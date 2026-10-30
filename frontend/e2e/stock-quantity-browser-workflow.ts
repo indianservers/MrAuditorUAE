@@ -215,6 +215,12 @@ export async function runStockQuantityBrowserWorkflow(
   expect(historical.body).toEqual(approved.body);
   expect(historical.version).toBe(approved.version);
   await reviewer.goto(`/intelligence/${eid}/lead?event=${approved.id}`);
+  const retainedGood = reviewer
+    .getByRole("row")
+    .filter({ has: reviewer.getByRole("cell", { name: "GOOD", exact: true }) });
+  await expect(
+    retainedGood.getByRole("cell", { name: "40.0", exact: true }),
+  ).toBeVisible();
   await expect(
     reviewer.getByRole("button", {
       name: "Create connected working-paper draft",

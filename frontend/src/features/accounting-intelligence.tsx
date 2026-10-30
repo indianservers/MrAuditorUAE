@@ -26,6 +26,7 @@ import { CountryWorkflows } from "./country-workflows";
 import { StatutoryReportPreview } from "./statutory-report-preview";
 import { IntelligenceExports } from "./intelligence-exports";
 import { PDFGridEditor, buildPDFGrid, emptyPDFGrid } from "./pdf-grid-editor";
+import { stockCountReviewColumns } from "./stock-review-columns";
 
 type Choice = { id: string; label: string; scan_status?: string };
 type Result = {
@@ -1225,64 +1226,69 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                 values={body![key] as unknown[]}
                 decide={decide}
                 preferredColumns={
-                  detail.data.kind === "regulatory-assessment" && key === "rows"
-                    ? [
-                        "rule_key",
-                        "rule_version",
-                        "applicability",
-                        "selected_date",
-                        "calculation_currency",
-                        "tax_base",
-                        "applied_rate",
-                        "unrounded_calculated_amount",
-                        "missing_inputs",
-                        "invalid_inputs",
-                        "missing_fact_provenance",
-                        "professional_conclusion",
-                      ]
-                    : detail.data.kind === "regulatory-conversion" &&
+                  body?.workflow === "stock-audit" && key === "rows"
+                    ? stockCountReviewColumns
+                    : detail.data.kind === "regulatory-assessment" &&
                         key === "rows"
                       ? [
-                          "source_currency",
-                          "source_amount",
-                          "rate",
-                          "target_currency",
-                          "unrounded_amount",
-                          "converted_amount",
-                          "decimal_places",
-                          "rounding",
-                          "state",
+                          "rule_key",
+                          "rule_version",
+                          "applicability",
+                          "selected_date",
+                          "calculation_currency",
+                          "tax_base",
+                          "applied_rate",
+                          "unrounded_calculated_amount",
+                          "missing_inputs",
+                          "invalid_inputs",
+                          "missing_fact_provenance",
+                          "professional_conclusion",
                         ]
-                      : area === "source-table" && key === "rows"
-                        ? body?.table_kind === "bank"
-                          ? [
-                              "reference",
-                              "date",
-                              "account_code",
-                              "currency",
-                              "amount",
-                              "counterparty",
-                              "source_page",
-                              "source_page_row",
-                              "source_worksheet",
-                            ]
-                          : [
-                              "reference",
-                              "counterparty",
-                              "account_code",
-                              "currency",
-                              "open_amount",
-                              "document_type",
-                              "document_date",
-                              "due_date",
-                              "balance_date",
-                            ]
-                        : undefined
+                      : detail.data.kind === "regulatory-conversion" &&
+                          key === "rows"
+                        ? [
+                            "source_currency",
+                            "source_amount",
+                            "rate",
+                            "target_currency",
+                            "unrounded_amount",
+                            "converted_amount",
+                            "decimal_places",
+                            "rounding",
+                            "state",
+                          ]
+                        : area === "source-table" && key === "rows"
+                          ? body?.table_kind === "bank"
+                            ? [
+                                "reference",
+                                "date",
+                                "account_code",
+                                "currency",
+                                "amount",
+                                "counterparty",
+                                "source_page",
+                                "source_page_row",
+                                "source_worksheet",
+                              ]
+                            : [
+                                "reference",
+                                "counterparty",
+                                "account_code",
+                                "currency",
+                                "open_amount",
+                                "document_type",
+                                "document_date",
+                                "due_date",
+                                "balance_date",
+                              ]
+                          : undefined
                 }
                 provenanceLabel={
-                  detail.data.kind.startsWith("regulatory-")
-                    ? "Show all result provenance"
-                    : undefined
+                  body?.workflow === "stock-audit" && key === "rows"
+                    ? "Show stock count provenance"
+                    : detail.data.kind.startsWith("regulatory-")
+                      ? "Show all result provenance"
+                      : undefined
                 }
               />
             ))}

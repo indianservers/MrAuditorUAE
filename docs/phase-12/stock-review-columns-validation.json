@@ -1,0 +1,61 @@
+{
+  "scope": "Show stock quantities and evidence coverage before optional provenance in workflow and retained lead views",
+  "source_files": [
+    {
+      "path": "frontend/src/features/stock-review-columns.ts",
+      "sha256": "082566ff85f19494bd3376bad0e1890383372058511061f653ec924279a6878a"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "17961ed8f1039de6ce36bfef204a8a26dcf93e645ee18915b307e2f81c433fb4"
+    },
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "sha256": "fdc21199dc539981755f47a976e11b66dff9b9db0d662d8e7a48776caf1eb0dd"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "aba303c5fbb58c1a3a9d3095dc10c679f7ba738884bbe7a8c43330f4db1ede3b"
+    },
+    {
+      "path": "frontend/tests/generic-matching-candidates.test.tsx",
+      "sha256": "f64ad97369f60916d6574518eced5e15a6576b3338109a01816ecf85cb00ac87"
+    },
+    {
+      "path": "frontend/e2e/stock-quantity-browser-workflow.ts",
+      "sha256": "4e1313c37f2505ede3d952f38df69ec0b47842d6e2f778f2a8926997a399fe06"
+    },
+    {
+      "path": "docs/phase-12/stock-review-columns-initial.xml",
+      "sha256": "4fa67e35672c243d45787ab1884e8b108fa80a8ab6a62138577c2edc9efd958c"
+    },
+    {
+      "path": "docs/phase-12/stock-review-columns-final.xml",
+      "sha256": "5a14c6529367c09c4905f84e827e5ff5d8d17e8e03a0151aa0e664f82565b53c"
+    }
+  ],
+  "verification": {
+    "focused_frontend_passed": 154,
+    "focused_frontend_failed": 0,
+    "focused_frontend_files": 2,
+    "scoped_eslint": "passed",
+    "typescript": "passed",
+    "filtered_release_discovery": "existing extended inventory case discovered"
+  },
+  "initial_failure": {
+    "passed": 152,
+    "failed": 2,
+    "reason": "Country stock workflow did not offer the provenance toggle after introducing compact columns. Added stock-audit to toggle eligibility; original failed JUnit retained verbatim."
+  },
+  "behavior": [
+    "Both screens share position, unit, currency, book/count/supported quantities, coverage percentage, variance, carrying value and state.",
+    "Workflow full-column view and lead stock-provenance toggle retain IDs and auditor annotations.",
+    "Stale lead shows 40% immediately while paper creation remains disabled.",
+    "Hosted browser extension now asserts the visible stale coverage before its capture."
+  ],
+  "limits": [
+    "UI change only; financial calculations and saved source rows are unchanged.",
+    "Earlier original browser captures are source-specific and do not establish the new display.",
+    "New hosted execution and screenshot inspection remain pending."
+  ]
+}

@@ -3716,6 +3716,10 @@ it.each(["AE", "IN"])("shows per-position quantity coverage and its declaration 
   expect(screen.getByRole("columnheader", { name: "count supported quantity" })).toBeVisible();
   expect(screen.getByRole("columnheader", { name: "quantity coverage percent" })).toBeVisible();
   expect(screen.getByRole("cell", { name: "40.0" })).toBeVisible();
+  expect(screen.queryByRole("columnheader", { name: "id" })).toBeNull();
+  fireEvent.click(screen.getByRole("checkbox", { name: "Show source provenance and all columns" }));
+  expect(screen.getByRole("columnheader", { name: "id" })).toBeVisible();
+  expect(screen.getByRole("cell", { name: "40.0" })).toBeVisible();
 });
 
 it.each(["AE", "IN"])("disables legacy stock approval while retaining the saved result (%s)", (country) => {

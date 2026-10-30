@@ -61,3 +61,15 @@ They show retained 40% partial coverage with negative/missing positions unresolv
 and stale retained results with connected draft generation disabled. Exact tested
 source and original image hashes are in stock-quantity-browser-9eea28e.json under
 docs/phase-12. This proof predates the separate TCS withdrawal boundary change.
+
+Review display follow-up: stock workflow and retained lead views share the same
+position, unit, currency, book/count/supported quantity, percentage, variance and
+carrying-value columns. Raw source identifiers and auditor annotations remain
+available in the stock provenance view. A stale lead therefore shows 40% beside
+its exception state immediately, with draft generation still disabled. The hosted
+case now asserts that visible figure before its stale capture. Local component
+checks cover both countries and expanded provenance; all 154 affected tests pass.
+The initial two failures exposed the missing workflow provenance toggle; the
+original failed diagnostic is retained, and the toggle is enabled. New hosted
+captures require source-specific verification and are not established by earlier
+screenshots.

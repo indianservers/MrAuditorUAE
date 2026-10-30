@@ -90,6 +90,25 @@ vi.mock("@/hooks/use-api", () => ({
             review_status: state.reviewed ? "REVIEWED" : "UNVERIFIED",
             workflow: state.workflow || undefined,
             quantity_coverage_contract: state.stockContract || undefined,
+            rows:
+              state.workflow === "stock-audit"
+                ? [
+                    {
+                      id: "stock-1",
+                      auditor: "SYNTHETIC-RAW-REVIEWER",
+                      site: "WH",
+                      sku: "GOOD",
+                      lot: "L",
+                      uom: "PCS",
+                      currency: "AED",
+                      book_quantity: "10",
+                      count_quantity: "4",
+                      count_supported_quantity: "4",
+                      quantity_coverage_percent: "40.0",
+                      state: "VARIANCE",
+                    },
+                  ]
+                : undefined,
             bank_account_binding: state.binding
               ? {
                   matching_account_code: "100",
@@ -329,6 +348,31 @@ it.each([
     }
   },
 );
+
+it("keeps stock quantities visible in stale lead history with provenance available separately", () => {
+  state.workflow = "stock-audit";
+  state.stockContract = "stock-declared-count-coverage/1";
+  state.reviewed = true;
+  state.freshness = "STALE";
+  render(<AccountingIntelligence eid="e" area="lead" />);
+  expect(screen.getByRole("cell", { name: "40.0" })).toBeVisible();
+  expect(
+    screen.queryByRole("cell", { name: "SYNTHETIC-RAW-REVIEWER" }),
+  ).toBeNull();
+  expect(
+    screen.getByRole("button", {
+      name: "Create connected working-paper draft",
+    }),
+  ).toBeDisabled();
+  fireEvent.click(
+    screen.getByRole("checkbox", { name: "Show stock count provenance" }),
+  );
+  expect(
+    screen.getByRole("cell", { name: "SYNTHETIC-RAW-REVIEWER" }),
+  ).toBeVisible();
+  expect(screen.getByRole("cell", { name: "40.0" })).toBeVisible();
+  expect(state.mutate).not.toHaveBeenCalled();
+});
 
 it("retains a directly opened stale report in its result selector without enabling approval", () => {
   state.kind = "statutory-report";

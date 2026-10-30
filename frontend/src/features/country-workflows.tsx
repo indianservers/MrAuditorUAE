@@ -75,6 +75,7 @@ import {
   InventoryPerformanceEvidence,
 } from "./inventory-performance";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
+import { stockCountReviewColumns } from "./stock-review-columns";
 import { VATCompositionSource } from "./vat-composition-source";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
 import { draftCurrency, reportingCurrency } from "./workflow-currency";
@@ -1417,7 +1418,7 @@ export function CountryWorkflows({
                     "unpaid_days",
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
-  const columns =
+  const domainColumns =
     (body?.workflow === "adverse-media-review" ||
       body?.table_type?.startsWith("media-")) &&
     !showRuleProvenance
@@ -1635,6 +1636,10 @@ export function CountryWorkflows({
                                   "state",
                                 ].filter((key) => allColumns.includes(key))
                               : baseColumns;
+  const columns =
+    body?.workflow === "stock-audit" && !showRuleProvenance
+      ? stockCountReviewColumns.filter((key) => allColumns.includes(key))
+      : domainColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -7609,6 +7614,7 @@ export function CountryWorkflows({
               body.workflow === "inventory-valuation-control" ||
               body.workflow === "inventory-fifo-cost" ||
               body.workflow === "inventory-performance" ||
+              body.workflow === "stock-audit" ||
               body.workflow === "sanctions-name-review" ||
               body.workflow === "procurement-match" ||
               body.workflow === "party-balance-confirmations" ||

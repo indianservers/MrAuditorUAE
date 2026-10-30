@@ -124,3 +124,7 @@ docs/phase-12/1e1aceb-hosted-worker-recovery.json -text
 # Preserve the publisher's original statement specification and text sample.
 docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-22072026.xlsx -text
 docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt -text whitespace=cr-at-eol
+
+# Preserve literal DOM spacing in the failed stock provenance-toggle diagnostic.
+docs/phase-12/stock-review-columns-initial.xml -text whitespace=-blank-at-eol,cr-at-eol
+docs/phase-12/stock-review-columns-final.xml -text whitespace=cr-at-eol

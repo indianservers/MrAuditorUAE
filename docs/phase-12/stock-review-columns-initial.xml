@@ -1,0 +1,6001 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="154" failures="2" errors="0" time="26.4459188">
+    <testsuite name="tests/country-workflows.test.tsx" timestamp="2026-10-30T12:06:57.887Z" hostname="DESKTOP-B3SR465" tests="138" failures="2" errors="0" skipped="0" time="25.3106899">
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (undefined)" time="0.2567534">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (india-monthly-rule-intersections/1)" time="0.0834635">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (india-monthly-rule-intersections/2)" time="0.0735096">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers establishment charge sources only for India (AE)" time="0.0913353">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers establishment charge sources only for India (IN)" time="0.092466">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1183094">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (STALE/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1035056">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/UNVERIFIED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1085039">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/true/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1120125">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/false/NOT_VERIFIED)" time="0.1081951">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers MOHRE savings source contracts only for UAE (AE)" time="0.0762727">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers MOHRE savings source contracts only for UAE (IN)" time="0.0814011">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="binds separate retained enrolment evidence and independent wage controls for savings sources" time="0.2101454">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1076126">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (STALE/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1073426">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/UNVERIFIED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.0985834">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/true/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1018351">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/false/NOT_VERIFIED)" time="0.0994489">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps savings fund and membership identity visible in compact bank allocations" time="0.1063968">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/false/india-payroll-basis-proration/1)" time="0.1143673">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (STALE/REVIEWED/false/india-payroll-basis-proration/1)" time="0.1546815">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/UNVERIFIED/false/india-payroll-basis-proration/1)" time="0.1619993">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/true/india-payroll-basis-proration/1)" time="0.1638978">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/false/old)" time="0.1331822">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows the selected workbook population and excluded scope before approval" time="0.1006941">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains the explicit worksheet and population assessment in a workbook source" time="0.190807">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues separate requested and written-response controls with retained party documents" time="0.2396308">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues only reviewed positive-party sources with an explicit review window" time="0.2987353">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains independent purchase quantity controls separately from money controls" time="0.1643929">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows an explicit salary eligibility exclusion alongside zero pension contributions" time="0.0981598">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers every export format and actionable errors in AE" time="0.0937091">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers every export format and actionable errors in IN" time="0.0724577">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; opens a linked retained review even outside the first source-history page" time="0.1142463">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps obligation, reported and bank amounts readable without changing retained provenance" time="0.1666786">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; requires explicit settlement choices and independently reviewed obligation sources" time="0.4371618">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows readable CAMT page controls and retains the complete page provenance" time="0.1039353">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; prepares only explicitly selected reviewed BRS book exceptions with independent controls" time="0.3512195">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds a selected retained assessment document when preparing withholding records" time="0.1875539">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds the selected retained quote while preparing an exchange rate source" time="0.1680897">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows unsupported assessment scope even when the numerical comparison matches" time="0.110651">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile 26AS" time="0.0840899">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile 168" time="0.0830268">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile TRACES" time="0.0899719">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: AE CURRENT" time="0.0553893">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: AE STALE" time="0.0926578">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: IN CURRENT" time="0.102492">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows employment service dates in the compact gratuity settlement comparison" time="0.1133398">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; renders withholding amounts as labelled values with readable differences" time="0.1105979">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps liability and credit role choices separate and requires explicit assessment" time="0.2309459">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps credit residual balances visible before expanding application provenance" time="0.1447568">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; requires a pre-application balance confirmation for credit applications" time="0.2051133">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows open-item balances first while retaining every provenance column" time="0.1133067">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps recent job results accessible without expanding the entire history" time="0.1276635">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues reviewed open items with explicit payable sign and reporting-date scope" time="0.2530934">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues reviewed bank-table reuse with its original evidence and independent controls" time="0.1904317">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the explicitly selected bank debit/credit convention" time="0.2464574">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; submits explicit original CSV headings and exclusions without changing values" time="0.2519601">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues GSTR-2B with the recipient, return month and separate document control" time="0.2203075">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows pension amounts in AED with the authority and membership cohort" time="0.1556623">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues AED pension review using only independently reviewed sources" time="0.2643955">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; does not offer UAE pension review for an India engagement" time="0.0886703">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows payroll amounts first and reveals rule references on request" time="0.1373336">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds payroll-rules imports to a selected clean retained document" time="0.1634176">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds pension-rules imports to a selected clean retained document" time="0.1480356">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds benefit-rules imports to a selected clean retained document" time="0.1645051">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps derived expected dues out of the independent return role" time="0.0806273">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues original numbered GSTR-2B files with independent per-file controls" time="0.3425993">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues INR payroll calculations using only independently reviewed rule sources" time="0.266965">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; links only reviewed ESIC populations with explicit component coverage and reviewed sources" time="0.3579473">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; prepares ECR with declared establishment, wage month, members and amounts" time="0.2477357">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues an India invoice with explicit GSTIN, direction, month and component controls" time="0.1866745">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a credit-normal payable GL control without a movement date" time="0.1555514">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a committed account selection without asking for an exported copy" time="0.218071">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; filters unavailable country workflows and wrong source types" time="0.0817053">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers native instructions only for the channel role, keeping independent schedules selectable" time="0.0928641">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the selected independent bank sources and exact balances" time="0.3554669">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues subsequent bank clearance with an explicit window and AED scope" time="0.3306944">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues subsequent bank clearance with an explicit window and INR scope" time="0.3411848">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps quarantined evidence disabled and rejects malformed currency controls" time="0.1257744">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows missing evidence as a blocker and disables approval" time="0.087485">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; submits an explicit selected-box scope rather than silently filtering a full return" time="0.2116832">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; pages excluded rows without changing the selected comparison rows" time="0.5952672">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; prepares selected boxes only from a current independently reviewed import result" time="0.4155347">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; requires an explicitly entered zero row count rather than coercing a blank" time="0.3507653">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for unreviewed results" time="0.0827796">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for stale results" time="0.0717655">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for blocked results" time="0.0478284">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; requires separate source tax and taxable-base controls" time="0.1853893">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer a domestic UAE import review in India" time="0.0942062">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows VAT201 monetary differences first and preserves original provenance" time="0.1641272">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues the explicit WPS EVP profile with separate employee and component controls" time="0.2669462">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="submits independently declared inventory partition controls with the retained CSV" time="0.2088387">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uses only reviewed quantity-controlled inventory sources in bidirectional mode" time="0.3288459">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues the separate arrear profile with retained context and six independent controls" time="0.3610445">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps regular payments out of an explicitly arrear-only comparison" time="0.3077446">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; requires independent directional controls before carrying the full residual population" time="0.09294">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; hides carry-forward for UNVERIFIED / CURRENT" time="0.0934693">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; hides carry-forward for REVIEWED / STALE" time="0.0862714">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="prepares native ESIC XLS with separate employer/month context and independent controls" time="0.3403925">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues retained inventory valuation documents with separate extended cost and NRV controls" time="0.2135531">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires explicit recorded GL basis and inventory review scope" time="0.2137356">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independently controlled ESIC wage populations without contribution inference" time="0.1583626">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; queues a scoped accounting window with reviewed sources for AE" time="0.3088067">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; queues a scoped accounting window with reviewed sources for IN" time="0.3269704">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; pages individual posting links independently of the comparison rows" time="0.5861386">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires all twenty explicit VAT201 boxes after selecting the emirate layout" time="0.2468516">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="compares invoice evidence with an independent register without offering it as filed return evidence" time="0.2603691">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps native invoice JSON out of the India GST return selector" time="0.0781756">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues GSTR-1 summary metrics with separate independent controls and no mixed currency total" time="0.2190129">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows original summary metrics and count units without inventing liability totals" time="0.1047774">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues outward invoice sections with distinct request context and independent section controls" time="0.0960314">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps inward GSTR-2B and outward GSTR-1 native responses in their own workflow return pickers" time="0.120758">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows the bank date blocker and avoids an inverted range on an empty exception schedule" time="0.1074916">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires scoped owner evidence and only offers independently reviewed account sources" time="0.4268327">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="links only current reviewed account evidence with an explicit financial scope assessment" time="0.266146">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues document-series counts independently from money with separately retained scope context" time="0.0616162">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows document counts and missing ranges as labelled values without currency tolerance" time="0.1088693">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues expense cutoff with explicit reviewed recognition and posting sources" time="0.2835413">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independently controlled inventory response quantities with retained correspondence" time="0.202317">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows independent VAT201 summary errors even when box comparisons match" time="0.1064737">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="pages all retained turnover adjustments independently of registration rows" time="0.5893532">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains independent signed monetary controls when preparing turnover amounts" time="0.1636816">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads merchant-reserve-movements with distinct controls and no mixed generic total" time="0.2286942">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads merchant-reserve-balances with distinct controls and no mixed generic total" time="0.2512628">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads dated benefit exclusions with independent day/count controls and clears them when changing source type" time="0.2593663">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows exact eligible days in compact benefits while preserving full service-year precision in provenance" time="0.1390711">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires explicit complete account coverage dates without changing the reporting cutoff" time="0.5066881">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for AE (shared=false)" time="0.151994">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for AE (shared=true)" time="0.176124">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for IN (shared=false)" time="0.0405003">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for IN (shared=true)" time="0.0321016">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues an explicit FIFO cost period and assessment for AE" time="0.061468">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues an explicit FIFO cost period and assessment for IN" time="0.2665624">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows per-position quantity coverage and its declaration boundary (AE)" time="0.2243362">
+            <failure message="Unable to find an accessible element with the role &quot;checkbox&quot; and name &quot;Show source provenance and all columns&quot;
+
+Here are the accessible roles:
+
+  heading:
+
+  Name &quot;Reconcile and assess evidence&quot;:
+  &lt;h1 /&gt;
+
+  Name &quot;Workflow scope&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Recent jobs&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Declared count coverage&quot;:
+  &lt;h2 /&gt;
+
+  --------------------------------------------------
+  navigation:
+
+  Name &quot;Country workflow navigation&quot;:
+  &lt;nav
+    aria-label=&quot;Country workflow navigation&quot;
+    class=&quot;toolbar&quot;
+  /&gt;
+
+  --------------------------------------------------
+  link:
+
+  Name &quot;Prepare sources&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/workflow-source&quot;
+  /&gt;
+
+  Name &quot;Run workflows&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/country-workflow&quot;
+  /&gt;
+
+  Name &quot;Accounting intelligence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead&quot;
+  /&gt;
+
+  Name &quot;Upload evidence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/engagements/engagement/evidence&quot;
+  /&gt;
+
+  Name &quot;Open working-paper actions&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead?event=result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  group:
+
+  Name &quot;&quot;:
+  &lt;details
+    style=&quot;margin: 16px 0px;&quot;
+  /&gt;
+
+  Name &quot;&quot;:
+  &lt;details
+    class=&quot;main-panel&quot;
+    style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+  /&gt;
+
+  Name &quot;current committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;Account evidence scope&quot;:
+  &lt;fieldset /&gt;
+
+  --------------------------------------------------
+  paragraph:
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p
+    class=&quot;text-sm&quot;
+  /&gt;
+
+  --------------------------------------------------
+  list:
+
+  Name &quot;&quot;:
+  &lt;ul /&gt;
+
+  --------------------------------------------------
+  listitem:
+
+  Name &quot;&quot;:
+  &lt;li /&gt;
+
+  --------------------------------------------------
+  combobox:
+
+  Name &quot;current stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;prior stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP periods assessed comparable&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP display rounding&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Workflow&quot;:
+  &lt;select
+    aria-label=&quot;Workflow&quot;
+  /&gt;
+
+  Name &quot;books source&quot;:
+  &lt;select
+    aria-label=&quot;books source&quot;
+  /&gt;
+
+  Name &quot;statement source&quot;:
+  &lt;select
+    aria-label=&quot;statement source&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank account evidence (optional)&quot;:
+  &lt;select
+    aria-label=&quot;Reviewed bank account evidence (optional)&quot;
+  /&gt;
+
+  Name &quot;Saved source or result&quot;:
+  &lt;select
+    aria-label=&quot;Saved source or result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  option:
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select an assessment&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Assessed comparable&quot;:
+  &lt;option
+    value=&quot;yes&quot;
+  /&gt;
+
+  Name &quot;Not assessed comparable — block approval&quot;:
+  &lt;option
+    value=&quot;no&quot;
+  /&gt;
+
+  Name &quot;Select rounding&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Half up&quot;:
+  &lt;option
+    value=&quot;HALF_UP&quot;
+  /&gt;
+
+  Name &quot;Half even&quot;:
+  &lt;option
+    value=&quot;HALF_EVEN&quot;
+  /&gt;
+
+  Name &quot;Payroll accounting bridge&quot;:
+  &lt;option
+    value=&quot;payroll-ledger-rollforward&quot;
+  /&gt;
+
+  Name &quot;Assessed FIFO cost&quot;:
+  &lt;option
+    value=&quot;inventory-fifo-cost&quot;
+  /&gt;
+
+  Name &quot;Inventory valuation and GL controls&quot;:
+  &lt;option
+    value=&quot;inventory-valuation-control&quot;
+  /&gt;
+
+  Name &quot;Controlled procurement&quot;:
+  &lt;option
+    value=&quot;procurement-match&quot;
+  /&gt;
+
+  Name &quot;Expense cutoff&quot;:
+  &lt;option
+    value=&quot;expense-cutoff&quot;
+  /&gt;
+
+  Name &quot;Positive party balances&quot;:
+  &lt;option
+    value=&quot;party-balance-confirmations&quot;
+  /&gt;
+
+  Name &quot;Statutory dues&quot;:
+  &lt;option
+    value=&quot;statutory-dues&quot;
+  /&gt;
+
+  Name &quot;Inventory count bridge&quot;:
+  &lt;option
+    value=&quot;inventory-count-bridge&quot;
+  /&gt;
+
+  Name &quot;Obligation bank allocations&quot;:
+  &lt;option
+    value=&quot;obligation-bank-allocations&quot;
+  /&gt;
+
+  Name &quot;Subsequent bank clearance&quot;:
+  &lt;option
+    value=&quot;bank-subsequent-clearance&quot;
+  /&gt;
+
+  Name &quot;UAE VAT201 box comparison&quot;:
+  &lt;option
+    value=&quot;uae-vat-return&quot;
+  /&gt;
+
+  Name &quot;UAE import VAT review&quot;:
+  &lt;option
+    value=&quot;uae-import-vat&quot;
+  /&gt;
+
+  Name &quot;Credit-note applications&quot;:
+  &lt;option
+    value=&quot;credit-note-applications&quot;
+  /&gt;
+
+  Name &quot;Payroll settlement&quot;:
+  &lt;option
+    value=&quot;payroll-settlement&quot;
+  /&gt;
+
+  Name &quot;UAE pension contribution review&quot;:
+  &lt;option
+    value=&quot;uae-pension-review&quot;
+  /&gt;
+
+  Name &quot;Bank account identity and owner evidence&quot;:
+  &lt;option
+    value=&quot;bank-account-evidence&quot;
+  /&gt;
+
+  Name &quot;Bank reconciliation&quot;:
+  &lt;option
+    value=&quot;bank-brs&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Arithmetic and declared account labels only&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account review current · BANK-1 · AED · 2026-06-30&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Select result&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;gstr1 retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr1-native&quot;
+  /&gt;
+
+  Name &quot;gstr2b retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr2b-native&quot;
+  /&gt;
+
+  Name &quot;Reviewed purchase register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-register&quot;
+  /&gt;
+
+  Name &quot;Reviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Unreviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Account evidence register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-register&quot;
+  /&gt;
+
+  Name &quot;Account evidence ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-ledger&quot;
+  /&gt;
+
+  Name &quot;Account evidence bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-bank&quot;
+  /&gt;
+
+  Name &quot;Account evidence unreviewed · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review current · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Account review stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;account-review-stale&quot;
+  /&gt;
+
+  Name &quot;Account review unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Account review other · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-other&quot;
+  /&gt;
+
+  Name &quot;ESIC population reviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-reviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;esic-review-stale&quot;
+  /&gt;
+
+  Name &quot;ESIC population blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Reviewed FIFO movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;fifo-movements&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory valuations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-valuations&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party items · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-items&quot;
+  /&gt;
+
+  Name &quot;Reviewed party controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-responses&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff documents · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-documents&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff recognitions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-recognitions&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff postings · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-postings&quot;
+  /&gt;
+
+  Name &quot;Coverage REVIEWED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-REVIEWED&quot;
+  /&gt;
+
+  Name &quot;Coverage UNVERIFIED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-UNVERIFIED&quot;
+  /&gt;
+
+  Name &quot;Unreviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger opening · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-opening&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger payroll · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-payroll&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger posted · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-posted&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger closing · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-closing&quot;
+  /&gt;
+
+  Name &quot;Unreviewed payroll ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-ledger&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear expected · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-expected&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-return&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-payment&quot;
+  /&gt;
+
+  Name &quot;Regular monthly payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;regular-payment&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-books&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory counts · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-counts&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-movements&quot;
+  /&gt;
+
+  Name &quot;Uncontrolled stock · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;uncontrolled-stock&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-bases&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-rules&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-reported&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-reported&quot;
+  /&gt;
+
+  Name &quot;Assessed import boxes · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-books&quot;
+  /&gt;
+
+  Name &quot;Full filed VAT201 source · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-filed&quot;
+  /&gt;
+
+  Name &quot;Reviewed expected dues · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;expected-dues&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;dues-links&quot;
+  /&gt;
+
+  Name &quot;WPS instructions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wps&quot;
+  /&gt;
+
+  Name &quot;Native ECR return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ecr&quot;
+  /&gt;
+
+  Name &quot;Payroll component bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-rules&quot;
+  /&gt;
+
+  Name &quot;Reported ECR · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;reported&quot;
+  /&gt;
+
+  Name &quot;Reviewed ESI reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-reported&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Outstanding cheques · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;outstanding&quot;
+  /&gt;
+
+  Name &quot;Clearance allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;clearances&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Wrong source type · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wrong&quot;
+  /&gt;
+
+  Name &quot;Saved reconciliation · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  textbox:
+
+  Name &quot;Find current inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;current zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;prior zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock/GP period comparability assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock-change review threshold (%)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Gross-profit margin change threshold (percentage points)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP display decimal places&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP review title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Schedule title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Linked account scope assessment&quot;:
+  &lt;textarea
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Bank account identifier&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account currency&quot;:
+  &lt;input
+    value=&quot;AED&quot;
+  /&gt;
+
+  Name &quot;book opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;book closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Scope and source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Review / exception rationale&quot;:
+  &lt;textarea /&gt;
+
+  --------------------------------------------------
+  listbox:
+
+  Name &quot;current inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  --------------------------------------------------
+  button:
+
+  Name &quot;Clear current inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Prepare stock and GP review&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Queue calculation&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export XLSX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export PDF&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export DOCX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Independent approval&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Reject&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Previous rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Next rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  --------------------------------------------------
+  table:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;table /&gt;
+
+  --------------------------------------------------
+  caption:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;caption /&gt;
+
+  --------------------------------------------------
+  rowgroup:
+
+  Name &quot;&quot;:
+  &lt;thead /&gt;
+
+  Name &quot;&quot;:
+  &lt;tbody /&gt;
+
+  --------------------------------------------------
+  row:
+
+  Name &quot;site sku lot uom currency book quantity count quantity count supported quantity quantity coverage percent state Disposition&quot;:
+  &lt;tr /&gt;
+
+  Name &quot;WH S L PCS AED 10 4 4 40.0 VARIANCE Document exception&quot;:
+  &lt;tr /&gt;
+
+  --------------------------------------------------
+  columnheader:
+
+  Name &quot;site&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;sku&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;lot&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;uom&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;currency&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;book quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count supported quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;quantity coverage percent&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;state&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;Disposition&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  --------------------------------------------------
+  cell:
+
+  Name &quot;WH&quot;:
+  &lt;td /&gt;
+
+  Name &quot;S&quot;:
+  &lt;td /&gt;
+
+  Name &quot;L&quot;:
+  &lt;td /&gt;
+
+  Name &quot;PCS&quot;:
+  &lt;td /&gt;
+
+  Name &quot;AED&quot;:
+  &lt;td /&gt;
+
+  Name &quot;10&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;40.0&quot;:
+  &lt;td /&gt;
+
+  Name &quot;VARIANCE&quot;:
+  &lt;td /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;td /&gt;
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;intelligence-workspace&quot;
+    &gt;
+      &lt;h1&gt;
+        Reconcile and assess evidence
+      &lt;/h1&gt;
+      &lt;nav
+        aria-label=&quot;Country workflow navigation&quot;
+        class=&quot;toolbar&quot;
+      &gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/workflow-source&quot;
+        &gt;
+          Prepare sources
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/country-workflow&quot;
+        &gt;
+          Run workflows
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/lead&quot;
+        &gt;
+          Accounting intelligence
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/engagements/engagement/evidence&quot;
+        &gt;
+          Upload evidence
+        &lt;/a&gt;
+      &lt;/nav&gt;
+      &lt;details
+        style=&quot;margin: 16px 0px;&quot;
+      &gt;
+        &lt;summary&gt;
+          1
+           synthetic reference scenarios across country workflows
+        &lt;/summary&gt;
+        &lt;p&gt;
+          These scenarios test source comparisons and evidence controls. They do not establish complete statutory coverage or live registry integrations.
+        &lt;/p&gt;
+        &lt;ul&gt;
+          &lt;li&gt;
+            RW-001
+             · 
+            Bank receipt
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/details&gt;
+      &lt;details
+        class=&quot;main-panel&quot;
+        style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+      &gt;
+        &lt;summary&gt;
+          Review stock and gross-profit trends from committed accounts
+        &lt;/summary&gt;
+        &lt;p&gt;
+          Select current and earlier snapshots of this entity. This review uses the functional currency (
+          not loaded
+          ), retains signed account values and requires independent controls. Stock existence, complete classification and reasons for changes require separate evidence. It issues no audit opinion.
+        &lt;/p&gt;
+        &lt;fieldset&gt;
+          &lt;legend&gt;
+            current
+             committed source
+          &lt;/legend&gt;
+          &lt;label&gt;
+            current
+             stock/GP snapshot
+            &lt;select&gt;
+              &lt;option
+                value=&quot;&quot;
+              &gt;
+                Select committed GL/journal or trial balance
+              &lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current inventory
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Debit-normal closing balance.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current inventory
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+                  Bank GL
+                &lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/label&gt;
+            &lt;p&gt;
+              0
+               selected, including selections outside the current search.
+            &lt;/p&gt;
+            &lt;button
+              class=&quot;button&quot;
+              disabled=&quot;&quot;
+            &gt;
+              Clear 
+              current inventory
+               accounts
+            &lt;/button&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               account count
+              &lt;input
+                inputmode=&quot;numeric&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               amount
+              &lt;input
+                inputmode=&quot;decimal&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               account scope assessment
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current
+               zero inventory assessment (required for zero)
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+          &lt;/fieldset&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current revenue
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Credits less debits, excluding opening balances.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current revenue
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current revenue
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+     ..." type="TestingLibraryElementError">
+TestingLibraryElementError: Unable to find an accessible element with the role &quot;checkbox&quot; and name &quot;Show source provenance and all columns&quot;
+
+Here are the accessible roles:
+
+  heading:
+
+  Name &quot;Reconcile and assess evidence&quot;:
+  &lt;h1 /&gt;
+
+  Name &quot;Workflow scope&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Recent jobs&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Declared count coverage&quot;:
+  &lt;h2 /&gt;
+
+  --------------------------------------------------
+  navigation:
+
+  Name &quot;Country workflow navigation&quot;:
+  &lt;nav
+    aria-label=&quot;Country workflow navigation&quot;
+    class=&quot;toolbar&quot;
+  /&gt;
+
+  --------------------------------------------------
+  link:
+
+  Name &quot;Prepare sources&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/workflow-source&quot;
+  /&gt;
+
+  Name &quot;Run workflows&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/country-workflow&quot;
+  /&gt;
+
+  Name &quot;Accounting intelligence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead&quot;
+  /&gt;
+
+  Name &quot;Upload evidence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/engagements/engagement/evidence&quot;
+  /&gt;
+
+  Name &quot;Open working-paper actions&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead?event=result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  group:
+
+  Name &quot;&quot;:
+  &lt;details
+    style=&quot;margin: 16px 0px;&quot;
+  /&gt;
+
+  Name &quot;&quot;:
+  &lt;details
+    class=&quot;main-panel&quot;
+    style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+  /&gt;
+
+  Name &quot;current committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;Account evidence scope&quot;:
+  &lt;fieldset /&gt;
+
+  --------------------------------------------------
+  paragraph:
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p
+    class=&quot;text-sm&quot;
+  /&gt;
+
+  --------------------------------------------------
+  list:
+
+  Name &quot;&quot;:
+  &lt;ul /&gt;
+
+  --------------------------------------------------
+  listitem:
+
+  Name &quot;&quot;:
+  &lt;li /&gt;
+
+  --------------------------------------------------
+  combobox:
+
+  Name &quot;current stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;prior stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP periods assessed comparable&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP display rounding&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Workflow&quot;:
+  &lt;select
+    aria-label=&quot;Workflow&quot;
+  /&gt;
+
+  Name &quot;books source&quot;:
+  &lt;select
+    aria-label=&quot;books source&quot;
+  /&gt;
+
+  Name &quot;statement source&quot;:
+  &lt;select
+    aria-label=&quot;statement source&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank account evidence (optional)&quot;:
+  &lt;select
+    aria-label=&quot;Reviewed bank account evidence (optional)&quot;
+  /&gt;
+
+  Name &quot;Saved source or result&quot;:
+  &lt;select
+    aria-label=&quot;Saved source or result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  option:
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select an assessment&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Assessed comparable&quot;:
+  &lt;option
+    value=&quot;yes&quot;
+  /&gt;
+
+  Name &quot;Not assessed comparable — block approval&quot;:
+  &lt;option
+    value=&quot;no&quot;
+  /&gt;
+
+  Name &quot;Select rounding&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Half up&quot;:
+  &lt;option
+    value=&quot;HALF_UP&quot;
+  /&gt;
+
+  Name &quot;Half even&quot;:
+  &lt;option
+    value=&quot;HALF_EVEN&quot;
+  /&gt;
+
+  Name &quot;Payroll accounting bridge&quot;:
+  &lt;option
+    value=&quot;payroll-ledger-rollforward&quot;
+  /&gt;
+
+  Name &quot;Assessed FIFO cost&quot;:
+  &lt;option
+    value=&quot;inventory-fifo-cost&quot;
+  /&gt;
+
+  Name &quot;Inventory valuation and GL controls&quot;:
+  &lt;option
+    value=&quot;inventory-valuation-control&quot;
+  /&gt;
+
+  Name &quot;Controlled procurement&quot;:
+  &lt;option
+    value=&quot;procurement-match&quot;
+  /&gt;
+
+  Name &quot;Expense cutoff&quot;:
+  &lt;option
+    value=&quot;expense-cutoff&quot;
+  /&gt;
+
+  Name &quot;Positive party balances&quot;:
+  &lt;option
+    value=&quot;party-balance-confirmations&quot;
+  /&gt;
+
+  Name &quot;Statutory dues&quot;:
+  &lt;option
+    value=&quot;statutory-dues&quot;
+  /&gt;
+
+  Name &quot;Inventory count bridge&quot;:
+  &lt;option
+    value=&quot;inventory-count-bridge&quot;
+  /&gt;
+
+  Name &quot;Obligation bank allocations&quot;:
+  &lt;option
+    value=&quot;obligation-bank-allocations&quot;
+  /&gt;
+
+  Name &quot;Subsequent bank clearance&quot;:
+  &lt;option
+    value=&quot;bank-subsequent-clearance&quot;
+  /&gt;
+
+  Name &quot;UAE VAT201 box comparison&quot;:
+  &lt;option
+    value=&quot;uae-vat-return&quot;
+  /&gt;
+
+  Name &quot;UAE import VAT review&quot;:
+  &lt;option
+    value=&quot;uae-import-vat&quot;
+  /&gt;
+
+  Name &quot;Credit-note applications&quot;:
+  &lt;option
+    value=&quot;credit-note-applications&quot;
+  /&gt;
+
+  Name &quot;Payroll settlement&quot;:
+  &lt;option
+    value=&quot;payroll-settlement&quot;
+  /&gt;
+
+  Name &quot;UAE pension contribution review&quot;:
+  &lt;option
+    value=&quot;uae-pension-review&quot;
+  /&gt;
+
+  Name &quot;Bank account identity and owner evidence&quot;:
+  &lt;option
+    value=&quot;bank-account-evidence&quot;
+  /&gt;
+
+  Name &quot;Bank reconciliation&quot;:
+  &lt;option
+    value=&quot;bank-brs&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Arithmetic and declared account labels only&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account review current · BANK-1 · AED · 2026-06-30&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Select result&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;gstr1 retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr1-native&quot;
+  /&gt;
+
+  Name &quot;gstr2b retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr2b-native&quot;
+  /&gt;
+
+  Name &quot;Reviewed purchase register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-register&quot;
+  /&gt;
+
+  Name &quot;Reviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Unreviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Account evidence register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-register&quot;
+  /&gt;
+
+  Name &quot;Account evidence ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-ledger&quot;
+  /&gt;
+
+  Name &quot;Account evidence bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-bank&quot;
+  /&gt;
+
+  Name &quot;Account evidence unreviewed · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review current · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Account review stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;account-review-stale&quot;
+  /&gt;
+
+  Name &quot;Account review unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Account review other · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-other&quot;
+  /&gt;
+
+  Name &quot;ESIC population reviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-reviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;esic-review-stale&quot;
+  /&gt;
+
+  Name &quot;ESIC population blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Reviewed FIFO movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;fifo-movements&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory valuations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-valuations&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party items · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-items&quot;
+  /&gt;
+
+  Name &quot;Reviewed party controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-responses&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff documents · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-documents&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff recognitions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-recognitions&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff postings · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-postings&quot;
+  /&gt;
+
+  Name &quot;Coverage REVIEWED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-REVIEWED&quot;
+  /&gt;
+
+  Name &quot;Coverage UNVERIFIED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-UNVERIFIED&quot;
+  /&gt;
+
+  Name &quot;Unreviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger opening · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-opening&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger payroll · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-payroll&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger posted · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-posted&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger closing · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-closing&quot;
+  /&gt;
+
+  Name &quot;Unreviewed payroll ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-ledger&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear expected · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-expected&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-return&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-payment&quot;
+  /&gt;
+
+  Name &quot;Regular monthly payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;regular-payment&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-books&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory counts · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-counts&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-movements&quot;
+  /&gt;
+
+  Name &quot;Uncontrolled stock · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;uncontrolled-stock&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-bases&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-rules&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-reported&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-reported&quot;
+  /&gt;
+
+  Name &quot;Assessed import boxes · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-books&quot;
+  /&gt;
+
+  Name &quot;Full filed VAT201 source · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-filed&quot;
+  /&gt;
+
+  Name &quot;Reviewed expected dues · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;expected-dues&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;dues-links&quot;
+  /&gt;
+
+  Name &quot;WPS instructions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wps&quot;
+  /&gt;
+
+  Name &quot;Native ECR return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ecr&quot;
+  /&gt;
+
+  Name &quot;Payroll component bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-rules&quot;
+  /&gt;
+
+  Name &quot;Reported ECR · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;reported&quot;
+  /&gt;
+
+  Name &quot;Reviewed ESI reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-reported&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Outstanding cheques · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;outstanding&quot;
+  /&gt;
+
+  Name &quot;Clearance allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;clearances&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Wrong source type · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wrong&quot;
+  /&gt;
+
+  Name &quot;Saved reconciliation · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  textbox:
+
+  Name &quot;Find current inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;current zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;prior zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock/GP period comparability assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock-change review threshold (%)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Gross-profit margin change threshold (percentage points)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP display decimal places&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP review title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Schedule title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Linked account scope assessment&quot;:
+  &lt;textarea
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Bank account identifier&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account currency&quot;:
+  &lt;input
+    value=&quot;AED&quot;
+  /&gt;
+
+  Name &quot;book opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;book closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Scope and source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Review / exception rationale&quot;:
+  &lt;textarea /&gt;
+
+  --------------------------------------------------
+  listbox:
+
+  Name &quot;current inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  --------------------------------------------------
+  button:
+
+  Name &quot;Clear current inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Prepare stock and GP review&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Queue calculation&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export XLSX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export PDF&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export DOCX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Independent approval&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Reject&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Previous rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Next rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  --------------------------------------------------
+  table:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;table /&gt;
+
+  --------------------------------------------------
+  caption:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;caption /&gt;
+
+  --------------------------------------------------
+  rowgroup:
+
+  Name &quot;&quot;:
+  &lt;thead /&gt;
+
+  Name &quot;&quot;:
+  &lt;tbody /&gt;
+
+  --------------------------------------------------
+  row:
+
+  Name &quot;site sku lot uom currency book quantity count quantity count supported quantity quantity coverage percent state Disposition&quot;:
+  &lt;tr /&gt;
+
+  Name &quot;WH S L PCS AED 10 4 4 40.0 VARIANCE Document exception&quot;:
+  &lt;tr /&gt;
+
+  --------------------------------------------------
+  columnheader:
+
+  Name &quot;site&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;sku&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;lot&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;uom&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;currency&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;book quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count supported quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;quantity coverage percent&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;state&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;Disposition&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  --------------------------------------------------
+  cell:
+
+  Name &quot;WH&quot;:
+  &lt;td /&gt;
+
+  Name &quot;S&quot;:
+  &lt;td /&gt;
+
+  Name &quot;L&quot;:
+  &lt;td /&gt;
+
+  Name &quot;PCS&quot;:
+  &lt;td /&gt;
+
+  Name &quot;AED&quot;:
+  &lt;td /&gt;
+
+  Name &quot;10&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;40.0&quot;:
+  &lt;td /&gt;
+
+  Name &quot;VARIANCE&quot;:
+  &lt;td /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;td /&gt;
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;intelligence-workspace&quot;
+    &gt;
+      &lt;h1&gt;
+        Reconcile and assess evidence
+      &lt;/h1&gt;
+      &lt;nav
+        aria-label=&quot;Country workflow navigation&quot;
+        class=&quot;toolbar&quot;
+      &gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/workflow-source&quot;
+        &gt;
+          Prepare sources
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/country-workflow&quot;
+        &gt;
+          Run workflows
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/lead&quot;
+        &gt;
+          Accounting intelligence
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/engagements/engagement/evidence&quot;
+        &gt;
+          Upload evidence
+        &lt;/a&gt;
+      &lt;/nav&gt;
+      &lt;details
+        style=&quot;margin: 16px 0px;&quot;
+      &gt;
+        &lt;summary&gt;
+          1
+           synthetic reference scenarios across country workflows
+        &lt;/summary&gt;
+        &lt;p&gt;
+          These scenarios test source comparisons and evidence controls. They do not establish complete statutory coverage or live registry integrations.
+        &lt;/p&gt;
+        &lt;ul&gt;
+          &lt;li&gt;
+            RW-001
+             · 
+            Bank receipt
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/details&gt;
+      &lt;details
+        class=&quot;main-panel&quot;
+        style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+      &gt;
+        &lt;summary&gt;
+          Review stock and gross-profit trends from committed accounts
+        &lt;/summary&gt;
+        &lt;p&gt;
+          Select current and earlier snapshots of this entity. This review uses the functional currency (
+          not loaded
+          ), retains signed account values and requires independent controls. Stock existence, complete classification and reasons for changes require separate evidence. It issues no audit opinion.
+        &lt;/p&gt;
+        &lt;fieldset&gt;
+          &lt;legend&gt;
+            current
+             committed source
+          &lt;/legend&gt;
+          &lt;label&gt;
+            current
+             stock/GP snapshot
+            &lt;select&gt;
+              &lt;option
+                value=&quot;&quot;
+              &gt;
+                Select committed GL/journal or trial balance
+              &lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current inventory
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Debit-normal closing balance.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current inventory
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+                  Bank GL
+                &lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/label&gt;
+            &lt;p&gt;
+              0
+               selected, including selections outside the current search.
+            &lt;/p&gt;
+            &lt;button
+              class=&quot;button&quot;
+              disabled=&quot;&quot;
+            &gt;
+              Clear 
+              current inventory
+               accounts
+            &lt;/button&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               account count
+              &lt;input
+                inputmode=&quot;numeric&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               amount
+              &lt;input
+                inputmode=&quot;decimal&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               account scope assessment
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current
+               zero inventory assessment (required for zero)
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+          &lt;/fieldset&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current revenue
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Credits less debits, excluding opening balances.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current revenue
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current revenue
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+     ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/country-workflows.test.tsx:3720:26
+            </failure>
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows per-position quantity coverage and its declaration boundary (IN)" time="0.2035174">
+            <failure message="Unable to find an accessible element with the role &quot;checkbox&quot; and name &quot;Show source provenance and all columns&quot;
+
+Here are the accessible roles:
+
+  heading:
+
+  Name &quot;Reconcile and assess evidence&quot;:
+  &lt;h1 /&gt;
+
+  Name &quot;Workflow scope&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Recent jobs&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Declared count coverage&quot;:
+  &lt;h2 /&gt;
+
+  --------------------------------------------------
+  navigation:
+
+  Name &quot;Country workflow navigation&quot;:
+  &lt;nav
+    aria-label=&quot;Country workflow navigation&quot;
+    class=&quot;toolbar&quot;
+  /&gt;
+
+  --------------------------------------------------
+  link:
+
+  Name &quot;Prepare sources&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/workflow-source&quot;
+  /&gt;
+
+  Name &quot;Run workflows&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/country-workflow&quot;
+  /&gt;
+
+  Name &quot;Accounting intelligence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead&quot;
+  /&gt;
+
+  Name &quot;Upload evidence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/engagements/engagement/evidence&quot;
+  /&gt;
+
+  Name &quot;Open working-paper actions&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead?event=result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  group:
+
+  Name &quot;&quot;:
+  &lt;details
+    style=&quot;margin: 16px 0px;&quot;
+  /&gt;
+
+  Name &quot;&quot;:
+  &lt;details
+    class=&quot;main-panel&quot;
+    style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+  /&gt;
+
+  Name &quot;current committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;Account evidence scope&quot;:
+  &lt;fieldset /&gt;
+
+  --------------------------------------------------
+  paragraph:
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p
+    class=&quot;text-sm&quot;
+  /&gt;
+
+  --------------------------------------------------
+  list:
+
+  Name &quot;&quot;:
+  &lt;ul /&gt;
+
+  --------------------------------------------------
+  listitem:
+
+  Name &quot;&quot;:
+  &lt;li /&gt;
+
+  --------------------------------------------------
+  combobox:
+
+  Name &quot;current stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;prior stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP periods assessed comparable&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP display rounding&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Workflow&quot;:
+  &lt;select
+    aria-label=&quot;Workflow&quot;
+  /&gt;
+
+  Name &quot;books source&quot;:
+  &lt;select
+    aria-label=&quot;books source&quot;
+  /&gt;
+
+  Name &quot;statement source&quot;:
+  &lt;select
+    aria-label=&quot;statement source&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank account evidence (optional)&quot;:
+  &lt;select
+    aria-label=&quot;Reviewed bank account evidence (optional)&quot;
+  /&gt;
+
+  Name &quot;Saved source or result&quot;:
+  &lt;select
+    aria-label=&quot;Saved source or result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  option:
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select an assessment&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Assessed comparable&quot;:
+  &lt;option
+    value=&quot;yes&quot;
+  /&gt;
+
+  Name &quot;Not assessed comparable — block approval&quot;:
+  &lt;option
+    value=&quot;no&quot;
+  /&gt;
+
+  Name &quot;Select rounding&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Half up&quot;:
+  &lt;option
+    value=&quot;HALF_UP&quot;
+  /&gt;
+
+  Name &quot;Half even&quot;:
+  &lt;option
+    value=&quot;HALF_EVEN&quot;
+  /&gt;
+
+  Name &quot;India outward invoices and notes&quot;:
+  &lt;option
+    value=&quot;india-gstr1-documents&quot;
+  /&gt;
+
+  Name &quot;India GSTR-1 summary reconciliation&quot;:
+  &lt;option
+    value=&quot;india-gstr1-summary&quot;
+  /&gt;
+
+  Name &quot;India invoice evidence register&quot;:
+  &lt;option
+    value=&quot;india-invoice-register&quot;
+  /&gt;
+
+  Name &quot;Payroll accounting bridge&quot;:
+  &lt;option
+    value=&quot;payroll-ledger-rollforward&quot;
+  /&gt;
+
+  Name &quot;Assessed FIFO cost&quot;:
+  &lt;option
+    value=&quot;inventory-fifo-cost&quot;
+  /&gt;
+
+  Name &quot;Inventory valuation and GL controls&quot;:
+  &lt;option
+    value=&quot;inventory-valuation-control&quot;
+  /&gt;
+
+  Name &quot;Controlled procurement&quot;:
+  &lt;option
+    value=&quot;procurement-match&quot;
+  /&gt;
+
+  Name &quot;Expense cutoff&quot;:
+  &lt;option
+    value=&quot;expense-cutoff&quot;
+  /&gt;
+
+  Name &quot;Positive party balances&quot;:
+  &lt;option
+    value=&quot;party-balance-confirmations&quot;
+  /&gt;
+
+  Name &quot;India ESIC population&quot;:
+  &lt;option
+    value=&quot;india-esic-population&quot;
+  /&gt;
+
+  Name &quot;Statutory dues&quot;:
+  &lt;option
+    value=&quot;statutory-dues&quot;
+  /&gt;
+
+  Name &quot;Inventory count bridge&quot;:
+  &lt;option
+    value=&quot;inventory-count-bridge&quot;
+  /&gt;
+
+  Name &quot;Obligation bank allocations&quot;:
+  &lt;option
+    value=&quot;obligation-bank-allocations&quot;
+  /&gt;
+
+  Name &quot;Subsequent bank clearance&quot;:
+  &lt;option
+    value=&quot;bank-subsequent-clearance&quot;
+  /&gt;
+
+  Name &quot;India withholding liability&quot;:
+  &lt;option
+    value=&quot;india-withholding-liability&quot;
+  /&gt;
+
+  Name &quot;India withholding credit&quot;:
+  &lt;option
+    value=&quot;india-withholding-credit&quot;
+  /&gt;
+
+  Name &quot;Credit-note applications&quot;:
+  &lt;option
+    value=&quot;credit-note-applications&quot;
+  /&gt;
+
+  Name &quot;Payroll settlement&quot;:
+  &lt;option
+    value=&quot;payroll-settlement&quot;
+  /&gt;
+
+  Name &quot;India payroll contribution rules review&quot;:
+  &lt;option
+    value=&quot;india-payroll-rules&quot;
+  /&gt;
+
+  Name &quot;Bank account identity and owner evidence&quot;:
+  &lt;option
+    value=&quot;bank-account-evidence&quot;
+  /&gt;
+
+  Name &quot;Bank reconciliation&quot;:
+  &lt;option
+    value=&quot;bank-brs&quot;
+  /&gt;
+
+  Name &quot;India GST&quot;:
+  &lt;option
+    value=&quot;india-gst&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Arithmetic and declared account labels only&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account review current · BANK-1 · AED · 2026-06-30&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Select result&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;gstr1 retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr1-native&quot;
+  /&gt;
+
+  Name &quot;gstr2b retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr2b-native&quot;
+  /&gt;
+
+  Name &quot;Reviewed purchase register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-register&quot;
+  /&gt;
+
+  Name &quot;Reviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Unreviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Account evidence register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-register&quot;
+  /&gt;
+
+  Name &quot;Account evidence ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-ledger&quot;
+  /&gt;
+
+  Name &quot;Account evidence bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-bank&quot;
+  /&gt;
+
+  Name &quot;Account evidence unreviewed · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review current · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Account review stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;account-review-stale&quot;
+  /&gt;
+
+  Name &quot;Account review unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Account review other · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-other&quot;
+  /&gt;
+
+  Name &quot;ESIC population reviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-reviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;esic-review-stale&quot;
+  /&gt;
+
+  Name &quot;ESIC population blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Reviewed FIFO movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;fifo-movements&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory valuations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-valuations&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party items · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-items&quot;
+  /&gt;
+
+  Name &quot;Reviewed party controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-responses&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff documents · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-documents&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff recognitions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-recognitions&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff postings · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-postings&quot;
+  /&gt;
+
+  Name &quot;Coverage REVIEWED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-REVIEWED&quot;
+  /&gt;
+
+  Name &quot;Coverage UNVERIFIED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-UNVERIFIED&quot;
+  /&gt;
+
+  Name &quot;Unreviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger opening · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-opening&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger payroll · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-payroll&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger posted · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-posted&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger closing · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-closing&quot;
+  /&gt;
+
+  Name &quot;Unreviewed payroll ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-ledger&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear expected · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-expected&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-return&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-payment&quot;
+  /&gt;
+
+  Name &quot;Regular monthly payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;regular-payment&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-books&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory counts · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-counts&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-movements&quot;
+  /&gt;
+
+  Name &quot;Uncontrolled stock · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;uncontrolled-stock&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-bases&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-rules&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-reported&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-reported&quot;
+  /&gt;
+
+  Name &quot;Assessed import boxes · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-books&quot;
+  /&gt;
+
+  Name &quot;Full filed VAT201 source · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-filed&quot;
+  /&gt;
+
+  Name &quot;Reviewed expected dues · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;expected-dues&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;dues-links&quot;
+  /&gt;
+
+  Name &quot;WPS instructions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wps&quot;
+  /&gt;
+
+  Name &quot;Native ECR return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ecr&quot;
+  /&gt;
+
+  Name &quot;Payroll component bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-rules&quot;
+  /&gt;
+
+  Name &quot;Reported ECR · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;reported&quot;
+  /&gt;
+
+  Name &quot;Reviewed ESI reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-reported&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Outstanding cheques · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;outstanding&quot;
+  /&gt;
+
+  Name &quot;Clearance allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;clearances&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Wrong source type · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wrong&quot;
+  /&gt;
+
+  Name &quot;Saved reconciliation · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  textbox:
+
+  Name &quot;Find current inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;current zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;prior zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock/GP period comparability assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock-change review threshold (%)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Gross-profit margin change threshold (percentage points)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP display decimal places&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP review title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Schedule title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Linked account scope assessment&quot;:
+  &lt;textarea
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Bank account identifier&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account currency&quot;:
+  &lt;input
+    value=&quot;INR&quot;
+  /&gt;
+
+  Name &quot;book opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;book closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Scope and source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Review / exception rationale&quot;:
+  &lt;textarea /&gt;
+
+  --------------------------------------------------
+  listbox:
+
+  Name &quot;current inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  --------------------------------------------------
+  button:
+
+  Name &quot;Clear current inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Prepare stock and GP review&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Queue calculation&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export XLSX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export PDF&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export DOCX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Independent approval&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Reject&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Previous rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Next rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  --------------------------------------------------
+  table:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;table /&gt;
+
+  --------------------------------------------------
+  caption:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;caption /&gt;
+
+  --------------------------------------------------
+  rowgroup:
+
+  Name &quot;&quot;:
+  &lt;thead /&gt;
+
+  Name &quot;&quot;:
+  &lt;tbody /&gt;
+
+  --------------------------------------------------
+  row:
+
+  Name &quot;site sku lot uom currency book quantity count quantity count supported quantity quantity coverage percent state Disposition&quot;:
+  &lt;tr /&gt;
+
+  Name &quot;WH S L PCS INR 10 4 4 40.0 VARIANCE Document exception&quot;:
+  &lt;tr /&gt;
+
+  --------------------------------------------------
+  columnheader:
+
+  Name &quot;site&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;sku&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;lot&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;uom&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;currency&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;book quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count supported quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;quantity coverage percent&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;state&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;Disposition&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  --------------------------------------------------
+  cell:
+
+  Name &quot;WH&quot;:
+  &lt;td /&gt;
+
+  Name &quot;S&quot;:
+  &lt;td /&gt;
+
+  Name &quot;L&quot;:
+  &lt;td /&gt;
+
+  Name &quot;PCS&quot;:
+  &lt;td /&gt;
+
+  Name &quot;INR&quot;:
+  &lt;td /&gt;
+
+  Name &quot;10&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;40.0&quot;:
+  &lt;td /&gt;
+
+  Name &quot;VARIANCE&quot;:
+  &lt;td /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;td /&gt;
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;intelligence-workspace&quot;
+    &gt;
+      &lt;h1&gt;
+        Reconcile and assess evidence
+      &lt;/h1&gt;
+      &lt;nav
+        aria-label=&quot;Country workflow navigation&quot;
+        class=&quot;toolbar&quot;
+      &gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/workflow-source&quot;
+        &gt;
+          Prepare sources
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/country-workflow&quot;
+        &gt;
+          Run workflows
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/lead&quot;
+        &gt;
+          Accounting intelligence
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/engagements/engagement/evidence&quot;
+        &gt;
+          Upload evidence
+        &lt;/a&gt;
+      &lt;/nav&gt;
+      &lt;details
+        style=&quot;margin: 16px 0px;&quot;
+      &gt;
+        &lt;summary&gt;
+          1
+           synthetic reference scenarios across country workflows
+        &lt;/summary&gt;
+        &lt;p&gt;
+          These scenarios test source comparisons and evidence controls. They do not establish complete statutory coverage or live registry integrations.
+        &lt;/p&gt;
+        &lt;ul&gt;
+          &lt;li&gt;
+            RW-001
+             · 
+            Bank receipt
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/details&gt;
+      &lt;details
+        class=&quot;main-panel&quot;
+        style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+      &gt;
+        &lt;summary&gt;
+          Review stock and gross-profit trends from committed accounts
+        &lt;/summary&gt;
+        &lt;p&gt;
+          Select current and earlier snapshots of this entity. This review uses the functional currency (
+          not loaded
+          ), retains signed account values and requires independent controls. Stock existence, complete classification and reasons for changes require separate evidence. It issues no audit opinion.
+        &lt;/p&gt;
+        &lt;fieldset&gt;
+          &lt;legend&gt;
+            current
+             committed source
+          &lt;/legend&gt;
+          &lt;label&gt;
+            current
+             stock/GP snapshot
+            &lt;select&gt;
+              &lt;option
+                value=&quot;&quot;
+              &gt;
+                Select committed GL/journal or trial balance
+              &lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current inventory
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Debit-normal closing balance.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current inventory
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+                  Bank GL
+                &lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/label&gt;
+            &lt;p&gt;
+              0
+               selected, including selections outside the current search.
+            &lt;/p&gt;
+            &lt;button
+              class=&quot;button&quot;
+              disabled=&quot;&quot;
+            &gt;
+              Clear 
+              current inventory
+               accounts
+            &lt;/button&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               account count
+              &lt;input
+                inputmode=&quot;numeric&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               amount
+              &lt;input
+                inputmode=&quot;decimal&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               account scope assessment
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current
+               zero inventory assessment (required for zero)
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+          &lt;/fieldset&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current revenue
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Credits less debits, excluding opening balances.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current revenue
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current revenue
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+     ..." type="TestingLibraryElementError">
+TestingLibraryElementError: Unable to find an accessible element with the role &quot;checkbox&quot; and name &quot;Show source provenance and all columns&quot;
+
+Here are the accessible roles:
+
+  heading:
+
+  Name &quot;Reconcile and assess evidence&quot;:
+  &lt;h1 /&gt;
+
+  Name &quot;Workflow scope&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Recent jobs&quot;:
+  &lt;h2 /&gt;
+
+  Name &quot;Declared count coverage&quot;:
+  &lt;h2 /&gt;
+
+  --------------------------------------------------
+  navigation:
+
+  Name &quot;Country workflow navigation&quot;:
+  &lt;nav
+    aria-label=&quot;Country workflow navigation&quot;
+    class=&quot;toolbar&quot;
+  /&gt;
+
+  --------------------------------------------------
+  link:
+
+  Name &quot;Prepare sources&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/workflow-source&quot;
+  /&gt;
+
+  Name &quot;Run workflows&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/country-workflow&quot;
+  /&gt;
+
+  Name &quot;Accounting intelligence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead&quot;
+  /&gt;
+
+  Name &quot;Upload evidence&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/engagements/engagement/evidence&quot;
+  /&gt;
+
+  Name &quot;Open working-paper actions&quot;:
+  &lt;a
+    class=&quot;button&quot;
+    href=&quot;/intelligence/engagement/lead?event=result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  group:
+
+  Name &quot;&quot;:
+  &lt;details
+    style=&quot;margin: 16px 0px;&quot;
+  /&gt;
+
+  Name &quot;&quot;:
+  &lt;details
+    class=&quot;main-panel&quot;
+    style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+  /&gt;
+
+  Name &quot;current committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;current cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior committed source&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior inventory&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior revenue&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;prior cost of sales&quot;:
+  &lt;fieldset /&gt;
+
+  Name &quot;Account evidence scope&quot;:
+  &lt;fieldset /&gt;
+
+  --------------------------------------------------
+  paragraph:
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p /&gt;
+
+  Name &quot;&quot;:
+  &lt;p
+    class=&quot;text-sm&quot;
+  /&gt;
+
+  --------------------------------------------------
+  list:
+
+  Name &quot;&quot;:
+  &lt;ul /&gt;
+
+  --------------------------------------------------
+  listitem:
+
+  Name &quot;&quot;:
+  &lt;li /&gt;
+
+  --------------------------------------------------
+  combobox:
+
+  Name &quot;current stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;prior stock/GP snapshot&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP periods assessed comparable&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Stock/GP display rounding&quot;:
+  &lt;select /&gt;
+
+  Name &quot;Workflow&quot;:
+  &lt;select
+    aria-label=&quot;Workflow&quot;
+  /&gt;
+
+  Name &quot;books source&quot;:
+  &lt;select
+    aria-label=&quot;books source&quot;
+  /&gt;
+
+  Name &quot;statement source&quot;:
+  &lt;select
+    aria-label=&quot;statement source&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank account evidence (optional)&quot;:
+  &lt;select
+    aria-label=&quot;Reviewed bank account evidence (optional)&quot;
+  /&gt;
+
+  Name &quot;Saved source or result&quot;:
+  &lt;select
+    aria-label=&quot;Saved source or result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  option:
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select committed GL/journal or trial balance&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;100 · Bank GL&quot;:
+  &lt;option
+    value=&quot;cash&quot;
+  /&gt;
+
+  Name &quot;Select an assessment&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Assessed comparable&quot;:
+  &lt;option
+    value=&quot;yes&quot;
+  /&gt;
+
+  Name &quot;Not assessed comparable — block approval&quot;:
+  &lt;option
+    value=&quot;no&quot;
+  /&gt;
+
+  Name &quot;Select rounding&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Half up&quot;:
+  &lt;option
+    value=&quot;HALF_UP&quot;
+  /&gt;
+
+  Name &quot;Half even&quot;:
+  &lt;option
+    value=&quot;HALF_EVEN&quot;
+  /&gt;
+
+  Name &quot;India outward invoices and notes&quot;:
+  &lt;option
+    value=&quot;india-gstr1-documents&quot;
+  /&gt;
+
+  Name &quot;India GSTR-1 summary reconciliation&quot;:
+  &lt;option
+    value=&quot;india-gstr1-summary&quot;
+  /&gt;
+
+  Name &quot;India invoice evidence register&quot;:
+  &lt;option
+    value=&quot;india-invoice-register&quot;
+  /&gt;
+
+  Name &quot;Payroll accounting bridge&quot;:
+  &lt;option
+    value=&quot;payroll-ledger-rollforward&quot;
+  /&gt;
+
+  Name &quot;Assessed FIFO cost&quot;:
+  &lt;option
+    value=&quot;inventory-fifo-cost&quot;
+  /&gt;
+
+  Name &quot;Inventory valuation and GL controls&quot;:
+  &lt;option
+    value=&quot;inventory-valuation-control&quot;
+  /&gt;
+
+  Name &quot;Controlled procurement&quot;:
+  &lt;option
+    value=&quot;procurement-match&quot;
+  /&gt;
+
+  Name &quot;Expense cutoff&quot;:
+  &lt;option
+    value=&quot;expense-cutoff&quot;
+  /&gt;
+
+  Name &quot;Positive party balances&quot;:
+  &lt;option
+    value=&quot;party-balance-confirmations&quot;
+  /&gt;
+
+  Name &quot;India ESIC population&quot;:
+  &lt;option
+    value=&quot;india-esic-population&quot;
+  /&gt;
+
+  Name &quot;Statutory dues&quot;:
+  &lt;option
+    value=&quot;statutory-dues&quot;
+  /&gt;
+
+  Name &quot;Inventory count bridge&quot;:
+  &lt;option
+    value=&quot;inventory-count-bridge&quot;
+  /&gt;
+
+  Name &quot;Obligation bank allocations&quot;:
+  &lt;option
+    value=&quot;obligation-bank-allocations&quot;
+  /&gt;
+
+  Name &quot;Subsequent bank clearance&quot;:
+  &lt;option
+    value=&quot;bank-subsequent-clearance&quot;
+  /&gt;
+
+  Name &quot;India withholding liability&quot;:
+  &lt;option
+    value=&quot;india-withholding-liability&quot;
+  /&gt;
+
+  Name &quot;India withholding credit&quot;:
+  &lt;option
+    value=&quot;india-withholding-credit&quot;
+  /&gt;
+
+  Name &quot;Credit-note applications&quot;:
+  &lt;option
+    value=&quot;credit-note-applications&quot;
+  /&gt;
+
+  Name &quot;Payroll settlement&quot;:
+  &lt;option
+    value=&quot;payroll-settlement&quot;
+  /&gt;
+
+  Name &quot;India payroll contribution rules review&quot;:
+  &lt;option
+    value=&quot;india-payroll-rules&quot;
+  /&gt;
+
+  Name &quot;Bank account identity and owner evidence&quot;:
+  &lt;option
+    value=&quot;bank-account-evidence&quot;
+  /&gt;
+
+  Name &quot;Bank reconciliation&quot;:
+  &lt;option
+    value=&quot;bank-brs&quot;
+  /&gt;
+
+  Name &quot;India GST&quot;:
+  &lt;option
+    value=&quot;india-gst&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Select transactions source&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · REVIEWED&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Arithmetic and declared account labels only&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account review current · BANK-1 · AED · 2026-06-30&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Select result&quot;:
+  &lt;option
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;gstr1 retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr1-native&quot;
+  /&gt;
+
+  Name &quot;gstr2b retained return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;gstr2b-native&quot;
+  /&gt;
+
+  Name &quot;Reviewed purchase register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-register&quot;
+  /&gt;
+
+  Name &quot;Reviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Unreviewed INV-01 evidence · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-invoice-evidence&quot;
+  /&gt;
+
+  Name &quot;Account evidence register · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-register&quot;
+  /&gt;
+
+  Name &quot;Account evidence ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-ledger&quot;
+  /&gt;
+
+  Name &quot;Account evidence bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-bank&quot;
+  /&gt;
+
+  Name &quot;Account evidence unreviewed · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review current · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-current&quot;
+  /&gt;
+
+  Name &quot;Account review stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;account-review-stale&quot;
+  /&gt;
+
+  Name &quot;Account review unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Account review blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Account review other · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;account-review-other&quot;
+  /&gt;
+
+  Name &quot;ESIC population reviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-reviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population unreviewed · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-unreviewed&quot;
+  /&gt;
+
+  Name &quot;ESIC population stale · v2 · STALE&quot;:
+  &lt;option
+    value=&quot;esic-review-stale&quot;
+  /&gt;
+
+  Name &quot;ESIC population blocked · v2 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-review-blocked&quot;
+  /&gt;
+
+  Name &quot;Reviewed FIFO movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;fifo-movements&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory valuations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-valuations&quot;
+  /&gt;
+
+  Name &quot;Reviewed inventory controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;valuation-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party items · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-items&quot;
+  /&gt;
+
+  Name &quot;Reviewed party controls · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-controls&quot;
+  /&gt;
+
+  Name &quot;Reviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-responses&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff documents · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-documents&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff recognitions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-recognitions&quot;
+  /&gt;
+
+  Name &quot;Reviewed cutoff postings · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;cutoff-postings&quot;
+  /&gt;
+
+  Name &quot;Coverage REVIEWED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-REVIEWED&quot;
+  /&gt;
+
+  Name &quot;Coverage UNVERIFIED · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;coverage-UNVERIFIED&quot;
+  /&gt;
+
+  Name &quot;Unreviewed party responses · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;party-unreviewed&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger opening · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-opening&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger payroll · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-payroll&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger posted · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-posted&quot;
+  /&gt;
+
+  Name &quot;Reviewed ledger closing · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ledger-closing&quot;
+  /&gt;
+
+  Name &quot;Unreviewed payroll ledger · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-ledger&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear expected · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-expected&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-return&quot;
+  /&gt;
+
+  Name &quot;Reviewed arrear payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;arrear-payment&quot;
+  /&gt;
+
+  Name &quot;Regular monthly payment · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;regular-payment&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-books&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory counts · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-counts&quot;
+  /&gt;
+
+  Name &quot;Controlled inventory movements · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;inventory-movements&quot;
+  /&gt;
+
+  Name &quot;Uncontrolled stock · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;uncontrolled-stock&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-bases&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-rules&quot;
+  /&gt;
+
+  Name &quot;Reviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;pension-reported&quot;
+  /&gt;
+
+  Name &quot;Unreviewed pension-reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-pension-reported&quot;
+  /&gt;
+
+  Name &quot;Assessed import boxes · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-books&quot;
+  /&gt;
+
+  Name &quot;Full filed VAT201 source · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;vat-filed&quot;
+  /&gt;
+
+  Name &quot;Reviewed expected dues · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;expected-dues&quot;
+  /&gt;
+
+  Name &quot;Reviewed bank allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;dues-links&quot;
+  /&gt;
+
+  Name &quot;WPS instructions · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wps&quot;
+  /&gt;
+
+  Name &quot;Native ECR return · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;ecr&quot;
+  /&gt;
+
+  Name &quot;Payroll component bases · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;bases&quot;
+  /&gt;
+
+  Name &quot;Reviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;rules&quot;
+  /&gt;
+
+  Name &quot;Unreviewed contribution rules · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;unreviewed-rules&quot;
+  /&gt;
+
+  Name &quot;Reported ECR · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;reported&quot;
+  /&gt;
+
+  Name &quot;Reviewed ESI reported · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;esic-reported&quot;
+  /&gt;
+
+  Name &quot;Books · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;books&quot;
+  /&gt;
+
+  Name &quot;Outstanding cheques · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;outstanding&quot;
+  /&gt;
+
+  Name &quot;Clearance allocations · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;clearances&quot;
+  /&gt;
+
+  Name &quot;Bank · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;statement&quot;
+  /&gt;
+
+  Name &quot;Wrong source type · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;wrong&quot;
+  /&gt;
+
+  Name &quot;Saved reconciliation · v1 · CURRENT&quot;:
+  &lt;option
+    value=&quot;result&quot;
+  /&gt;
+
+  --------------------------------------------------
+  textbox:
+
+  Name &quot;Find current inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;current zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find current cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent current cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;current cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior inventory accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior inventory amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior inventory account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;prior zero inventory assessment (required for zero)&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior revenue accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior revenue amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior revenue account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Find prior cost of sales accounts&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales account count&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Independent prior cost of sales amount&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales account scope assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock/GP period comparability assessment&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Stock-change review threshold (%)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Gross-profit margin change threshold (percentage points)&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP display decimal places&quot;:
+  &lt;input
+    inputmode=&quot;numeric&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP review title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Stock/GP source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Schedule title&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Linked account scope assessment&quot;:
+  &lt;textarea
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Bank account identifier&quot;:
+  &lt;input
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Account currency&quot;:
+  &lt;input
+    value=&quot;INR&quot;
+  /&gt;
+
+  Name &quot;book opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;book closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement opening&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;statement closing&quot;:
+  &lt;input
+    inputmode=&quot;decimal&quot;
+    value=&quot;&quot;
+  /&gt;
+
+  Name &quot;Scope and source rationale&quot;:
+  &lt;textarea /&gt;
+
+  Name &quot;Review / exception rationale&quot;:
+  &lt;textarea /&gt;
+
+  --------------------------------------------------
+  listbox:
+
+  Name &quot;current inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;current cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior inventory accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior revenue accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  Name &quot;prior cost of sales accounts&quot;:
+  &lt;select
+    disabled=&quot;&quot;
+    multiple=&quot;&quot;
+    size=&quot;4&quot;
+  /&gt;
+
+  --------------------------------------------------
+  button:
+
+  Name &quot;Clear current inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear current cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior inventory accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior revenue accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Clear prior cost of sales accounts&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Prepare stock and GP review&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Queue calculation&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export XLSX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export PDF&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Export DOCX&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Independent approval&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Reject&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;button
+    class=&quot;button&quot;
+  /&gt;
+
+  Name &quot;Previous rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  Name &quot;Next rows&quot;:
+  &lt;button
+    class=&quot;button&quot;
+    disabled=&quot;&quot;
+  /&gt;
+
+  --------------------------------------------------
+  table:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;table /&gt;
+
+  --------------------------------------------------
+  caption:
+
+  Name &quot;Source-linked schedule · rows 1–1; XLSX contains the full result&quot;:
+  &lt;caption /&gt;
+
+  --------------------------------------------------
+  rowgroup:
+
+  Name &quot;&quot;:
+  &lt;thead /&gt;
+
+  Name &quot;&quot;:
+  &lt;tbody /&gt;
+
+  --------------------------------------------------
+  row:
+
+  Name &quot;site sku lot uom currency book quantity count quantity count supported quantity quantity coverage percent state Disposition&quot;:
+  &lt;tr /&gt;
+
+  Name &quot;WH S L PCS INR 10 4 4 40.0 VARIANCE Document exception&quot;:
+  &lt;tr /&gt;
+
+  --------------------------------------------------
+  columnheader:
+
+  Name &quot;site&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;sku&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;lot&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;uom&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;currency&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;book quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;count supported quantity&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;quantity coverage percent&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;state&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  Name &quot;Disposition&quot;:
+  &lt;th
+    scope=&quot;col&quot;
+  /&gt;
+
+  --------------------------------------------------
+  cell:
+
+  Name &quot;WH&quot;:
+  &lt;td /&gt;
+
+  Name &quot;S&quot;:
+  &lt;td /&gt;
+
+  Name &quot;L&quot;:
+  &lt;td /&gt;
+
+  Name &quot;PCS&quot;:
+  &lt;td /&gt;
+
+  Name &quot;INR&quot;:
+  &lt;td /&gt;
+
+  Name &quot;10&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;4&quot;:
+  &lt;td /&gt;
+
+  Name &quot;40.0&quot;:
+  &lt;td /&gt;
+
+  Name &quot;VARIANCE&quot;:
+  &lt;td /&gt;
+
+  Name &quot;Document exception&quot;:
+  &lt;td /&gt;
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+&lt;body&gt;
+  &lt;div&gt;
+    &lt;div
+      class=&quot;intelligence-workspace&quot;
+    &gt;
+      &lt;h1&gt;
+        Reconcile and assess evidence
+      &lt;/h1&gt;
+      &lt;nav
+        aria-label=&quot;Country workflow navigation&quot;
+        class=&quot;toolbar&quot;
+      &gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/workflow-source&quot;
+        &gt;
+          Prepare sources
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/country-workflow&quot;
+        &gt;
+          Run workflows
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/intelligence/engagement/lead&quot;
+        &gt;
+          Accounting intelligence
+        &lt;/a&gt;
+        &lt;a
+          class=&quot;button&quot;
+          href=&quot;/engagements/engagement/evidence&quot;
+        &gt;
+          Upload evidence
+        &lt;/a&gt;
+      &lt;/nav&gt;
+      &lt;details
+        style=&quot;margin: 16px 0px;&quot;
+      &gt;
+        &lt;summary&gt;
+          1
+           synthetic reference scenarios across country workflows
+        &lt;/summary&gt;
+        &lt;p&gt;
+          These scenarios test source comparisons and evidence controls. They do not establish complete statutory coverage or live registry integrations.
+        &lt;/p&gt;
+        &lt;ul&gt;
+          &lt;li&gt;
+            RW-001
+             · 
+            Bank receipt
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/details&gt;
+      &lt;details
+        class=&quot;main-panel&quot;
+        style=&quot;padding: 20px; margin-bottom: 16px;&quot;
+      &gt;
+        &lt;summary&gt;
+          Review stock and gross-profit trends from committed accounts
+        &lt;/summary&gt;
+        &lt;p&gt;
+          Select current and earlier snapshots of this entity. This review uses the functional currency (
+          not loaded
+          ), retains signed account values and requires independent controls. Stock existence, complete classification and reasons for changes require separate evidence. It issues no audit opinion.
+        &lt;/p&gt;
+        &lt;fieldset&gt;
+          &lt;legend&gt;
+            current
+             committed source
+          &lt;/legend&gt;
+          &lt;label&gt;
+            current
+             stock/GP snapshot
+            &lt;select&gt;
+              &lt;option
+                value=&quot;&quot;
+              &gt;
+                Select committed GL/journal or trial balance
+              &lt;/option&gt;
+            &lt;/select&gt;
+          &lt;/label&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current inventory
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Debit-normal closing balance.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current inventory
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+                  Bank GL
+                &lt;/option&gt;
+              &lt;/select&gt;
+            &lt;/label&gt;
+            &lt;p&gt;
+              0
+               selected, including selections outside the current search.
+            &lt;/p&gt;
+            &lt;button
+              class=&quot;button&quot;
+              disabled=&quot;&quot;
+            &gt;
+              Clear 
+              current inventory
+               accounts
+            &lt;/button&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               account count
+              &lt;input
+                inputmode=&quot;numeric&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              Independent 
+              current inventory
+               amount
+              &lt;input
+                inputmode=&quot;decimal&quot;
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current inventory
+               account scope assessment
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current
+               zero inventory assessment (required for zero)
+              &lt;textarea /&gt;
+            &lt;/label&gt;
+          &lt;/fieldset&gt;
+          &lt;fieldset&gt;
+            &lt;legend&gt;
+              current revenue
+            &lt;/legend&gt;
+            &lt;p&gt;
+              Credits less debits, excluding opening balances.
+               
+              Assess account classification and complete scope explicitly.
+            &lt;/p&gt;
+            &lt;label&gt;
+              Find 
+              current revenue
+               accounts
+              &lt;input
+                value=&quot;&quot;
+              /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+              current revenue
+               accounts
+              &lt;select
+                disabled=&quot;&quot;
+                multiple=&quot;&quot;
+                size=&quot;4&quot;
+              &gt;
+                &lt;option
+                  value=&quot;cash&quot;
+                &gt;
+                  100
+                   · 
+     ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ tests/country-workflows.test.tsx:3720:26
+            </failure>
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="disables legacy stock approval while retaining the saved result (AE)" time="0.0957826">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="disables legacy stock approval while retaining the saved result (IN)" time="0.1009955">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows FIFO closing quantities and cost differences before expanded arithmetic provenance" time="0.1388367">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/generic-matching-candidates.test.tsx" timestamp="2026-10-30T12:06:57.910Z" hostname="DESKTOP-B3SR465" tests="16" failures="0" errors="0" skipped="0" time="1.1352289">
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="connects complete generic reconciliation candidates with independent item and candidate pagination" time="0.4699784">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="shows recalculation guidance for historical generic results with incomplete candidates" time="0.0150962">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="does not interpret another result kind as a reconciliation candidate population" time="0.0085659">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="shows full-population review counts even when a result page contains fewer rows" time="0.0411485">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="retains the original account identity and mapping assessment in source review" time="0.0162638">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="queues an explicit source account declaration without changing the original file" time="0.0511275">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/true//)" time="0.0323816">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (STALE/true//)" time="0.0335278">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/false//)" time="0.0366564">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/true/stock-audit/)" time="0.0412525">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/true/stock-audit/stock-declared-count-coverage/1)" time="0.0313161">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="keeps stock quantities visible in stale lead history with provenance available separately" time="0.259372">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="retains a directly opened stale report in its result selector without enabling approval" time="0.0291441">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="does not name a different result as the selected historical event" time="0.0237293">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="retains the requested ID while report detail loads and then shows the authorized stale result" time="0.0312414">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="shows a failed detail request and retries that request without treating it as an empty selection" time="0.0121835">
+        </testcase>
+    </testsuite>
+</testsuites>
