@@ -7,6 +7,7 @@ import {
 import { readFileSync, mkdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import type { WorkflowEvent } from "./msme-browser-workflow";
+import { runStockQuantityBrowserWorkflow } from "./stock-quantity-browser-workflow";
 
 const screenshots = "test-results/country-reports";
 async function login(page: Page, email: string) {
@@ -59,7 +60,7 @@ function ledger(current: boolean, revenue: number) {
   return Buffer.from(rows.join("\n") + "\n");
 }
 
-test("synthetic UAE then India stock GP UI controls, independent approval, full lineage export and prior-source staleness", async ({
+test("synthetic UAE then India stock GP, declared quantity coverage, independent review, full exports and source staleness", async ({
   page,
   browser,
 }) => {
@@ -477,6 +478,15 @@ test("synthetic UAE then India stock GP UI controls, independent approval, full 
         .screenshot({
           path: `${screenshots}/${country}-stock-GP-prior-superseded-stale.png`,
         });
+      await runStockQuantityBrowserWorkflow(
+        page,
+        reviewer,
+        eid,
+        identities.tenant_id,
+        country,
+        currency,
+        screenshots,
+      );
     }
     expect(errors).toEqual([]);
   } finally {

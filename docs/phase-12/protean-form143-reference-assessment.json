@@ -1,0 +1,75 @@
+{
+  "scope": "Retained primary Form 143 references for native TCS import qualification; no parser or filing qualification",
+  "retrieved_date": "2026-10-30",
+  "download_page": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+  "qualification_status": "SOURCE_CONFLICTS_REQUIRE_ASSESSMENT",
+  "sources": [
+    {
+      "path": "docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-22072026.xlsx",
+      "url": "https://tinpan.proteantech.in/downloads/e-tds/Form%20Number%20143-27EQ%20-%20Q1%20to%20Q4_22072026.xlsx",
+      "bytes": 37837,
+      "sha256": "c487ddd78125433aefc4063ccb93ebe820156c42e1d2a58986ae110c50fc51a7",
+      "original_bytes": true
+    },
+    {
+      "path": "docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt",
+      "url": "https://tinpan.proteantech.in/downloads/e-tds/143.txt",
+      "bytes": 546,
+      "sha256": "3e89997614f6ee2781fa7d2f72e44d5b78ca2d240a9debc5d77f08b5815b20ab",
+      "original_bytes": true
+    }
+  ],
+  "observations": [
+    {
+      "kind": "VERSION_LABEL_CONFLICT",
+      "page_label": "File Format for Form Number 143 Q1 to Q4 Version 1.2",
+      "sheet": "FIleformat_R",
+      "cell": "A2",
+      "workbook_version": "1.1"
+    },
+    {
+      "kind": "FIELD_COUNT_EXAMPLE_CONFLICT",
+      "sheet": "FIleformat_R",
+      "cell": "B13",
+      "notes_file_header_fields": 16,
+      "notes_file_header_delimiters": 15,
+      "numbered_header_fields_range": "A22:A39",
+      "numbered_header_fields": 18,
+      "original_sample_header_fields": 18
+    },
+    {
+      "kind": "MANDATORY_SAMPLE_VALUE_CONFLICT",
+      "sheet": "FIleformat_R",
+      "field_number_cell": "A171",
+      "field_number": 18,
+      "mandatory_cell": "F171",
+      "mandatory_value": "M",
+      "allowed_values_cell": "G171",
+      "allowed_values": [
+        "Y",
+        "N"
+      ],
+      "sample_line": 4,
+      "sample_record_type": "DD",
+      "sample_field_number": 18,
+      "sample_value": ""
+    }
+  ],
+  "original_sample_record_widths": {
+    "FH": 18,
+    "BH": 72,
+    "CD": 30,
+    "DD": 45
+  },
+  "inspection": "Read-only bounded workbook cell and exact sample-field inspection; no workbook changes or visual verification claimed",
+  "next_requirements": [
+    "Resolve version and normative field ambiguities against an authoritative corrected layout or independently assessed applicable specification.",
+    "Retain full regular/correction record hierarchy and independent amount/population controls before adding a production native profile.",
+    "Qualify representative authorized client or portal files; do not infer filing acceptance, challan payment, tax rate correctness or credit entitlement from a parsed statement."
+  ],
+  "limits": [
+    "No new India native format is enabled by archiving these files.",
+    "The public publisher sample is reference data, not a client pilot or a test expectation independently checked for the application.",
+    "This does not change the global roadmap checkpoint."
+  ]
+}

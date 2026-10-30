@@ -1,0 +1,38 @@
+{
+  "scope": "Hosted release test extension for declared stock count quantities and stale paper UI gates",
+  "source_files": [
+    {
+      "path": "frontend/e2e/inventory-performance-release.spec.ts",
+      "sha256": "afdd6112fb5f63727b0c630a969c65915339920f229af06e24c94a4c4e31215c"
+    },
+    {
+      "path": "frontend/e2e/stock-quantity-browser-workflow.ts",
+      "sha256": "e8efcb627042086f2ed65bd734574e71993970764c4c7c4d708fbb80deabd62a"
+    }
+  ],
+  "local_verification": {
+    "scoped_eslint": "passed",
+    "typescript": "passed",
+    "filtered_test_discovery": "one stock/GP release case discovered",
+    "exact_browser_xlsx_assertion": "Valid workbook passes; negative count with a numeric coverage result fails"
+  },
+  "hosted_status": "PENDING_FOR_THIS_SOURCE",
+  "planned_countries": [
+    "AE",
+    "IN"
+  ],
+  "planned_checks": [
+    "Actual clean retained CSV uploads, queued worker source preparation and independent source reviews.",
+    "Explicit source row and directional quantity controls; no aggregate quantity across positions.",
+    "UI stock calculation with partial count 40%, negative count null and missing count null; monetary supported value 40 out of book value 230.",
+    "Unresolved exceptions reject independent approval; explicit dispositions retain unchanged quantities.",
+    "Full XLSX validates three position records; negative coverage remains null.",
+    "Source withdrawal marks approved result STALE with unchanged body/version and disables connected paper creation.",
+    "Four original new quantity-coverage captures require separate download and visual inspection."
+  ],
+  "limits": [
+    "Synthetic browser extension, not a passed hosted test merely because it was added.",
+    "No real physical verification, native TCS parser or client qualification is claimed.",
+    "Archived Protean reference conflicts are a separate evidence assessment."
+  ]
+}

@@ -41,3 +41,14 @@ they do not rewrite or delete historical results. Seven additional cases cover
 UAE/India legacy approval and current/stale/unreviewed/legacy/current-version
 paper controls. The two affected frontend suites passed all 153 tests; scoped
 ESLint and TypeScript also passed. Hosted checks remain source-specific.
+
+Hosted browser extension: stock-quantity-browser-workflow.ts is called for each
+country by the existing stock/GP release test. Actual retained CSV uploads,
+ClamAV scans and queued source preparation produce independent directional
+controls for three book positions and two count positions. UI calculation keeps
+partial, negative and missing count states distinct. Independent approval first
+fails on undocumented exceptions, then retains 40% after explicit dispositions.
+The test verifies complete XLSX rows and unchanged stale history after source
+withdrawal, plus the disabled working-paper action, with four new captures.
+TypeScript, scoped lint and test discovery passed; hosted execution and actual
+visual review of these new captures remain pending.
