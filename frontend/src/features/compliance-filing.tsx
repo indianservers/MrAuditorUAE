@@ -17,9 +17,13 @@ const stages = [
 export function ComplianceFiling({
   base,
   paper,
+  canManage = true,
+  canApprove = true,
 }: {
   base: string;
   paper: Paper;
+  canManage?: boolean;
+  canApprove?: boolean;
 }) {
   const current = String(paper.body.filing_stage || "not_started");
   const next = stages[Math.min(stages.indexOf(current) + 1, stages.length - 1)];
@@ -27,6 +31,13 @@ export function ComplianceFiling({
   const [receipt, setReceipt] = useState("");
   const action = useAction();
   const receiptRequired = stage === "submitted" || stage === "acknowledged";
+  const locked = paper.status === "LOCKED";
+  const permitted =
+    stage === "approved_for_submission" ? canApprove : canManage;
+  const validReceipt =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+      receipt,
+    );
   return (
     <section aria-label="Filing readiness">
       <h3>Filing readiness</h3>
@@ -42,10 +53,41 @@ export function ComplianceFiling({
         . Record an evidenced human decision; this does not submit to an
         authority.
       </p>
+      <p>
+        Jurisdiction: {String(paper.body.jurisdiction || "Not recorded")}.
+        Changes to approved country scope, obligation criteria or existing
+        receipts require a return to preparing and independent reassessment.
+      </p>
+      {Boolean(
+        paper.body.submission_evidence_id ||
+        paper.body.acknowledgment_evidence_id,
+      ) && (
+        <dl aria-label="Retained filing receipts">
+          <dt>Recorded submission evidence</dt>
+          <dd>{String(paper.body.submission_evidence_id || "Not recorded")}</dd>
+          <dt>Recorded acknowledgment evidence</dt>
+          <dd>
+            {String(paper.body.acknowledgment_evidence_id || "Not recorded")}
+          </dd>
+        </dl>
+      )}
+      {locked && (
+        <p role="status">
+          Reopen the locked record before changing its filing stage.
+        </p>
+      )}
+      {!permitted && (
+        <p role="status">
+          {stage === "approved_for_submission"
+            ? "A user with filing approval permission must record this stage."
+            : "A user with filing management permission must record this stage."}
+        </p>
+      )}
       <label>
         Next filing stage
         <select
           value={stage}
+          disabled={locked || action.isPending}
           onChange={(e) => {
             setStage(e.target.value);
             setReceipt("");
@@ -74,8 +116,10 @@ export function ComplianceFiling({
       <Button
         disabled={
           action.isPending ||
+          locked ||
+          !permitted ||
           stage === current ||
-          (receiptRequired && !/^[0-9a-f-]{36}$/i.test(receipt))
+          (receiptRequired && !validReceipt)
         }
         onClick={() =>
           action.mutate({

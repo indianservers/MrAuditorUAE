@@ -1,0 +1,27 @@
+{
+  "change": "Expose the filing reassessment path, retained receipts and stage-specific permission/lock states in the common UAE/India filing UI.",
+  "checks": {
+    "frontend_passed": 392,
+    "files": 74,
+    "typecheck": "PASS",
+    "lint": "PASS_WITH_EXISTING_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS"
+  },
+  "executed_cases": [
+    "Return an acknowledged filing to preparing with the exact saved version and no replacement receipt fields.",
+    "Show retained submission and acknowledgment identities and the declared jurisdiction.",
+    "Disable stage selection and recording on locked records with a reopen instruction.",
+    "Reject a malformed 36-character non-UUID receipt.",
+    "Require approval permission for approval stage and management permission for other stages.",
+    "Existing first submission and separate acknowledgment input tests remain passing."
+  ],
+  "receipt": {
+    "path": "docs/phase-12/filing-controls-frontend.xml",
+    "sha256": "1eee5ed7b8297689f87c9d9a57c509684fb0f54ee2096849d62dcc3cf8ad5d14"
+  },
+  "limitations": [
+    "UI controls supplement server authorization, reviewer separation, version checks, freshness and scope guards; they do not replace those guards.",
+    "Component tests and production build; no new visual browser capture claimed.",
+    "No external submission or professional country qualification."
+  ]
+}

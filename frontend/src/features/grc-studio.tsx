@@ -394,6 +394,8 @@ function Panel({
                       key={`${detail.id}:${detail.version}`}
                       base={base}
                       paper={detail}
+                      canManage={permissions.includes("compliance.manage")}
+                      canApprove={permissions.includes("compliance.approve")}
                     />
                   )}
                 {area === "engagement" && (
