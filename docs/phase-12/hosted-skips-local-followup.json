@@ -1,0 +1,91 @@
+{
+  "status": "DEDICATED_LOCAL_CHECKS_PASSED_LIVE_VENDOR_CHECKS_PENDING",
+  "executed_at_source": "f92310ae5c2de17b3e6ed81100139ba5b684bd07",
+  "related_hosted_source": "9615b86531bc589324c301178d08e3c5def14c77",
+  "checks": [
+    {
+      "path": "docs/phase-12/connector-isolated-db-final.xml",
+      "sha256": "9b2908776128d603826c660fe83bf25a2cc0693666f405960a1bbe5387d16651",
+      "size_bytes": 844,
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/hosted-skips-windows-worker.xml",
+      "sha256": "9270ccf85c2f41475f4c9ddb041debd0e72dea4db28dba2ed3c48258aeed9054",
+      "size_bytes": 397,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "isolation": {
+    "postgres": "Fresh UUID-named connector_test_<32hex>_test database and generated NOSUPERUSER NOBYPASSRLS application role",
+    "cleanup": "Owned runner returned zero after its finally block dropped only its newly created database/role",
+    "redis": "Existing owned tax-form test Redis database 14; test uses a fresh UUID organization prefix and deletes only its own quota/lease keys",
+    "shared_services_stopped": false,
+    "live_vendor_credentials_used": false
+  },
+  "covered": [
+    "Actual PostgreSQL row-level tenant isolation and immutable connector evidence",
+    "Parallel grant refresh rotates once and retains current client-secret semantics using a synthetic callback",
+    "Checkpoint commit survives caller rollback and tampered cached object bytes are rejected",
+    "Real Redis organization request budget and concurrency are shared across two clients",
+    "Actual Windows suspended-start job-assignment rejection does not resume document processing"
+  ],
+  "source_blobs": [
+    {
+      "path": "scripts/connector_operations_run.py",
+      "sha256": "d5444e69d80fef387f3e0350494d4b72a4fca88745963a67ca77d46c62d5ccb3",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/tests/unit/test_connector_operations_db.py",
+      "sha256": "0f01c2cb94c626f497a26cb64db684d4687c7527d8c4fa6f65d109fabe72ff28",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/app/modules/connectors/runtime.py",
+      "sha256": "d39ef53aa0f556a9f61ca38db1ff310ce098a2d6b75bae799ae4f89b84ed2d75",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/app/modules/connectors/quota.py",
+      "sha256": "acd63356195c67b1abab3d9f1892061b9fa5feb8abb243b1abaeb2758b4c6972",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/app/modules/lineage/storage.py",
+      "sha256": "3beeb3d04d547382bd2a755e4cdadd69fe9f9035cea8fdfe241def08f46dba0f",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/alembic/versions/0019_connector_operations.py",
+      "sha256": "3cb4b638638db994bbeda359194610ca0d57f140ab5ef7be57bc5f68b5e4d815",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/app/db/session.py",
+      "sha256": "b71c1042e1073e2c99fd75354dd2d434050a0642490a569a965e2b8bdfd56256",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/tests/unit/test_document_worker_runtime.py",
+      "sha256": "a0f37cda3abf8da2108734a7b3bf613bf7c62a00053c07f1325677977900c8b2",
+      "same_as_9615b86": true
+    },
+    {
+      "path": "backend/app/modules/intelligence/extraction_process.py",
+      "sha256": "8c60afb57b9b8df4e83371e44179c7a74a00da270ab0bf2f6f1a9c8beb9051a7",
+      "same_as_9615b86": true
+    }
+  ],
+  "limitations": [
+    "These are separate local results, not changes to the hosted JUnit report or its nine skips",
+    "Four remaining live Zoho/Tally/direct-provider tests require explicit authorized access and independently checked source totals",
+    "No live provider/native layout/client accuracy or professional qualification asserted"
+  ]
+}

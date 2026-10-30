@@ -1,0 +1,91 @@
+{
+  "status": "HOSTED_BROWSER_AND_VISUAL_CORRECTIONS_VERIFIED_FULL_BACKEND_PENDING",
+  "source_commit": "f92310ae5c2de17b3e6ed81100139ba5b684bd07",
+  "run_id": 40988886535,
+  "job_id": 123846232570,
+  "conclusion": "success",
+  "browser_tests": {
+    "passed": 6,
+    "failed": 0,
+    "suite_duration": "6.3 minutes",
+    "annual_case_seconds": 16.1
+  },
+  "artifact": {
+    "id": 12948064263,
+    "size_bytes": 11166816,
+    "sha256": "7cc112bcb847a544051e89bf60a64ab42e9fb7be4d143ccda5693b3786e2e16b",
+    "download_digest_verified": true
+  },
+  "original_images": [
+    {
+      "entry": "country-reports/IN-annual-gst-withdrawn-source-stale.png",
+      "bytes": 410574,
+      "sha256": "5a6ac94609e05c6e54cc725d0c25e8032d43219ec19fecde5420f0daa0d82a80",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-withdrawn-source-stale-f92310a.png",
+      "visually_inspected": true,
+      "finding": "Entire saved annual result, PAN/year/review date, exact 30000000 and 0, separate candidates, REVIEWED and STALE badges, disabled approval and complete MATCHED INR row visible without fixed-header clipping"
+    },
+    {
+      "entry": "country-reports/IN-form26-A-generated-stale.png",
+      "bytes": 591651,
+      "sha256": "33c507051d2c9d8dd93dfe2e954966babc13d43a08ac38fa5e4a8d0f1d08293d",
+      "dimensions": [
+        2200,
+        3400
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-generated-stale-f92310a.png",
+      "visually_inspected": true,
+      "finding": "Correct selected report and part, STALE warning, 877 requirements with paginated source references, retained blocks and Saved source validation at generation wording visible; saved validation is not presented as a new current recheck"
+    },
+    {
+      "entry": "country-reports/IN-form26-B-generated-stale.png",
+      "bytes": 594127,
+      "sha256": "4d274fdd0c427c3d5cabf92bd6493e6b2a2b3646dec0ff2a63df4db70740600b",
+      "dimensions": [
+        2200,
+        3400
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-generated-stale-f92310a.png",
+      "visually_inspected": true,
+      "finding": "Correct selected report and part, STALE warning, 877 requirements with paginated source references, retained blocks and Saved source validation at generation wording visible; saved validation is not presented as a new current recheck"
+    }
+  ],
+  "source_blobs": [
+    {
+      "path": "frontend/e2e/annual-gst-release.spec.ts",
+      "sha256": "2d8c29d8b4f75c03e5acb350446c530cd6e168bef3f2c47ae508058b33db3d40"
+    },
+    {
+      "path": "frontend/src/features/statutory-report-preview.tsx",
+      "sha256": "149b5cbdd289ab4c3659fe22251dad05ed7ce7d68947af7144983c9510edf469"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "24db9479160f9b40cbe6715b5bc668b4c1ca1d53e2a90f46681f46f061b92c73"
+    }
+  ],
+  "verified": [
+    "Annual stale panel and MATCHED row both satisfy full viewport assertions before capture",
+    "Original annual result body remains identical after source rejection",
+    "Missing controls null/pending and approval rejection remain enforced",
+    "Independent reviewer and author separation, exact XLSX metadata and all existing country/Form26/auth browser cases passed",
+    "Historic Form26 validation label confirmed in both part captures"
+  ],
+  "new_followup": {
+    "status": "CONFIRMED_FRESH_DRAFT_CURRENCY_DEFAULT_GAP",
+    "observation": "New-run bank workflow panel above the saved annual result defaults to AED in the India engagement configured with INR functional/presentation currencies",
+    "source": "frontend/src/features/country-workflows.tsx: hardcoded useState(\"AED\")",
+    "scope": "Fresh creation-form defaults; the retained annual result and its source row remain INR",
+    "next_action": "Use the engagement/entity currency as the fresh common-workflow default while preserving explicit foreign-currency choices and mandatory statutory reporting currencies"
+  },
+  "limitations": [
+    "Only three corrected captures archived here; prior pending/input/positive annual captures remain in ec2a710 archive",
+    "Form26 screenshots show paginated first requirements/blocks; browser/API assertions separately verify all 877 entries and XLSX row counts",
+    "Latest full backend verify job still in progress at observation; older 9615b86 complete baseline is separately recorded",
+    "All evidence is synthetic; no live provider, real-client, filing or professional qualification claimed"
+  ]
+}

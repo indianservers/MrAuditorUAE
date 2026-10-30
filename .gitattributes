@@ -79,3 +79,11 @@ docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/*.csv text eol=lf
 docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/*.txt text eol=lf
 
 docs/phase-12/annual-browser-visual-*.xml -text whitespace=cr-at-eol
+
+docs/phase-12/9615b86-hosted-full.xml -text whitespace=cr-at-eol
+
+docs/phase-12/9615b86-hosted-coverage.json -text
+
+docs/phase-12/connector-isolated-db-final.xml -text whitespace=cr-at-eol
+
+docs/phase-12/hosted-skips-windows-worker.xml -text whitespace=cr-at-eol

@@ -1,0 +1,374 @@
+{
+  "contract": "hosted-backend-verification/1",
+  "source_commit": "9615b86531bc589324c301178d08e3c5def14c77",
+  "run_id": 40978946657,
+  "job_id": 123813847575,
+  "conclusion": "success",
+  "all_six_jobs": "success",
+  "artifact": {
+    "id": 12947258969,
+    "size_bytes": 229905,
+    "sha256": "98461198e149d7babe0af549652b5586af424052b103f01b0e72a7948fa7528a",
+    "download_digest_verified": true
+  },
+  "receipts": [
+    {
+      "path": "docs/phase-12/9615b86-hosted-full.xml",
+      "sha256": "1da697e90449110e8abc961145484e3aa455953c35c3530e2750412ab0ff80b4",
+      "size_bytes": 677280
+    },
+    {
+      "path": "docs/phase-12/9615b86-hosted-coverage.json",
+      "sha256": "0df63bad33630e27cac764af1aabf2095c26929428af546dcb87e6cc3213a008",
+      "size_bytes": 1808043
+    }
+  ],
+  "junit": {
+    "tests": 4441,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 9,
+    "passed": 4432,
+    "seconds": 5416.308
+  },
+  "coverage": {
+    "covered_lines": 34756,
+    "num_statements": 40131,
+    "percent_covered": 86.60636415738456,
+    "percent_covered_display": "87",
+    "missing_lines": 5375,
+    "excluded_lines": 5,
+    "percent_statements_covered": 86.60636415738456,
+    "percent_statements_covered_display": "87"
+  },
+  "core_coverage": {
+    "covered_lines": 831,
+    "statements": 930,
+    "percent": 89.35483870967742
+  },
+  "operations": {
+    "compliance-runtime-connector.json": {
+      "synthetic": true,
+      "calendar": {
+        "items": [
+          {
+            "record_id": "5673b9bd-decb-4182-8cf3-8ddea6ad4223",
+            "version": 1,
+            "reference": "SYN-UNRESOLVED",
+            "deadline": null,
+            "extension_deadline": null,
+            "deadline_kind": "unresolved",
+            "filing_stage": "not_started",
+            "calendar_state": "UNRESOLVED",
+            "freshness": "CURRENT",
+            "reassessment_required": false,
+            "review_status": "IN_PROGRESS",
+            "owner_id": "e5793161-9240-46fc-97dd-4fcb3b91fe93",
+            "reviewer_id": "bfaae9c4-2888-456e-b2c6-b619f630d193"
+          }
+        ],
+        "bounded_to": 200,
+        "external_submission_performed": false
+      },
+      "reviewed_obligation": {
+        "engagement_id": "58eeb66d-9382-41f8-bebb-6c7b405afddc",
+        "kind": "grc-obligation",
+        "reference": "SYN-UNRESOLVED",
+        "title": "Synthetic unresolved deadline",
+        "status": "APPROVED",
+        "body": {
+          "area": "",
+          "module": "policy",
+          "sources": [],
+          "blockers": [],
+          "deadline": null,
+          "due_date": null,
+          "owner_id": "e5793161-9240-46fc-97dd-4fcb3b91fe93",
+          "entity_id": "d8e33bef-189d-4cd3-9ded-e055250052af",
+          "narrative": "",
+          "assertions": [],
+          "source_url": "https://synthetic.invalid/internal-policy",
+          "reviewer_id": "bfaae9c4-2888-456e-b2c6-b619f630d193",
+          "entity_facts": {},
+          "evidence_ids": [],
+          "filing_stage": "under_review",
+          "jurisdiction": "SYNTHETIC",
+          "review_cycle": 3,
+          "review_stage": 1,
+          "deadline_kind": "unresolved",
+          "deadline_rule": null,
+          "reminder_days": [],
+          "effective_from": "2026-01-01",
+          "review_approvers": [
+            "bfaae9c4-2888-456e-b2c6-b619f630d193"
+          ],
+          "rule_evidence_id": null,
+          "fact_evidence_ids": [],
+          "required_evidence": "Independent source and computation review",
+          "extension_deadline": null,
+          "statutory_record_id": null,
+          "compliance_assessment": "not_assessed",
+          "escalation_after_days": null,
+          "extension_evidence_id": null,
+          "notifications_enabled": false,
+          "readiness_evidence_ids": [],
+          "submission_evidence_id": null,
+          "acknowledgment_evidence_id": null
+        },
+        "version": 5,
+        "prepared_by": "e5793161-9240-46fc-97dd-4fcb3b91fe93",
+        "tenant_id": "8594f7ae-f358-42f9-941d-f1e4df36a91d",
+        "created_by": "e5793161-9240-46fc-97dd-4fcb3b91fe93",
+        "id": "5673b9bd-decb-4182-8cf3-8ddea6ad4223",
+        "created_at": "2026-10-30T01:05:46.154039+00:00",
+        "updated_at": "2026-10-30T01:05:46.856567+00:00"
+      },
+      "runtime": {
+        "language": {
+          "state": "not_configured",
+          "observation": "recent tenant execution, not a live probe",
+          "observed_at": null,
+          "error_category": null,
+          "reachability_ttl_seconds": 300,
+          "deterministic_engines_require_gateway": false,
+          "local_ml_requires_gateway": false,
+          "narrative_is_independent_verification": false
+        },
+        "local_ml": {
+          "runtime": "TensorFlow.js Node CPU",
+          "state": "inspect_model_registry",
+          "readiness": "per-model deployment and artifact validation required",
+          "allowed_modes": [
+            "trained_model",
+            "statistical_baseline",
+            "rules_baseline",
+            "diagnostic_mock",
+            "unavailable"
+          ]
+        }
+      },
+      "connector": {
+        "connection_id": "d709a73d-9612-4cc6-9d31-f7b5bc8a021e",
+        "operational_health": {
+          "provider": "file",
+          "connection_type": "import_export_adapter",
+          "last_attempt_at": "2026-10-30T01:05:47.235095+00:00",
+          "last_success_at": null,
+          "success_lookup": "latest 100 attempts; older history may exist",
+          "lag_seconds": null,
+          "status": "failed",
+          "completeness": "insufficient_evidence",
+          "complete": false,
+          "error_category": "partial_page_failure",
+          "counts": {
+            "gl": 12
+          },
+          "count_semantics": "provider-extracted counts; committed/rejected import totals require the linked validation report",
+          "committed_import_records": null,
+          "rejected_import_records": null,
+          "checkpoint": {
+            "downloaded": 2
+          },
+          "execution_mode": "simulated",
+          "live_qualified": false,
+          "remediation": "Inspect rejected records and controls; renew authorization for auth errors; resume retained checkpoint or use controlled file import"
+        },
+        "status": "configured",
+        "live_qualified": false,
+        "records": [],
+        "actions": [
+          "resume_failed_session",
+          "renew_consent",
+          "run_source_controls",
+          "verify_vendor_contract"
+        ],
+        "credential_storage": "encrypted; never included in diagnostics",
+        "capabilities": {
+          "native_balance_controls": "independent opening/closing reports required; no undocumented report endpoint assumed",
+          "automatic_activation": false,
+          "signed_windows_release": "not_applicable"
+        }
+      },
+      "external_requests_performed": false
+    },
+    "filing-lifecycle.json": {
+      "synthetic": true,
+      "acknowledged_record": {
+        "engagement_id": "6306a62f-cb96-420e-a6ec-3a3ec7874f65",
+        "kind": "grc-obligation",
+        "reference": "SYN-FILING",
+        "title": "Synthetic filing lifecycle",
+        "status": "LOCKED",
+        "body": {
+          "area": "",
+          "module": "policy",
+          "sources": [],
+          "blockers": [],
+          "deadline": "2026-10-30",
+          "due_date": null,
+          "owner_id": "0ae35fab-b842-43cf-968b-5eae948a669d",
+          "entity_id": "8b758847-db9f-46d4-af94-883b6fb4235b",
+          "narrative": "",
+          "assertions": [],
+          "source_url": "https://synthetic.invalid/policy",
+          "reviewer_id": "1bd43b5f-e16e-4f86-b1d0-7ef1c23680b2",
+          "entity_facts": {},
+          "evidence_ids": [],
+          "filing_stage": "acknowledged",
+          "jurisdiction": "SYNTHETIC",
+          "review_cycle": 10,
+          "review_stage": 1,
+          "deadline_kind": "firm_internal",
+          "deadline_rule": null,
+          "reminder_days": [
+            0
+          ],
+          "effective_from": "2026-01-01",
+          "review_approvers": [
+            "1bd43b5f-e16e-4f86-b1d0-7ef1c23680b2"
+          ],
+          "rule_evidence_id": null,
+          "fact_evidence_ids": [],
+          "required_evidence": "Synthetic readiness and authorization documents",
+          "extension_deadline": null,
+          "statutory_record_id": null,
+          "compliance_assessment": "pending",
+          "escalation_after_days": null,
+          "extension_evidence_id": null,
+          "notifications_enabled": true,
+          "readiness_evidence_ids": [
+            "a4b62ade-50bd-4314-a9c0-13d438e41425"
+          ],
+          "submission_evidence_id": "eade25a4-b91a-4293-b4bf-9889e09a880a",
+          "acknowledgment_evidence_id": "c37252ce-8281-41a4-9594-d9393be76fbc"
+        },
+        "version": 13,
+        "prepared_by": "0ae35fab-b842-43cf-968b-5eae948a669d",
+        "tenant_id": "b7e2d468-b18f-40de-8c10-6de900712e3d",
+        "created_by": "0ae35fab-b842-43cf-968b-5eae948a669d",
+        "id": "172a4302-d2da-4605-88b7-1f7cd1a383d7",
+        "created_at": "2026-10-30T01:05:49.689531+00:00",
+        "updated_at": "2026-10-30T01:05:52.166481+00:00"
+      },
+      "source_correction": {
+        "items": [
+          {
+            "record_id": "172a4302-d2da-4605-88b7-1f7cd1a383d7",
+            "version": 13,
+            "reference": "SYN-FILING",
+            "deadline": "2026-10-30",
+            "extension_deadline": null,
+            "deadline_kind": "firm_internal",
+            "filing_stage": "acknowledged",
+            "calendar_state": "ACKNOWLEDGED",
+            "freshness": "STALE",
+            "reassessment_required": true,
+            "review_status": "LOCKED",
+            "owner_id": "0ae35fab-b842-43cf-968b-5eae948a669d",
+            "reviewer_id": "1bd43b5f-e16e-4f86-b1d0-7ef1c23680b2"
+          }
+        ],
+        "bounded_to": 200,
+        "external_submission_performed": false
+      },
+      "duplicate_reminders_suppressed": true,
+      "external_submission_performed": false
+    },
+    "worker-recovery.json": {
+      "synthetic": true,
+      "failure_injection": "persisted expired worker claim",
+      "abandoned_claim": "failed_requires_manual_retry",
+      "pending_outbox_dispatched": 1,
+      "abandoned_job_automatically_reexecuted": false
+    }
+  },
+  "operation_archive_receipts": [
+    {
+      "archive_entry": ".local-runtime/ci-verification/operations/compliance-runtime-connector.json",
+      "sha256": "7b6ab33afa313c0e9a79f13c61db374b1506a70ed416b4b693523678cc8b6707",
+      "size_bytes": 4933
+    },
+    {
+      "archive_entry": ".local-runtime/ci-verification/operations/filing-lifecycle.json",
+      "sha256": "284e78a486e88f438ff716875b6051aba380890336ff76a76b4353705f53c4b0",
+      "size_bytes": 2807
+    },
+    {
+      "archive_entry": ".local-runtime/ci-verification/operations/worker-recovery.json",
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db",
+      "size_bytes": 218
+    }
+  ],
+  "skipped_tests": [
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "class": "tests.phase2.test_live_native",
+      "name": "test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_document_worker_runtime",
+      "name": "test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "form26_scope_evidence": {
+    "cases": [
+      "test_period_form_review_export_and_source_correction[True-True]",
+      "test_period_form_review_export_and_source_correction[True-False]"
+    ],
+    "assertions": "Both modern parts invoke expanded_field_report, assert all 877 retained requirements and 878 XLSX rows with exact key membership; source correction keeps historical body unchanged",
+    "source_blobs": [
+      {
+        "path": "backend/tests/qa_crud/test_tax_audit_scope.py",
+        "sha256": "898d51e894491ed22837cf958e5e26f80494a612c1df5f6df6e5e24b882d5fe3",
+        "unchanged_from_baseline": true
+      },
+      {
+        "path": "backend/app/modules/regulatory/form26_fields.py",
+        "sha256": "99cdd9a9f15a57185f4acde7756e416d147652bb61c5051f9d803a58e057799c",
+        "unchanged_from_baseline": true
+      }
+    ]
+  },
+  "limitations": [
+    "Source-specific baseline before INR/AED reporting controls, annual GST candidate assessment and later visual changes",
+    "Nine skips retained exactly; live provider tests require explicit opt-in/authorized credentials/independent controls",
+    "Connector DB/Redis and Windows-only checks have separate local receipts; they do not rewrite this hosted skip count",
+    "Synthetic workflow evidence and draft field coverage do not establish complete legal content, filing or real-client qualification"
+  ]
+}
