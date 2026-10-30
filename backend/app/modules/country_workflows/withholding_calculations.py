@@ -4,6 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from app.modules.country_workflows import withholding_pan
 from app.modules.country_workflows.annual_tax_statement import CONTRACT, validate_population
 from app.modules.country_workflows.audit_calculations import result
 from app.modules.country_workflows.withholding_provisions import (
@@ -62,6 +63,7 @@ def certificate_pools(records):
                 "source_version",
             )
         )
+        scope += (withholding_pan.identity_scope(record),)
         pool = pools.setdefault(key, {"scope": scope, "amount": Decimal(0)})
         if pool["scope"] != scope:
             raise ValueError(
@@ -148,6 +150,7 @@ def withholding(data, tables):
     rows = []
     base_role = "expected" if liability else "books"
     for index, key in enumerate(sorted(all_keys), 1):
+        identity = dict(zip(KEY_FIELDS, key, strict=True))
         present = {role: records.get(key) for role, records in selected.items()}
         missing = [role for role, record in present.items() if record is None]
         baseline = present[base_role]
@@ -189,8 +192,11 @@ def withholding(data, tables):
         assessed = present[assessment_role]
         issues = assessment_issues(assessed, "rule" if liability else "certificate", pools)
         comparison_state = state
+        pan = withholding_pan.assess(identity["counterparty"], assessed, data.as_of, issues)
         if issues and state != "MISSING_CURRENT_RECORD":
             state = "ASSESSMENT_NOT_SUPPORTED"
+        if pan.get("pan_issues") and state != "MISSING_CURRENT_RECORD":
+            state = "PAN_TREATMENT_NOT_SUPPORTED"
         statutory_scope_issues = (
             [ISSUE] if liability and baseline and withdrawn_expectation(baseline) else []
         )
@@ -209,10 +215,11 @@ def withholding(data, tables):
         rows.append(
             {
                 "id": f"withholding-{index}",
-                **dict(zip(KEY_FIELDS, key, strict=True)),
+                **identity,
                 "state": state,
                 "comparison_state": comparison_state,
                 "assessment_issues": issues,
+                **pan,
                 "statutory_scope_issues": statutory_scope_issues,
                 "assessment_role": assessment_role,
                 "assessment_provenance": provenance,
@@ -247,18 +254,24 @@ def withholding(data, tables):
     return {
         **result(
             rows,
-            any(row["assessment_issues"] or row["statutory_scope_issues"] for row in rows),
+            any(
+                row["assessment_issues"] or row["statutory_scope_issues"] or row.get("pan_issues")
+                for row in rows
+            ),
             [
                 "Legal roles are separate; beneficiary credit never clears a deductor/collector liability",
                 "Current/superseded/cancelled status is an assessed source selection, not live portal verification",
                 "Expected amounts, rule references, tax years and due dates require independent professional assessment",
                 "Retained document hashes, declared coverage and certificate caps support review; they do not qualify document authenticity or legal applicability",
                 "Matched credit evidence does not establish eligibility, recoverability or a right to refund",
+                "Missing/invalid/applied PAN markers need a scoped treatment in the retained rule/certificate assessment; documented treatment does not authenticate PAN or establish legal entitlement",
                 "Each current record is a cumulative transaction observation; raw challan allocation, partial deposits, FX and overlapping provider observations need separately reviewed normalization",
             ],
         ),
         "withholding_role": data.withholding_role,
         "assessment_contract_version": "withholding-assessment/1",
+        "withholding_pan_contract": withholding_pan.CONTRACT,
+        "withholding_pan_counts": withholding_pan.counts(rows),
         **(
             {
                 "withholding_provision_scope": {

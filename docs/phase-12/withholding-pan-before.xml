@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="12" time="2.004" timestamp="2026-10-30T23:30:00.081532+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANNOTAVBL-deductor]" time="0.009"><failure message="assert False is True">role = 'deductor', marker = 'PANNOTAVBL'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANNOTAVBL-collector]" time="0.002"><failure message="assert False is True">role = 'collector', marker = 'PANNOTAVBL'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANNOTAVBL-deductee]" time="0.002"><failure message="assert False is True">role = 'deductee', marker = 'PANNOTAVBL'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANNOTAVBL-collectee]" time="0.002"><failure message="assert False is True">role = 'collectee', marker = 'PANNOTAVBL'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANAPPLIED-deductor]" time="0.003"><failure message="assert False is True">role = 'deductor', marker = 'PANAPPLIED'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANAPPLIED-collector]" time="0.003"><failure message="assert False is True">role = 'collector', marker = 'PANAPPLIED'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANAPPLIED-deductee]" time="0.002"><failure message="assert False is True">role = 'deductee', marker = 'PANAPPLIED'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANAPPLIED-collectee]" time="0.002"><failure message="assert False is True">role = 'collectee', marker = 'PANAPPLIED'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANINVALID-deductor]" time="0.003"><failure message="assert False is True">role = 'deductor', marker = 'PANINVALID'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANINVALID-collector]" time="0.003"><failure message="assert False is True">role = 'collector', marker = 'PANINVALID'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANINVALID-deductee]" time="0.002"><failure message="assert False is True">role = 'deductee', marker = 'PANINVALID'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase><testcase classname="tests.unit.test_withholding_pan_status" name="test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker[PANINVALID-collectee]" time="0.002"><failure message="assert False is True">role = 'collectee', marker = 'PANINVALID'
+
+    @pytest.mark.parametrize("role", ["deductor", "collector", "deductee", "collectee"])
+    @pytest.mark.parametrize("marker", ["PANNOTAVBL", "PANAPPLIED", "PANINVALID"])
+    def test_equal_amounts_cannot_clear_an_unassessed_missing_pan_marker(role, marker):
+        records = population(role)
+        for rows in records.values():
+            for row in rows:
+                row["counterparty"] = marker
+        out = run(records, role)
+&gt;       assert out["blocked"] is True
+E       assert False is True
+
+tests\unit\test_withholding_pan_status.py:16: AssertionError</failure></testcase></testsuite></testsuites>

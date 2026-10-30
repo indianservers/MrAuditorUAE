@@ -1,0 +1,121 @@
+{
+  "contract": "withholding-missing-pan-verification/1",
+  "parent_commit": "f5e0facafc412cbf6e8b60d7ae19553bdacebd31",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "ef3e58c10150eb12a40f23980c4f6325b737bec1445e230464e878e866898abc"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "90dd2e6e5ce8a0e0ff8ae7524848a761a84bf308cf117bdb0ba042fa4055fba9"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_calculations.py",
+      "sha256": "bb5be19d43427426e028ec6e327bdb93241c906a11a660ea2d10877c5d90159d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_pan.py",
+      "sha256": "9e59fd2df3dc86ca195aa12d381e7664d111cef33cdca84134949588e4e6e3e6"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_schemas.py",
+      "sha256": "3f39e0497f7ba1608f601937c6434e970286958ee132ad2af3d338cba4af9e42"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "4641efae54954c3272a4abc83485a31e47b33dce9798f406c32f087583ce0308"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "ce1153cbfa14bf898c6eceb1b8fe5294e2b9e008429cc3f08d39c5f66e31107b"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_withholding_pan_status.py",
+      "sha256": "54a7035bdc8dd1f4204a0ab5ef3bced0c8950263871298d008d3a627d9b9b7a7"
+    },
+    {
+      "path": "backend/tests/unit/test_withholding_pan_status.py",
+      "sha256": "6e747b45959a0a5ce8f350f13f3d401226c57b349572915763015f4cea4f2a11"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "b153fb64bbedade7c635732aa981598d940d902e8b9a9293ba5ed308c9a49d38"
+    },
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "ab645016d5e3b73d7739c7af956f03e1c6030b50ca8e5cc3a75a0f137afcd566"
+    },
+    {
+      "path": "frontend/e2e/withholding-pan-browser-workflow.ts",
+      "sha256": "74b6dca5488f9b7a62b03ada6edaa765de03639058f47f15b01f95d54f798f25"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "cd70a13674c1bde21d9920dee2d7d6c733fb114ba3178341423148b4b874dfae"
+    },
+    {
+      "path": "frontend/src/features/withholding-pan-review.tsx",
+      "sha256": "c680f5075ffd1aa4d58d4074501110d535b60a1c8ebddb16510fc0df15d825f2"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "4b8a75e7ae56ebc9b0b0889450e8948f8bc8a3e1b40185c8238116c8a33cc3ae"
+    },
+    {
+      "path": "frontend/tests/withholding-pan-review.test.tsx",
+      "sha256": "f72153aea73b7fde10eed5b732bffa48f28268ac39681ed1ce6c7fd0f72b5646"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/withholding-pan-before.xml",
+      "passed": 0,
+      "skipped": 0,
+      "failed": 12,
+      "sha256": "767fcd1e0bb3ed1dda402e8f029fb8bc57260d11225bb8956448d9dc0f8e1827"
+    },
+    {
+      "path": "docs/phase-12/withholding-pan-all-units.xml",
+      "passed": 4212,
+      "skipped": 4,
+      "failed": 0,
+      "sha256": "eb1ed162d4d8e8ae97bd4a059aa3dafac70678fdb05f378ff4a9fbfff9adea81"
+    },
+    {
+      "path": "docs/phase-12/withholding-pan-api.xml",
+      "passed": 27,
+      "skipped": 0,
+      "failed": 0,
+      "sha256": "1e63a02dc830236ac66c14982178d109b5d206e2b64c4ae58cd7e451468270ae"
+    },
+    {
+      "path": "docs/phase-12/withholding-pan-frontend.xml",
+      "passed": 466,
+      "skipped": 0,
+      "failed": 0,
+      "sha256": "b159b8b1ccbe3e682e9c0c3acf16cd84bf46cdb559c4952256613a1e66041fe2"
+    }
+  ],
+  "checks": {
+    "scoped_ruff_lint_and_format": "PASS",
+    "mypy": "PASS_422_APP_FILES",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "production_next_build": "PASS",
+    "api_contracts": "CURRENT",
+    "generated_api_types": "CURRENT"
+  },
+  "scope": [
+    "Reserved missing-PAN markers require retained party and treatment assessment for four withholding roles; arithmetic comparisons and original markers remain visible.",
+    "Certificate pooling separates assessed parties, full-result counts survive pagination, and complete XLSX retains assessment evidence.",
+    "Actual PostgreSQL/HTTP tests cover pending approval, independent source review, export, working papers and source-replacement staleness."
+  ],
+  "limits": [
+    "Four existing connector unit tests require their isolated real-DB runner and remain skipped.",
+    "Twelve failures are the intentional BEFORE-fix reproduction, not final failures. Reports overlap and must not be summed as distinct scenarios.",
+    "New hosted PAN browser execution and merchant capture correction remain pending after commit; prior Form 143 browser passed within an overall failed suite, recorded separately.",
+    "No PAN registry authentication, inferred legal rate, government filing or independently checked real-client qualification. Pilot folders contain templates and labelled synthetic examples only."
+  ]
+}

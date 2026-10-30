@@ -15888,6 +15888,54 @@
           ],
           "title": "AnnualTaxStatement",
           "type": "object"
+        },
+        "MissingPANTreatment": {
+          "additionalProperties": false,
+          "properties": {
+            "marker": {
+              "enum": [
+                "PANNOTAVBL",
+                "PANAPPLIED",
+                "PANINVALID"
+              ],
+              "title": "Marker",
+              "type": "string"
+            },
+            "party_reference": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Party Reference",
+              "type": "string"
+            },
+            "treatment_reference": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Treatment Reference",
+              "type": "string"
+            },
+            "assessed_on": {
+              "format": "date",
+              "title": "Assessed On",
+              "type": "string"
+            },
+            "assessment": {
+              "maxLength": 2000,
+              "minLength": 10,
+              "title": "Assessment",
+              "type": "string"
+            }
+          },
+          "required": [
+            "marker",
+            "party_reference",
+            "treatment_reference",
+            "assessed_on",
+            "assessment"
+          ],
+          "title": "MissingPANTreatment",
+          "type": "object"
         }
       },
       "additionalProperties": false,
@@ -16030,6 +16078,17 @@
           ],
           "default": null,
           "title": "Payment Date"
+        },
+        "pan_treatment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MissingPANTreatment"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
         },
         "annual_statement": {
           "anyOf": [

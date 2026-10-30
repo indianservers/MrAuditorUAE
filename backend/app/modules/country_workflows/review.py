@@ -1,4 +1,8 @@
 def approval_error(body):
+    from app.modules.country_workflows.withholding_pan import approval_error as pan_error
+
+    if error := pan_error(body):
+        return error
     from app.modules.country_workflows.withholding_provisions import saved_withdrawn_expectation
 
     if saved_withdrawn_expectation(body):

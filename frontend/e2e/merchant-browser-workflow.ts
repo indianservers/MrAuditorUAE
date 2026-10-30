@@ -451,8 +451,17 @@ export async function runMerchantBrowserWorkflow(
     .click();
   const replacementResponse = await replacement;
   expect(replacementResponse.status()).toBe(201);
-  const approvedReplacement =
-    (await replacementResponse.json()) as WorkflowEvent;
+  const replacementVersion = (await replacementResponse.json()) as {
+    id: string;
+    version: number;
+  };
+  const replacementRead = await reviewer.request.get(
+    `/api/backend/${prefix}/events/${replacementVersion.id}`,
+    { headers },
+  );
+  expect(replacementRead.status()).toBe(200);
+  const approvedReplacement = (await replacementRead.json()) as WorkflowEvent;
+  expect(approvedReplacement.version).toBe(replacementVersion.version);
   expect(approvedReplacement.body.review_status).toBe("REVIEWED");
   expect(approvedReplacement.freshness).toBe("CURRENT");
   await reviewer.goto(

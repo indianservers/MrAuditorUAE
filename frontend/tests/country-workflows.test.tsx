@@ -3845,3 +3845,12 @@ it("queues dated Form 143 with its own tax-year and allocation controls", async 
   expect(payload).not.toHaveProperty("native_withholding_controls");
   expect(payload.form143_controls).not.toHaveProperty("income_tax");
 });
+
+it("shows missing-PAN treatment review on the withholding result",()=>{
+  state.country="IN";
+  state.result={id:"result",kind:"country-workflow",version:1,freshness:"CURRENT",body:{workflow:"india-withholding-liability",title:"SYNTHETIC pending missing PAN",blocked:true,review_status:"UNVERIFIED",withholding_pan_contract:"withholding-missing-pan-treatment/1",withholding_pan_counts:{rows_with_marker:1,pending_rows:1,documented_rows:0},rows:[{id:"withholding-1",counterparty:"PANNOTAVBL",state:"PAN_TREATMENT_NOT_SUPPORTED",pan_status:"PANNOTAVBL",pan_authentication:"NOT_PERFORMED",pan_treatment_state:"PENDING_ASSESSMENT",pan_issues:["PAN_TREATMENT_ASSESSMENT_MISSING"]}]}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow"/>);
+  fireEvent.change(screen.getByLabelText("Saved source or result"),{target:{value:"result"}});
+  expect(screen.getByRole("region",{name:"Missing PAN treatment review"})).toHaveTextContent("1 pending");
+  expect(screen.getByRole("button",{name:"Independent approval"})).toBeDisabled();
+});

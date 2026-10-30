@@ -1,0 +1,44 @@
+{
+  "source_commit": "37249b3d224399bdefb9af4fa2b9915d5a372e0e",
+  "run_id": 41088486247,
+  "job_id": 124175819071,
+  "conclusion": "success",
+  "passed": 4983,
+  "skipped": 9,
+  "failed": 0,
+  "overall_coverage_percent": 86.87786093148296,
+  "core_coverage": {
+    "covered": 831,
+    "total": 930,
+    "percent_displayed": 89.35
+  },
+  "artifact": {
+    "id": 12998745458,
+    "size_bytes": 242355,
+    "sha256": "e3912867f1c2abdff68cae612dd07a507353054980ca7cc58f616c83a2a61c07"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/37249b3-hosted-full.xml",
+      "size_bytes": 773721,
+      "sha256": "754ae89113697bbe6ef66450642a7c88971171919f419e5793194fc34a889774"
+    },
+    {
+      "path": "docs/phase-12/37249b3-hosted-coverage.json",
+      "size_bytes": 1854769,
+      "sha256": "bc621272e33fb7ab99211c1027a89a65b0f57658daef96577d05525e5bc55fa5"
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "security": "success",
+    "containers": "success",
+    "ml": "success"
+  },
+  "limits": [
+    "Source predates DMCC, nonresident 27Q, dated Form 143 and missing-PAN treatment increments. Their proof remains separate.",
+    "Nine full-suite skips remain skips. Synthetic CI is not representative-client, legal or production qualification."
+  ]
+}

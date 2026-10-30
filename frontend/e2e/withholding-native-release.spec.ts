@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import { readFileSync, mkdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { runWithholdingPANBrowserWorkflow } from "./withholding-pan-browser-workflow";
 import {
   makeWorkflowHarness,
   type WorkflowEvent,
@@ -448,6 +449,13 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
           path: `${screenshots}/IN-${form}-native-crosswalk-superseded-stale.png`,
         });
     }
+    await runWithholdingPANBrowserWorkflow(
+      page,
+      reviewer,
+      eid,
+      identities.tenant_id,
+      screenshots,
+    );
     expect(errors).toEqual([]);
   } finally {
     await context.close();

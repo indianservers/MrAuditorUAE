@@ -8,6 +8,7 @@ from uuid import UUID
 from pydantic import Field, field_validator, model_validator
 
 from app.modules.country_workflows.annual_tax_statement import AnnualTaxStatement
+from app.modules.country_workflows.withholding_pan import MissingPANTreatment, marker
 from app.modules.jurisdictions.profiles import Strict
 
 Identifier = Annotated[str, Field(min_length=1, max_length=120, pattern=r"^\S(?:.*\S)?$")]
@@ -33,6 +34,9 @@ class WithholdingRecord(Strict):
     source_version: Identifier
     due_date: date | None = None
     payment_date: date | None = None
+    pan_treatment: MissingPANTreatment | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     annual_statement: AnnualTaxStatement | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
@@ -45,23 +49,41 @@ class WithholdingRecord(Strict):
         default=None, ge=0, max_digits=28, decimal_places=8, allow_inf_nan=False
     )
 
-    @field_validator("annual_statement", mode="before")
+    @field_validator("annual_statement", "pan_treatment", mode="before")
     @classmethod
-    def statement_csv(cls, value):
+    def statement_csv(cls, value, info):
         if isinstance(value, str):
             import json
 
             try:
                 decoded = json.loads(value)
             except ValueError:
-                raise ValueError("Annual statement CSV scope requires a JSON object") from None
+                label = (
+                    "PAN treatment"
+                    if info.field_name == "pan_treatment"
+                    else "Annual statement CSV scope"
+                )
+                raise ValueError(f"{label} requires a JSON object") from None
             if not isinstance(decoded, dict):
-                raise ValueError("Annual statement CSV scope requires a JSON object")
+                label = (
+                    "PAN treatment"
+                    if info.field_name == "pan_treatment"
+                    else "Annual statement CSV scope"
+                )
+                raise ValueError(f"{label} requires a JSON object")
             return decoded
         return value
 
     @model_validator(mode="after")
     def assessed_scope(self):
+        if self.pan_treatment is not None and (
+            marker(self.counterparty) != self.pan_treatment.marker
+            or self.pan_treatment.treatment_reference != self.rule_reference
+            or self.assessment_kind is None
+        ):
+            raise ValueError(
+                "Missing-PAN treatment must match its source marker, rule reference and explicit retained rule/certificate assessment kind"
+            )
         if self.annual_statement is not None:
             self.annual_statement.check_record(self.model_dump(mode="json"))
         binding = (self.assessment_evidence_version_id, self.assessment_sha256)

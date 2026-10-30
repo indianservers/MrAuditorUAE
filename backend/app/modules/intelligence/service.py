@@ -315,6 +315,11 @@ async def current(db, ctx, obj, visited=None):
         and obj.body.get("assessment_contract_version") != "withholding-assessment/1"
     ):
         return False
+    if getattr(obj, "kind", None) == "country-workflow":
+        from app.modules.country_workflows.withholding_pan import current as current_pan
+
+        if not current_pan(obj.body):
+            return False
     if (
         getattr(obj, "kind", None) == "country-workflow"
         and obj.body.get("workflow") == "india-withholding"

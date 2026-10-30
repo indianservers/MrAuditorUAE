@@ -1648,6 +1648,8 @@ async def generate_paper(
             "comparison_basis",
             "selected_current_totals",
             "assessment_contract_version",
+            "withholding_pan_contract",
+            "withholding_pan_counts",
             "withholding_provision_scope",
             "turnover_contract",
             "turnover_basis",

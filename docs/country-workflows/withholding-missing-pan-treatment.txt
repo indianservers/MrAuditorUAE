@@ -1,0 +1,76 @@
+Missing-PAN observations and retained treatment
+
+This change closes a roadmap acceptance gap shared by India TDS/TCS liability
+and beneficiary-credit comparisons. PANNOTAVBL, PANAPPLIED and PANINVALID were
+previously ordinary matching strings: four equal role-scoped populations with
+the same marker could produce an unblocked MATCHED result. The twelve initial
+regressions reproduced this for all three markers and all four legal roles.
+
+Amounts and original markers are still retained. A marker now adds explicit
+PAN-treatment issues and blocks approval until the required rule/certificate
+source contains a scoped pan_treatment object. Arithmetic comparison_state can
+remain MATCHED while state is PAN_TREATMENT_NOT_SUPPORTED. Zero amounts and
+row exception notes do not resolve the missing assessment. No rate, exemption,
+PAN authenticity or legal eligibility is inferred from any marker.
+
+The optional structured object contains marker, party_reference,
+treatment_reference, assessed_on and assessment. The marker must agree with the
+uploaded counterparty marker. The treatment reference must equal that record's
+rule_reference. Party reference must be an assessed identifier, not another
+missing-PAN marker. Assessment date is an explicit ISO calendar date and cannot
+be later than the comparison cutoff. A meaningful assessment and explicit
+assessment_kind are required. For CSV, put a JSON object in the pan_treatment
+cell; Python dictionary syntax or a free-text note cannot substitute.
+
+The existing retained assessment evidence version, exact SHA-256, rule versus
+certificate kind, transaction coverage and certificate limits remain required.
+The new object reuses that binding; it does not create an unverified alternate
+document path. The supporting original must be current, clean, accessible to
+the engagement/tenant and independently reviewed through the existing source
+workflow. Updating the source and recalculating creates new immutable versions;
+it does not modify the old pending calculation or original marker.
+
+A documented treatment can support the evidence comparison on the explicitly
+assessed facts. Output says DOCUMENTED_ON_RETAINED_ASSESSMENT and PAN
+authentication remains NOT_PERFORMED. This permits legitimate assessed
+missing-PAN cases without pretending that a PAN became available or valid.
+It is not a complete legal PAN/rate/certificate corpus or registry check.
+Ordinary internal party identifiers are not assumed to be PANs merely because
+they do not have a PAN-shaped value.
+
+Shared certificate caps still aggregate across transactions. The assessed
+party reference is part of certificate identity scope: changing it per row
+cannot reuse one certificate/document reference to clear different parties.
+Amounts, legal roles, source status selection and all existing assessment and
+withdrawn-provision controls remain separate. Liability and beneficiary credit
+do not clear each other.
+
+New results include withholding_pan_contract and full-result marker/pending/
+documented counts. A missing marker beyond the first visible 100 rows still
+blocks approval and appears in those counts. The read-only review panel shows
+the current page's marker, assessment, party/rule reference and original evidence
+binding. XLSX adds the complete Withholding PAN treatment schedule. The generic
+Rows sheet and original amounts remain available. A 121-row API case verifies
+that a marker outside the first page is neither hidden from approval controls
+nor omitted from the complete export.
+
+Retained missing-PAN results predating this contract must be regenerated before
+approval or downstream use. Their saved financial bodies and review history
+are preserved. Older ordinary non-marker results do not receive an inferred PAN
+status or a blanket invalidation. The existing independent-review, working-paper
+and freshness infrastructure enforces the current control rather than relying
+only on a disabled UI button.
+
+Verification includes the twelve reproduced regressions, all four roles with
+documented and unsupported treatments, JSON/date/scope rejection, zero amounts,
+shared certificate caps and retained-result guards. Real PostgreSQL/HTTP cases
+verify independent source/result review, failed approval despite exception notes,
+complete XLSX, paper generation for a supported assessment, and unchanged bodies
+after supporting-evidence replacement. Local scan/queue boundaries are explicit
+doubles. A hosted native browser extension uses actual scanning, source review,
+UI calculation/approval/export, and pending/documented/stale captures. Its new
+execution and visual review remain pending for the committed source.
+
+No real-client inputs, external PAN authentication, professional legal opinion
+or statutory production qualification are supplied by these tests. The original
+154 authored scenarios are not relabelled or expanded into qualified client cases.

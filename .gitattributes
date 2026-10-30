@@ -192,4 +192,8 @@ backend/app/modules/country_workflows/india_form143_layout.json text eol=lf
 docs/phase-12/form143-final-typed.xml -text whitespace=cr-at-eol
 docs/phase-12/form143-frontend-final.xml -text whitespace=cr-at-eol
 docs/phase-12/form143-zero-and-boundaries.xml -text whitespace=cr-at-eol
+docs/phase-12/37249b3-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/37249b3-hosted-coverage.json -text
+docs/phase-12/withholding-pan-*.xml -text whitespace=cr-at-eol
+docs/country-workflows/sample-inputs/SYNTHETIC-missing-pan-treatment/*.csv -text whitespace=cr-at-eol
 docs/country-workflows/sample-inputs/SYNTHETIC-dated-form143/SYNTHETIC-explicit-completion-143.txt -text whitespace=cr-at-eol

@@ -1,0 +1,2 @@
+id,registration,counterparty,legal_role,tax_kind,rule_reference,tax_year_start,tax_year_end,period,transaction_reference,transaction_date,currency,amount,record_status,source_reference,source_version,due_date,payment_date,assessment_kind,assessment_period_start,assessment_period_end,assessment_amount_limit
+expected1,SYN-ENTITY,PANNOTAVBL,collector,TCS,SYN-reviewed-rule-version-1,2026-04-01,2027-03-31,2026-05,SYN-TRANSACTION-1,2026-05-15,INR,100,current,SYN-expected,1,2026-06-07,2026-06-01,rule,2026-04-01,2027-03-31,

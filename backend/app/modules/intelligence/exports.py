@@ -183,6 +183,8 @@ def render(event, format):
             "comparison_basis",
             "selected_current_totals",
             "assessment_contract_version",
+            "withholding_pan_contract",
+            "withholding_pan_counts",
             "vat_reporting_currency_contract",
             "vat_reporting_currency",
             "vat_fx_basis",
@@ -883,6 +885,37 @@ def render(event, format):
                 append(coverage, fields)
                 for link in body["confirmation_coverage_links"]:
                     append(coverage, [link.get(field) for field in fields])
+            from app.modules.country_workflows.withholding_pan import relevant_rows as pan_rows
+
+            if missing_pan_rows := pan_rows(body):
+                pan_sheet = workbook.create_sheet("Withholding PAN treatment")
+                pan_fields = [
+                    "id",
+                    "registration",
+                    "counterparty",
+                    "legal_role",
+                    "period",
+                    "transaction_reference",
+                    "comparison_state",
+                    "state",
+                    "pan_status",
+                    "pan_treatment_state",
+                    "pan_issues",
+                    "party_reference",
+                    "treatment_reference",
+                    "assessed_on",
+                    "assessment",
+                    "assessment_evidence_version_id",
+                    "assessment_sha256",
+                    "assessment_kind",
+                    "pan_authentication",
+                ]
+                append(pan_sheet, pan_fields)
+                for pan_row in missing_pan_rows:
+                    pan_context = pan_row.get("pan_treatment") or {}
+                    pan_provenance = pan_row.get("assessment_provenance") or {}
+                    values = {**pan_row, **pan_context, **pan_provenance}
+                    append(pan_sheet, [values.get(field) for field in pan_fields])
             if (
                 body.get("native_metadata", {}).get("contract")
                 == "retained-regular-withholding-observations/1"

@@ -36,6 +36,7 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { TaxCloseExposures } from "./tax-close-exposures";
 import { PageHeader } from "./shared";
 import { IntelligenceExports } from "./intelligence-exports";
+import { WithholdingPANReview } from "./withholding-pan-review";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { BankCashReview } from "./bank-cash-review";
 import { ScreeningCandidates } from "./screening-candidates";
@@ -328,6 +329,12 @@ type Result = {
   freshness: string;
   collection_totals?: Record<string, number>;
   body: MSMETaxBody & {
+    withholding_pan_contract?: string;
+    withholding_pan_counts?: {
+      rows_with_marker: number;
+      pending_rows: number;
+      documented_rows: number;
+    };
     bank_observation_scope?: BankObservationScope;
     workflow?: string;
     payroll_rule_selection_contract?: string;
@@ -7252,6 +7259,13 @@ export function CountryWorkflows({
               selected={selected}
               body={body}
               totals={detail.data.collection_totals}
+            />
+          )}
+          {compactWithholding && (
+            <WithholdingPANReview
+              rows={rows}
+              contract={body.withholding_pan_contract}
+              counts={body.withholding_pan_counts}
             />
           )}
           {body.inventory_quantity_controls && (

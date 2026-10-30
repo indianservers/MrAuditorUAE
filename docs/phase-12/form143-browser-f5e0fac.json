@@ -1,0 +1,88 @@
+{
+  "source_commit": "f5e0facafc412cbf6e8b60d7ae19553bdacebd31",
+  "run_id": 41102124562,
+  "job_id": 124220955689,
+  "job_conclusion": "failure",
+  "suite_passed": 11,
+  "suite_failed": 2,
+  "suite_duration": "4.5m",
+  "native_case": {
+    "conclusion": "success",
+    "duration": "12.1s",
+    "scope": "Historical 26Q/27EQ/27Q original samples and separately labelled explicit synthetic Form 143 completion; actual scanning, forms, review, complete export and crosswalk staleness."
+  },
+  "artifact": {
+    "id": 12998364846,
+    "size_bytes": 11786962,
+    "sha256": "79c09914f3be796824c36113435d0d6fa036c9177240eafc1af28bcdae9c497a"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "c156c9d3d79536a06ab69a7cee3c931d77eeca8a8abcf388afb401136d642b92"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "c6bacb6cbccba4f7224a3748c14f3ce1490653c14dab20c95455b03f88900f59"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/india_form143_native.py",
+      "sha256": "04a707913f780ed8f5a841e824ae93f807aed43809b8e49e8ab0a23f0901599f"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-merchant-mutation-freshness-assert-f5e0fac-1.png",
+      "sha256": "9dedc3f8fb14d9c28f77104d45d6a7936ef9143c14c4ea4d9aafde3c53fd4591",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-merchant-mutation-freshness-assert-f5e0fac-2.png",
+      "sha256": "20d777935bfaf084d57e82a1327710f2f456228f37aadd12992a0dd6c72f1500",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-143-native-crosswalk-superseded-stale-f5e0fac.png",
+      "sha256": "e23c5802876fe615b8b96f5dc3bc26abdf4585c767190538a16a26e1b4424003",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-143-native-regular-reviewed-f5e0fac.png",
+      "sha256": "e4325d596f39bcda8a11bf9f29978cdb608ad351d756a201df9e8e198c7cd6de",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-mutation-freshness-assert-f5e0fac-1.png",
+      "sha256": "36e5a2fc28c2a8024a22a0ecb4cf002ab7fc6ba559f1cec7b26f60133ebcc545",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-mutation-freshness-assert-f5e0fac-2.png",
+      "sha256": "bcb0776b8e6674678203f8c1ed0a922a5c54ec5da49030ad39821e44364987d8",
+      "visually_inspected": true
+    }
+  ],
+  "visual_observations": [
+    "Reviewed/current and reviewed/stale Form 143 images preserve the separate 700 party tax, 21,000 base, 210,000 challan tax, 213,000 gross and 1,000 allocations; source flags and leading-zero DDO reference remain visible.",
+    "Source is explicitly labelled SYNTHETIC; these completions do not repair the incomplete public original or qualify page v1.2.",
+    "Merchant failure captures show transient preparer/reviewer states before the corrected exact-event reload. They do not prove a complete approved replacement capture."
+  ],
+  "failure": {
+    "cases": [
+      "synthetic AE report coverage",
+      "synthetic IN report coverage"
+    ],
+    "location": "merchant-browser-workflow.ts:457",
+    "expected": "CURRENT",
+    "received": "undefined",
+    "cause": "The harness asserted freshness on the successful mutation response, which does not include computed freshness.",
+    "correction": "Read the exact returned event ID using GET, assert version, REVIEWED and computed CURRENT, then navigate to that ID and capture the complete card. Financial approval guards and semantic freshness assertions remain intact.",
+    "corrected_execution": "PENDING_FOR_NEXT_COMMITTED_SOURCE"
+  },
+  "limits": [
+    "The full suite failed; the native case success is separate from the two merchant harness failures.",
+    "Source predates the missing-PAN treatment increment and does not qualify it.",
+    "Full backend qualification is independently pending for this source.",
+    "No real-client, legal-rule, issuer-currentness, PAN authentication, FVU/CSI or production qualification is supplied."
+  ]
+}
