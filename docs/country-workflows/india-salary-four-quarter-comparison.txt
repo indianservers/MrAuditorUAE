@@ -1,0 +1,65 @@
+India salary: four-quarter / annual current-employer comparison
+==============================================================
+
+The country workflow screen and source preparation screen offer a separate
+four-quarter salary comparison for India. It reuses the native historical
+24Q sources, independent review, immutable events, evidence store, freshness
+checks and XLSX export. Endpoint: salary-annual-comparison under the scoped
+intelligence engagement API. Contract: india-salary-four-quarter-current-employer/1.
+
+The target is SD field 36 of the retained Q4 v7.5 workbook: current-employer
+tax deducted for the whole year, described by that source as the aggregate
+of Annexure I tax across the four quarters for the employee. It is NOT SD29,
+which also includes other employers, superannuation and other TDS/TCS.
+The adopted comparison covers FY2013-14 to FY2025-26, with explicit field36
+values. A blank field36 remains missing, even if quarterly amounts are zero.
+This compares source observations; it does not recompute tax or legal liability.
+
+Inputs
+------
+Choose one current independently reviewed original regular source for each
+non-nil quarter: v6.3 Q1-Q3 and v7.5 Q4. All sources must share the same TAN,
+financial year and exact selected quarter. Q4 must carry complete controlled
+annual records. The engagement financial period must cover the whole year.
+Q1-Q3 can instead carry explicit retained nil-quarter assessments. Missing
+selections do not become nil. Q4 cannot be nil in this annual comparison.
+
+Retain a separate clean annual employee/nil-quarter crosswalk document and
+its original SHA-256. Original native-file bytes, quarterly crosswalk versions
+and byte-identical clones cannot substitute for this document. The original
+document must be current, hash-verified and within the existing bounded
+evidence verification path. Its preparer and all source preparers remain
+contributors for independent-review restrictions.
+
+Map every annual SD/batch/record key exactly once. Each assigned party link
+identifies its quarter and original batch/challan/party key. One quarterly
+party cannot be assigned twice. Different valid PANs require corrected
+evidence. Names and missing-PAN sentinels never automatically identify an
+employee: the mapping retains an explicit identity status and assessment.
+Unresolved identities stay unresolved even where amounts agree.
+
+Outputs and exceptions
+----------------------
+Each salary row retains the original annual source line, four separate
+quarterly totals, their sum, recorded current-employer tax, signed difference,
+identity assessment and comparison status. Unassigned quarterly parties
+remain explicit exception rows and in their own complete lineage population.
+They prevent a complete-coverage claim and require documented disposition
+before workpaper approval. Specified-senior annual records are disclosed as
+outside this salary comparison; 94P quarterly parties cannot be assigned to SD.
+
+The party coverage view pages assigned and unassigned populations separately.
+XLSX contains complete Salary quarter links and Unassigned salary parties
+sheets, in addition to the result schedule. Quarterly source events, context
+and independent annual mapping are retained dependencies. Replacement of
+either an annual mapping or a quarterly mapping makes the historical result
+stale, preserving its original body and review history.
+
+Limits
+------
+Four selected prepared statements or an assessed nil quarter do not establish
+government filing completeness, portal-currentness, FVU/CSI validation,
+bank payment, tax credit or professional signoff. No new salary tax rates,
+deduction entitlement, pension comparison or legal certificate conclusions
+are inferred. Real-client qualification still requires supplied redacted
+inputs, independent expected schedules and retained professional reviews.

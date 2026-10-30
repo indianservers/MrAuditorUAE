@@ -236,3 +236,4 @@ docs/country-workflows/authority-references/form144-2026-07-22/*.txt whitespace=
 docs/phase-12/numbered-deductions-all-units.xml -text whitespace=cr-at-eol
 docs/phase-12/1a25dcd-hosted-full.xml -text whitespace=cr-at-eol
 docs/phase-12/1a25dcd-hosted-coverage.json -text
+docs/phase-12/annual-comparison-*.xml -text whitespace=cr-at-eol

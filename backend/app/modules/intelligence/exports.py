@@ -96,6 +96,14 @@ def render(event, format):
             "issues",
             "blocked",
             "contract",
+            "salary_crosswalk_document_binding",
+            "tan",
+            "financial_year",
+            "salary_employee_count",
+            "quarter_tax_totals",
+            "nil_quarter_assessments",
+            "comparison_complete",
+            "specified_senior_annual_record_count",
             "control_comparison",
             "booking_date_review_count",
             "import_nil_scope",
@@ -885,6 +893,16 @@ def render(event, format):
                 append(coverage, fields)
                 for link in body["confirmation_coverage_links"]:
                     append(coverage, [link.get(field) for field in fields])
+            for key, title in (
+                ("salary_quarterly_links", "Salary quarter links"),
+                ("unassigned_quarterly_parties", "Unassigned salary parties"),
+            ):
+                if key in body:
+                    sheet = workbook.create_sheet(title)
+                    fields = list(dict.fromkeys(field for row in body[key] for field in row))
+                    append(sheet, fields or ["No records"])
+                    for link in body[key]:
+                        append(sheet, [link.get(field) for field in fields])
             from app.modules.country_workflows.withholding_pan import relevant_rows as pan_rows
 
             if missing_pan_rows := pan_rows(body):

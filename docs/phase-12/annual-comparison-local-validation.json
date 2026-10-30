@@ -1,0 +1,49 @@
+{
+  "scope": "India historical four-quarter salary/current-employer annual comparison",
+  "date": "2026-10-31",
+  "reports": [
+    {
+      "file": "docs/phase-12/annual-comparison-validation.xml",
+      "sha256": "5e7f9c9a16121297e43042dd60039aad195718781e931a48886717502bf55903",
+      "bytes": 750896,
+      "tests": 4760,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "passed": 4756
+    },
+    {
+      "file": "docs/phase-12/annual-comparison-final-api.xml",
+      "sha256": "1c4e2270aa4b7712e650eb062a2395bd56e591f5e43a3225df163982e7360d93",
+      "bytes": 1250,
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 6
+    }
+  ],
+  "broad_backend_seconds": 235.6,
+  "broad_scope": "Complete backend unit suite plus native withholding, Q4 salary, ECR source and new annual salary HTTP workflows",
+  "final_api_seconds": 21.25,
+  "final_api_scope": "All six annual comparison HTTP cases after explicit TAN/year export metadata; positive all-quarter, independent review, complete export, pagination, annual/quarter crosswalk staleness, separate/cloned/quarantined mapping and engagement-year boundaries",
+  "frontend": {
+    "passed": 498,
+    "files": 86,
+    "seconds": 45.12,
+    "final_caption_checks": "Two targeted UI tests and typecheck pass after explicit scope text"
+  },
+  "static_checks": {
+    "ruff": "PASS, 827 files formatted",
+    "mypy": "PASS, 430 source files",
+    "frontend_lint": "PASS with existing unrelated unused-variable warning",
+    "contracts_and_frontend_api_types": "CURRENT",
+    "production_build": "PASS"
+  },
+  "browser_acceptance": "New all-quarter source/review/export/staleness case added to hosted compound native workflow; not yet executed on this change",
+  "limits": [
+    "Synthetic observations do not establish professional/client/production qualification",
+    "Only recorded SD36 current-employer tax is compared; no salary-tax recomputation or mixed-credit substitution",
+    "Full global roadmap and real-client gates remain open"
+  ]
+}

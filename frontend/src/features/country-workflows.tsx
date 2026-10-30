@@ -92,6 +92,10 @@ import {
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { stockCountReviewColumns } from "./stock-review-columns";
 import { VATCompositionSource } from "./vat-composition-source";
+import {
+  SalaryAnnualComparison,
+  SalaryAnnualLinks,
+} from "./salary-annual-comparison";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
 import { draftCurrency, reportingCurrency } from "./workflow-currency";
 import { TurnoverBooksComposition } from "./turnover-books-composition";
@@ -2520,6 +2524,16 @@ export function CountryWorkflows({
           onCreated={setSelected}
         />
       )}
+      {["workflow-source", "country-workflow"].includes(mode) &&
+        config.data?.country === "IN" && (
+          <SalaryAnnualComparison
+            key={`salary-annual:${eid}`}
+            eid={eid}
+            sources={results.data?.items || []}
+            evidence={inputs.data?.evidence || []}
+            onCreated={setSelected}
+          />
+        )}
       {mode === "workflow-source" &&
         ["AE", "IN"].includes(config.data?.country || "") && (
           <TurnoverBooksComposition
@@ -7312,6 +7326,13 @@ export function CountryWorkflows({
               rows={rows}
               contract={body.withholding_pan_contract}
               counts={body.withholding_pan_counts}
+            />
+          )}
+          {body.workflow === "india-salary-annual-reconciliation" && (
+            <SalaryAnnualLinks
+              key={selected}
+              prefix={prefix}
+              selected={selected}
             />
           )}
           {body.inventory_quantity_controls && (

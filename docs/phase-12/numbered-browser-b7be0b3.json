@@ -1,0 +1,69 @@
+{
+  "source_commit": "b7be0b3d8ee21acaca0fe57995f82bb7f00c4bf8",
+  "run_id": 41141914782,
+  "job_id": 124357976927,
+  "conclusion": "success",
+  "suite": {
+    "passed": 14,
+    "duration": "9.8m",
+    "native_withholding_case_seconds": 53.2
+  },
+  "artifact": {
+    "id": 13019157220,
+    "bytes": 20886803,
+    "sha256": "be1003c8713190a761069740d7db3576b9dc3a9c32c0dec776717b5aa5199b8c"
+  },
+  "images": [
+    {
+      "file": "IN-140-native-crosswalk-superseded-stale-b7be0b3.png",
+      "sha256": "652efcb697fc195d92edfafbd71a6c65731eab34b4878bc894be7e6505aea801",
+      "bytes": 131212
+    },
+    {
+      "file": "IN-140-native-regular-reviewed-b7be0b3.png",
+      "sha256": "b6593405c2c9661d29514b3da08434c3cd420691afa631dc7fd00e90c61cd74c",
+      "bytes": 134184
+    },
+    {
+      "file": "IN-140-numbered-source-fields-b7be0b3.png",
+      "sha256": "8b023bb7b20e2b115d251921fd5b5a88728e4ff5aa5be941b5a3bef9ccef2024",
+      "bytes": 17657
+    },
+    {
+      "file": "IN-144-native-crosswalk-superseded-stale-b7be0b3.png",
+      "sha256": "a7389105868620aa8254a11b65f8cb791993af0d79c0652756b5bf771ab2cd5c",
+      "bytes": 135614
+    },
+    {
+      "file": "IN-144-native-regular-reviewed-b7be0b3.png",
+      "sha256": "3f7bb19bbdcdaa38a4196e93582faf2f8001bb790ecea70ebb0a96cc28d2a039",
+      "bytes": 138530
+    },
+    {
+      "file": "IN-144-numbered-source-fields-b7be0b3.png",
+      "sha256": "f8024d55fdadb6cd107fbf1c34185094c5a9ac3c859709fb2a266e47bbd2d5ff",
+      "bytes": 22864
+    },
+    {
+      "file": "IN-144-recorded-residence-fields-b7be0b3.png",
+      "sha256": "f8024d55fdadb6cd107fbf1c34185094c5a9ac3c859709fb2a266e47bbd2d5ff",
+      "bytes": 22864
+    }
+  ],
+  "visual_review": [
+    "Form140 displays separate deducted tax, allocated deposit, gross challan deposit and component controls; no invented income-tax/surcharge/cess columns.",
+    "Form144 displays the dated nonresident status, opt-out, destination, remittance, gross-up, rate basis, address, email and contact observations.",
+    "Original blank cash fields remain visibly blank; the independent cash controls require explicit zero.",
+    "Both reviewed sources retain original amounts and reviewed history after crosswalk replacement; freshness changes to STALE and independent approval is disabled.",
+    "Form144 full-panel captures clip the right-hand source columns. The original segmented source/residence screenshots expose those recorded fields; they do not establish their authenticity."
+  ],
+  "automated_scope": [
+    "Nine native regular profiles, explicit synthetic dated completions and the separate missing-PAN review workflow",
+    "Full controlled upload, second-user review, self-review prohibition, exported complete source fields and crosswalk-supersession staleness"
+  ],
+  "limits": [
+    "The full backend job was still running when browser success was recorded; this is not an all-jobs-success receipt",
+    "This source predates the separate all-quarter salary comparison workflow",
+    "Synthetic browser evidence does not establish client, legal, FVU/CSI, filing or production qualification"
+  ]
+}

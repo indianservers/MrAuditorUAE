@@ -14,7 +14,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def india_context(c):
+async def india_context(c, year=2026):
     h, existing = await scope(c)
     response = await c.post(
         "/api/v1/entities",
@@ -33,7 +33,7 @@ async def india_context(c):
     response = await c.post(
         "/api/v1/financial-periods",
         headers=h,
-        json={"entity_id": entity, "start_date": "2026-04-01", "end_date": "2027-03-31"},
+        json={"entity_id": entity, "start_date": f"{year}-04-01", "end_date": f"{year + 1}-03-31"},
     )
     assert response.status_code == 201, response.text
     response = await c.post(

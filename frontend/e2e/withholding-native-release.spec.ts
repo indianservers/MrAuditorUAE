@@ -2,6 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 import { readFileSync, mkdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { runWithholdingPANBrowserWorkflow } from "./withholding-pan-browser-workflow";
+import { runSalaryAnnualBrowserWorkflow } from "./salary-annual-browser-workflow";
 import {
   makeWorkflowHarness,
   type WorkflowEvent,
@@ -727,6 +728,32 @@ test("India historical native samples and explicit dated Form 138/140/143/144 fi
           path: `${screenshots}/IN-${form}-native-crosswalk-superseded-stale.png`,
         });
     }
+    const salaryPeriod = await create("financial-periods", {
+      entity_id: entity.id,
+      start_date: "2024-04-01",
+      end_date: "2025-03-31",
+    });
+    const salaryEngagement = await create("engagements", {
+      entity_id: entity.id,
+      period_id: salaryPeriod.id,
+      name: "SYNTHETIC four-quarter salary comparison",
+      engagement_type: "External Audit",
+    });
+    await create(
+      `engagements/${salaryEngagement.id}/audit/team`,
+      {
+        membership_id: identities.reviewer_membership_id,
+        role_id: identities.reviewer_role_id,
+      },
+      200,
+    );
+    await runSalaryAnnualBrowserWorkflow(
+      page,
+      reviewer,
+      salaryEngagement.id,
+      identities.tenant_id,
+      screenshots,
+    );
     const panPeriod = await create("financial-periods", {
       entity_id: entity.id,
       start_date: "2026-04-01",

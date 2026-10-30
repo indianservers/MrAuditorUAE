@@ -2819,6 +2819,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intelligence/engagements/{eid}/salary-annual-comparison": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Salary Annual Comparison */
+        post: operations["salary_annual_comparison_api_v1_intelligence_engagements__eid__salary_annual_comparison_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
         parameters: {
             query?: never;
@@ -9162,6 +9179,54 @@ export interface components {
             result?: {
                 [key: string]: unknown;
             };
+        };
+        /** SalaryAnnualComparisonInput */
+        SalaryAnnualComparisonInput: {
+            /** Label */
+            label: string;
+            /** Quarter Source Ids */
+            quarter_source_ids: {
+                [key: string]: string | null;
+            };
+            /** Nil Quarter Assessments */
+            nil_quarter_assessments?: {
+                [key: string]: string;
+            };
+            /**
+             * Crosswalk Document Version Id
+             * Format: uuid
+             */
+            crosswalk_document_version_id: string;
+            /** Crosswalk Sha256 */
+            crosswalk_sha256: string;
+            /** Employees */
+            employees: components["schemas"]["SalaryEmployeeMap"][];
+            /** Assessment */
+            assessment: string;
+        };
+        /** SalaryEmployeeMap */
+        SalaryEmployeeMap: {
+            /** Annual Key */
+            annual_key: string;
+            /** Parties */
+            parties?: components["schemas"]["SalaryPartyLink"][];
+            /**
+             * Identity Status
+             * @enum {string}
+             */
+            identity_status: "assessed_same_employee" | "unresolved";
+            /** Assessment */
+            assessment: string;
+        };
+        /** SalaryPartyLink */
+        SalaryPartyLink: {
+            /**
+             * Quarter
+             * @enum {string}
+             */
+            quarter: "Q1" | "Q2" | "Q3" | "Q4";
+            /** Party Key */
+            party_key: string;
         };
         /** SampleExclusion */
         SampleExclusion: {
@@ -28537,6 +28602,106 @@ export interface operations {
             };
         };
     };
+    salary_annual_comparison_api_v1_intelligence_engagements__eid__salary_annual_comparison_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "x-tenant-id": string;
+            };
+            path: {
+                eid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalaryAnnualComparisonInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     contribution_obligation_source_api_v1_intelligence_engagements__eid__contribution_obligation_source_post: {
         parameters: {
             query?: never;
@@ -30660,6 +30825,8 @@ export interface operations {
                 ambiguity_limit?: number;
                 tax_invoice_offset?: number;
                 tax_invoice_limit?: number;
+                salary_link_offset?: number;
+                salary_link_limit?: number;
             };
             header: {
                 "x-tenant-id": string;

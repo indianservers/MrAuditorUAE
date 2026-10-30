@@ -26,6 +26,7 @@ from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.country_workflows.inventory_performance import InventoryPerformanceInput
 from app.modules.country_workflows.payroll_proration_source import ProratedBasisInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
+from app.modules.country_workflows.salary_annual_comparison import SalaryAnnualComparisonInput
 from app.modules.country_workflows.savings_reported_source import SavingsReportedInput
 from app.modules.country_workflows.turnover_composition import TurnoverCompositionInput
 from app.modules.country_workflows.turnover_ledger import TurnoverLedgerInput
@@ -201,6 +202,16 @@ async def vat201_composition_source(
     eid: uuid.UUID, data: VATCompositionInput, db: DB, ctx: Actor, request: Request
 ):
     from app.modules.country_workflows.vat_composition import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/salary-annual-comparison", status_code=201)
+async def salary_annual_comparison(
+    eid: uuid.UUID, data: SalaryAnnualComparisonInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.salary_annual_comparison import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
@@ -936,6 +947,8 @@ async def event_details(
     ambiguity_limit: int = Query(100, ge=1, le=500),
     tax_invoice_offset: int = Query(0, ge=0),
     tax_invoice_limit: int = Query(100, ge=1, le=500),
+    salary_link_offset: int = Query(0, ge=0),
+    salary_link_limit: int = Query(100, ge=1, le=500),
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
@@ -975,6 +988,8 @@ async def event_details(
             excluded_offset : excluded_offset + excluded_limit
         ]
     for key, start, size in [
+        ("salary_quarterly_links", salary_link_offset, salary_link_limit),
+        ("unassigned_quarterly_parties", salary_link_offset, salary_link_limit),
         ("turnover_adjustment_rows", turnover_offset, turnover_limit),
         ("custody_quantity_controls", custody_control_offset, custody_control_limit),
         ("ownership_paths", ownership_path_offset, ownership_path_limit),

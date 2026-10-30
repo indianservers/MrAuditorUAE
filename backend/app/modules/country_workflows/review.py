@@ -1,4 +1,12 @@
 def approval_error(body):
+    if body.get("workflow") == "india-salary-annual-reconciliation":
+        from app.modules.country_workflows.salary_annual_comparison import CONTRACT
+
+        if (
+            body.get("contract") != CONTRACT
+            or body.get("salary_crosswalk_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"
+        ):
+            return "Regenerate the four-quarter salary comparison with retained independent employee mapping"
     from app.modules.country_workflows.withholding_pan import approval_error as pan_error
 
     if error := pan_error(body):

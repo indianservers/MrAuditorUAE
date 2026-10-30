@@ -27243,6 +27243,142 @@
         }
       }
     },
+    "/api/v1/intelligence/engagements/{eid}/salary-annual-comparison": {
+      "post": {
+        "tags": [
+          "Accounting intelligence"
+        ],
+        "summary": "Salary Annual Comparison",
+        "operationId": "salary_annual_comparison_api_v1_intelligence_engagements__eid__salary_annual_comparison_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Eid"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalaryAnnualComparisonInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
       "post": {
         "tags": [
@@ -30652,6 +30788,29 @@
               "minimum": 1,
               "default": 100,
               "title": "Tax Invoice Limit"
+            }
+          },
+          {
+            "name": "salary_link_offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Salary Link Offset"
+            }
+          },
+          {
+            "name": "salary_link_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Salary Link Limit"
             }
           },
           {
@@ -65884,6 +66043,155 @@
           "status"
         ],
         "title": "RunOut"
+      },
+      "SalaryAnnualComparisonInput": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Label"
+          },
+          "quarter_source_ids": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "propertyNames": {
+              "enum": [
+                "Q1",
+                "Q2",
+                "Q3",
+                "Q4"
+              ]
+            },
+            "type": "object",
+            "title": "Quarter Source Ids"
+          },
+          "nil_quarter_assessments": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "enum": [
+                "Q1",
+                "Q2",
+                "Q3",
+                "Q4"
+              ]
+            },
+            "type": "object",
+            "title": "Nil Quarter Assessments"
+          },
+          "crosswalk_document_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Crosswalk Document Version Id"
+          },
+          "crosswalk_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Crosswalk Sha256"
+          },
+          "employees": {
+            "items": {
+              "$ref": "#/components/schemas/SalaryEmployeeMap"
+            },
+            "type": "array",
+            "maxItems": 5000,
+            "minItems": 1,
+            "title": "Employees"
+          },
+          "assessment": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Assessment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "label",
+          "quarter_source_ids",
+          "crosswalk_document_version_id",
+          "crosswalk_sha256",
+          "employees",
+          "assessment"
+        ],
+        "title": "SalaryAnnualComparisonInput"
+      },
+      "SalaryEmployeeMap": {
+        "properties": {
+          "annual_key": {
+            "type": "string",
+            "pattern": "^SD/[1-9][0-9]*/[1-9][0-9]*$",
+            "title": "Annual Key"
+          },
+          "parties": {
+            "items": {
+              "$ref": "#/components/schemas/SalaryPartyLink"
+            },
+            "type": "array",
+            "maxItems": 20000,
+            "title": "Parties"
+          },
+          "identity_status": {
+            "type": "string",
+            "enum": [
+              "assessed_same_employee",
+              "unresolved"
+            ],
+            "title": "Identity Status"
+          },
+          "assessment": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Assessment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "annual_key",
+          "identity_status",
+          "assessment"
+        ],
+        "title": "SalaryEmployeeMap"
+      },
+      "SalaryPartyLink": {
+        "properties": {
+          "quarter": {
+            "type": "string",
+            "enum": [
+              "Q1",
+              "Q2",
+              "Q3",
+              "Q4"
+            ],
+            "title": "Quarter"
+          },
+          "party_key": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*/[1-9][0-9]*/[1-9][0-9]*$",
+            "title": "Party Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "quarter",
+          "party_key"
+        ],
+        "title": "SalaryPartyLink"
       },
       "SampleExclusion": {
         "properties": {
