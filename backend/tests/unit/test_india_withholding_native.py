@@ -437,7 +437,7 @@ def test_assessed_history_status_never_silently_turns_raw_positive_observations_
 
 def test_pinned_lexical_limits_point_to_the_exact_original_issuer_workbooks():
     limits, _ = profile_limits()
-    for form, version in (("26Q", "7.8"), ("27EQ", "6.9")):
+    for form, version in (("26Q", "7.8"), ("27EQ", "6.9"), ("27Q", "7.5")):
         assert (
             limits[form]["source_sha256"]
             == hashlib.sha256((ROOT / f"protean-{form}-{version}.xls").read_bytes()).hexdigest()

@@ -452,8 +452,13 @@ export async function runMerchantBrowserWorkflow(
   expect((await replacement).status()).toBe(201);
   await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
   if (await notification.count()) await notification.last().click();
-  await cash.screenshot({
+  await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
+  await cash.scrollIntoViewIfNeeded();
+  // A notification-triggered refresh can replace the region between resolving
+  // an element screenshot and scrolling it. Capture the asserted viewport.
+  await reviewer.screenshot({
     path: `${screenshots}/${country}-merchant-cash-released-replacement-approved.png`,
+    fullPage: false,
   });
   expect(reviewerErrors).toEqual([]);
 }

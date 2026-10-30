@@ -1794,11 +1794,16 @@ export function CountryWorkflows({
               ...([
                 "india-26q-regular-v7.8",
                 "india-27eq-regular-v6.9",
+                "india-27q-regular-v7.5",
               ].includes(sourceFormat)
                 ? {
                     native_withholding_controls: nativeWithholdingPayload(
                       nativeWithholding,
-                      sourceFormat.includes("27eq") ? "27EQ" : "26Q",
+                      sourceFormat.includes("27eq")
+                        ? "27EQ"
+                        : sourceFormat.includes("27q")
+                          ? "27Q"
+                          : "26Q",
                       expectedRows,
                     ),
                   }
@@ -2841,11 +2846,18 @@ export function CountryWorkflows({
                   {[
                     "india-26q-regular-v7.8",
                     "india-27eq-regular-v6.9",
+                    "india-27q-regular-v7.5",
                   ].includes(sourceFormat) && (
                     <NativeWithholdingSource
                       value={nativeWithholding}
                       onChange={setNativeWithholding}
-                      form={sourceFormat.includes("27eq") ? "27EQ" : "26Q"}
+                      form={
+                        sourceFormat.includes("27eq")
+                          ? "27EQ"
+                          : sourceFormat.includes("27q")
+                            ? "27Q"
+                            : "26Q"
+                      }
                       documents={(inputs.data?.evidence || []).filter(
                         (doc) =>
                           doc.scan_status === "CLEAN" &&

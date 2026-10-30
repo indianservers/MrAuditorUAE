@@ -181,3 +181,10 @@ docs/phase-12/dmcc-complete-final.xml -text whitespace=cr-at-eol
 docs/phase-12/dmcc-frontend-verified.xml -text whitespace=cr-at-eol
 docs/phase-12/dmcc-source-binding-final.xml -text whitespace=cr-at-eol
 docs/phase-12/dmcc-ui-verified-final.xml -text whitespace=cr-at-eol
+docs/phase-12/acf5611-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/acf5611-hosted-coverage.json -text
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27Q-7.5.xls -text
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27Q-original-sample.zip -text
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27Q-original-sample.txt -text whitespace=cr-at-eol
+docs/phase-12/india-27q-final-verified.xml -text whitespace=cr-at-eol
+docs/phase-12/india-27q-frontend-final.xml -text whitespace=cr-at-eol

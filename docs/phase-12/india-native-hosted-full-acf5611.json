@@ -1,0 +1,44 @@
+{
+  "source_commit": "acf5611997a70ef4006a55f93f045df1d2d1a7c6",
+  "run_id": 41078235036,
+  "job_id": 124140092966,
+  "conclusion": "success",
+  "passed": 4892,
+  "skipped": 9,
+  "failures": 0,
+  "overall_coverage_percent": 86.8447250212456,
+  "core_coverage": {
+    "covered": 831,
+    "total": 930,
+    "percent_displayed": 89.35
+  },
+  "artifact": {
+    "id": 12994876872,
+    "size_bytes": 241098,
+    "sha256": "b1d5ac951e9b3681e965cded6b9ac97d26df456e83426f9a86059ad882bd80ed"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/acf5611-hosted-full.xml",
+      "sha256": "e371544a29efc90f084c5dcee75d613311af26cefdc6f877eb5ea0cb37cd2985",
+      "size_bytes": 759274
+    },
+    {
+      "path": "docs/phase-12/acf5611-hosted-coverage.json",
+      "sha256": "adc89289c608235e6bf614dfdb1c6f1b61a4bf37ed31840f2ea04c653a0f315b",
+      "size_bytes": 1851495
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "ml": "success",
+    "containers": "success",
+    "security": "success"
+  },
+  "limits": [
+    "Source predates the book-entry control, shared merchant cash, business-day and DMCC increments. Their qualification requires their own source-bound results.",
+    "Nine full-suite skips remain skips; synthetic verification is not real-client or production statutory qualification."
+  ]
+}

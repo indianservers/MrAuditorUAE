@@ -1,0 +1,48 @@
+{
+  "classification": "SYNTHETIC_CROSSWALK_FOR_PUBLIC_ISSUER_SAMPLE_NOT_CLIENT_OR_LEGAL_QUALIFICATION",
+  "expected_mapped_rows": 2,
+  "main_control_totals": {
+    "INR": "166000"
+  },
+  "requires_replacement": [
+    "controls.crosswalk_document_version_id"
+  ],
+  "controls": {
+    "tan": "MUMN77777A",
+    "financial_year": "201920",
+    "quarter": "Q3",
+    "observed_on": "2026-10-30",
+    "batch_count": 1,
+    "challan_count": 1,
+    "party_count": 2,
+    "income_tax": "166000",
+    "surcharge": "0",
+    "cess": "0",
+    "allocated_deposit": "166000",
+    "challan_deposit": "20000000",
+    "payment_base": "26600000",
+    "record_status": "current",
+    "crosswalk_document_version_id": "00000000-0000-0000-0000-000000000000",
+    "assessment": "SYNTHETIC independently counted public sample and retained crosswalk; not client or treaty qualification",
+    "groups": [
+      {
+        "transaction_reference": "SYN-NR-1",
+        "transaction_date": "2019-12-10",
+        "period": "2019-12",
+        "rule_reference": "SYN-NR-ASSESSED-SECTION",
+        "party_records": [
+          "1/1/1"
+        ]
+      },
+      {
+        "transaction_reference": "SYN-NR-2",
+        "transaction_date": "2019-12-10",
+        "period": "2019-12",
+        "rule_reference": "SYN-NR-ASSESSED-SECTION",
+        "party_records": [
+          "1/1/2"
+        ]
+      }
+    ]
+  }
+}

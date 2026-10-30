@@ -1,0 +1,94 @@
+{
+  "source_commit": "87f83a3ac517c217fa3b677c8b1761c6059ece35",
+  "run_id": 41094235035,
+  "job_id": 124195698559,
+  "job_conclusion": "failure",
+  "suite_passed": 12,
+  "suite_failed": 1,
+  "suite_duration": "5.9m",
+  "dmcc_case": {
+    "conclusion": "success",
+    "duration": "13.5s",
+    "coverage": [
+      "Original regulation and guideline PDFs uploaded and scanned with real ClamAV.",
+      "Separate source review, synthetic company versus foreign branch facts, UI filing approval, source withdrawal and unchanged historical body.",
+      "Source-stale warning visible and submission-stage action disabled after withdrawal.",
+      "India parent keeps India entity country while its branch obligation is UAE."
+    ]
+  },
+  "artifact": {
+    "id": 12995253057,
+    "size_bytes": 11827842,
+    "sha256": "093aeee61cb812059b4f828ababc46352f6dd4e2ae8439bf71baf12326056cf1"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/dmcc-audit-release.spec.ts",
+      "sha256": "f8823bd303b2270daa9ddd8153113109c5db226ffdf54dffe6d0b4e4e427e169"
+    },
+    {
+      "path": "backend/app/modules/grc/dmcc_audit.py",
+      "sha256": "0b7fe41656ba152cce21fbe40660b88d4288d3d491088fd7c3c7021f4ad0a7d5"
+    },
+    {
+      "path": "frontend/src/features/dmcc-audit-result.tsx",
+      "sha256": "1963de41c669ab41dede79972a756dd43a15e9143145a2b9ba6873b880ca98e6"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "2c6a6b886f07bfafe63fbb4fb56f83e27e2b39f06ff22dd23e43549e15d58605"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-DMCC-guideline-withdrawn-stale-87f83a3.png",
+      "sha256": "9b9dd81b8ca870f0c27afdace8c23fdb068007959429d0f8abaee30753891600",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-DMCC-procedure-reviewed-87f83a3.png",
+      "sha256": "cd71f8a9b167fe4bb6a7cb0d555e54faf3f601328370ad0fcf3e56f393590202",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-DMCC-guideline-withdrawn-stale-87f83a3.png",
+      "sha256": "ba3a593bc24f98315c6083c9eca136386b57ad6ef20e9a268c8fcb3a9227cc09",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-DMCC-procedure-reviewed-87f83a3.png",
+      "sha256": "b59326253f13a495dc0d189d24478c68255d7e4f17dfec005c03491d58ab8b77",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-detached-capture-87f83a3-1.png",
+      "sha256": "c745b6a2d0734f7b1442228af5720f308c472fd53225c8f1465646440425be41",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-detached-capture-87f83a3-2.png",
+      "sha256": "8344792940589cfecefd47b70df690e272ca69e6d0bd306f73b7a02ece795049",
+      "visually_inspected": true
+    }
+  ],
+  "visual_observations": [
+    "UAE company current assessment distinguishes individual accounts/audit required, group accounts not required and assessed approved auditor.",
+    "Foreign branch portal required; company individual/audit/group accounts remain unresolved rather than exempt. Assessed branch group auditor exception is separate.",
+    "Both source-withdrawn captures retain their determinations with STALE and a reassessment alert.",
+    "Merchant failure captures show the result region temporarily absent while its current selected result remains in the reviewer selector; they do not prove final active-cash display."
+  ],
+  "failure": {
+    "case": "synthetic IN report coverage, separate reviewer and generated draft",
+    "location": "merchant-browser-workflow.ts:455",
+    "error": "locator.screenshot: Element is not attached to the DOM",
+    "phase": "After active approved allocation assertion and notification dismissal, during element screenshot.",
+    "correction": "Reassert active approval after notification dismissal, scroll the region into view and capture the viewport without holding an element screenshot through a refresh. Financial approval assertions and server guards are unchanged.",
+    "corrected_execution": "PENDING_FOR_NEW_COMMITTED_SOURCE"
+  },
+  "limits": [
+    "DMCC captures contain the authority assessment region; filing-stage assertions are test evidence rather than visible in these cropped images.",
+    "Synthetic entity facts and professionally assessed scope inputs are not registry/auditor authentication or actual client qualification.",
+    "December 31 six-month fixture does not settle all calendar-month interpretations.",
+    "The full backend job for this source remains independently pending; the failed suite cannot be called all green."
+  ]
+}

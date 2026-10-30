@@ -85,3 +85,13 @@ execution. New hosted full-backend/browser results and visual inspection remain
 pending for the committed source. Source documents plus synthetic entity facts
 are not real-client pilots or professional qualification. The existing authored
 154-scenario catalogue and overall roadmap completion status are unchanged.
+
+Hosted source 87f83a3: the new DMCC company and foreign-branch case passed in
+13.5 seconds with actual PDF scanning. All four original current/stale captures
+have been saved and visually inspected. The branch retains unresolved company
+accounts/audit/group determinations alongside its separate required portal
+procedure. The whole suite had 12 passes and one failure: a pre-existing India
+merchant capture detached during a refresh after the approved allocation was
+asserted. This is retained in dmcc-browser-87f83a3.json with both original failure
+captures and a bounded capture correction. It is not an all-green suite result.
+Full backend and corrected browser proof remain separate source-specific gates.

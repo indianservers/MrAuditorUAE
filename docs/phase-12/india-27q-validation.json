@@ -1,0 +1,114 @@
+{
+  "contract": "india-nonresident-27q-observations-verification/1",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "parent_commit": "87f83a3ac517c217fa3b677c8b1761c6059ece35",
+  "source_files": [
+    {
+      "path": "backend/app/modules/country_workflows/india_withholding_native.py",
+      "sha256": "3558ed26323527417d3f29acebf303698cb7f3208bb146afed606907f2bdd3b8"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/india_withholding_native_limits.json",
+      "sha256": "1bfde3319a6a33855558410b44655f302546360ffb04da79214499c369ee2b92"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/native_sources.py",
+      "sha256": "d6db5b383253ab5bdfb471dfb76f5c623eaf77bb64aaec1a3e206616bc01e344"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "c27cf390e56bcdd95384551918a509d031bd739a5702dddb93b49c42106c96f6"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "a1dbce19f86bd00795fc9304a1214638d9640a64b6e8be3deef94bdb0f579f03"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "e9b950b1382cd5d6c7a7195d9f93139029357ccb35a8766a92da387c75deebd5"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_india_withholding_native.py",
+      "sha256": "8408724144b5ca3d56e66510f521d301889ec2f0e72cdca030a50ab284688177"
+    },
+    {
+      "path": "backend/tests/unit/test_india_27q_native.py",
+      "sha256": "d3e39d18366a2141b4fd002575345cdb444dc8cce17b3b805ae4986b8130abd3"
+    },
+    {
+      "path": "backend/tests/unit/test_india_withholding_native.py",
+      "sha256": "f1b345e672c5cdb7a72684204d46ee786cfb5cf763abed491a33e50eb7163b7a"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "e86f75a55805de1840730f9536a8f97300dc947cebe985182f531d5c279f3766"
+    },
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "23f7f080e2ff3b221a4ca62823d0904b77ea8b7abe6b66e9a96119892b1cdb14"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "3e3ba495cc64a4aa1ef2848aa8d8437f2cd1c24fe2fbc4e5de1ce894bc90df17"
+    },
+    {
+      "path": "frontend/src/features/native-withholding-source.tsx",
+      "sha256": "7beb96295625b48adf79510b5130ee94128f32fab1003d3dbf76dc50ac40a713"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "2f50e73f54d13ee8185dd1de220230f44265eaf0ba1ae0162480386b467238dc"
+    },
+    {
+      "path": "frontend/tests/native-withholding-source.test.tsx",
+      "sha256": "1d806ca23e3ea6d69597b28dc4d962ae658e5eb5ef157c696af4277c8e5857c3"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/india-27q-final-verified.xml",
+      "passed": 264,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "202a64f7eff4b8dad7cdf035f03ef5f10668d0f14a8464214397ab0e7c754d9b"
+    },
+    {
+      "path": "docs/phase-12/india-27q-frontend-final.xml",
+      "passed": 457,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "5579f6ca92edf9a5776d40558d81fadc7ecaa77e09c06a711d85438b9737e21d"
+    }
+  ],
+  "checks": {
+    "scoped_ruff_lint_and_format": "PASS",
+    "mypy": "PASS_420_APP_FILES",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "next_production_build": "PASS",
+    "api_contracts": "CURRENT",
+    "generated_api_types": "CURRENT",
+    "extended_native_browser_case": "ONE_DISCOVERED_NOT_EXECUTED_FOR_NEW_SOURCE"
+  },
+  "verified_scope": [
+    "Original public 27Q v7.5 sample plus independent synthetic count/component/deposit/payment-base controls; all original parties linked and reported-only role enforced.",
+    "Real PostgreSQL/HTTP source review, self-review rejection, comparison against independently specified expected schedules, complete XLSX and unchanged source/downstream bodies after crosswalk replacement.",
+    "Separate recorded rate basis, remittance, residence, 15CA reference, foreign tax ID, contact/address, cash-withdrawal bands and opt-out flag retained in review/export; blanks are not zero or exemptions.",
+    "Crosswalk groups cannot merge different nonresident contexts or unidentifiable missing-PAN parties. Earlier/later field windows and last legacy year are tested.",
+    "Country, historical status, nil/book-entry, count/arithmetic, lexical limits and TDS/TCS purchase-control separation regressions pass.",
+    "Frontend source selection, controls, code/blank display and lineage paging pass; old 26Q/27EQ output columns remain unchanged."
+  ],
+  "authority_assessment": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/27Q-source-assessment.json",
+  "prior_hosted_evidence": [
+    "docs/phase-12/india-native-hosted-full-acf5611.json",
+    "docs/phase-12/dmcc-browser-87f83a3.json"
+  ],
+  "test_driven_corrections": "Initial 27Q API export check exposed missing nonresident columns; exporter corrected. Three initial legacy helper failures were missing wrapper default arguments, restored before the passing full targeted run.",
+  "warnings": "10 existing SQLAlchemy distinct-on deprecation warnings in obligation bank-consumption tests.",
+  "limits": [
+    "Scan/queue doubles in API tests; new hosted 27Q browser/full-backend execution still pending for the committed source.",
+    "Conservative numbered field widths, including 12-character 15CA reference; descriptive source contradiction 12-15 is retained, not guessed away.",
+    "Not complete FVU/CSI, conditional/legal-code validation, treaty/residency entitlement, tax rate, portal authenticity, filing or bank/tax-credit evidence.",
+    "No real-client pilot or independent professional country qualification is provided. Authored scenario count remains 154 synthetic cases."
+  ]
+}

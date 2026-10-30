@@ -907,6 +907,12 @@ def render(event, format):
                     "reason_flag",
                     "certificate_reference",
                 ]
+                if body["native_metadata"].get("form") == "27Q":
+                    from app.modules.country_workflows.india_withholding_native import (
+                        NONRESIDENT_FIELDS,
+                    )
+
+                    native_fields += list(NONRESIDENT_FIELDS)
                 append(native_links, native_fields)
                 for link in body["native_metadata"]["party_links"]:
                     append(native_links, [link.get(field) for field in native_fields])

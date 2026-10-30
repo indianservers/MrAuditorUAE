@@ -365,6 +365,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         supported_media = {
             "india-26q-regular-v7.8": {"text/plain"},
             "india-27eq-regular-v6.9": {"text/plain"},
+            "india-27q-regular-v7.5": {"text/plain"},
             "un-sc-consolidated-xml": {"application/xml", "text/xml"},
             "india-esic-members-xls": {"application/vnd.ms-excel"},
             "canonical-csv": {

@@ -292,6 +292,25 @@ export function NativeWithholdingLinks({
     "recorded_rate",
     "reason_flag",
     "certificate_reference",
+    ...(rows.some((row) => "recorded_rate_basis" in row)
+      ? [
+          "recorded_rate_basis",
+          "nature_of_remittance_code",
+          "form_15ca_reference",
+          "residence_country_code",
+          "deductee_email",
+          "deductee_contact",
+          "residence_address",
+          "foreign_tax_identifier",
+          "cash_withdrawal_194n",
+          "cash_withdrawal_194n_first_band",
+          "cash_withdrawal_194n_second_band",
+          "cash_withdrawal_cooperative_194n",
+          "cash_withdrawal_cooperative_first_band",
+          "cash_withdrawal_cooperative_second_band",
+          "recorded_115bac_opt_out",
+        ]
+      : []),
   ];
   return (
     <section aria-label="Native withholding party lineage">
@@ -301,6 +320,14 @@ export function NativeWithholdingLinks({
         group. Recorded rates, reason flags and certificates are source
         observations requiring independent assessment.
       </p>
+      {rows.some((row) => "recorded_rate_basis" in row) && (
+        <p>
+          Nonresident fields retain uploaded codes and references. Rate basis A
+          records the Income Tax Act and B records DTAA. Neither establishes
+          residence, treaty eligibility, a valid Form 15CA acknowledgment or the
+          correct tax rate. Blank source fields remain blank.
+        </p>
+      )}
       <label>
         Native group ID filter
         <input

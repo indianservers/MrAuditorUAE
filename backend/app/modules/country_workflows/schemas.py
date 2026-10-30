@@ -440,6 +440,7 @@ class SourceInput(Strict):
         "india-gstr1-documents-json",
         "india-26q-regular-v7.8",
         "india-27eq-regular-v6.9",
+        "india-27q-regular-v7.5",
     ] = "canonical-csv"
     gstr1_section_controls: list[GSTR1SectionControl] = Field(default_factory=list, max_length=10)
     gstr1_context_evidence_version_id: uuid.UUID | None = None
@@ -580,7 +581,11 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
-        if self.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}:
+        if self.file_format in {
+            "india-26q-regular-v7.8",
+            "india-27eq-regular-v6.9",
+            "india-27q-regular-v7.5",
+        }:
             if (
                 self.table_type != "withholding-records"
                 or self.native_withholding_controls is None

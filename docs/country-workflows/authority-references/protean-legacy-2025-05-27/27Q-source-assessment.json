@@ -1,0 +1,39 @@
+{
+  "checked_on": "2026-10-30",
+  "authority_page": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+  "form": "27Q",
+  "version": "7.5",
+  "scope": "Observed historical regular statements, FY 2010-11 through 2025-26; successor Form 144 is separate. No legal commencement inferred.",
+  "originals": [
+    {
+      "path": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27Q-7.5.xls",
+      "size_bytes": 153088,
+      "sha256": "dfde04d4458c90c6db7941f1c30c13c3d2a196a896e77d771b703fc5411da43a",
+      "source_url": "https://tinpan.proteantech.in/downloads/e-tds/File_Format_27Q_Regular_Q1_to_Q4_Version_7.5_27052025_201011.xls"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27Q-original-sample.zip",
+      "size_bytes": 445,
+      "sha256": "c3131b8593db2a4315b1789bebe4ce9e7e99aa1de2d991123f99e6d2cd29557b",
+      "source_url": "https://tinpan.proteantech.in/downloads/e-tds/download/uat/27QQ3.zip"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27Q-original-sample.txt",
+      "size_bytes": 822,
+      "sha256": "645e28be095de6f3e6f3b1079d0112f70741249403a7e9673dced50153ddce9b",
+      "source_url": "Original unchanged ZIP member 27QRQ3.txt"
+    }
+  ],
+  "inspected_workbook_sheet": "File Format_R",
+  "numbered_record_widths": {
+    "FH": 18,
+    "BH": 72,
+    "CD": 41,
+    "DD": 54
+  },
+  "source_conflicts": [
+    "General notes FH-16 example differs from numbered FH-18 and original sample.",
+    "DD field 37 numbered width 12 differs from description permitting 12 through 15 characters. Selected conservative profile rejects above 12 without truncating."
+  ],
+  "qualification": "Record structure, explicit independent controls and retained assessed crosswalk only. No complete FVU/CSI, treaty, residency, legal rate or filing qualification."
+}

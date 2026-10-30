@@ -24,6 +24,14 @@ WPS_RECORD_CONTRACT = "wps-single-line-records/1"
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "india-27q-regular-v7.5",
+        "label": "India historical 27Q nonresident regular statement v7.5",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "FY 2010-11 through 2025-26 original TDS observations, complete party/challan controls and retained crosswalk, with separate recorded treaty/remittance/residence fields; no treaty eligibility, legal rate, FVU, filing or bank settlement inference. Successor Form 144 is separate.",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
         "id": "india-26q-regular-v7.8",
         "label": "India historical 26Q regular statement v7.8",
         "countries": ["IN"],
@@ -144,7 +152,7 @@ FORMATS: list[dict[str, Any]] = [
     },
     {
         "id": "uae-wps-sif",
-        "label": "UAE WPS SIF — EDR / SCR trailer",
+        "label": "UAE WPS SIF â€” EDR / SCR trailer",
         "countries": ["AE"],
         "table_type": "obligations",
         "description": "Bank-published trailer layout; employee count and fixed/variable salary totals checked; instructions are not payment confirmation",
@@ -715,7 +723,11 @@ def parse_native(content, data, country, filename):
     with localcontext() as arithmetic:
         arithmetic.prec = 80
         try:
-            if data.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}:
+            if data.file_format in {
+                "india-26q-regular-v7.8",
+                "india-27eq-regular-v6.9",
+                "india-27q-regular-v7.5",
+            }:
                 from app.modules.country_workflows.india_withholding_native import parse_regular
 
                 rows, metadata = parse_regular(content, data)
@@ -797,7 +809,8 @@ def parse_native(content, data, country, filename):
         "population_completeness": "DECLARED_UN_XML_SUBJECT_SCRIPT_AND_ALIAS_CONTROLS"
         if data.file_format == "un-sc-consolidated-xml"
         else "DECLARED_NATIVE_WITHHOLDING_PARTIES_AND_CROSSWALK_CONTROLS"
-        if data.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}
+        if data.file_format
+        in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9", "india-27q-regular-v7.5"}
         else "ESIC_DECLARED_MEMBER_DAY_ZERO_WAGE_AND_WAGE_CONTROLS"
         if data.file_format == "india-esic-members-xls"
         else "RETAINED_DOCUMENT_SERIES_COUNTS_NOT_INVOICE_COMPLETENESS"
@@ -833,7 +846,8 @@ def parse_native(content, data, country, filename):
                 "allowed_source_roles": ["reported"],
                 "allowed_workflows": ["india-withholding-liability"],
             }
-            if data.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}
+            if data.file_format
+            in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9", "india-27q-regular-v7.5"}
             else {}
         ),
         **(

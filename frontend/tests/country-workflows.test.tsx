@@ -225,6 +225,7 @@ vi.mock("@/hooks/use-api", () => ({
             source_formats: [
               { id: "india-26q-regular-v7.8", label: "India historical 26Q regular statement v7.8", available: state.country === "IN", table_type: "withholding-records" },
               { id: "india-27eq-regular-v6.9", label: "India historical 27EQ regular statement v6.9", available: state.country === "IN", table_type: "withholding-records" },
+              { id: "india-27q-regular-v7.5", label: "India historical 27Q nonresident regular statement v7.5", available: state.country === "IN", table_type: "withholding-records" },
               { id: "un-sc-consolidated-xml", label: "UN consolidated sanctions XML", available: true, table_type: "sanctions-entries" },
               {
                 id: "india-gstr1-document-series-json",
@@ -3785,12 +3786,12 @@ it.each(["AE", "IN"])("queues independent UN snapshot controls without monetary 
 });
 
 
-it("queues a native regular statement with separate retained crosswalk and independent tax controls", async () => {
+it.each(["india-26q-regular-v7.8", "india-27q-regular-v7.5"])("queues a native regular statement with separate retained crosswalk and independent tax controls (%s)", async (format) => {
   state.country = "IN";
   render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
   fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: "withholding-records" } });
   fireEvent.change(screen.getByLabelText("Withholding assessment document (optional shared document)"), { target: { value: "context-clean" } });
-  fireEvent.change(screen.getByLabelText("Source file format"), { target: { value: "india-26q-regular-v7.8" } });
+  fireEvent.change(screen.getByLabelText("Source file format"), { target: { value: format } });
   for (const [label,value] of [
     ["Clean retained evidence","clean"],["Schedule title","Synthetic native 26Q observations"],["Expected data rows","1"],["Independent totals by currency","INR=100"],
     ["Native statement TAN","MUMN77777A"],["Native financial year (six digits)","202021"],["Native statement quarter","Q1"],["Native observation cutoff","2026-10-30"],["Assessed native source selection","current"],
@@ -3800,7 +3801,7 @@ it("queues a native regular statement with separate retained crosswalk and indep
   fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
   await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).not.toHaveProperty("rule_document_version_id");
-  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({file_format:"india-26q-regular-v7.8",table_type:"withholding-records",expected_rows:1,control_totals:{INR:"100"},native_withholding_controls:{tan:"MUMN77777A",party_count:1,record_status:"current",crosswalk_document_version_id:"context-clean",income_tax:"100",allocated_deposit:"100",challan_deposit:"1000"}});
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({file_format:format,table_type:"withholding-records",expected_rows:1,control_totals:{INR:"100"},native_withholding_controls:{tan:"MUMN77777A",party_count:1,record_status:"current",crosswalk_document_version_id:"context-clean",income_tax:"100",allocated_deposit:"100",challan_deposit:"1000"}});
 });
 
 

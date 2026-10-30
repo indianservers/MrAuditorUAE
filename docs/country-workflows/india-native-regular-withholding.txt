@@ -69,11 +69,22 @@ form submission, review/export and crosswalk-supersession captures. The first
 hosted native UI case passed at acf5611997a70ef4006a55f93f045df1d2d1a7c6;
 its four original reviewed/stale captures have been visually inspected.
 
-Remaining: complete FVU/CSI and conditional-field qualification, correction and
-successor/native salary/nonresident profiles, complete legally approved
+Remaining: complete FVU/CSI and conditional-field qualification, correction,
+successor and salary profiles, complete legally approved
 rate/threshold/certificate rules and code crosswalks, actual issuer/portal
 verification, authorized filing and real independently checked client pilots.
 The existing synthetic scenario count is not increased by these samples/tests.
+
+The historical nonresident 27Q observed-file increment is documented separately
+in india-native-nonresident-withholding.txt. It does not qualify successor Form
+144, treaty eligibility, legal rates, FVU or CSI.
+
+The hosted full backend at acf5611 completed with 4,892 passes, nine skips,
+86.844725 percent overall coverage and 89.35 percent displayed core coverage.
+All six hosted jobs passed on that source. Exact original JUnit/coverage are
+archived with india-native-hosted-full-acf5611.json. That source predates the
+book-entry control fix, shared merchant cash, business-day and DMCC increments;
+it does not qualify later changes merely because the earlier suite passed.
 
 Final checks: 232 related backend regression cases plus eight additional
 quarter-boundary cases pass (240 distinct cases across retained reports). The

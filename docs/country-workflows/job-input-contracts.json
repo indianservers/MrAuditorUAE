@@ -3261,7 +3261,8 @@
               "india-gstr1-document-series-json",
               "india-gstr1-documents-json",
               "india-26q-regular-v7.8",
-              "india-27eq-regular-v6.9"
+              "india-27eq-regular-v6.9",
+              "india-27q-regular-v7.5"
             ],
             "title": "File Format",
             "type": "string"

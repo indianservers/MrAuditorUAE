@@ -23,6 +23,24 @@ WIDTHS = {"FH": 18, "BH": 72, "CD": 41, "DD": 54}
 FORMATS = {
     "india-26q-regular-v7.8": ("26Q", "TDS", "deductor"),
     "india-27eq-regular-v6.9": ("27EQ", "TCS", "collector"),
+    "india-27q-regular-v7.5": ("27Q", "TDS", "deductor"),
+}
+NONRESIDENT_FIELDS = {
+    "recorded_rate_basis": 35,
+    "nature_of_remittance_code": 36,
+    "form_15ca_reference": 37,
+    "residence_country_code": 38,
+    "deductee_email": 39,
+    "deductee_contact": 40,
+    "residence_address": 41,
+    "foreign_tax_identifier": 42,
+    "cash_withdrawal_194n": 43,
+    "cash_withdrawal_194n_first_band": 44,
+    "cash_withdrawal_194n_second_band": 45,
+    "cash_withdrawal_cooperative_194n": 46,
+    "cash_withdrawal_cooperative_first_band": 47,
+    "cash_withdrawal_cooperative_second_band": 48,
+    "recorded_115bac_opt_out": 49,
 }
 
 
@@ -90,7 +108,7 @@ def parse_regular(content, data):
     if (
         form == "27EQ"
         and controls.purchase_value is None
-        or form == "26Q"
+        or form != "27EQ"
         and controls.purchase_value is not None
     ):
         raise ValueError("A purchase-value control applies to 27EQ only and is required there")
@@ -149,7 +167,7 @@ def parse_regular(content, data):
     first = records[0]
     if (
         first[1] != "FH"
-        or first[2] != ("NS1" if form == "26Q" else "TC1")
+        or first[2] != ("TC1" if form == "27EQ" else "NS1")
         or first[3] != "R"
         or first[7] != controls.tan
     ):
@@ -253,6 +271,26 @@ def parse_regular(content, data):
             money(fields[21])
             if form == "27EQ":
                 money(fields[20])
+            if form == "27Q":
+                if year >= 2013 and (
+                    fields[34] not in {"A", "B"}
+                    or not re.fullmatch(r"[0-9]{1,3}", fields[35])
+                    or not re.fullmatch(r"[0-9]{1,3}", fields[37])
+                ):
+                    raise ValueError(
+                        "Retain explicit nonresident rate-basis, remittance and residence-country codes; no treaty or residence is inferred"
+                    )
+                if year < 2013 and any(fields[index] for index in range(34, 38)):
+                    raise ValueError(
+                        "Nonresident remittance fields in this layout apply from FY 2013-14"
+                    )
+                for value in fields[42:48]:
+                    if value:
+                        money(value)
+                if year >= 2023 and fields[48] not in {"Y", "N"}:
+                    raise ValueError(
+                        "Retain the explicit recorded nonresident 115BAC opt-out flag from FY 2023-24"
+                    )
             if money(fields[16]) and tax_date is None:
                 raise ValueError(
                     "A positive regular tax observation needs its retained deduction/collection date"
@@ -341,6 +379,28 @@ def parse_regular(content, data):
             raise ValueError(
                 "Each mapped observation must retain one PAN, native section code and reporting month"
             )
+        if (
+            form == "27Q"
+            and len(
+                {tuple(v["fields"][index] for index in (34, 35, 37, 41)) for v in group_parties}
+            )
+            != 1
+        ):
+            raise ValueError(
+                "A nonresident crosswalk group cannot merge distinct rate bases, remittance kinds, residence countries or foreign tax identifiers"
+            )
+        if (
+            form == "27Q"
+            and len(group_parties) > 1
+            and group_parties[0]["fields"][9] in {"PANNOTAVBL", "PANAPPLIED", "PANINVALID"}
+            and (
+                not group_parties[0]["fields"][41].strip()
+                or len({v["fields"][12] for v in group_parties}) != 1
+            )
+        ):
+            raise ValueError(
+                "Missing-PAN nonresident parties cannot be grouped without the same retained name and nonempty foreign tax identifier"
+            )
         row = WithholdingRecord(
             id=f"{form}:group:{ordinal}",
             registration=controls.tan,
@@ -388,6 +448,11 @@ def parse_regular(content, data):
                     "recorded_rate": f[25],
                     "reason_flag": f[29],
                     "certificate_reference": f[33],
+                    **(
+                        {name: f[position - 1] for name, position in NONRESIDENT_FIELDS.items()}
+                        if form == "27Q"
+                        else {}
+                    ),
                 }
             )
     if len(rows) != data.expected_rows:
@@ -435,6 +500,11 @@ def parse_regular(content, data):
         "fvu_validation": "NOT_PERFORMED",
         "validation_basis": "RECORD_STRUCTURE_DECLARED_CONTROLS_AND_ASSESSED_CROSSWALK_NOT_GOVERNMENT_FILE_VALIDATION",
         "all_original_fields": "RETAINED_IN_HASH_VERIFIED_ORIGINAL_FILE",
+        **(
+            {"nonresident_treaty_and_residence_qualification": "NOT_PERFORMED"}
+            if form == "27Q"
+            else {}
+        ),
         "limitations": [
             "Regular uploaded statement observations only; no correction, portal-currentness, FVU, CSI or filing qualification",
             "Conditional mandatory-field, legal-code and certificate eligibility checks remain outside this observed-amount import profile",

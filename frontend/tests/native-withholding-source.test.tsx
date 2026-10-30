@@ -38,6 +38,44 @@ const value = {
 };
 
 describe("native withholding controls", () => {
+  it("preserves nonresident source codes and blanks while distinguishing treaty claims from qualification", () => {
+    render(
+      <NativeWithholdingLinks
+        rows={[
+          {
+            party_key: "1/1/1",
+            group_id: "27Q:group:1",
+            recorded_rate_basis: "B",
+            nature_of_remittance_code: "021",
+            residence_country_code: "113",
+            foreign_tax_identifier: "0007-FOREIGN",
+            form_15ca_reference: "",
+          },
+        ]}
+      />,
+    );
+    const table = screen.getByRole("table", {
+      name: "Native withholding party links",
+    });
+    expect(
+      within(table).getByRole("columnheader", { name: "recorded rate basis" }),
+    ).toBeVisible();
+    expect(
+      within(table).getByRole("cell", { name: "0007-FOREIGN" }),
+    ).toBeVisible();
+    expect(within(table).getByRole("cell", { name: "021" })).toBeVisible();
+    expect(screen.getByText(/Neither establishes/)).toHaveTextContent(
+      "treaty eligibility",
+    );
+    const headers = within(table)
+      .getAllByRole("columnheader")
+      .map((h) => h.textContent);
+    const cells = within(table).getAllByRole("row")[1].querySelectorAll("td");
+    expect(cells[headers.indexOf("form 15ca reference")].textContent).toBe("");
+    expect(nativeWithholdingPayload(value, "27Q", "1")).not.toHaveProperty(
+      "purchase_value",
+    );
+  });
   it("shows each challan once and preserves leading-zero references and distinct gross/allocated amounts", () => {
     render(
       <NativeWithholdingChallans

@@ -1,0 +1,76 @@
+Historical India nonresident withholding observations
+
+The india-27q-regular-v7.5 profile adds original Form 27Q regular statement
+observations to the existing India withholding workflow. It reuses retained
+evidence, clean scanning, queued source preparation, independent review,
+reported-only liability comparison, party/challan lineage, complete XLSX and
+source replacement staleness. UAE and other-country domestic engines cannot
+activate this India profile. Historical source periods remain explicitly
+declared rather than inferred from the engagement or upload date.
+
+The scope is FY 2010-11 through 2025-26. Successor Form 144, correction
+statements and salary forms remain separate. Protean's regular-download page
+was rechecked on 30 October 2026. The original version 7.5 XLS, original public
+sample ZIP and its unchanged extracted TXT are retained under
+authority-references/protean-legacy-2025-05-27/. Exact source hashes and URLs
+are recorded in 27Q-source-assessment.json. The date in the specification URL
+is not inferred to be a legal commencement date.
+
+The numbered tables and original sample both establish 18 FH, 72 BH, 41 CD and
+54 DD fields. The general-notes example still says 16 FH fields; that example
+does not override the actual numbered layout. The combined lexical limits
+retain the exact 27Q specification hash. No existing 26Q/27EQ field limits or
+output columns are changed. A further source inconsistency remains: the
+15CA-reference field's numeric width is 12, while its description mentions
+12 through 15 characters. This conservative observed-file profile applies
+the numbered width of 12, so longer references need a separately assessed
+layout; it does not silently truncate them or claim complete FVU compatibility.
+
+Separate original crosswalk evidence and explicit independent population,
+component, allocated-deposit, gross-challan and payment-base controls are
+required. The public sample contains two distinct parties, 166,000 INR tax,
+26,600,000 INR payment base and 20,000,000 INR gross challan deposit. These
+different amounts remain separate. Original challan/BSR identifiers retain
+their leading zeros. Purchase-value controls belong to TCS and are rejected
+for this TDS source. Nil and unknown book-entry flags cannot bypass controls.
+
+Party review and export retain the uploaded rate-basis code, remittance code,
+15CA reference, residence-country code, contact/address, foreign tax ID,
+recorded cash-withdrawal bands and 115BAC opt-out flag. Blank optional fields
+stay blank. A and B are source rate-basis claims, not assessed entitlement to
+the Income Tax Act or a treaty rate. The importer requires explicit supported
+rate-basis and numeric remittance/residence codes from FY 2013-14, and an
+explicit recorded Y/N opt-out flag from FY 2023-24. These bounded checks do
+not establish the complete issuer conditional-field or code-membership rules.
+
+A crosswalk group cannot merge different recorded rate bases, remittance
+types, residence countries or foreign tax identifiers. Missing-PAN sentinels
+do not establish one person's identity: grouping those parties additionally
+requires the same retained name and a nonempty identical foreign tax ID.
+Separate original parties remain traceable even where amounts are grouped.
+These controls do not authenticate a foreign tax identifier or residency.
+
+The prepared statement can supply reported observations only. Treaty
+eligibility, TRC/Form 10F, beneficial ownership, PE exposure, section/rate
+qualification, Form 15CA/15CB authenticity, government acceptance, CSI, FVU,
+bank execution and posted tax credit require separate evidence/procedures.
+No tax rate is calculated from the uploaded recorded-rate field. Historical
+superseded/cancelled records preserve their amounts and selected status.
+
+API verification uses real PostgreSQL/HTTP with explicit scan/queue doubles,
+separate preparer/reviewer, independently specified per-party expected amounts,
+complete XLSX checks and unchanged historical bodies after crosswalk replacement.
+The first export regression exposed omitted nonresident columns; the exporter
+now includes them. Focused and complete frontend checks include selecting the
+profile, submitting native controls, displaying source codes/blanks, retaining
+leading-zero references, paging and country isolation. Exact final counts and
+source hashes are recorded in the validation receipt.
+
+The hosted native browser case now includes the original 27Q sample, its own
+2019-20/Q3 controls, real clean-file scanning, form submission, independent
+review, complete export and crosswalk-supersession captures. Its new execution
+and visual review remain pending until results for the committed source arrive.
+Earlier 26Q/27EQ browser and full backend proof retain their original source
+revisions. No real-client pilot or professional approval is supplied by the
+public samples, synthetic crosswalks or software tests. The authored synthetic
+154-case catalogue and overall production qualification remain unchanged.

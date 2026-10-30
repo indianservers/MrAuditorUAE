@@ -18,7 +18,7 @@ async function login(page: Page, email: string) {
   await page.waitForURL("**/dashboard");
 }
 
-test("historical India 26Q and 27EQ original samples, controlled form, full lineage and crosswalk staleness", async ({
+test("historical India 26Q, 27EQ and nonresident 27Q original samples, controlled form, full lineage and crosswalk staleness", async ({
   page,
   browser,
 }) => {
@@ -97,14 +97,17 @@ test("historical India 26Q and 27EQ original samples, controlled form, full line
       eid,
       identities.tenant_id,
     );
-    for (const form of ["26Q", "27EQ"] as const) {
-      const count = form === "26Q" ? 4 : 10;
-      const month = form === "26Q" ? "2020-04" : "2020-10";
-      const total = form === "26Q" ? "1900" : "1000";
-      const gross = form === "26Q" ? "100000" : "10000";
+    for (const form of ["26Q", "27EQ", "27Q"] as const) {
+      const count = form === "26Q" ? 4 : form === "27Q" ? 2 : 10;
+      const month =
+        form === "26Q" ? "2020-04" : form === "27Q" ? "2019-12" : "2020-10";
+      const total =
+        form === "26Q" ? "1900" : form === "27Q" ? "166000" : "1000";
+      const gross =
+        form === "26Q" ? "100000" : form === "27Q" ? "20000000" : "10000";
       const groups = Array.from({ length: count }, (_, i) => ({
         transaction_reference: `SYN-ASSESSMENT-${i + 1}`,
-        transaction_date: month + "-01",
+        transaction_date: month + (form === "27Q" ? "-10" : "-01"),
         period: month,
         rule_reference: "SYN-ASSESSED-SECTION",
         party_records: [`1/1/${i + 1}`],
@@ -134,7 +137,11 @@ test("historical India 26Q and 27EQ original samples, controlled form, full line
       await page
         .getByRole("combobox", { name: "Source file format", exact: true })
         .selectOption(
-          form === "26Q" ? "india-26q-regular-v7.8" : "india-27eq-regular-v6.9",
+          form === "26Q"
+            ? "india-26q-regular-v7.8"
+            : form === "27Q"
+              ? "india-27q-regular-v7.5"
+              : "india-27eq-regular-v6.9",
         );
       await page
         .getByRole("combobox", { name: "Clean retained evidence", exact: true })
@@ -162,7 +169,10 @@ test("historical India 26Q and 27EQ original samples, controlled form, full line
         ["Expected data rows", String(count)],
         ["Independent totals by currency", `INR=${total}`],
         ["Native statement TAN", "MUMN77777A"],
-        ["Native financial year (six digits)", "202021"],
+        [
+          "Native financial year (six digits)",
+          form === "27Q" ? "201920" : "202021",
+        ],
         ["Native observation cutoff", "2026-10-30"],
         ["Native batch count", "1"],
         ["Native challan count", "1"],
@@ -174,7 +184,7 @@ test("historical India 26Q and 27EQ original samples, controlled form, full line
         ["Native challan deposit control (INR)", gross],
         [
           "Native payment base control (INR)",
-          form === "26Q" ? "19000" : "10000",
+          form === "26Q" ? "19000" : form === "27Q" ? "26600000" : "10000",
         ],
         ["Native crosswalk groups (JSON)", JSON.stringify(groups)],
         [
@@ -250,7 +260,8 @@ test("historical India 26Q and 27EQ original samples, controlled form, full line
       await expect(challans.getByRole("row")).toHaveCount(2);
       await expect(
         challans.getByRole("cell", {
-          name: form === "26Q" ? "0000809" : "0000897",
+          name:
+            form === "26Q" ? "0000809" : form === "27Q" ? "0000525" : "0000897",
           exact: true,
         }),
       ).toBeVisible();
@@ -285,11 +296,40 @@ test("historical India 26Q and 27EQ original samples, controlled form, full line
             `assert sum(Decimal(x['total_tax']) for x in r)==Decimal('${total}')`,
             `assert r[-1]['party_key']=='1/1/${count}'`,
             "c=list(w['Withholding challans'].values);assert len(c)==2",
-            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${form === "26Q" ? "0000809" : "0000897"}'`,
+            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${form === "26Q" ? "0000809" : form === "27Q" ? "0000525" : "0000897"}'`,
+            ...(form === "27Q"
+              ? [
+                  "assert [x['recorded_rate_basis'] for x in r]==['B','B']",
+                  "assert [x['nature_of_remittance_code'] for x in r]==['21','49']",
+                  "assert [x['residence_country_code'] for x in r]==['113','113']",
+                  "assert r[0]['foreign_tax_identifier'] is None",
+                ]
+              : []),
           ].join("\n"),
         ],
         { input: readFileSync(downloaded!), timeout: 15000 },
       );
+      if (form === "27Q") {
+        expect(metadata.nonresident_treaty_and_residence_qualification).toBe(
+          "NOT_PERFORMED",
+        );
+        await expect(
+          links.getByRole("columnheader", {
+            name: "residence country code",
+            exact: true,
+          }),
+        ).toBeVisible();
+        await links.locator("..").evaluate((element) => {
+          const header = Array.from(element.querySelectorAll("th")).find(
+            (node) => node.textContent === "recorded rate basis",
+          );
+          if (!header) throw new Error("Nonresident field header missing");
+          element.scrollLeft = header.offsetLeft;
+        });
+        await links.locator("..").screenshot({
+          path: `${screenshots}/IN-27Q-nonresident-recorded-fields.png`,
+        });
+      }
       await upload(
         mapping.record,
         `SYNTHETIC-${form}-crosswalk-corrected.txt`,

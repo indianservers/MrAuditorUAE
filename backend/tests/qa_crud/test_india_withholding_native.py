@@ -12,11 +12,26 @@ from tests.phase4.test_workflows import actor, create, grant
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute
 from tests.qa_crud.test_country_workflows import source as csv_source
 from tests.qa_crud.test_india_ecr_source import india_context
-from tests.unit.test_india_withholding_native import controls, options, original
+from tests.unit.test_india_27q_native import controls27, options27, original27
+from tests.unit.test_india_withholding_native import controls as legacy_controls
+from tests.unit.test_india_withholding_native import options as legacy_options
+from tests.unit.test_india_withholding_native import original as legacy_original
 
 pytestmark = pytest.mark.skipif(
     os.getenv("INTEGRATION_TESTS") != "1", reason="Owned disposable DB required"
 )
+
+
+def controls(form="26Q"):
+    return controls27() if form == "27Q" else legacy_controls(form)
+
+
+def options(form="26Q", **changes):
+    return options27(**changes) if form == "27Q" else legacy_options(form, **changes)
+
+
+def original(form="26Q"):
+    return original27() if form == "27Q" else legacy_original(form)
 
 
 async def upload(c, h, base, name, content):
@@ -32,7 +47,7 @@ async def upload(c, h, base, name, content):
     return record, response.json()
 
 
-@pytest.mark.parametrize("form", ["26Q", "27EQ"])
+@pytest.mark.parametrize("form", ["26Q", "27EQ", "27Q"])
 async def test_native_regular_statement_with_crosswalk_retains_complete_reported_observations(
     environment, monkeypatch, form
 ):
@@ -72,17 +87,23 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
     assert export.status_code == 200, export.text
     book = load_workbook(io.BytesIO(export.content), read_only=True)
     links = list(book["Withholding party links"].values)
-    assert len(links) == (5 if form == "26Q" else 11)
+    assert len(links) == declared["party_count"] + 1
     records = [dict(zip(links[0], row, strict=True)) for row in links[1:]]
-    assert records[-1]["party_key"] == f"1/1/{4 if form == '26Q' else 10}"
-    assert sum(Decimal(row["total_tax"]) for row in records) == (1900 if form == "26Q" else 1000)
+    assert records[-1]["party_key"] == f"1/1/{declared['party_count']}"
+    assert sum(Decimal(row["total_tax"]) for row in records) == Decimal(declared["income_tax"])
+    if form == "27Q":
+        assert [r["recorded_rate_basis"] for r in records] == ["B", "B"]
+        assert [r["nature_of_remittance_code"] for r in records] == ["21", "49"]
+        assert [r["residence_country_code"] for r in records] == ["113", "113"]
+        assert records[0]["foreign_tax_identifier"] is None
+        assert metadata["nonresident_treaty_and_residence_qualification"] == "NOT_PERFORMED"
     challans = list(book["Withholding challans"].values)
     assert len(challans) == 2
     declared_challan = dict(zip(challans[0], challans[1], strict=True))
     assert declared_challan["bsr_or_form24g_reference"] == (
-        "0000809" if form == "26Q" else "0000897"
+        "0000809" if form == "26Q" else "0000525" if form == "27Q" else "0000897"
     )
-    assert declared_challan["gross_deposit"] == ("100000.00" if form == "26Q" else "10000.00")
+    assert Decimal(declared_challan["gross_deposit"]) == Decimal(declared["challan_deposit"])
     book.close()
     rule_record, rule_file = await upload(
         c,
@@ -92,24 +113,34 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         b"SYNTHETIC independently specified public sample expected schedule; fictional assessed rules only, no legal or client qualification",
     )
     selected = {"reported": reviewed["id"]}
-    expected_amounts = ["1000", "500", "200", "200"] if form == "26Q" else ["100"] * 10
-    month = "2020-04" if form == "26Q" else "2020-10"
-    due = "2020-05-07" if form == "26Q" else "2020-11-07"
-    paid = "2020-05-01" if form == "26Q" else "2020-11-01"
+    expected_amounts = (
+        ["1000", "500", "200", "200"]
+        if form == "26Q"
+        else ["11000", "155000"]
+        if form == "27Q"
+        else ["100"] * 10
+    )
+    month = "2020-04" if form == "26Q" else "2019-12" if form == "27Q" else "2020-10"
+    due = "2020-05-07" if form == "26Q" else "2020-01-07" if form == "27Q" else "2020-11-07"
+    paid = "2020-05-01" if form == "26Q" else "2020-01-01" if form == "27Q" else "2020-11-01"
     for role in ("expected", "withheld", "deposited"):
         rows = [
             {
                 "id": f"SYN-{role}-{i}",
                 "registration": "MUMN77777A",
-                "counterparty": "AAAPA1234A",
-                "legal_role": "deductor" if form == "26Q" else "collector",
-                "tax_kind": "TDS" if form == "26Q" else "TCS",
-                "rule_reference": "SYN-ASSESSED-SECTION",
-                "tax_year_start": "2020-04-01",
-                "tax_year_end": "2021-03-31",
+                "counterparty": ["GHSPL9563J", "HNSPL7485K"][i - 1]
+                if form == "27Q"
+                else "AAAPA1234A",
+                "legal_role": "collector" if form == "27EQ" else "deductor",
+                "tax_kind": "TCS" if form == "27EQ" else "TDS",
+                "rule_reference": "SYN-NR-ASSESSED-SECTION"
+                if form == "27Q"
+                else "SYN-ASSESSED-SECTION",
+                "tax_year_start": "2019-04-01" if form == "27Q" else "2020-04-01",
+                "tax_year_end": "2020-03-31" if form == "27Q" else "2021-03-31",
                 "period": month,
-                "transaction_reference": f"SYN-ASSESSMENT-{i}",
-                "transaction_date": month + "-01",
+                "transaction_reference": f"SYN-NR-{i}" if form == "27Q" else f"SYN-ASSESSMENT-{i}",
+                "transaction_date": month + ("-10" if form == "27Q" else "-01"),
                 "currency": "INR",
                 "amount": amount,
                 "record_status": "current",
@@ -120,8 +151,8 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
                 **(
                     {
                         "assessment_kind": "rule",
-                        "assessment_period_start": "2020-04-01",
-                        "assessment_period_end": "2021-03-31",
+                        "assessment_period_start": "2019-04-01" if form == "27Q" else "2020-04-01",
+                        "assessment_period_end": "2020-03-31" if form == "27Q" else "2021-03-31",
                     }
                     if role == "expected"
                     else {}
@@ -136,7 +167,7 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
             rows,
             "SYNTHETIC independent " + role,
             "withholding-records",
-            {"INR": "1900" if form == "26Q" else "1000"},
+            {"INR": declared["income_tax"]},
             **({"rule_document_version_id": rule_file["id"]} if role == "expected" else {}),
         )
         accepted = await decision(c, reviewer[0], eid, imported)
@@ -149,7 +180,7 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         "country-workflow",
         {
             "workflow": "india-withholding-liability",
-            "withholding_role": "deductor" if form == "26Q" else "collector",
+            "withholding_role": "collector" if form == "27EQ" else "deductor",
             "source_ids": selected,
             "as_of": "2026-06-30",
             "title": "SYNTHETIC independently controlled native statement comparison",
