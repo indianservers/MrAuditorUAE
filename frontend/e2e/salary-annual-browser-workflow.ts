@@ -144,10 +144,11 @@ export async function runSalaryAnnualBrowserWorkflow(
     .click();
   for (const q of Object.keys(sourceIds))
     await page
-      .getByLabel(`Salary ${q} native source`, { exact: true })
+      .getByRole("combobox", { name: `Salary ${q} native source`, exact: true })
       .selectOption(sourceIds[q]);
   await page
-    .getByLabel("Independent annual employee and nil-quarter crosswalk", {
+    .getByRole("combobox", {
+      name: "Independent annual employee and nil-quarter crosswalk",
       exact: true,
     })
     .selectOption(mapping.version.id);

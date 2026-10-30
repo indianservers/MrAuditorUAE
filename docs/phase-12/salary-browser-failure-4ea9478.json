@@ -1,0 +1,33 @@
+{
+  "source_commit": "4ea947886705661e0b7dc0b6de8c617d12d66c62",
+  "run_id": 41144786232,
+  "job_id": 124367256026,
+  "conclusion": "failure",
+  "passed": 13,
+  "failed": 1,
+  "duration": "9.9m",
+  "failure": "Exact getByLabel quarter-select locator timed out before the all-quarter comparison was submitted",
+  "observed_page": "Original preparer screenshot visibly shows the expanded annual comparison form and Salary Q1 native source select. Reviewer screenshot remains on the preceding Q4 source.",
+  "change": "Use the combobox role and exact accessible name for quarter and independent-crosswalk selects, consistent with the existing native source browser workflow",
+  "artifact": {
+    "id": 13021126237,
+    "bytes": 20819315,
+    "sha256": "67f142e0ef558483ad05bea917def19aa282970c1ae785f26f73092b3268340a"
+  },
+  "images": [
+    {
+      "file": "salary-browser-failure-4ea9478-1.png",
+      "bytes": 128940,
+      "sha256": "67eeb6206d29bacc00f22a0e4cfbefcfdda30a6aaee35b67b3a259e4920add54"
+    },
+    {
+      "file": "salary-browser-failure-4ea9478-2.png",
+      "bytes": 257530,
+      "sha256": "c99f294648a227e42d0df72e49379de178742e3cf7b67710ac3bf30d7e64ee8e"
+    }
+  ],
+  "limits": [
+    "This failed run does not establish all-quarter browser acceptance",
+    "The locator correction requires a new hosted browser run; local type checks cannot establish its runtime success"
+  ]
+}
