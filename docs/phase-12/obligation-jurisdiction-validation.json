@@ -1,0 +1,125 @@
+{
+  "feature": "Explicit assessed domestic/foreign obligation scope, independent of home entity country and engagement reporting context.",
+  "source_hash_basis": "Exact staged Git blob bytes; checkout line endings may differ.",
+  "sources": [
+    {
+      "path": "backend/app/api/v1/grc.py",
+      "sha256": "fd1ef99d3a2764c0d7e9f7c159e246b5e1dd59e53dfc2ed86b4d10f720117621"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "a6052120d2dca40ac19607e8cfdb4d111b287b55caf1da66a80094814ec66df9"
+    },
+    {
+      "path": "backend/app/modules/grc/filing.py",
+      "sha256": "fe28e2b2fe4155271f2f41f01ca600a722741c581e4d3590888bc71bcd85fdf6"
+    },
+    {
+      "path": "backend/app/modules/grc/notifications.py",
+      "sha256": "15d5b38ad93697b6a48dcecd94843da690519aef6d1c4fd3bfae65810adad3e1"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "15388fe9072550b715b943186954093fb7332bc3c0b576a743b33e40227387af"
+    },
+    {
+      "path": "backend/app/modules/grc/service.py",
+      "sha256": "9a6784d09ee9d8840191760299ed4b18ffeb6c56b709320deb46ae53826aac0e"
+    },
+    {
+      "path": "backend/tests/unit/test_obligation_jurisdiction.py",
+      "sha256": "7c913e8d44beca5980fec7b7255c759eddc30362b26a011b3fba140abb44ca00"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_obligation_jurisdiction.py",
+      "sha256": "6436bc702f2ca551d134537b58c2c5a0862aaf457fe1772c931e319ba14a8370"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "5840de4d8029bdcc8d597a7814a10eb1e1950287eeb1a81e02f3612087c4f396"
+    },
+    {
+      "path": "frontend/tests/compliance-filing.test.tsx",
+      "sha256": "81e73e20b58e3121f5ca0d87f11a14488c34dbc9a96be9774f47e397d6cecaa4"
+    },
+    {
+      "path": "docs/country-workflows/obligation-jurisdiction-scope.txt",
+      "sha256": "216c357d251a1eeec1f6aa6bf7d6f60b8bf7fb5067884935c42f58d90aa81714"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "docs/phase-12/obligation-jurisdiction-api-final.xml",
+      "sha256": "e1ec6f0e8639e828a895bf6bc037f21ae64c88e0c317b95edab11c255776e6c4",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/obligation-jurisdiction-focused.xml",
+      "sha256": "4d1c62f3ecc83eaebf759aab7d659215528bcce55ba9347db201598b266fa4b7",
+      "tests": 99,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/obligation-jurisdiction-regression.xml",
+      "sha256": "dd869c5846172ffddc10b015358aa165104a771a7066cec8c77371f56ba5e998",
+      "tests": 3695,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/obligation-jurisdiction-regression-final.xml",
+      "sha256": "d97072ec9546d044283a605ee8cee5c562424797ae1f5c098ffc4a04b47f3ff0",
+      "tests": 3695,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/obligation-jurisdiction-frontend.xml",
+      "sha256": "45d0ea0eb456020f20b5978b9afd5bca3732261b137d4d07fa9f7b4b219341c8",
+      "tests": 393,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "final_checks": {
+    "backend_passed": 3691,
+    "backend_skipped": 4,
+    "frontend_passed": 393,
+    "frontend_files": 74,
+    "mypy_app_files": 413,
+    "ruff": "PASS",
+    "frontend_typecheck": "PASS",
+    "frontend_lint": "PASS_WITH_EXISTING_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS",
+    "api_and_job_input_contract_check": "PASS_UNCHANGED"
+  },
+  "scope_verified": [
+    "AE/AE and IN/IN domestic scopes; AE/IN, IN/AE and AE/GB foreign scope schema round trips.",
+    "API verifies actual entity country, independently approved original rule/fact documents and rejects an approved derived workpaper as original evidence.",
+    "Actual UAE entity keeps AE workflow context and AED default while retaining an Indian foreign obligation.",
+    "Potential and assessed-inapplicable scopes have separate calendar states; cannot support filing approval or a supported compliance assertion; filing reminders suppressed.",
+    "Explicitly assessed applicable scope uses existing independent filing-readiness and review gates.",
+    "Nested scope changes after approval require reassessment; source withdrawal makes the record stale without rewriting its retained body.",
+    "Frontend displays entity/obligation country separately and blocks pending applicability at filing stages."
+  ],
+  "fixture_repairs": [
+    "Initial broad regression preserved unchanged: 3690 passed, 4 skipped, 1 failed because the derived workpaper fixture omitted required folder/sections/conclusion.",
+    "Completed the derived fixture and its required manager/partner approval; no review guard was relaxed. Final broad regression passed all 3691 cases."
+  ],
+  "limitations": [
+    "Counts overlap; focused/API receipts are not additional distinct real-world clients.",
+    "Synthetic sources and actors, with explicit scanner/broker doubles; not real-client or country legal qualification.",
+    "Declared country scope does not activate a foreign tax engine, prepare native forms, verify external registration authenticity or execute filing.",
+    "Legacy unstructured jurisdiction records remain unstructured; no verified relationship is inferred.",
+    "Four isolated connector database tests remain skipped in this selected broad run.",
+    "New-source hosted full backend and browser checks remain pending; no new browser screenshot qualification claimed."
+  ]
+}

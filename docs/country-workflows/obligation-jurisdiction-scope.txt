@@ -1,0 +1,21 @@
+Assessed domestic and foreign obligation scope
+
+The common GRC obligation record can retain jurisdiction_scope separately from the legal entity country and the engagement reporting context. For example, an AE legal entity may retain an explicitly assessed IN obligation. This does not switch the entity country, reporting context, functional currency, or available country calculation engines.
+
+Use the existing obligation form. Set jurisdiction to the exact two-letter obligation country and complete jurisdiction_scope:
+- entity_country: actual saved legal entity country (checked by the API).
+- obligation_country: country imposing the assessed or potential obligation.
+- relationship: domestic when countries agree, foreign when they differ.
+- applicability: potential, assessed_applicable, or assessed_not_applicable.
+- registration_reference: retained exact reference, or blank when no registration is established. A reference is not verified by an external registry.
+- assessment: an explicit independently reviewable assessment, not a software inference.
+
+Also retain entity_facts, fact_evidence_ids and a separate rule_evidence_id on the obligation. These must reference independently approved, current original evidence records with clean scanned retained files. A derived workpaper cannot stand in for either original source. Existing evidence access, tenant/engagement scope, source withdrawal and reviewer separation still apply.
+
+Potential scope has APPLICABILITY_PENDING calendar state. An assessed inapplicable scope has ASSESSED_NOT_APPLICABLE state. Neither supports filing approval, submission, acknowledgment or a supported compliance assertion, and neither produces filing-deadline reminders. Applicability assessment may itself be reviewed as a record. Assessed applicable scope still requires the existing deadline, readiness, independent approval and actual receipt controls; assessment does not constitute filing.
+
+After approval for submission, country scope and existing receipts cannot be changed while retaining the approved filing stage. Return to preparing for reassessment. Withdrawn source evidence makes the obligation stale without rewriting its saved body. The calendar retains the declared scope together with freshness and review status.
+
+Historical records without structured scope remain without structured scope. Their free-text jurisdiction is not automatically treated as a verified domestic or foreign assessment.
+
+Limits: declared two-letter country identifiers and source references do not qualify an entire country legal corpus, establish registration authenticity, prepare native foreign forms, activate foreign-country tax calculations in the home-country engagement, or execute external filing. Country-specific rate/threshold rules, professional applicability conclusions, native adapters and representative client validation remain separate work.

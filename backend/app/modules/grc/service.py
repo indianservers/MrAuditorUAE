@@ -149,8 +149,22 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
         if field.endswith("evidence_ids") and value:
             evidences.update(value)
     evidences.update(body.get("evidence_ids", []))
+    checked_evidence = {}
     for rid in evidences:
-        await evidence(db, ctx, eng.id, uuid.UUID(rid))
+        checked_evidence[rid] = await evidence(db, ctx, eng.id, uuid.UUID(rid))
+    if key == "obligation" and data.jurisdiction_scope:
+        from app.db.models.platform import LegalEntity
+
+        entity = await db.get(LegalEntity, eng.entity_id)
+        if not entity or entity.tenant_id != ctx.tenant_id:
+            raise HTTPException(404, "Legal entity not found")
+        if data.jurisdiction_scope.entity_country != entity.country:
+            raise HTTPException(422, "Obligation entity country must match the actual legal entity")
+        for identifier in [data.rule_evidence_id, *data.fact_evidence_ids]:
+            if checked_evidence[str(identifier)].kind != "evidence":
+                raise HTTPException(
+                    422, "Country scope requires original rule and entity-fact evidence records"
+                )
     if hasattr(data, "entity_id") and data.entity_id != eng.entity_id:
         raise HTTPException(422, "Record entity must match engagement")
     if key == "framework":

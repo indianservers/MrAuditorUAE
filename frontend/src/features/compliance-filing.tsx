@@ -32,6 +32,16 @@ export function ComplianceFiling({
   const action = useAction();
   const receiptRequired = stage === "submitted" || stage === "acknowledged";
   const locked = paper.status === "LOCKED";
+  const countryScope =
+    paper.body.jurisdiction_scope &&
+    typeof paper.body.jurisdiction_scope === "object" &&
+    !Array.isArray(paper.body.jurisdiction_scope)
+      ? (paper.body.jurisdiction_scope as Record<string, unknown>)
+      : null;
+  const scopePending =
+    countryScope &&
+    countryScope.applicability !== "assessed_applicable" &&
+    ["approved_for_submission", "submitted", "acknowledged"].includes(stage);
   const permitted =
     stage === "approved_for_submission" ? canApprove : canManage;
   const validReceipt =
@@ -58,6 +68,21 @@ export function ComplianceFiling({
         Changes to approved country scope, obligation criteria or existing
         receipts require a return to preparing and independent reassessment.
       </p>
+      {countryScope && (
+        <p>
+          Declared entity country: {String(countryScope.entity_country)} ·
+          Obligation country: {String(countryScope.obligation_country)} ·{" "}
+          {String(countryScope.relationship)} · Applicability:{" "}
+          {String(countryScope.applicability).replaceAll("_", " ")}. This
+          assessment does not change the entity country or activate a foreign
+          tax engine.
+        </p>
+      )}
+      {scopePending && (
+        <p role="status">
+          Assess country applicability before approving or recording submission.
+        </p>
+      )}
       {Boolean(
         paper.body.submission_evidence_id ||
         paper.body.acknowledgment_evidence_id,
@@ -117,6 +142,7 @@ export function ComplianceFiling({
         disabled={
           action.isPending ||
           locked ||
+          Boolean(scopePending) ||
           !permitted ||
           stage === current ||
           (receiptRequired && !validReceipt)

@@ -125,6 +125,7 @@ async def validate_transition(db, ctx, eng, data, record_id):
             "entity_id",
             "module",
             "jurisdiction",
+            "jurisdiction_scope",
             "source_url",
             "effective_from",
             "deadline_kind",

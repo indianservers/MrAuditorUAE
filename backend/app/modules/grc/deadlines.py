@@ -65,6 +65,12 @@ def calculate(rule: DeadlineRule):
 
 
 def state(body, today):
+    scope = body.get("jurisdiction_scope")
+    if isinstance(scope, dict):
+        if scope.get("applicability") == "assessed_not_applicable":
+            return "ASSESSED_NOT_APPLICABLE"
+        if scope.get("applicability") != "assessed_applicable":
+            return "APPLICABILITY_PENDING"
     deadline = body.get("extension_deadline") or body.get("deadline")
     if not deadline:
         return "UNRESOLVED"

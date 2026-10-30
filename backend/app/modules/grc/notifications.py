@@ -79,6 +79,10 @@ async def compliance_reminders(db, ctx, eid, today):
         due = body.get("extension_deadline") or body.get("deadline")
         if (
             not body.get("notifications_enabled")
+            or (
+                isinstance(body.get("jurisdiction_scope"), dict)
+                and body["jurisdiction_scope"].get("applicability") != "assessed_applicable"
+            )
             or not due
             or body.get("filing_stage") in {"submitted", "acknowledged"}
             or await freshness(db, ctx, paper) != "CURRENT"

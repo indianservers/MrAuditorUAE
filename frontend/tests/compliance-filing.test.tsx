@@ -141,3 +141,37 @@ it("requires the stage-specific permission for approval and management", () => {
     screen.getByRole("button", { name: "Record evidenced filing stage" }),
   ).toBeDisabled();
 });
+
+it("keeps entity country and foreign obligation country distinct and blocks unassessed filing approval", () => {
+  render(
+    <ComplianceFiling
+      base="grc/engagements/scoped"
+      paper={{
+        ...paper,
+        body: {
+          filing_stage: "under_review",
+          jurisdiction: "IN",
+          jurisdiction_scope: {
+            entity_country: "AE",
+            obligation_country: "IN",
+            relationship: "foreign",
+            applicability: "potential",
+          },
+        },
+      }}
+    />,
+  );
+  expect(screen.getByText(/Declared entity country: AE/)).toHaveTextContent(
+    "Obligation country: IN",
+  );
+  expect(screen.getByText(/Assess country applicability/)).toBeVisible();
+  expect(
+    screen.getByRole("button", { name: "Record evidenced filing stage" }),
+  ).toBeDisabled();
+  fireEvent.change(screen.getByLabelText("Next filing stage"), {
+    target: { value: "preparing" },
+  });
+  expect(
+    screen.getByRole("button", { name: "Record evidenced filing stage" }),
+  ).toBeEnabled();
+});

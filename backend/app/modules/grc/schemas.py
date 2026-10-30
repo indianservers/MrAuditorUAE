@@ -480,6 +480,30 @@ class Closure(Body):
     evidence_ids: Evidence = Field(min_length=1)
 
 
+class ObligationJurisdictionScope(Strict):
+    """Explicitly assessed country relationship; never inferred legal applicability."""
+
+    entity_country: str = Field(pattern=r"^[A-Z]{2}$")
+    obligation_country: str = Field(pattern=r"^[A-Z]{2}$")
+    relationship: Literal["domestic", "foreign"]
+    applicability: Literal["potential", "assessed_applicable", "assessed_not_applicable"]
+    registration_reference: str = Field(default="", max_length=200)
+    assessment: str = Field(min_length=10, max_length=4000)
+
+    @model_validator(mode="after")
+    def exact_scope(self):
+        expected = "domestic" if self.entity_country == self.obligation_country else "foreign"
+        if self.relationship != expected:
+            raise ValueError("Obligation relationship must agree with the two declared countries")
+        if len(self.assessment.strip()) < 10 or self.assessment != self.assessment.strip():
+            raise ValueError("Retain an explicit exact country applicability assessment")
+        if self.registration_reference != self.registration_reference.strip():
+            raise ValueError(
+                "Retain the exact registration reference without surrounding whitespace"
+            )
+        return self
+
+
 class Obligation(Body):
     owner_id: uuid.UUID
     entity_id: uuid.UUID
@@ -499,6 +523,7 @@ class Obligation(Body):
     ]
     source_url: str = Field(min_length=1, max_length=2000)
     jurisdiction: Text
+    jurisdiction_scope: ObligationJurisdictionScope | None = None
     effective_from: date
     deadline: date | None = None
     deadline_kind: Literal[
@@ -533,6 +558,25 @@ class Obligation(Body):
 
     @model_validator(mode="after")
     def filing_contract(self):
+        if self.jurisdiction_scope:
+            scope = self.jurisdiction_scope
+            if self.jurisdiction != scope.obligation_country:
+                raise ValueError(
+                    "Structured obligation jurisdiction must equal its obligation country"
+                )
+            if not self.rule_evidence_id or not self.fact_evidence_ids or not self.entity_facts:
+                raise ValueError(
+                    "Structured country scope requires separate rule and entity-fact evidence"
+                )
+            if self.rule_evidence_id in self.fact_evidence_ids:
+                raise ValueError("Rule and entity-fact evidence must be separate records")
+            if scope.applicability != "assessed_applicable" and (
+                self.filing_stage in {"approved_for_submission", "submitted", "acknowledged"}
+                or self.compliance_assessment == "supported"
+            ):
+                raise ValueError(
+                    "Unassessed or inapplicable country scope cannot support a filing approval"
+                )
         if any(day < 0 or day > 365 for day in self.reminder_days) or len(
             set(self.reminder_days)
         ) != len(self.reminder_days):

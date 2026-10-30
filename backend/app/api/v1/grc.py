@@ -80,6 +80,8 @@ async def compliance_calendar(eid: uuid.UUID, db: DB, ctx: Actor):
                 "record_id": str(obj.id),
                 "version": obj.version,
                 "reference": obj.reference,
+                "jurisdiction": obj.body.get("jurisdiction"),
+                "jurisdiction_scope": obj.body.get("jurisdiction_scope"),
                 "deadline": obj.body.get("deadline"),
                 "extension_deadline": obj.body.get("extension_deadline"),
                 "deadline_kind": obj.body.get("deadline_kind", "unresolved"),
