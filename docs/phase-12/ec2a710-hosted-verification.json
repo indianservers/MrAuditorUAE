@@ -1,0 +1,100 @@
+{
+  "source_commit": "ec2a7100906563153acbead599f454ca7afd0317",
+  "run_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40987130449",
+  "all_six_jobs": "SUCCESS",
+  "verify_job_id": 123840664348,
+  "passed": 4514,
+  "skipped": 9,
+  "failures": 0,
+  "errors": 0,
+  "statement_coverage_percent": 86.638701350278,
+  "calculation_core": {
+    "covered": 831,
+    "statements": 930
+  },
+  "archive": {
+    "artifact_id": 12949925840,
+    "bytes": 230977,
+    "sha256": "f7d2e66792f86affe58349b3988d4f771e6e9ff422ac567579567a7b77d2568e"
+  },
+  "original_files": [
+    {
+      "path": "docs/phase-12/ec2a710-hosted-full.xml",
+      "archive_entry": "backend/verification-results.xml",
+      "sha256": "c77e6d4d4540092ab65e49a758385a7ea2c63f5015758557bc527523465eaf9c"
+    },
+    {
+      "path": "docs/phase-12/ec2a710-hosted-coverage.json",
+      "archive_entry": "backend/coverage.json",
+      "sha256": "4498a2ef19716a912f20d09c7bfe4b05389d6572d359cc9e3cb35b6cd0e90609"
+    },
+    {
+      "path": "docs/phase-12/ec2a710-hosted-compliance-runtime-connector.json",
+      "archive_entry": ".local-runtime/ci-verification/operations/compliance-runtime-connector.json",
+      "sha256": "0dd1250e6617eeabe361af97be564d2f42d2ee000623252cc320e0f2cdb4e363"
+    },
+    {
+      "path": "docs/phase-12/ec2a710-hosted-filing-lifecycle.json",
+      "archive_entry": ".local-runtime/ci-verification/operations/filing-lifecycle.json",
+      "sha256": "afead2f9138ab7fe7057a4795589e563079b86b322256bae0ede40d49a89d5f1"
+    },
+    {
+      "path": "docs/phase-12/ec2a710-hosted-worker-recovery.json",
+      "archive_entry": ".local-runtime/ci-verification/operations/worker-recovery.json",
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db"
+    }
+  ],
+  "skipped_tests": [
+    {
+      "classname": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "classname": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "classname": "tests.phase2.test_live_connectors",
+      "name": "test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "classname": "tests.phase2.test_live_native",
+      "name": "test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_document_worker_runtime",
+      "name": "test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "limitations": [
+    "Source-specific hosted evidence includes annual GST candidates and INR/AED controls; predates the 6cb6391 entity-currency metadata and UI fix.",
+    "Browser six-case evidence for this same source is archived separately in gst-annual-browser-ec2a710.json.",
+    "Synthetic connector, filing and recovery evidence does not establish live provider access, real client qualification, external filing or professional conclusions.",
+    "Nine skipped tests remain skipped in this hosted run; separate local coverage of isolated database and Windows worker categories is documented in hosted-skips-local-followup.json."
+  ]
+}
