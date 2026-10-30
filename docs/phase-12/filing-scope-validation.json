@@ -1,0 +1,24 @@
+{
+  "change": "Preserve independently approved filing jurisdiction and obligation criteria until an explicit return to preparing or not_started.",
+  "regression": {
+    "path": "docs/phase-12/filing-scope-regression.xml",
+    "sha256": "768349d6276ac27e817e9d8dca9f09637ac2e7f1cced518ea9187db589a4eb56",
+    "passed": 3656,
+    "skipped": 4,
+    "failures": 0,
+    "errors": 0
+  },
+  "checks": [
+    "66 field/stage/country combinations cover AE and IN, approved_for_submission/submitted/acknowledged and eleven newly protected scope fields.",
+    "Each unit case also permits the explicit return to preparing with revised facts.",
+    "Actual API rejects five scope edits on a reopened approved filing; saved version and entire body remain unchanged after each rejection.",
+    "Existing independent filing lifecycle, acknowledgment, reminders and source-withdrawal staleness still pass.",
+    "Ruff check/format and mypy all 413 application files pass."
+  ],
+  "limitations": [
+    "Internal recorded filing workflow only; no external submission performed.",
+    "Does not activate Indian tax workflows in a UAE reporting context or implement a complete cross-border obligation registry.",
+    "Unit permission/evidence reads are doubles; API regression uses real isolated database and retained synthetic evidence with explicit scanner/broker doubles.",
+    "All-unit regression is not the full hosted backend suite; four dedicated database tests remain skipped in this run."
+  ]
+}

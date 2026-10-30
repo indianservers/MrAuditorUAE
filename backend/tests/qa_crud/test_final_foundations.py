@@ -228,6 +228,33 @@ async def test_evidenced_filing_lifecycle_reminders_and_stale_receipt(
     assert obj["status"] == "APPROVED"
     same = await step(h, "approved_for_submission")
     assert same["version"] == obj["version"]
+    # Reopening permits edits, but must not preserve submission approval for a new scope.
+    from app.modules.grc.service import clean
+
+    obj = await action(c, reviewer[0], base, obj, "reopen")
+    retained = obj["body"]
+    for field, value in (
+        ("jurisdiction", "IN"),
+        ("module", "vat"),
+        ("effective_from", "2026-04-01"),
+        ("deadline_kind", "client_agreed"),
+        ("source_url", "https://synthetic.invalid/changed-rule"),
+    ):
+        changed = await c.patch(
+            base + f"/records/{obj['id']}",
+            headers=h,
+            json={
+                "version": obj["version"],
+                "reference": obj["reference"],
+                "title": obj["title"],
+                "body": {**clean(retained), field: value},
+            },
+        )
+        assert changed.status_code == 409, changed.text
+        assert "Approved filing inputs changed" in changed.text
+        unchanged = (await c.get(audit_base + f"/records/{obj['id']}", headers=h)).json()
+        assert unchanged["version"] == obj["version"] and unchanged["body"] == retained
+    obj = await approve(c, h, reviewer[0], base, obj)
     obj = await step(h, "submitted", submission_evidence_id=evidences[1]["id"])
     obj = await approve(c, h, reviewer[0], base, obj)
     obj = await step(h, "acknowledged", acknowledgment_evidence_id=evidences[2]["id"])

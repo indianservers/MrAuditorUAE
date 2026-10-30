@@ -119,6 +119,19 @@ async def validate_transition(db, ctx, eng, data, record_id):
             raise HTTPException(409, "Independently approved preceding filing stage required")
     if previous and old in {"approved_for_submission", "submitted", "acknowledged"}:
         protected = [
+            # Jurisdiction and obligation criteria are part of the approved filing scope.
+            # Reopening a record alone must not retain its approved submission stage.
+            "owner_id",
+            "entity_id",
+            "module",
+            "jurisdiction",
+            "source_url",
+            "effective_from",
+            "deadline_kind",
+            "required_evidence",
+            "compliance_assessment",
+            "evidence_ids",
+            "statutory_record_id",
             "deadline",
             "deadline_rule",
             "entity_facts",
