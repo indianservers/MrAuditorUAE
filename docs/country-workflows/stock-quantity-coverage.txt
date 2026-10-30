@@ -32,3 +32,12 @@ disposition, complete XLSX and generated-paper checks; 416 frontend tests in
 was correctly rejected; its original failed JUnit is retained separately.
 Synthetic tests do not establish source authenticity, physical attendance,
 title, condition assessment, statutory methodology or real-client qualification.
+
+UI follow-up: older stock results remain readable with their regeneration
+message, but independent approval is disabled. The connected working-paper
+action also requires CURRENT freshness, independent review and the current stock
+contract when applicable. These UI gates mirror the existing server rejection;
+they do not rewrite or delete historical results. Seven additional cases cover
+UAE/India legacy approval and current/stale/unreviewed/legacy/current-version
+paper controls. The two affected frontend suites passed all 153 tests; scoped
+ESLint and TypeScript also passed. Hosted checks remain source-specific.

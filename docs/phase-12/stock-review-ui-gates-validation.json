@@ -1,0 +1,42 @@
+{
+  "scope": "UI gates mirror retained stock coverage and freshness requirements for approval and draft generation",
+  "source_files": [
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "sha256": "6042277251c8c65ffc0339dad2550faae7fe242f2e3a92d66e8df2f838463127"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "84f26b912b0c686911f747080fcf18880afe63a8936e56b35cadbaf28b3c7c31"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "899e0bf1d4da7ae00e2d900ce6c383da1ae1d8bf408208951a6a1e5f5bf19fa0"
+    },
+    {
+      "path": "frontend/tests/generic-matching-candidates.test.tsx",
+      "sha256": "86edb29917f23778c53a2eaaf3d0d4dba47112f2fea327c0d5379b172c444754"
+    },
+    {
+      "path": "docs/phase-12/stock-review-ui-gates.xml",
+      "sha256": "44eab7904bd773127c1c5e3260debc7102191be0faa190e33f29a313647c7e74"
+    }
+  ],
+  "verification": {
+    "frontend_focused_passed": 153,
+    "frontend_focused_files": 2,
+    "frontend_scoped_eslint": "passed",
+    "frontend_typecheck": "passed"
+  },
+  "behavior": [
+    "UAE and India legacy stock results remain readable while independent approval is disabled.",
+    "New connected draft creation requires CURRENT freshness and REVIEWED source status.",
+    "Stock draft creation additionally requires stock-declared-count-coverage/1; current reviewed non-stock results remain eligible.",
+    "Disabled actions perform no mutation in the focused tests."
+  ],
+  "limits": [
+    "No new backend arithmetic or legal rule qualification.",
+    "Focused component verification is not a hosted-browser or full-suite claim.",
+    "Previous hosted captures and full/frontend receipts remain separately source-bound."
+  ]
+}

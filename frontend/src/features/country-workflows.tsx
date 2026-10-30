@@ -865,6 +865,9 @@ export function CountryWorkflows({
     (f) => f.id === sourceFormat,
   );
   const body = detail.data?.body;
+  const obsoleteStockCoverage =
+    body?.workflow === "stock-audit" &&
+    body.quantity_coverage_contract !== "stock-declared-count-coverage/1";
   const obsoletePayrollPolicySelection =
     body?.workflow === "india-payroll-rules" &&
     body.payroll_rule_selection_contract !==
@@ -7069,14 +7072,12 @@ export function CountryWorkflows({
               Quantity coverage: {body.quantity_coverage_basis}
             </p>
           )}
-          {body.workflow === "stock-audit" &&
-            body.quantity_coverage_contract !==
-              "stock-declared-count-coverage/1" && (
-              <p role="status">
-                Regenerate stock count coverage with current quantity and sign
-                controls before approval or working-paper generation.
-              </p>
-            )}
+          {obsoleteStockCoverage && (
+            <p role="status">
+              Regenerate stock count coverage with current quantity and sign
+              controls before approval or working-paper generation.
+            </p>
+          )}
           {body.workflow === "inventory-performance" &&
             body.inventory_performance_scope && (
               <InventoryPerformanceEvidence
@@ -7552,6 +7553,7 @@ export function CountryWorkflows({
                 action.isPending ||
                 detail.data.freshness !== "CURRENT" ||
                 obsoletePayrollPolicySelection ||
+                obsoleteStockCoverage ||
                 !!body.blocked
               }
               onClick={() => decide("approve")}

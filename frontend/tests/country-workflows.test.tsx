@@ -3718,6 +3718,17 @@ it.each(["AE", "IN"])("shows per-position quantity coverage and its declaration 
   expect(screen.getByRole("cell", { name: "40.0" })).toBeVisible();
 });
 
+it.each(["AE", "IN"])("disables legacy stock approval while retaining the saved result (%s)", (country) => {
+  state.country = country;
+  state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: { workflow: "stock-audit", title: "Historical stock result", rows: [{ id: "stock-1", state: "MATCHED", carrying_value: "100" }] } };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+  expect(screen.getByText(/Regenerate stock count coverage with current quantity/)).toBeVisible();
+  expect(screen.getByRole("button", { name: "Independent approval" })).toBeDisabled();
+  expect(screen.getByRole("cell", { name: "100" })).toBeVisible();
+  expect(state.mutate).not.toHaveBeenCalled();
+});
+
 it("shows FIFO closing quantities and cost differences before expanded arithmetic provenance", () => {
   state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: { workflow: "inventory-fifo-cost", title: "Assessed FIFO cost", blocked: false, rows: [{ id: "fifo:1", site: "WH", sku: "S", lot: "L", uom: "PCS", currency: "AED", expected_closing_quantity: "1", book_quantity: "1", rounded_fifo_closing_cost: "12.19", rounded_book_gross_cost: "12.19", book_minus_fifo: "0.00", raw_fifo_closing_cost: "12.1932631112635269", raw_cost_rollforward_difference: "0", state: "MATCHED" }] } };
   render(<CountryWorkflows eid="engagement" mode="country-workflow" />);

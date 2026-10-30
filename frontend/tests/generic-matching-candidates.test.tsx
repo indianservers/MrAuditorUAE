@@ -5,6 +5,9 @@ import { AccountingIntelligence } from "@/features/accounting-intelligence";
 const state = vi.hoisted(() => ({
   kind: "reconciliation",
   freshness: "CURRENT",
+  reviewed: false,
+  workflow: "",
+  stockContract: "",
   detailId: "result",
   detailStatus: "ready",
   refetch: vi.fn(),
@@ -84,6 +87,9 @@ vi.mock("@/hooks/use-api", () => ({
           version: 1,
           freshness: state.freshness,
           body: {
+            review_status: state.reviewed ? "REVIEWED" : "UNVERIFIED",
+            workflow: state.workflow || undefined,
+            quantity_coverage_contract: state.stockContract || undefined,
             bank_account_binding: state.binding
               ? {
                   matching_account_code: "100",
@@ -143,6 +149,9 @@ vi.mock("@/hooks/use-api", () => ({
 beforeEach(() => {
   state.kind = "reconciliation";
   state.freshness = "CURRENT";
+  state.reviewed = false;
+  state.workflow = "";
+  state.stockContract = "";
   state.detailId = "result";
   state.detailStatus = "ready";
   state.refetch.mockClear();
@@ -294,6 +303,32 @@ it("queues an explicit source account declaration without changing the original 
     ),
   );
 });
+
+it.each([
+  ["CURRENT", true, "", "", true],
+  ["STALE", true, "", "", false],
+  ["CURRENT", false, "", "", false],
+  ["CURRENT", true, "stock-audit", "", false],
+  ["CURRENT", true, "stock-audit", "stock-declared-count-coverage/1", true],
+])(
+  "gates new papers by freshness, review and stock coverage (%s/%s/%s/%s)",
+  (freshness, reviewed, workflow, contract, enabled) => {
+    state.freshness = String(freshness);
+    state.reviewed = Boolean(reviewed);
+    state.workflow = String(workflow);
+    state.stockContract = String(contract);
+    render(<AccountingIntelligence eid="e" area="lead" />);
+    const button = screen.getByRole("button", {
+      name: "Create connected working-paper draft",
+    });
+    if (enabled) expect(button).toBeEnabled();
+    else {
+      expect(button).toBeDisabled();
+      fireEvent.click(button);
+      expect(state.mutate).not.toHaveBeenCalled();
+    }
+  },
+);
 
 it("retains a directly opened stale report in its result selector without enabling approval", () => {
   state.kind = "statutory-report";

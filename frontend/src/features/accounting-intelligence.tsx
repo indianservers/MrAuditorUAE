@@ -1360,7 +1360,12 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
               </Button>
               <Button
                 disabled={
-                  action.isPending || body?.review_status !== "REVIEWED"
+                  action.isPending ||
+                  detail.data.freshness !== "CURRENT" ||
+                  body?.review_status !== "REVIEWED" ||
+                  (body?.workflow === "stock-audit" &&
+                    body.quantity_coverage_contract !==
+                      "stock-declared-count-coverage/1")
                 }
                 onClick={async () => {
                   await action
