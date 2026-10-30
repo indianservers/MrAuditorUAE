@@ -65,8 +65,9 @@ partial allocated deposits, multiple challans, overlapping/uncovered mappings,
 review independence, complete XLSX, independently specified per-party comparison
 and source/downstream staleness. API scanner and queue dispatch are explicit
 test doubles. A separate hosted browser case is configured for actual ClamAV,
-form submission, review/export and crosswalk-supersession captures; that new
-native UI case awaits hosted execution and visual inspection.
+form submission, review/export and crosswalk-supersession captures. The first
+hosted native UI case passed at acf5611997a70ef4006a55f93f045df1d2d1a7c6;
+its four original reviewed/stale captures have been visually inspected.
 
 Remaining: complete FVU/CSI and conditional-field qualification, correction and
 successor/native salary/nonresident profiles, complete legally approved
@@ -79,6 +80,29 @@ quarter-boundary cases pass (240 distinct cases across retained reports). The
 83-case native unit report includes the prior 75 native cases and eight new
 boundaries; it is not counted as 83 additional cases. All 443 frontend tests,
 Next.js build, mypy (419 application files), scoped lint and current API payload
-contracts pass. The configured native browser case awaits hosted execution.
+contracts pass. Hosted browser smoke passed all 11 cases at acf5611; this
+does not include the later book-entry and nil-marker control fix below.
 Synthetic public-sample controls and explicit placeholder-document guidance
 are saved under sample-inputs/SYNTHETIC-native-withholding-regular/.
+
+Follow-up deposit-control review: the nonempty party-observation profile now
+requires an explicit CD field 37 Y/N book-entry/cash selection. An unknown or
+blank flag cannot bypass the cash check for allocated party deposits plus
+recorded interest, other charges and fees. The original numbered 26Q workbook
+row 153 describes the allowed values and distinguishes nil statements; row
+143 describes the different cash and book-entry minimum controls. Nil markers
+are rejected in this nonempty profile rather than attached to positive party
+observations. Complete nil-statement qualification remains separate.
+
+Synthetic regression reproduced eight previously accepted underfunded cash
+populations (both forms, four unknown/blank flags). Explicit N already rejected
+those amounts. The fix also preserves explicit Y as an observed source flag,
+without inferring bank payment or tax credit. These checks do not add FVU,
+government filing, portal verification or real-client qualification.
+
+The final follow-up regression report, native-book-entry-final.xml, records
+254 passed cases and no skips/failures, including the native API and related
+source/withholding workflows. Ten existing SQLAlchemy DISTINCT ON deprecation
+warnings remain. Scoped Ruff formatting/lint and mypy over 419 files pass.
+The source-bound browser receipt is india-native-browser-acf5611.json. It
+records the earlier hosted commit separately from this locally tested fix.

@@ -207,6 +207,14 @@ def parse_regular(content, data):
                 or fields[5] not in {"Y", "N"}
             ):
                 raise ValueError("Duplicate or invalid native challan identity or nil flag")
+            if fields[5] == "Y":
+                raise ValueError(
+                    "Nil statements are separate from this nonempty party-observation profile"
+                )
+            if fields[36] not in {"Y", "N"}:
+                raise ValueError(
+                    "Native challan book-entry flag must explicitly select Y or N before deposit controls apply"
+                )
             calendar(fields[17])
             if (
                 sum(money(fields[i - 1]) for i in (22, 23, 24, 25, 26, 39)) != money(fields[26])

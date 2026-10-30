@@ -1,0 +1,69 @@
+{
+  "source_commit": "acf5611997a70ef4006a55f93f045df1d2d1a7c6",
+  "run_id": 41078235036,
+  "job_id": 124140092808,
+  "job_conclusion": "success",
+  "suite": {
+    "passed": 11,
+    "failed": 0,
+    "duration": "5.5m"
+  },
+  "native_case_duration": "7.9s",
+  "artifact": {
+    "id": 12987799093,
+    "size_bytes": 14520705,
+    "sha256": "796a5448679fb5a8218fe7318d54b993f8b3c5eccffe1bac281f61e6dd99336a"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "1c708f11105759a6f383a5e5689868be3b1746d41f0b064f0a80e0e45d3e7edf"
+    },
+    {
+      "path": "frontend/src/features/native-withholding-source.tsx",
+      "sha256": "2ab0b0bb7dc7054b379c90c8cd3e240367c458cd9da64d93aef809dd538d293d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/india_withholding_native.py",
+      "sha256": "f3418780a2067f77d4945e9996dcc1f03506d7739f398bc6562fd1af1bb379ca"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/IN-26Q-native-regular-reviewed-acf5611.png",
+      "sha256": "6fa147aef52f9e93991403a58b2491ce55f68290c0f420580f756fab31266bae",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-26Q-native-crosswalk-superseded-stale-acf5611.png",
+      "sha256": "c3022f5929493355c3c6ac2e62dff8e5d124a0a35f44aea8e249607266f220f7",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-27EQ-native-regular-reviewed-acf5611.png",
+      "sha256": "69013dc9c6cb097b7949634aa9f1dc286ec8aea19957b49ecae7711c6125d95a",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-27EQ-native-crosswalk-superseded-stale-acf5611.png",
+      "sha256": "80d5d09d67f13af915420168bcb3c0477e8da6736cbd4b30b2983ef201226839",
+      "visually_inspected": true
+    }
+  ],
+  "visual_findings": [
+    "26Q has four party links, 1900 allocated tax and one 100000 gross challan; BSR 0000809 and challan 00078 keep leading zeroes.",
+    "27EQ has ten party links, 1000 allocated tax and one 10000 gross challan; BSR 0000897 and challan 00012 keep leading zeroes.",
+    "Both original reviewed screenshots show CURRENT; replacing the separate crosswalk shows STALE with approval disabled and the original amounts still visible.",
+    "Tables distinguish original party allocations from one-per-challan gross amounts and describe observations as unverified bank/CSI receipts."
+  ],
+  "automated_assertions": [
+    "Real configured ClamAV, queued controlled native import through the UI and independent review; self-review returns 403.",
+    "Complete XLSX party/challan lineage; separate crosswalk replacement makes the source stale without changing its saved body/version."
+  ],
+  "limitations": [
+    "Original public issuer examples with synthetic assessed crosswalks; not redacted client pilots or legal/FVU/CSI qualification.",
+    "Screenshot lineage tables show the complete small party population; mapped schedule screen captures do not show every 27EQ row. Complete export is asserted separately.",
+    "This hosted result predates the follow-up book-entry/nil-marker control fix. That fix has its own local 254-case report; no hosted qualification is inferred.",
+    "Full backend verification at this commit was still running when this browser evidence was recorded."
+  ]
+}

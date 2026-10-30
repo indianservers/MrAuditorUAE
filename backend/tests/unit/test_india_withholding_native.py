@@ -297,6 +297,45 @@ def test_nonzero_components_and_partial_allocated_deposit_never_become_gross_cas
     assert parsed["native_metadata"]["component_controls"]["challan_deposit"] == "100110.00"
 
 
+@pytest.mark.parametrize("form", ["26Q", "27EQ"])
+@pytest.mark.parametrize("book_entry_flag", ["", "X", "0", "n", "N"])
+def test_unknown_book_entry_flag_cannot_bypass_allocated_deposit_charge_control(
+    form, book_entry_flag
+):
+    declared = controls(form)
+    allocated = int(declared["allocated_deposit"])
+    declared["challan_deposit"] = str(allocated)
+    content = original(form)
+    for line, field, value in [
+        (2, 47, f"{allocated}.00"),
+        (3, 22, f"{allocated - 5}.00"),
+        (3, 25, "5.00"),
+        (3, 27, f"{allocated}.00"),
+        (3, 34, "5.00"),
+        (3, 37, book_entry_flag),
+    ]:
+        content = edit(content, line, field, value)
+    # All population and aggregate controls agree, but the gross challan cannot
+    # cover the allocated party deposit plus its explicitly recorded interest.
+    with pytest.raises(ValueError, match="book-entry flag|applicable recorded charges"):
+        parse_native(
+            content, options(form, native_withholding_controls=declared), "IN", "synthetic.txt"
+        )
+
+
+@pytest.mark.parametrize("form", ["26Q", "27EQ"])
+def test_explicit_book_entry_is_preserved_as_observation_without_cash_evidence(form):
+    parsed = parse_native(edit(original(form), 3, 37, "Y"), options(form), "IN", "synthetic.txt")
+    assert parsed["native_metadata"]["challan_controls"][0]["book_entry_flag"] == "Y"
+    assert parsed["native_metadata"]["bank_payment_or_tax_credit"] == "NOT_EVIDENCED"
+
+
+@pytest.mark.parametrize("form", ["26Q", "27EQ"])
+def test_nil_marker_cannot_label_a_positive_nonempty_party_population(form):
+    with pytest.raises(ValueError, match="Nil statements are separate"):
+        parse_native(edit(original(form), 3, 6, "Y"), options(form), "IN", "synthetic.txt")
+
+
 def test_multiple_challans_are_complete_and_can_map_to_the_same_assessed_transactions():
     records = [line.decode().split("^") for line in original().splitlines()]
     records[1][3] = "2"
