@@ -1,0 +1,188 @@
+{
+  "status": "HOSTED_BROWSER_PASS_ARCHIVED_VISUAL_CORRECTIONS_PENDING_HOSTED_EXECUTION",
+  "hosted_source_commit": "ec2a7100906563153acbead599f454ca7afd0317",
+  "run_id": 40987130449,
+  "browser_job_id": 123840664328,
+  "browser_job_conclusion": "success",
+  "browser_tests": {
+    "passed": 6,
+    "failed": 0,
+    "suite_duration": "6.0 minutes",
+    "annual_gst_case_duration_seconds": 15.0,
+    "cases": [
+      "India annual GST pending/positive/review/export/stale",
+      "UAE report coverage and country workflows",
+      "India report coverage and country workflows",
+      "Form26 A/2 full field revision/review/export/stale",
+      "Form26 B/2 full field revision/review/export/stale",
+      "Real BFF authentication/client writes/logout revocation"
+    ]
+  },
+  "artifact": {
+    "id": 12948155840,
+    "bytes": 10940073,
+    "sha256": "b3fcb0389c5cf41b4e3c84e55f696e6b01db5d1cb701a7ddd9a6f72342eef101"
+  },
+  "original_images": [
+    {
+      "entry": "country-reports/IN-annual-gst-missing-controls-pending.png",
+      "bytes": 61524,
+      "sha256": "42f4e4c3f3e4b493e44c82ab44b53e47ca1eea2983d72a027a24ac91f88d36f4",
+      "dimensions": [
+        1171,
+        475
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-missing-controls-pending-ec2a710.png",
+      "visually_inspected": true,
+      "finding": "PAN/year/date retained; both amount controls visibly Not supplied, both outcomes pending, missing-completeness and missing-control reasons visible"
+    },
+    {
+      "entry": "country-reports/IN-annual-gst-explicit-pan-scope.png",
+      "bytes": 55514,
+      "sha256": "32aac48619af5edb00235b76fa53f5a52e57b6aed4b1d51a86c49c7689263f64",
+      "dimensions": [
+        1011,
+        632
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-explicit-pan-scope-ec2a710.png",
+      "visually_inspected": true,
+      "finding": "Explicit enabled scope, PAN, dated financial/rule reviews, regular status, exact 30000000 and explicit other turnover 0, completeness checked and synthetic basis visible"
+    },
+    {
+      "entry": "country-reports/IN-annual-gst-reviewed-candidates.png",
+      "bytes": 56565,
+      "sha256": "3801027b9f8baf1a362288e9dc67c4a52c30a55a27f8f47b040472995d0d030d",
+      "dimensions": [
+        1171,
+        455
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-reviewed-candidates-ec2a710.png",
+      "visually_inspected": true,
+      "finding": "Separate GSTR-9 required and GSTR-9C threshold-not-exceeded candidates; original amounts and non-filing limitations visible; independent reviewed status established by browser response/selection assertions outside this clipped region"
+    },
+    {
+      "entry": "country-reports/IN-annual-gst-withdrawn-source-stale.png",
+      "bytes": 154241,
+      "sha256": "059fc3a8898b0aac034bda062acdeea5bb26e3adfee75635e2485bedaf52546a",
+      "dimensions": [
+        1213,
+        1413
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-withdrawn-source-stale-ec2a710.png",
+      "visually_inspected": true,
+      "finding": "STALE and REVIEWED badges, original amounts/candidates and disabled independent approval visible; element capture is partially obscured by fixed header and omits title/PAN and bottom data row; improved capture pending"
+    },
+    {
+      "entry": "country-reports/IN-form26-A-generated-stale.png",
+      "bytes": 590931,
+      "sha256": "a35de598a208c8777debc0504551a4208ff28a42cf166810be56e55d2cdad1ad",
+      "dimensions": [
+        2200,
+        3400
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-generated-stale-ec2a710.png",
+      "visually_inspected": true,
+      "finding": "Correct part, populated selected report, STALE warning, saved FY2026-27 scope, 877 requirements with 20-row paging and retained blocks visible; source-validation string is historic generation metadata and its display label is being clarified"
+    },
+    {
+      "entry": "country-reports/IN-form26-B-generated-stale.png",
+      "bytes": 592884,
+      "sha256": "6f88058f49c2ec10ed37abfc0ddbd7ea2d1ec2d0ca187a198ab25bec9860314a",
+      "dimensions": [
+        2200,
+        3400
+      ],
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-generated-stale-ec2a710.png",
+      "visually_inspected": true,
+      "finding": "Correct part, populated selected report, STALE warning, saved FY2026-27 scope, 877 requirements with 20-row paging and retained blocks visible; source-validation string is historic generation metadata and its display label is being clarified"
+    }
+  ],
+  "current_local_checks": [
+    {
+      "path": "docs/phase-12/gst-annual-period-partitions.xml",
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/annual-browser-visual-frontend.xml",
+      "tests": 380,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "Frontend typecheck and lint passed; existing unused-variable warning only",
+    "Production build passed",
+    "No backend production code changed in this correction"
+  ],
+  "current_changes": [
+    "Four additional mixed-period annual GST tests: monthly/quarterly PAN totals, missing interior month despite agreed controls, net-zero cross-partition differences despite tolerance, duplicate annual/monthly overlap",
+    "Source-specific synthetic packet walkthrough",
+    "Clarify saved source validation at generation in report preview",
+    "Annual stale screenshot now requires complete panel and result row inside 2200x2600 viewport; actual recapture pending"
+  ],
+  "limits": [
+    "All images retained unchanged with original archive hashes; annual stale screenshot clipping is not represented as complete visual evidence",
+    "Hosted pass belongs to ec2a710 source; new visual corrections have not run in hosted browser yet",
+    "Other four completed gates were green; full backend verify job remained in progress at observation",
+    "Source preparation/review through real APIs, not browser upload widgets",
+    "Synthetic engineering tests do not establish real-client, legal, filing or professional qualification"
+  ],
+  "current_source_blobs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "66f4a67cbd3260ea9106036987ae6dadbf4a89171331824dbe075951d5a23d2c"
+    },
+    {
+      "path": "backend/tests/unit/test_gst_annual_scope.py",
+      "sha256": "e988c412e564cf0ae9aece55b011d3891618b84148843f23e30b954e476beca6"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/README.txt",
+      "sha256": "4360d31aa4af6a9c393fe8416baa8374253382bea55ef5c3929289ee44e1a826"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-explicit-pan-scope-ec2a710.png",
+      "sha256": "32aac48619af5edb00235b76fa53f5a52e57b6aed4b1d51a86c49c7689263f64"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-missing-controls-pending-ec2a710.png",
+      "sha256": "42f4e4c3f3e4b493e44c82ab44b53e47ca1eea2983d72a027a24ac91f88d36f4"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-reviewed-candidates-ec2a710.png",
+      "sha256": "3801027b9f8baf1a362288e9dc67c4a52c30a55a27f8f47b040472995d0d030d"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-annual-gst-withdrawn-source-stale-ec2a710.png",
+      "sha256": "059fc3a8898b0aac034bda062acdeea5bb26e3adfee75635e2485bedaf52546a"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-generated-stale-ec2a710.png",
+      "sha256": "a35de598a208c8777debc0504551a4208ff28a42cf166810be56e55d2cdad1ad"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-generated-stale-ec2a710.png",
+      "sha256": "6f88058f49c2ec10ed37abfc0ddbd7ea2d1ec2d0ca187a198ab25bec9860314a"
+    },
+    {
+      "path": "docs/phase-12/annual-browser-visual-frontend.xml",
+      "sha256": "616a667854c15db1f8e105db035d3f3086f1b625751d7b76acf8cd4b8ea7f4e0"
+    },
+    {
+      "path": "docs/phase-12/gst-annual-period-partitions.xml",
+      "sha256": "41f04d0ecc019b496d58a1255f46e049187b1f22bfa291d121c713c95c0ac51d"
+    },
+    {
+      "path": "frontend/e2e/annual-gst-release.spec.ts",
+      "sha256": "2d8c29d8b4f75c03e5acb350446c530cd6e168bef3f2c47ae508058b33db3d40"
+    },
+    {
+      "path": "frontend/src/features/statutory-report-preview.tsx",
+      "sha256": "149b5cbdd289ab4c3659fe22251dad05ed7ce7d68947af7144983c9510edf469"
+    }
+  ]
+}

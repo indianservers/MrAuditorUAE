@@ -1,3 +1,4 @@
+from calendar import monthrange
 from copy import deepcopy
 
 import pytest
@@ -36,6 +37,94 @@ def annual_rows(amount="20000000", registrations=1):
                 dict(population[0], id="second-" + role, registration="27ABCDE1234F1Z5")
             )
     return rows
+
+
+def monthly_and_quarterly_rows():
+    """Two independently assessed registrations with different filing partitions."""
+    originals = annual_rows()
+    rows = {role: [] for role in originals}
+    months = [(2025, month) for month in range(4, 13)] + [(2026, month) for month in range(1, 4)]
+    monthly = [
+        (f"{year}-{month:02}-01", f"{year}-{month:02}-{monthrange(year, month)[1]}")
+        for year, month in months
+    ]
+    quarterly = [
+        ("2025-04-01", "2025-06-30"),
+        ("2025-07-01", "2025-09-30"),
+        ("2025-10-01", "2025-12-31"),
+        ("2026-01-01", "2026-03-31"),
+    ]
+    for registration, partitions, amount in [
+        ("29ABCDE1234F1Z5", monthly, "2000000"),
+        ("27ABCDE1234F1Z5", quarterly, "7000000"),
+    ]:
+        for start, end in partitions:
+            for role in originals:
+                row = dict(
+                    originals[role][0],
+                    id=f"{role}-{registration[:2]}-{start}",
+                    registration=registration,
+                    period_start=start,
+                    period_end=end,
+                )
+                if role != "scope":
+                    row.update(
+                        reference=f"{role}-{start}", amount="0" if role == "adjustments" else amount
+                    )
+                rows[role].append(row)
+    return rows
+
+
+def partitioned_scope():
+    facts = scope()
+    facts["aggregate_turnover"] = "52000000"
+    return facts
+
+
+def test_monthly_and_quarterly_gstins_cover_one_pan_year_without_double_counting():
+    result = compare(monthly_and_quarterly_rows(), "IN", gst_annual_scope=partitioned_scope())
+    assessment = result["annual_gst_assessment"]
+    assert len(result["rows"]) == 16 and all(row["state"] == "MATCHED" for row in result["rows"])
+    assert assessment["registration_turnover"] == "52000000" and assessment["pending_reasons"] == []
+    assert assessment["gstr9c"] == "CANDIDATE_REQUIRED_SELF_CERTIFIED" and not result["blocked"]
+
+
+def test_missing_interior_month_is_pending_even_when_every_supplied_amount_and_pan_control_agree():
+    rows = monthly_and_quarterly_rows()
+    for role in rows:
+        rows[role] = [
+            row
+            for row in rows[role]
+            if not (row["registration"].startswith("29") and row["period_start"] == "2025-06-01")
+        ]
+    facts = partitioned_scope()
+    facts["aggregate_turnover"] = "50000000"
+    result = compare(rows, "IN", gst_annual_scope=facts)
+    assert all(row["state"] == "MATCHED" for row in result["rows"])
+    assert result["annual_gst_assessment"]["pending_reasons"] == [
+        "REGISTRATION_YEAR_COVERAGE_INCOMPLETE"
+    ]
+    assert result["blocked"] and result["annual_gst_assessment"]["gstr9c"] == "PENDING_REVIEW"
+
+
+def test_equal_opposite_partition_differences_cannot_clear_annual_scope_with_tolerance():
+    rows = monthly_and_quarterly_rows()
+    rows["return"][0]["amount"] = "2000001"
+    rows["return"][-1]["amount"] = "6999999"
+    result = compare(rows, "IN", gst_annual_scope=partitioned_scope(), tolerance="2")
+    assert all(row["state"] == "MATCHED" for row in result["rows"])
+    assert result["annual_gst_assessment"]["registration_turnover"] == "52000000"
+    assert result["annual_gst_assessment"]["pending_reasons"] == ["UNRESOLVED_TURNOVER_BRIDGE"]
+    assert result["blocked"] and approval_error(result)
+
+
+def test_annual_partition_cannot_duplicate_monthly_coverage_in_the_same_registration():
+    rows = monthly_and_quarterly_rows()
+    rows["scope"].append(
+        dict(rows["scope"][0], id="duplicate-annual-scope", period_end="2026-03-31")
+    )
+    with pytest.raises(ValueError, match="Overlapping expected registration periods"):
+        compare(rows, "IN", gst_annual_scope=partitioned_scope())
 
 
 def run(amount="20000000", **changes):

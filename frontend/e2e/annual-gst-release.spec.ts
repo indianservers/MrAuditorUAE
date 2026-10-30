@@ -426,15 +426,26 @@ test("synthetic India annual GST PAN facts, pending controls, independent approv
         exact: true,
       }),
     ).toBeDisabled();
-    await reviewer
+    await reviewer.setViewportSize({ width: 2200, height: 2600 });
+    const stalePanel = reviewer
       .getByRole("heading", {
         name: "SYNTHETIC annual GST controlled result",
         exact: true,
       })
-      .locator("..")
-      .screenshot({
-        path: `${screenshots}/IN-annual-gst-withdrawn-source-stale.png`,
-      });
+      .locator("..");
+    await stalePanel.scrollIntoViewIfNeeded();
+    await expect(stalePanel).toBeInViewport({ ratio: 1 });
+    await expect(
+      reviewer.getByRole("row").filter({
+        has: reviewer.getByRole("cell", {
+          name: "29ABCDE1234F1Z5",
+          exact: true,
+        }),
+      }),
+    ).toBeInViewport({ ratio: 1 });
+    await reviewer.screenshot({
+      path: `${screenshots}/IN-annual-gst-withdrawn-source-stale.png`,
+    });
     expect(errors).toEqual([]);
   } finally {
     await context.close();

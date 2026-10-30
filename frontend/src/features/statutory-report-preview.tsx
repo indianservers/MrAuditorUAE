@@ -118,7 +118,7 @@ export function StatutoryReportPreview({
         </label>
         <p>
           {filtered.length} of {items.length} saved requirements match. Page{" "}
-          {current + 1} of {pages}. Source validation:{" "}
+          {current + 1} of {pages}. Saved source validation at generation:{" "}
           {text(coverage.source_validation)}.
         </p>
         <Button

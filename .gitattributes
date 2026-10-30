@@ -75,3 +75,7 @@ docs/phase-12/selected-result-loading-*.xml -text
 docs/phase-12/gst-annual-*.xml -text whitespace=cr-at-eol
 
 docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/*.csv text eol=lf
+
+docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/*.txt text eol=lf
+
+docs/phase-12/annual-browser-visual-*.xml -text whitespace=cr-at-eol
