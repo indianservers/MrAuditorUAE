@@ -1,0 +1,81 @@
+{
+  "owner_id": "5ea0ab68-dacd-4aba-8d4b-c61134317661",
+  "entity_id": "7caa4a01-c1a5-4a67-8425-e19194dba0cd",
+  "module": "license",
+  "source_url": "https://en.adgm.thomsonreuters.com/rulebook/companies-regulations-2020",
+  "jurisdiction": "AE",
+  "jurisdiction_scope": {
+    "entity_country": "AE",
+    "obligation_country": "AE",
+    "relationship": "domestic",
+    "applicability": "assessed_applicable",
+    "registration_reference": "SYNTHETIC-ADGM-1",
+    "assessment": "SYNTHETIC independently assessed exact DMCC entity scope"
+  },
+  "obligation_period_start": "2026-09-30",
+  "obligation_period_end": "2027-12-31",
+  "effective_from": "2025-01-01",
+  "deadline_kind": "firm_internal",
+  "rule_evidence_id": "f886739b-e95f-4770-b1fa-775dc51b22c7",
+  "fact_evidence_ids": [
+    "5d6a47dc-e606-43a6-a815-f7e803b8cf87"
+  ],
+  "entity_facts": {
+    "assessment": "SYNTHETIC original licence, company facts and auditor assessment"
+  },
+  "required_evidence": "Independent exact source versions and company facts",
+  "compliance_assessment": "pending",
+  "deadline_rule": {
+    "identifier": "SYNTHETIC-ADGM-reference-date",
+    "version": 1,
+    "effective_from": "2025-01-01",
+    "effective_to": "2030-12-31",
+    "date_basis": "specified_event",
+    "trigger": "2027-09-30",
+    "months_after": 9,
+    "month_end_policy": "preserve_month_end",
+    "timezone": "Asia/Dubai",
+    "convention": "following",
+    "rolling_calendar": {
+      "coverage_start": "2026-01-01",
+      "coverage_end": "2030-12-31",
+      "weekend_days": [
+        5,
+        6
+      ],
+      "holidays": [],
+      "independent_holiday_count": 0,
+      "assessment": "SYNTHETIC explicitly zero holidays for arithmetic testing, not a national calendar"
+    },
+    "later_of": [
+      {
+        "identifier": "SYNTHETIC-reference-end",
+        "date_basis": "specified_event",
+        "trigger": "2027-12-31",
+        "months_after": 3
+      }
+    ]
+  },
+  "adgm_guidance_evidence_id": "fc1fb2b4-4345-45b9-8b05-c7186ea119e2",
+  "calendar_evidence_id": "2e7fb8b3-09dd-4552-9f10-61ec0e8679e2",
+  "adgm_accounts_scope": {
+    "profile": "adgm-company-accounts-cr20260626-guidance20261014/1",
+    "registration": "assessed_yes",
+    "legal_form": "company",
+    "company_status_at_reference_end": "private",
+    "filing_duty": "assessed_required",
+    "duty_basis": "SYNTHETIC independently assessed s415 filing duty and exceptions; no real entity qualification",
+    "accounting_reference_start": "2026-09-30",
+    "accounting_reference_end": "2027-12-31",
+    "incorporation_date": "2026-09-30",
+    "period_classification": "first_long",
+    "period_validity": "assessed_valid",
+    "shortened_period": "assessed_no",
+    "other_authority_modifications": "assessed_none",
+    "operative_from": "2025-01-01",
+    "operative_through": "2030-12-31",
+    "assessed_on": "2028-01-31",
+    "assessment": "SYNTHETIC adopted operative window and reference period assessment; not professional qualification",
+    "first_anniversary": "2027-09-30"
+  }
+}

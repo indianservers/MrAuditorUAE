@@ -284,47 +284,16 @@ def saved_assessment(body):
 
 
 async def verify_sources(db, ctx, data, checked):
-    from fastapi import HTTPException
-    from sqlalchemy import select
+    from app.modules.grc.authority_sources import verify_original_sources
 
-    from app.modules.audit_execution.models import EvidenceVersion
-    from app.modules.lineage.storage import ObjectStore, hash_file
-
-    if data.extension_evidence_id and checked[str(data.extension_evidence_id)].kind != "evidence":
-        raise HTTPException(
-            422, "DMCC deadline extensions require original retained authority evidence"
-        )
-
-    for identifier, digest in (
-        (data.rule_evidence_id, REGULATIONS_SHA256),
-        (data.dmcc_guideline_evidence_id, GUIDELINE_SHA256),
-    ):
-        if checked[str(identifier)].kind != "evidence":
-            raise HTTPException(
-                422, "DMCC profile requires original regulation and guideline evidence"
-            )
-        version = await db.scalar(
-            select(EvidenceVersion)
-            .where(
-                EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.record_id == identifier
-            )
-            .order_by(EvidenceVersion.number.desc())
-            .limit(1)
-        )
-        if (
-            not version
-            or version.scan_status != "CLEAN"
-            or version.sha256 != digest
-            or version.media_type != "application/pdf"
-        ):
-            raise HTTPException(
-                409, "Select the exact retained original PDFs for the adopted DMCC profile version"
-            )
-        try:
-            with ObjectStore().local(version.object_key, version.object_version) as path:
-                if path.stat().st_size != version.size or hash_file(path) != digest:
-                    raise HTTPException(
-                        409, "Retained DMCC source bytes do not match the adopted profile"
-                    )
-        except (OSError, ValueError) as error:
-            raise HTTPException(409, "Retained DMCC source bytes are unavailable") from error
+    await verify_original_sources(
+        db,
+        ctx,
+        checked,
+        "DMCC",
+        [
+            (data.rule_evidence_id, REGULATIONS_SHA256),
+            (data.dmcc_guideline_evidence_id, GUIDELINE_SHA256),
+        ],
+        data.extension_evidence_id,
+    )

@@ -7,6 +7,7 @@ from typing import Annotated, Literal
 from pydantic import BeforeValidator, Field, model_validator
 
 from app.modules.audit_execution.schemas import Body, Strict
+from app.modules.grc.adgm_accounts import ADGMAccountsScope
 from app.modules.grc.deadlines import DeadlineRule, candidates
 from app.modules.grc.deadlines import calculate as calculate_deadline
 from app.modules.grc.dmcc_audit import DMCCAuditScope
@@ -543,6 +544,12 @@ class Obligation(Body):
     dmcc_guideline_evidence_id: uuid.UUID | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    adgm_accounts_scope: ADGMAccountsScope | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    adgm_guidance_evidence_id: uuid.UUID | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     extension_deadline: date | None = None
     extension_evidence_id: uuid.UUID | None = None
     entity_facts: dict[str, str] = Field(default_factory=dict, max_length=30)
@@ -665,6 +672,9 @@ class Obligation(Body):
         from app.modules.grc.dmcc_audit import validate as validate_dmcc
 
         validate_dmcc(self)
+        from app.modules.grc.adgm_accounts import validate as validate_adgm
+
+        validate_adgm(self)
         return self
 
 

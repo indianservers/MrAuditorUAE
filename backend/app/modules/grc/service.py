@@ -159,6 +159,10 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
         from app.modules.grc.dmcc_audit import verify_sources
 
         await verify_sources(db, ctx, data, checked_evidence)
+    if key == "obligation" and data.adgm_accounts_scope:
+        from app.modules.grc.adgm_accounts import verify_sources as verify_adgm_sources
+
+        await verify_adgm_sources(db, ctx, data, checked_evidence)
     if key == "obligation" and data.jurisdiction_scope:
         from app.db.models.platform import LegalEntity
 
@@ -412,6 +416,13 @@ async def validate_action(db, ctx, eid, obj, action):
             if assess(data)["issues"]:
                 raise HTTPException(
                     409, "Resolve DMCC procedure assessment issues before independent approval"
+                )
+        if key == "obligation" and data.adgm_accounts_scope and action in {"approve", "lock"}:
+            from app.modules.grc.adgm_accounts import assess as assess_adgm
+
+            if assess_adgm(data)["issues"]:
+                raise HTTPException(
+                    409, "Resolve ADGM timetable assessment issues before independent approval"
                 )
         if key == "test":
             if data.test_type in {"operating", "retest"}:

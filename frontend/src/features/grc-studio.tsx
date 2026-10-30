@@ -18,6 +18,10 @@ import {
   type DeadlineComparison,
 } from "./compliance-filing";
 import { DMCCAuditResult, type DMCCAssessment } from "./dmcc-audit-result";
+import {
+  ADGMAccountsResult,
+  type ADGMAccountsAssessment,
+} from "./adgm-accounts-result";
 import { SoDCalculation, SoDInputAssignments } from "./sod-results";
 
 export const grcAreas = [
@@ -184,6 +188,7 @@ function Panel({
       reassessment_required: boolean;
       deadline_comparison?: DeadlineComparison | null;
       dmcc_audit_assessment?: DMCCAssessment | null;
+      adgm_accounts_assessment?: ADGMAccountsAssessment | null;
     }[];
   }>(
     `${base}/compliance-calendar?record_id=${selected?.id || ""}`,
@@ -441,6 +446,14 @@ function Panel({
                   Boolean(detail.body.dmcc_audit_scope) && (
                     <DMCCAuditResult
                       assessment={checked?.dmcc_audit_assessment}
+                      available={filingVerification.state === "known"}
+                      freshness={checked?.freshness}
+                    />
+                  )}
+                {area === "obligations" &&
+                  Boolean(detail.body.adgm_accounts_scope) && (
+                    <ADGMAccountsResult
+                      assessment={checked?.adgm_accounts_assessment}
                       available={filingVerification.state === "known"}
                       freshness={checked?.freshness}
                     />

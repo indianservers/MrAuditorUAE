@@ -1,0 +1,110 @@
+{
+  "scope": "ADGM company accounts timetable over retained explicitly assessed facts; reuses common obligations, calendar arithmetic, filing controls and original-source verifier.",
+  "full_goal_complete": false,
+  "reports": [
+    {
+      "path": "docs/phase-12/adgm-all-units.xml",
+      "sha256": "fd355faca77369904cb4aafb37fc34c6933b7951f472635210409b0b3db079f6",
+      "tests": 4339,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/adgm-focused.xml",
+      "sha256": "638b19878167b18ba6b4e20a528d7caaf88893a25a9aab124fe5aa0b75849da9",
+      "tests": 231,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/adgm-frontend.xml",
+      "sha256": "a854dc3f63ef3b5e530820a8bdc1676c5aeb085d7e25870af49793c9f5838a87",
+      "tests": 478,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "static_checks": {
+    "ruff": "passed scoped changed files and GRC module",
+    "mypy": "passed 424 app source files using backend configuration",
+    "frontend_types_eslint": "passed",
+    "api_snapshots": "current",
+    "api_generated_types": "current",
+    "production_frontend_build": "passed",
+    "new_browser_discovery": "one ADGM case discovered; included in smoke configuration"
+  },
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/grc.py",
+      "sha256": "d916ddd8700bb722791b5f43335b35559cab9d40f5aaa51a0e6c64e63f66e586"
+    },
+    {
+      "path": "backend/app/modules/grc/adgm_accounts.py",
+      "sha256": "899cf05404d6e51d0e5f489d483635717033230050e5cd4faf148d8bbd3dbb0a"
+    },
+    {
+      "path": "backend/app/modules/grc/authority_sources.py",
+      "sha256": "57d28b06d8b170fa4cc5978622617c2e31e3c342edf56bd4318138abfc913f86"
+    },
+    {
+      "path": "backend/app/modules/grc/dmcc_audit.py",
+      "sha256": "4327631a7f8aa2826d6b14c238f3601c07e158dd6a7f22ca1b6201e49566f9ad"
+    },
+    {
+      "path": "backend/app/modules/grc/filing.py",
+      "sha256": "9439f53a055fcc132ddf3a5f87a8a0104b2c05e4288ea6d79059e594219f3f37"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "238488578217e70a102700d2a828a71b258d277bbbae0167addd8036c181c41c"
+    },
+    {
+      "path": "backend/app/modules/grc/service.py",
+      "sha256": "e2a4e352c9da4a862de208e35e53b8e85ffbd5f41ac6510133d0f628ddc63832"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_adgm_accounts.py",
+      "sha256": "e7f91cec6c7888c445c8230832674c3787aa6a6be4781e0f9086d46f87b4849e"
+    },
+    {
+      "path": "backend/tests/unit/test_adgm_accounts.py",
+      "sha256": "1631e1a8d8f218bae433e75d90ff3043f5405640db7fd7b15a80b1f8b76ee843"
+    },
+    {
+      "path": "frontend/e2e/adgm-accounts-release.spec.ts",
+      "sha256": "cde68439e3dd0f08be9192d2007abf2e23d73c1fc8d37f9980a7f9f4cec1b4dc"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "685b95997b5a9225fbb2413e72633a5093947ceb98d02a4c81bc13f5f3ee3da0"
+    },
+    {
+      "path": "frontend/src/features/adgm-accounts-result.tsx",
+      "sha256": "5ae767bc600c3756a60ec771526c3c8d4239b5756b3d33e520194688aaf345ac"
+    },
+    {
+      "path": "frontend/src/features/grc-studio.tsx",
+      "sha256": "c909036a48c45f4f147ec6b22b347dbbeb5cdc1978f03493d36bf4a23549e917"
+    },
+    {
+      "path": "frontend/tests/adgm-accounts-result.test.tsx",
+      "sha256": "3541f13bc82e997da8f1f6df069570fda24494f6d831c50f79a586650e284364"
+    }
+  ],
+  "verification_scope": [
+    "Original public PDF metadata and stored-object integrity; source substitution/corruption rejection.",
+    "Synthetic reference/date/period facts, private/public and long-first-period alternatives, shortening combinations, month-end and calendar adjustments, aware extension applications and limits.",
+    "Independent actual HTTP filing approval, unresolved-fact approval rejection, protected approved scope changes, unchanged body and blocked submission after original guidance/calendar withdrawal.",
+    "Malformed saved authority rules project explicit reassessment instead of timezone/date errors.",
+    "Original-source verifier refactor retains DMCC regression coverage."
+  ],
+  "limits": [
+    "Original ClamAV/queue boundaries are doubled in local API tests. The hosted browser uses real isolated workers and remains pending for this new source.",
+    "The broader backend unit and focused/API reports overlap; their pass counts must not be added as distinct cases.",
+    "Synthetic fixture counts are not independently qualified real-world client counts.",
+    "Complete country/authority reporting packs, current legal/form qualification, real-client pilots, authorized live integrations and production drills remain open."
+  ]
+}

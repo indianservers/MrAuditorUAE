@@ -154,6 +154,8 @@ async def validate_transition(db, ctx, eng, data, record_id):
             "calendar_evidence_id",
             "dmcc_audit_scope",
             "dmcc_guideline_evidence_id",
+            "adgm_accounts_scope",
+            "adgm_guidance_evidence_id",
             "fact_evidence_ids",
             "extension_deadline",
             "extension_evidence_id",

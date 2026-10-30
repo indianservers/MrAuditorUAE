@@ -1,0 +1,69 @@
+{
+  "profile": "adgm-company-accounts-cr20260626-guidance20261014/1",
+  "reviewed_on": "2026-10-31",
+  "primary_source": "https://en.adgm.thomsonreuters.com/sites/default/files/net_file_store/ADGM1547_20963_VER20260626.pdf",
+  "guidance_source": "https://assets.adgm.com/download/assets/20261014+ADGM+Annual+Accounts+Guidance.pdf/30a374e65ada11ef92bcda675695d30e",
+  "complete_relevant_pages_inspected": {
+    "companies_regulations": [
+      230,
+      231,
+      252,
+      253
+    ],
+    "guidance": [
+      8,
+      34,
+      35,
+      36
+    ]
+  },
+  "operative_version": "Adopted window must be independently assessed; neither document filename nor retrieval date establishes commencement or entity applicability.",
+  "scope": [
+    "Company filing timetable under assessed section 415 duty/exemptions, section 416 triggers and section 417 month-end rules.",
+    "Private/public status is assessed immediately before reference period end. Accounting reference and accounts periods remain separate.",
+    "Long first period compares anniversary plus nine/six months with reference end plus three. Shortening adds its notice candidate.",
+    "Following-day adjustment needs its separately retained complete calendar. No national holidays are invented.",
+    "An extension needs a timezone-aware application timestamp and separate original authority outcome; latest permitted date is bounded by the adopted three-month and twelve-month limits. No ORS execution occurs."
+  ],
+  "qualification_limits": [
+    "No full review of the 633-page regulations, all operative amendments, audit exemptions, required report content, QFZP, ESG or all legal forms.",
+    "Filing duty/exemptions and period validity are explicit independent assessments, not automatically established legal conclusions.",
+    "LLPs, foundations, foreign branches, unresolved modifications, leap-day incorporation anniversaries and distinct notice/receipt dates require separate qualification.",
+    "Original PDFs must be uploaded as separate evidence and independently reviewed in each actual engagement; repository possession alone is insufficient.",
+    "The new UI/browser workflow has not yet executed in hosted CI.",
+    "Section 381 validity, prior alterations, administration and Registrar directions remain retained independent period-validity assessments. First financial year must start at incorporation; inclusive six/twelve/eighteen-month boundaries have explicit fixtures."
+  ],
+  "files": [
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-companies-consolidated-ver20260626.pdf",
+      "sha256": "8aae2ffcfa9cdc927894ad82e41e08e3eba235092c63d4a64a3349e0268249f0",
+      "size_bytes": 3568746
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-annual-accounts-v2-20261014.pdf",
+      "sha256": "aa34c1cf43afd0b4a281750f072b55bf177f48ed361f86bb6c614bf9204745af",
+      "size_bytes": 515781
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-page-8.png",
+      "sha256": "35fa72216a1111182f85a7622f6374c31be7830c2a16d89309b4d0b411464112",
+      "size_bytes": 304607
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-230.png",
+      "sha256": "68bdab8ec57eaef2ac29b4676b87ac6fbd85fcc3b4ae36dbb11199a38d1f8ee9",
+      "size_bytes": 260626
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-231.png",
+      "sha256": "8b305f75b3b87ceb3c9412d065f2173df2b8c2e241b4ba0f0d41a7aa9ea02709",
+      "size_bytes": 235209
+    }
+  ],
+  "working_week_source": {
+    "url": "https://www.adgm.com/media/announcements/adgm-aligns-with-international-financial-hubs-and-global-economies-on-monday-to-friday-work-week",
+    "published_on": "2021-12-27",
+    "retrieved_on": "2026-10-31",
+    "assessment": "Official ADGM announcement specifies Monday-Friday working week and Saturday/Sunday weekend from 2022-01-01. This does not establish the complete holiday calendar; that remains separate retained original evidence."
+  }
+}

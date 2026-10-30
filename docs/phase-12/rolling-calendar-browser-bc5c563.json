@@ -1,0 +1,139 @@
+{
+  "source_commit": "bc5c56395822ccb9aca38cc112ec9737b99069d7",
+  "run_id": 41121052978,
+  "job_id": 124287262046,
+  "job_conclusion": "failure",
+  "suite_passed": 12,
+  "suite_failed": 1,
+  "suite_duration": "6.7m",
+  "target_case": "explicit UAE and India business-day calendars, independent filing and replacement staleness",
+  "target_case_conclusion": "passed",
+  "target_case_duration": "22.7s",
+  "unrelated_failure": {
+    "case": "synthetic IN report coverage, separate reviewer and generated draft",
+    "error": "apiRequestContext.post: read ECONNRESET",
+    "location": "frontend/e2e/country-report-release.spec.ts:960",
+    "interpretation": "Observed connection reset; its underlying cause is not established and this suite is not all green."
+  },
+  "artifact": {
+    "id": 13008378722,
+    "size_bytes": 15712317,
+    "sha256": "b3cd566feed751beb27ca85bedcd3e83e971c81708650635610466a1d9e7c285"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-reviewed-bc5c563.png",
+      "size_bytes": 281921,
+      "sha256": "d3d5f11c0e284245a81e00a6d280c832293f205b92dc6a3c7654ee5fa3ff5aa4",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-SYN-notice-candidate-bc5c563.png",
+      "size_bytes": 8651,
+      "sha256": "64c3ea94c49107a4fb9fe1d52edbb986a7e266d9c5be5d4e099b548564c55fff",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-SYN-period-candidate-bc5c563.png",
+      "size_bytes": 9075,
+      "sha256": "178f4c341c3eb1d4871837c45d049155738f1a195f360a18f4944b6bac19424b",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-rolling-calendar-bc5c563.png",
+      "size_bytes": 26240,
+      "sha256": "c85efe11fa0338313672ab809f737d044abe78cdc143a12fc71b1c4b01875e6b",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-reviewed-actions-bc5c563.png",
+      "size_bytes": 289895,
+      "sha256": "1a6898257cfd6613ae67e41c099a1b953e635aa20afb2384834db917a61bc3d0",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-calendar-withdrawn-stale-bc5c563.png",
+      "size_bytes": 281921,
+      "sha256": "d3d5f11c0e284245a81e00a6d280c832293f205b92dc6a3c7654ee5fa3ff5aa4",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-calendar-withdrawn-stale-actions-bc5c563.png",
+      "size_bytes": 294217,
+      "sha256": "0558dee99a3ba8339d5d26bbbc85f1fa973049d54e047d3e727e78a4aeca2a71",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-reviewed-bc5c563.png",
+      "size_bytes": 280807,
+      "sha256": "ddee7856d7defee8332858c0cf66c2ce2aa237fdddd03a48daf3583f908cd137",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-SYN-notice-candidate-bc5c563.png",
+      "size_bytes": 8651,
+      "sha256": "d829cbea09c82040d79819f7b6f41b447224bb9055905ca3787fb55324f2c2a5",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-SYN-period-candidate-bc5c563.png",
+      "size_bytes": 9076,
+      "sha256": "f607d976a9262ff81eea7981953a984576908fcd0570f9253dc83ea15a892cb2",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-rolling-calendar-bc5c563.png",
+      "size_bytes": 25905,
+      "sha256": "a21de2b4a367510f93b11ad93425d228d3ff2d3e18897371ec83b80a8d190afb",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-reviewed-actions-bc5c563.png",
+      "size_bytes": 288489,
+      "sha256": "05b31572394ef043109a1c7920adb5c7216535788c4ee4c016025e8d38a79bd2",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-calendar-withdrawn-stale-bc5c563.png",
+      "size_bytes": 280802,
+      "sha256": "49c76c868c1225d03ae221982f79aa02b36b346b80cfd86854087920af98c331",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-calendar-withdrawn-stale-actions-bc5c563.png",
+      "size_bytes": 292845,
+      "sha256": "47099d890a042c5a8315223b2b0fe032bf0050cd1843e751d8a4fdc3c030549a",
+      "visually_inspected": true
+    }
+  ],
+  "verified_scope": [
+    "Target workflow passed with original calendar scans, independent evidence and filing approvals for both countries.",
+    "The raw selected month-end is March 31 2027; separately reviewed fictional holiday on that date produces April 1 after following adjustment.",
+    "Both expanded calendar captures show March 1 through April 30 coverage, Saturday/Sunday exclusions, one controlled fictional holiday and the original calendar record reference.",
+    "Action captures show CURRENT before withdrawal, then STALE, unchanged historical body and disabled filing with a supplied synthetic receipt after the calendar source is reopened."
+  ],
+  "limits": [
+    "Viewport summaries cover the header/upper area; separate bounded candidate, calendar and action captures supply the remaining regions.",
+    "This source predates the ADGM authority timetable profile.",
+    "Full backend job was still live when recording; passing target case is not a passing whole browser job.",
+    "Synthetic workflow verification is not national holiday, real-client or legal/professional qualification."
+  ],
+  "source_files": [
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "00d972577f931749362eb414debf6f6bfcab24b2d8c802296737f474eb385390"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "3fd82d85a1a21a452e5b492805fd7105d103d9966b2ac83d9d339c6fbdd84ab8"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "8742c020bf231f3305323552db990146b869331970b6478474d6c725a1d6d703"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "7b0fb708e6ca3b3ab55b53be7521bb8f65dc6288e1f828b2b06d69102071307b"
+    }
+  ]
+}

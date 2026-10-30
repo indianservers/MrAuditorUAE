@@ -1,0 +1,100 @@
+{
+  "source_commit": "bef1c3cfda6e9d7d4bebdfce590e752dd2cd5cea",
+  "run_id": 41118666198,
+  "job_id": 124279412286,
+  "job_conclusion": "success",
+  "suite_passed": 13,
+  "suite_failed": 0,
+  "suite_duration": "9.1m",
+  "business_calendar_comparison_duration": "26.0s",
+  "artifact": {
+    "id": 13007273303,
+    "size_bytes": 18346995,
+    "sha256": "8a2c48d14fdc69626eac8f6ffb161ac8e6308dc2e77e9971806ebb630aefd015"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-reviewed-bef1c3c.png",
+      "size_bytes": 281969,
+      "sha256": "af8fab16937ed5aec9e8f01f42db5eacbc9fc17f1c7a47275c2647c8c9eccc05",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-SYN-notice-candidate-bef1c3c.png",
+      "size_bytes": 8650,
+      "sha256": "9c4df2612960fdba525cb998c05ea223644a2f197fc6a59bbcb517ac1f5235c0",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-SYN-period-candidate-bef1c3c.png",
+      "size_bytes": 9076,
+      "sha256": "f607d976a9262ff81eea7981953a984576908fcd0570f9253dc83ea15a892cb2",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-reviewed-actions-bef1c3c.png",
+      "size_bytes": 277674,
+      "sha256": "a31f4676a1aee2178d31380e219fc97696c85cbd6fea8d2f5fa78a4fca294ca0",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-facts-withdrawn-stale-bef1c3c.png",
+      "size_bytes": 281965,
+      "sha256": "6bcd5f3bc1db69d530f516fcac83b87610ea1becf4949ef104183bda1c377049",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-facts-withdrawn-stale-actions-bef1c3c.png",
+      "size_bytes": 281510,
+      "sha256": "806023db9088e0ea52ab4f726f0f8f4bd7c33762c6513ea354650edd14755bd4",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-reviewed-bef1c3c.png",
+      "size_bytes": 280606,
+      "sha256": "c081be1b045cdb1c2727f79d2e6ac65f2bb887e9f1a442f454f7d5bcf4d8f818",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-SYN-notice-candidate-bef1c3c.png",
+      "size_bytes": 8650,
+      "sha256": "9c4df2612960fdba525cb998c05ea223644a2f197fc6a59bbcb517ac1f5235c0",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-SYN-period-candidate-bef1c3c.png",
+      "size_bytes": 9076,
+      "sha256": "f607d976a9262ff81eea7981953a984576908fcd0570f9253dc83ea15a892cb2",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-reviewed-actions-bef1c3c.png",
+      "size_bytes": 276448,
+      "sha256": "652d6a52aee00fbeb8e670f1d9479e9526ec08c3ca155bbc2410fa2d697fc835",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-facts-withdrawn-stale-bef1c3c.png",
+      "size_bytes": 280604,
+      "sha256": "046202b6928344b79b0348ec618bcdf892c158029f9550bac877398be3303bfc",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-facts-withdrawn-stale-actions-bef1c3c.png",
+      "size_bytes": 280420,
+      "sha256": "5fefe8d31d9aafe3b37a8e2812f622f05602e979c4de32ab134e48a9c5d11cf3",
+      "visually_inspected": true
+    }
+  ],
+  "visual_findings": [
+    "Both countries show explicit month-end preservation and the 2027-03-31 saved deadline in their summary viewports.",
+    "Complete separate candidate captures show June 1 plus one month as July 1 2026 and selected June 30 plus nine months as March 31 2027.",
+    "Separate action viewports show CURRENT before withdrawal, then STALE and disabled filing with a populated synthetic receipt after fact withdrawal.",
+    "Summary captures intentionally show the upper portion and clip lower candidate/action content; separate card and action captures supply those regions. Neither summary alone is claimed as full-panel proof."
+  ],
+  "limits": [
+    "This source predates rolling calendars and the ADGM company timetable.",
+    "Its full backend job was still live at the time of recording.",
+    "Synthetic workflow/screenshots do not establish real-client or professional qualification."
+  ]
+}

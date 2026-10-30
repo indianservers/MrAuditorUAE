@@ -205,3 +205,5 @@ docs/country-workflows/sample-inputs/SYNTHETIC-dated-form143/SYNTHETIC-explicit-
 docs/phase-12/rolling-calendar-*.xml -text whitespace=cr-at-eol
 docs/phase-12/f5e0fac-hosted-full.xml -text whitespace=cr-at-eol
 docs/phase-12/f5e0fac-hosted-coverage.json -text
+
+docs/phase-12/adgm-*.xml -text whitespace=cr-at-eol
