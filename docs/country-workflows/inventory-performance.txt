@@ -57,3 +57,14 @@ debit/credit semantics still require the existing source mapping and independent
 controls; TB arithmetic is not transaction-level audit evidence. UAE/India legal
 and professional reporting packs remain separate. Real-client pilot qualification
 and the full original roadmap remain open. Authored fixtures are synthetic only.
+
+Hosted browser release case: frontend/e2e/inventory-performance-release.spec.ts.
+It runs UAE then India using actual BFF authentication, controlled GL imports,
+the stock/GP form and independent review. Each period selects 21 stock accounts
+plus revenue and cost-of-sales accounts (46 complete lineage rows), then checks
+the last page, all XLSX rows and stale unchanged history after prior supersession.
+Nonzero opening revenue/cost balances test that GP uses period movements.
+Four reviewed/stale screenshots are captured. The test is registered in release
+smoke; local TypeScript, scoped lint and discovery passed. Hosted execution and
+visual inspection require the resulting run and original artifacts; adding the
+test is not a passed-browser claim.
