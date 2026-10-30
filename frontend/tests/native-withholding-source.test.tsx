@@ -132,6 +132,68 @@ describe("dated salary source", () => {
   });
 });
 
+describe("historical salary source", () => {
+  it("retains component tax and employee reference without a fabricated rate", () => {
+    render(
+      <NativeWithholdingLinks
+        rows={[
+          {
+            recorded_employee_reference: "001",
+            recorded_deposit_date: "2018-12-14",
+            income_tax: "1000.00",
+            surcharge: "0.00",
+            cess: "0.00",
+          },
+        ]}
+      />,
+    );
+    const table = screen.getByRole("table", {
+      name: "Native withholding party links",
+    });
+    expect(
+      within(table).getByRole("columnheader", { name: "income tax" }),
+    ).toBeVisible();
+    expect(
+      within(table).getByRole("columnheader", {
+        name: "recorded employee reference",
+      }),
+    ).toBeVisible();
+    expect(within(table).getByText("001")).toBeVisible();
+    expect(
+      within(table).queryByRole("columnheader", { name: "recorded rate" }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(table).queryByRole("columnheader", {
+        name: "recorded deposited flag",
+      }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Form 138 salary dates/)).not.toBeInTheDocument();
+  });
+  it("uses historical controls and requires a separate Q4 salary format", () => {
+    expect(nativeWithholdingPayload(value, "24Q", "1")).toMatchObject({
+      financial_year: "202021",
+      income_tax: "100",
+    });
+    expect(() =>
+      nativeWithholdingPayload({ ...value, quarter: "Q4" }, "24Q", "1"),
+    ).toThrow(/annual salary/);
+    render(
+      <NativeWithholdingSource
+        value={value}
+        onChange={vi.fn()}
+        form="24Q"
+        documents={[]}
+      />,
+    );
+    expect(
+      screen.queryByRole("option", { name: "Q4" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByLabelText("Native financial year (six digits)"),
+    ).toHaveValue("202021");
+  });
+});
+
 describe("native withholding controls", () => {
   it("separates dated Form 143 controls from legacy component and financial-year inputs", () => {
     const dated = {

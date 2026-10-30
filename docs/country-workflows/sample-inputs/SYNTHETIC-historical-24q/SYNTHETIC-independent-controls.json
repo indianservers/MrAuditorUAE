@@ -1,0 +1,29 @@
+{
+  "tan": "MUMN77777A",
+  "financial_year": "201819",
+  "quarter": "Q3",
+  "observed_on": "2026-10-31",
+  "batch_count": 1,
+  "challan_count": 1,
+  "party_count": 1,
+  "income_tax": "1000",
+  "surcharge": "0",
+  "cess": "0",
+  "allocated_deposit": "1000",
+  "challan_deposit": "1000",
+  "payment_base": "10000",
+  "record_status": "current",
+  "crosswalk_document_version_id": "00000000-0000-4000-8000-000000000024",
+  "assessment": "SYNTHETIC independent controls and transaction crosswalk for the unchanged public salary sample; no client or filing qualification",
+  "groups": [
+    {
+      "transaction_reference": "SYN-SALARY-LEGACY-1",
+      "transaction_date": "2018-12-16",
+      "period": "2018-12",
+      "rule_reference": "SYN-ASSESSED-SALARY-LEGACY",
+      "party_records": [
+        "1/1/1"
+      ]
+    }
+  ]
+}

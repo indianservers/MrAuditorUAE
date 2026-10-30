@@ -1802,6 +1802,7 @@ export function CountryWorkflows({
                 "india-26q-regular-v7.8",
                 "india-27eq-regular-v6.9",
                 "india-27q-regular-v7.5",
+                "india-24q-regular-q1q3-v6.3",
                 "india-form143-regular-20260722-v1.1",
                 "india-form138-regular-20260722-v1.1",
               ].includes(sourceFormat)
@@ -1817,11 +1818,13 @@ export function CountryWorkflows({
                           ? "138"
                           : sourceFormat.includes("form143")
                             ? "143"
-                            : sourceFormat.includes("27eq")
-                              ? "27EQ"
-                              : sourceFormat.includes("27q")
-                                ? "27Q"
-                                : "26Q",
+                            : sourceFormat.includes("24q")
+                              ? "24Q"
+                              : sourceFormat.includes("27eq")
+                                ? "27EQ"
+                                : sourceFormat.includes("27q")
+                                  ? "27Q"
+                                  : "26Q",
                         expectedRows,
                       ),
                   }
@@ -2865,6 +2868,7 @@ export function CountryWorkflows({
                     "india-26q-regular-v7.8",
                     "india-27eq-regular-v6.9",
                     "india-27q-regular-v7.5",
+                    "india-24q-regular-q1q3-v6.3",
                     "india-form143-regular-20260722-v1.1",
                     "india-form138-regular-20260722-v1.1",
                   ].includes(sourceFormat) && (
@@ -2876,11 +2880,13 @@ export function CountryWorkflows({
                           ? "138"
                           : sourceFormat.includes("form143")
                             ? "143"
-                            : sourceFormat.includes("27eq")
-                              ? "27EQ"
-                              : sourceFormat.includes("27q")
-                                ? "27Q"
-                                : "26Q"
+                            : sourceFormat.includes("24q")
+                              ? "24Q"
+                              : sourceFormat.includes("27eq")
+                                ? "27EQ"
+                                : sourceFormat.includes("27q")
+                                  ? "27Q"
+                                  : "26Q"
                       }
                       documents={(inputs.data?.evidence || []).filter(
                         (doc) =>

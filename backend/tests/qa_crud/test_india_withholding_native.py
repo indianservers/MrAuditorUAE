@@ -12,6 +12,7 @@ from tests.phase4.test_workflows import actor, create, grant
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute
 from tests.qa_crud.test_country_workflows import source as csv_source
 from tests.qa_crud.test_india_ecr_source import india_context
+from tests.unit.test_india_24q_native import controls24, options24, original24
 from tests.unit.test_india_27q_native import controls27, options27, original27
 from tests.unit.test_india_form138_native import controls138, options138, original138, synthetic138
 from tests.unit.test_india_form143_native import controls143, options143, original143, synthetic143
@@ -25,6 +26,8 @@ pytestmark = pytest.mark.skipif(
 
 
 def controls(form="26Q"):
+    if form == "24Q":
+        return controls24()
     if form == "138":
         return controls138()
     if form == "143":
@@ -33,6 +36,8 @@ def controls(form="26Q"):
 
 
 def options(form="26Q", **changes):
+    if form == "24Q":
+        return options24(**changes)
     if form == "138":
         if "native_withholding_controls" in changes:
             changes["form138_controls"] = changes.pop("native_withholding_controls")
@@ -45,6 +50,8 @@ def options(form="26Q", **changes):
 
 
 def original(form="26Q"):
+    if form == "24Q":
+        return original24()
     if form == "138":
         return synthetic138()
     if form == "143":
@@ -119,7 +126,7 @@ async def test_dated_form143_source_cannot_create_a_result_from_missing_or_unver
     assert job["result_id"] is None
 
 
-@pytest.mark.parametrize("form", ["26Q", "27EQ", "27Q", "143", "138"])
+@pytest.mark.parametrize("form", ["26Q", "27EQ", "27Q", "143", "138", "24Q"])
 async def test_native_regular_statement_with_crosswalk_retains_complete_reported_observations(
     environment, monkeypatch, form
 ):
@@ -182,6 +189,9 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         assert records[0]["recorded_deposited_flag"] == "Y"
         assert records[0]["recorded_section202_opt_out"] == "N"
         assert "income_tax" not in records[0] and metadata["workbook_version"] == "1.1"
+    if form == "24Q":
+        assert records[0]["recorded_deposit_date"] == "2018-12-14"
+        assert records[0]["income_tax"] == "1000.00" and "recorded_rate" not in records[0]
     if form == "138":
         assert [r["recorded_deposit_date"] for r in records] == ["2026-05-09"] * 2
         assert [r["recorded_deposited_flag"] for r in records] == ["Y"] * 2
@@ -196,7 +206,9 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
     assert len(challans) == 2
     declared_challan = dict(zip(challans[0], challans[1], strict=True))
     assert declared_challan["bsr_or_form24g_reference"] == (
-        "2000090"
+        "0000412"
+        if form == "24Q"
+        else "2000090"
         if form == "138"
         else "5000032"
         if form == "143"
@@ -232,7 +244,9 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
     )
     selected = {"reported": reviewed["id"]}
     expected_amounts = (
-        ["2000", "2000"]
+        ["1000"]
+        if form == "24Q"
+        else ["2000", "2000"]
         if form == "138"
         else ["700"]
         if form == "143"
@@ -243,7 +257,9 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         else ["100"] * 10
     )
     month = (
-        "2026-05"
+        "2018-12"
+        if form == "24Q"
+        else "2026-05"
         if form in {"143", "138"}
         else "2020-04"
         if form == "26Q"
@@ -252,7 +268,9 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         else "2020-10"
     )
     due = (
-        "2026-06-07"
+        "2019-01-07"
+        if form == "24Q"
+        else "2026-06-07"
         if form in {"143", "138"}
         else "2020-05-07"
         if form == "26Q"
@@ -261,7 +279,9 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         else "2020-11-07"
     )
     paid = (
-        "2026-06-01"
+        "2019-01-01"
+        if form == "24Q"
+        else "2026-06-01"
         if form in {"143", "138"}
         else "2020-05-01"
         if form == "26Q"
@@ -283,29 +303,45 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
                 else "AAAPA1234A",
                 "legal_role": "collector" if form in {"27EQ", "143"} else "deductor",
                 "tax_kind": "TCS" if form in {"27EQ", "143"} else "TDS",
-                "rule_reference": "SYN-ASSESSED-SALARY"
+                "rule_reference": "SYN-ASSESSED-SALARY-LEGACY"
+                if form == "24Q"
+                else "SYN-ASSESSED-SALARY"
                 if form == "138"
                 else "SYN-NR-ASSESSED-SECTION"
                 if form == "27Q"
                 else "SYN-ASSESSED-SECTION",
-                "tax_year_start": "2026-04-01"
+                "tax_year_start": "2018-04-01"
+                if form == "24Q"
+                else "2026-04-01"
                 if form in {"143", "138"}
                 else "2019-04-01"
                 if form == "27Q"
                 else "2020-04-01",
-                "tax_year_end": "2027-03-31"
+                "tax_year_end": "2019-03-31"
+                if form == "24Q"
+                else "2027-03-31"
                 if form in {"143", "138"}
                 else "2020-03-31"
                 if form == "27Q"
                 else "2021-03-31",
                 "period": month,
-                "transaction_reference": f"SYN-SALARY-{i}"
+                "transaction_reference": f"SYN-SALARY-LEGACY-{i}"
+                if form == "24Q"
+                else f"SYN-SALARY-{i}"
                 if form == "138"
                 else f"SYN-NR-{i}"
                 if form == "27Q"
                 else f"SYN-ASSESSMENT-{i}",
                 "transaction_date": month
-                + ("-06" if form == "138" else "-10" if form == "27Q" else "-01"),
+                + (
+                    "-16"
+                    if form == "24Q"
+                    else "-06"
+                    if form == "138"
+                    else "-10"
+                    if form == "27Q"
+                    else "-01"
+                ),
                 "currency": "INR",
                 "amount": amount,
                 "record_status": "current",
@@ -316,12 +352,16 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
                 **(
                     {
                         "assessment_kind": "rule",
-                        "assessment_period_start": "2026-04-01"
+                        "assessment_period_start": "2018-04-01"
+                        if form == "24Q"
+                        else "2026-04-01"
                         if form in {"143", "138"}
                         else "2019-04-01"
                         if form == "27Q"
                         else "2020-04-01",
-                        "assessment_period_end": "2027-03-31"
+                        "assessment_period_end": "2019-03-31"
+                        if form == "24Q"
+                        else "2027-03-31"
                         if form in {"143", "138"}
                         else "2020-03-31"
                         if form == "27Q"

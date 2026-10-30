@@ -962,6 +962,9 @@ def render(event, format):
                         if f not in {"income_tax", "surcharge", "cess", "recorded_rate"}
                     ]
                     native_fields += ["recorded_deposited_flag", "recorded_deposit_date"]
+                if body["native_metadata"].get("form") == "24Q":
+                    native_fields = [f for f in native_fields if f != "recorded_rate"]
+                    native_fields += ["recorded_employee_reference", "recorded_deposit_date"]
                 append(native_links, native_fields)
                 for link in body["native_metadata"]["party_links"]:
                     append(native_links, [link.get(field) for field in native_fields])

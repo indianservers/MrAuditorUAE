@@ -169,7 +169,6 @@ def test_salary_observations_reuse_the_reported_only_withholding_contract():
         (4, 27, "", "dates"),
         (4, 29, "0905202", "ddmmyyyy"),
         (4, 29, "31022026", "calendar"),
-        (4, 29, "01052026", "precedes"),
         (4, 29, "09112026", "cutoff"),
         (4, 32, "B", "reason"),
         (4, 33, "bad", "certificate"),
@@ -295,3 +294,10 @@ def test_zero_deduction_preserves_a_real_zero_and_requires_absent_tax_dates():
 def test_original_encoding_and_record_boundaries_are_not_repaired(mutate):
     with pytest.raises(ValueError):
         parse(mutate(synthetic138()))
+
+
+def test_recorded_deposit_may_precede_deduction_without_inferred_payment_legality():
+    result = parse(edit(synthetic138(), 4, 29, "01052026"))
+    link = result["native_metadata"]["party_links"][0]
+    assert link["recorded_deposit_date"] == "2026-05-01" and link["native_tax_date"] == "2026-05-06"
+    assert result["native_metadata"]["bank_payment_or_tax_credit"] == "NOT_EVIDENCED"

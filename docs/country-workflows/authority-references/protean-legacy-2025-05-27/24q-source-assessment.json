@@ -1,0 +1,70 @@
+{
+  "checked_on": "2026-10-31",
+  "authority_page": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+  "profile": "india-24q-regular-q1q3-v6.3",
+  "originals": [
+    {
+      "filename": "protean-24Q-Q1Q3-6.3.xls",
+      "source": "https://tinpan.proteantech.in/downloads/e-tds/File_Format_24Q_Regular_Q1_to_Q3_Version_6.3_27052025_201011.xls",
+      "size_bytes": 102912,
+      "sha256": "669d4f4395dd0a9f55a195e62bf5896f63520c84d2ef042432db22789eee5062"
+    },
+    {
+      "filename": "protean-24Q-Q4-7.5.xls",
+      "source": "https://tinpan.proteantech.in/downloads/e-tds/File_Format_24Q_Regular_Q4_Version_7.5_27052025_201112.xls",
+      "size_bytes": 191488,
+      "sha256": "085268dd1be1685ba23e6aa147bed7cedf114a635463c4ca6e917062eed9706f"
+    },
+    {
+      "filename": "protean-24Q-Q3-original-sample.zip",
+      "source": "https://tinpan.proteantech.in/downloads/e-tds/download/uat/24QQ3_Sample.zip",
+      "size_bytes": 417,
+      "sha256": "ba90fef59240141b6df1f3f115c8ed2a0801c7710c217a39c0a19ec3479e6bd2"
+    },
+    {
+      "filename": "protean-24Q-Q4-original-sample.zip",
+      "source": "https://tinpan.proteantech.in/downloads/e-tds/24QQ4.zip",
+      "size_bytes": 13983,
+      "sha256": "cc4645f85a1fb6ebbdf34bee85b39cde2a223a9dda1efaae874a491cea44f2b0"
+    },
+    {
+      "filename": "protean-24Q-Q3-original-sample.txt",
+      "source": "Unchanged member 24QRQ3.txt",
+      "size_bytes": 653,
+      "sha256": "2702ded4f56fa1fdfbb566674eeb7bb558a8e29b8fe663a255dce0e5308ecc56"
+    },
+    {
+      "filename": "protean-24Q-Q4-original-sample.txt",
+      "source": "Unchanged member 24QQ4/24QRQ4.txt",
+      "size_bytes": 1974,
+      "sha256": "fdd5ff87074908be4f17128c1da6798b16269441d8a55470f7d61e8819a7724c"
+    }
+  ],
+  "q1q3_sheet": "File Format_R",
+  "q1q3_numbered_widths": {
+    "FH": 18,
+    "BH": 72,
+    "CD": 41,
+    "DD": 54
+  },
+  "q4_sheet": "File Format",
+  "q4_numbered_widths": {
+    "FH": 18,
+    "BH": 72,
+    "CD": 41,
+    "DD": 54,
+    "SD": 88,
+    "S16": 8,
+    "C6A": 10,
+    "94P": 28,
+    "P16": 8,
+    "P6A": 10
+  },
+  "observed_differences": [
+    "General FH16 example differs from numbered FH18 and original samples.",
+    "Q4 public sample has BH70, DD48 and SD80, unlike numbered v7.5 BH72, DD54 and SD88; it is not silently repaired or used as a valid v7.5 oracle.",
+    "Q4 ZIP contains a Thumbs.db member; only the exact named text member was read, without extracting unrelated members.",
+    "Original Q3 sample records deposit 2018-12-14 before deduction 2018-12-16. The observed-date import preserves this without inferring payment legality."
+  ],
+  "qualification": "Historical regular Q1-Q3 observations only. Q4 annual detail populations, conditional eligibility, tax calculation, FVU/CSI, portal filing and real payment/credit evidence remain separate. Form138 is separate from historical24Q."
+}

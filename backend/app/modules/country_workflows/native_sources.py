@@ -40,6 +40,14 @@ FORMATS: list[dict[str, Any]] = [
         "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
     },
     {
+        "id": "india-24q-regular-q1q3-v6.3",
+        "label": "India historical 24Q salary regular Q1–Q3 v6.3",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "Historical FY2010–11 through FY2025–26 Q1–Q3 salary TDS observations with separate original employee references and deposit dates. Q4 annual salary records, successor Form138, calculations, FVU/CSI and bank or filing proof are separate.",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
         "id": "india-27q-regular-v7.5",
         "label": "India historical 27Q nonresident regular statement v7.5",
         "countries": ["IN"],
@@ -743,6 +751,7 @@ def parse_native(content, data, country, filename):
                 "india-26q-regular-v7.8",
                 "india-27eq-regular-v6.9",
                 "india-27q-regular-v7.5",
+                "india-24q-regular-q1q3-v6.3",
             }:
                 from app.modules.country_workflows.india_withholding_native import parse_regular
 
@@ -838,6 +847,7 @@ def parse_native(content, data, country, filename):
             "india-26q-regular-v7.8",
             "india-27eq-regular-v6.9",
             "india-27q-regular-v7.5",
+            "india-24q-regular-q1q3-v6.3",
             "india-form143-regular-20260722-v1.1",
             "india-form138-regular-20260722-v1.1",
         }
@@ -881,6 +891,7 @@ def parse_native(content, data, country, filename):
                 "india-26q-regular-v7.8",
                 "india-27eq-regular-v6.9",
                 "india-27q-regular-v7.5",
+                "india-24q-regular-q1q3-v6.3",
                 "india-form143-regular-20260722-v1.1",
                 "india-form138-regular-20260722-v1.1",
             }

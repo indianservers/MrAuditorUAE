@@ -1,0 +1,39 @@
+{
+  "profile": "india-24q-regular-q1q3-v6.3",
+  "reports": [
+    {
+      "path": "docs/phase-12/24q-all-units.xml",
+      "sha256": "539a9451df4c2e076ccc977f43c9707c8aafa8ad4f6e214afec41f835cdf9e6f",
+      "cases": 4505,
+      "passed": 4501,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/24q-focused.xml",
+      "sha256": "843599194dded6ec4c5395b599fbcd50a8c882f33c9a0295b059ab1e6b6a07d9",
+      "cases": 117,
+      "passed": 117,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/24q-frontend.xml",
+      "sha256": "25f762d35f921c541cf50f096afab158fa704ccf5408f407ef6f89d5f91b8e89",
+      "cases": 487,
+      "passed": 487,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "mypy: all 426 application files passed",
+    "Ruff: nine changed Python files passed lint and formatting",
+    "Frontend TypeScript, changed-file ESLint and production build passed",
+    "API/intelligence contract snapshots match current runtime models"
+  ],
+  "scope": [
+    "Full unit report passed 4501 cases and skipped four before two further employee-grouping tests were added; final focused report includes both new tests. Reports overlap and counts are not additive.",
+    "117 focused tests include 100 salary unit cases plus 17 HTTP integration cases across six native profiles, including full review/export/comparison/crosswalk staleness. HTTP scanner and queue boundaries use test doubles in an owned disposable database.",
+    "487 frontend tests passed across 84 files.",
+    "Source8bec27b real browser passed 14 cases; retained screenshots and its source-specific receipt are separate. Expanded historical24Q browser path is authored and statically checked but awaits hosted execution.",
+    "No Q4 annual annexure, FVU/CSI, complete tax/cohort qualification, actual bank payment, filing or real client pilot is established."
+  ]
+}

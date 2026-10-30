@@ -1,0 +1,36 @@
+{
+  "source_commit": "8bec27b297055d7bbd3fed407a1c6285da4d66dd",
+  "run_id": 41133085858,
+  "job_id": 124328729782,
+  "job_conclusion": "success",
+  "suite_passed": 14,
+  "suite_failed": 0,
+  "suite_duration": "6.0m",
+  "target_case": "India historical native samples and explicit dated Form 138/143 fixtures, controlled forms, full lineage and crosswalk staleness",
+  "target_case_duration": "22.8s",
+  "artifact": {
+    "id": 13013749569,
+    "size_bytes": 19640835,
+    "sha256": "3d90bcb67085f0ed6b3fb6d324b011ea6fd33abf47e602a5d51189567bdacaee"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/IN-138-native-crosswalk-superseded-stale-8bec27b.png",
+      "size_bytes": 138377,
+      "sha256": "568c949185e80d5c61c42d393f93f47628d50eaa429a2fb6e3168f20099bd275",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-138-native-regular-reviewed-8bec27b.png",
+      "size_bytes": 141317,
+      "sha256": "5f242691697edb62400271fe3a22cfc871172a913bea031593472d274ec5508b",
+      "visually_inspected": true
+    }
+  ],
+  "visual_review": "Two original captures inspected: current separately reviewed two-employee salary observations and challan components, then unchanged stale history and disabled independent approval after crosswalk replacement. Captured tables fit visibly; folded source-control details were not visually inspected in these captures.",
+  "limits": [
+    "Fictional assessed controls and separately labelled completion; original conflicted public sample remains unchanged. No real client, legal/FVU or bank-credit qualification.",
+    "This source predates the new historical24Q profile and the removal of the ungrounded deposit-before-deduction rejection; it does not prove those later changes.",
+    "Full backend verify job remained live at retrieval."
+  ]
+}

@@ -21,6 +21,7 @@ Text = Annotated[str, Field(min_length=1, max_length=120, pattern=r"^\S(?:.*\S)?
 PartyKey = Annotated[str, Field(pattern=r"^[1-9][0-9]{0,8}/[1-9][0-9]{0,8}/[1-9][0-9]{0,8}$")]
 WIDTHS = {"FH": 18, "BH": 72, "CD": 41, "DD": 54}
 FORMATS = {
+    "india-24q-regular-q1q3-v6.3": ("24Q", "TDS", "deductor"),
     "india-26q-regular-v7.8": ("26Q", "TDS", "deductor"),
     "india-27eq-regular-v6.9": ("27EQ", "TCS", "collector"),
     "india-27q-regular-v7.5": ("27Q", "TDS", "deductor"),
@@ -104,6 +105,8 @@ def parse_regular(content, data):
     if controls is None:
         raise ValueError("Native withholding requires independent statement and crosswalk controls")
     form, scheme, role = FORMATS[data.file_format]
+    if form == "24Q" and controls.quarter == "Q4":
+        raise ValueError("Historical 24Q Q4 requires its separate annual salary record profile")
     limits, limits_sha256 = profile_limits()
     if (
         form == "27EQ"
@@ -167,7 +170,7 @@ def parse_regular(content, data):
     first = records[0]
     if (
         first[1] != "FH"
-        or first[2] != ("TC1" if form == "27EQ" else "NS1")
+        or first[2] != ("TC1" if form == "27EQ" else "SL1" if form == "24Q" else "NS1")
         or first[3] != "R"
         or first[7] != controls.tan
     ):
@@ -303,11 +306,28 @@ def parse_regular(content, data):
                 raise ValueError(
                     "Native deduction/collection observation lies outside its declared financial quarter"
                 )
-            if not re.fullmatch(r"[0-9]{1,3}\.[0-9]{4}", fields[25]):
+            if form == "24Q":
+                calendar(fields[24])
+                payment_day = calendar(fields[22])
+                if payment_day.month not in quarter_months or payment_day.year != year + (
+                    payment_day.month < 4
+                ):
+                    raise ValueError(
+                        "Historical salary payment date lies outside its declared quarter"
+                    )
+                if fields[6] and not re.fullmatch(r"[0-9]{1,9}", fields[6]):
+                    raise ValueError("Historical salary employee reference requires bounded digits")
+                if fields[25]:
+                    raise ValueError("Historical 24Q has no recorded tax-rate field")
+            elif not re.fullmatch(r"[0-9]{1,3}\.[0-9]{4}", fields[25]):
                 raise ValueError(
                     "Native recorded rate requires four decimal places; no statutory rate is inferred"
                 )
             code = fields[32] or challans[challan][20]
+            if form == "24Q" and code not in {"92A", "92B", "92C", "94P"}:
+                raise ValueError(
+                    "Retain the historical salary section code without inferring eligibility"
+                )
             if not re.fullmatch(r"[A-Z0-9]{1,3}", code):
                 raise ValueError("An explicit native section/collection code is required")
             parties[key] = {"fields": fields, "period": observed_period, "code": code}
@@ -390,6 +410,20 @@ def parse_regular(content, data):
                 "A nonresident crosswalk group cannot merge distinct rate bases, remittance kinds, residence countries or foreign tax identifiers"
             )
         if (
+            form == "24Q"
+            and len({(v["fields"][6], v["fields"][29], v["fields"][33]) for v in group_parties})
+            != 1
+        ):
+            raise ValueError(
+                "Salary groups cannot merge different employee references or certificate contexts"
+            )
+        if (
+            form == "24Q"
+            and len(group_parties) > 1
+            and group_parties[0]["fields"][9] in {"PANNOTAVBL", "PANAPPLIED", "PANINVALID"}
+        ):
+            raise ValueError("Missing-PAN salary employees require separate crosswalk groups")
+        if (
             form == "27Q"
             and len(group_parties) > 1
             and group_parties[0]["fields"][9] in {"PANNOTAVBL", "PANAPPLIED", "PANINVALID"}
@@ -445,7 +479,14 @@ def parse_regular(content, data):
                     "total_tax": str(money(f[16])),
                     "allocated_deposit": str(money(f[18])),
                     "payment_base": str(money(f[21])),
-                    "recorded_rate": f[25],
+                    **(
+                        {"recorded_rate": f[25]}
+                        if form != "24Q"
+                        else {
+                            "recorded_employee_reference": f[6],
+                            "recorded_deposit_date": calendar(f[24]).isoformat(),
+                        }
+                    ),
                     "reason_flag": f[29],
                     "certificate_reference": f[33],
                     **(

@@ -1,0 +1,47 @@
+Historical salary TDS observations: Form 24Q Q1-Q3 v6.3
+
+india-24q-regular-q1q3-v6.3 reuses the existing historical withholding reader
+and independent controls, including complete FH/BH/CD/DD populations, tax,
+surcharge, cess, allocated deposit, payment base and gross challan totals.
+Its salary header is SL1. The historical fiscal-year controls remain bounded
+to FY2010-11 through FY2025-26. Successor Form138 remains a separate profile.
+
+Salary records retain original employee references, PAN, section code, payment,
+deduction and recorded deposit dates, reason and certificate references.
+24Q has no reported tax-rate field. No rate is invented, copied from another
+form or inferred from employee tax/payment amounts. Employee references retain
+leading zeros. Salary source payment and deduction dates must fit the declared
+quarter. Crosswalk groups cannot merge employee references or certificate
+contexts; missing-PAN employee observations require separate groups.
+
+The exact issuer workbook, ZIP and unchanged quarterly sample are retained in
+authority-references/protean-legacy-2025-05-27/. The source assessment records
+original hashes, source URLs and record widths. The sample's recorded deposit
+precedes its deduction date. This observation is preserved without inferring
+payment legality, tax credit or entitlement. The corresponding unsupported
+chronology rejection in the dated Form138 observation reader has been removed.
+Positive observed amounts still need their original dates, and dates beyond the
+explicit observation cutoff remain rejected. No bank evidence is manufactured.
+
+Original files and separately retained crosswalk evidence use the existing
+protected upload, scanner, queued preparation, separate reviewer, reported-only
+withholding comparison and complete XLSX export. Exports and UI retain component
+tax and employee reference/date fields without fabricated rate or deposited flag.
+Replacing the crosswalk invalidates the reviewed source and downstream result
+without rewriting the historical body or version.
+
+Q4 is explicitly excluded from this profile. Its retained numbered workbook
+v7.5 contains SD, S16, C6A, 94P, P16 and P6A annual detail populations. The public
+Q4 sample has BH70/DD48/SD80 rather than the numbered BH72/DD54/SD88 layout.
+The sample is not silently widened or used as a valid v7.5 oracle. Only the exact
+text member was read from its original ZIP; unrelated members were not extracted.
+
+sample-inputs/SYNTHETIC-historical-24q/ contains fictional independent controls
+for exercising the unchanged public quarterly sample. These are not a client
+pilot or professional approval. The existing 154-case authored engine catalogue
+and real pilot count remain unchanged.
+
+Broader salary qualification remains open: Q4 annual populations and calculations,
+source/sample version reconciliation, conditional legal/certificate eligibility,
+complete payroll/cohort rules, correction and CSI/FVU handling, current portal
+filing/payment/credit evidence, and independently approved real client pilots.

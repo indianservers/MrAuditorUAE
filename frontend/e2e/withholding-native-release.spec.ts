@@ -98,44 +98,53 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
       eid,
       identities.tenant_id,
     );
-    for (const form of ["26Q", "27EQ", "27Q", "143", "138"] as const) {
+    for (const form of ["26Q", "27EQ", "27Q", "143", "138", "24Q"] as const) {
       const count =
-        form === "138"
-          ? 2
-          : form === "143"
-            ? 1
+        form === "24Q"
+          ? 1
+          : form === "138"
+            ? 2
+            : form === "143"
+              ? 1
+              : form === "26Q"
+                ? 4
+                : form === "27Q"
+                  ? 2
+                  : 10;
+      const month =
+        form === "24Q"
+          ? "2018-12"
+          : ["143", "138"].includes(form)
+            ? "2026-05"
             : form === "26Q"
-              ? 4
+              ? "2020-04"
               : form === "27Q"
-                ? 2
-                : 10;
-      const month = ["143", "138"].includes(form)
-        ? "2026-05"
-        : form === "26Q"
-          ? "2020-04"
-          : form === "27Q"
-            ? "2019-12"
-            : "2020-10";
+                ? "2019-12"
+                : "2020-10";
       const total =
-        form === "138"
-          ? "4000"
-          : form === "143"
-            ? "700"
-            : form === "26Q"
-              ? "1900"
-              : form === "27Q"
-                ? "166000"
-                : "1000";
+        form === "24Q"
+          ? "1000"
+          : form === "138"
+            ? "4000"
+            : form === "143"
+              ? "700"
+              : form === "26Q"
+                ? "1900"
+                : form === "27Q"
+                  ? "166000"
+                  : "1000";
       const gross =
-        form === "138"
-          ? "24100"
-          : form === "143"
-            ? "213000"
-            : form === "26Q"
-              ? "100000"
-              : form === "27Q"
-                ? "20000000"
-                : "10000";
+        form === "24Q"
+          ? "1000"
+          : form === "138"
+            ? "24100"
+            : form === "143"
+              ? "213000"
+              : form === "26Q"
+                ? "100000"
+                : form === "27Q"
+                  ? "20000000"
+                  : "10000";
       const groups = Array.from({ length: count }, (_, i) => ({
         transaction_reference: `SYN-ASSESSMENT-${i + 1}`,
         transaction_date: month + (form === "27Q" ? "-10" : "-01"),
@@ -144,11 +153,13 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
         party_records: [`1/1/${i + 1}`],
       }));
       const publicOriginal = readFileSync(
-        form === "138"
-          ? "../docs/country-workflows/authority-references/form138-2026-07-22/protean-form138-original-sample.txt"
-          : form === "143"
-            ? "../docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt"
-            : `../docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-${form}-original-sample.txt`,
+        form === "24Q"
+          ? "../docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24Q-Q3-original-sample.txt"
+          : form === "138"
+            ? "../docs/country-workflows/authority-references/form138-2026-07-22/protean-form138-original-sample.txt"
+            : form === "143"
+              ? "../docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt"
+              : `../docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-${form}-original-sample.txt`,
       );
       let sourceBytes = publicOriginal;
       if (form === "143") {
@@ -208,15 +219,17 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
       await page
         .getByRole("combobox", { name: "Source file format", exact: true })
         .selectOption(
-          form === "138"
-            ? "india-form138-regular-20260722-v1.1"
-            : form === "143"
-              ? "india-form143-regular-20260722-v1.1"
-              : form === "26Q"
-                ? "india-26q-regular-v7.8"
-                : form === "27Q"
-                  ? "india-27q-regular-v7.5"
-                  : "india-27eq-regular-v6.9",
+          form === "24Q"
+            ? "india-24q-regular-q1q3-v6.3"
+            : form === "138"
+              ? "india-form138-regular-20260722-v1.1"
+              : form === "143"
+                ? "india-form143-regular-20260722-v1.1"
+                : form === "26Q"
+                  ? "india-26q-regular-v7.8"
+                  : form === "27Q"
+                    ? "india-27q-regular-v7.5"
+                    : "india-27eq-regular-v6.9",
         );
       await page
         .getByRole("combobox", { name: "Clean retained evidence", exact: true })
@@ -253,9 +266,11 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
             : "Native financial year (six digits)",
           ["143", "138"].includes(form)
             ? "202627"
-            : form === "27Q"
-              ? "201920"
-              : "202021",
+            : form === "24Q"
+              ? "201819"
+              : form === "27Q"
+                ? "201920"
+                : "202021",
         ],
         ["Native observation cutoff", "2026-10-30"],
         ["Native batch count", "1"],
@@ -290,15 +305,17 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
         ["Native challan deposit control (INR)", gross],
         [
           "Native payment base control (INR)",
-          form === "138"
-            ? "4200"
-            : form === "143"
-              ? "21000"
-              : form === "26Q"
-                ? "19000"
-                : form === "27Q"
-                  ? "26600000"
-                  : "10000",
+          form === "24Q"
+            ? "10000"
+            : form === "138"
+              ? "4200"
+              : form === "143"
+                ? "21000"
+                : form === "26Q"
+                  ? "19000"
+                  : form === "27Q"
+                    ? "26600000"
+                    : "10000",
         ],
         ["Native crosswalk groups (JSON)", JSON.stringify(groups)],
         [
@@ -383,15 +400,17 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
       await expect(
         challans.getByRole("cell", {
           name:
-            form === "138"
-              ? "2000090"
-              : form === "143"
-                ? "5000032"
-                : form === "26Q"
-                  ? "0000809"
-                  : form === "27Q"
-                    ? "0000525"
-                    : "0000897",
+            form === "24Q"
+              ? "0000412"
+              : form === "138"
+                ? "2000090"
+                : form === "143"
+                  ? "5000032"
+                  : form === "26Q"
+                    ? "0000809"
+                    : form === "27Q"
+                      ? "0000525"
+                      : "0000897",
           exact: true,
         }),
       ).toBeVisible();
@@ -426,7 +445,7 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
             `assert sum(Decimal(x['total_tax']) for x in r)==Decimal('${total}')`,
             `assert r[-1]['party_key']=='1/1/${count}'`,
             "c=list(w['Withholding challans'].values);assert len(c)==2",
-            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${form === "138" ? "2000090" : form === "143" ? "5000032" : form === "26Q" ? "0000809" : form === "27Q" ? "0000525" : "0000897"}'`,
+            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${form === "24Q" ? "0000412" : form === "138" ? "2000090" : form === "143" ? "5000032" : form === "26Q" ? "0000809" : form === "27Q" ? "0000525" : "0000897"}'`,
             ...(form === "143"
               ? [
                   "assert r[0]['recorded_deposited_flag']=='Y'",
@@ -441,6 +460,13 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
                   "assert [x['recorded_deposit_date'] for x in r]==['2026-05-09']*2",
                   "assert 'recorded_rate' not in r[0]",
                   "assert c[1][c[0].index('recorded_penalty')]=='100.00'",
+                ]
+              : []),
+            ...(form === "24Q"
+              ? [
+                  "assert r[0]['recorded_deposit_date']=='2018-12-14'",
+                  "assert r[0]['income_tax']=='1000.00'",
+                  "assert 'recorded_rate' not in r[0]",
                 ]
               : []),
             ...(form === "27Q"

@@ -217,3 +217,8 @@ docs/country-workflows/authority-references/form138-2026-07-22/*.xlsx -text
 docs/country-workflows/authority-references/form138-2026-07-22/*.txt -text whitespace=cr-at-eol
 docs/country-workflows/sample-inputs/SYNTHETIC-dated-form138/*.txt -text whitespace=cr-at-eol
 docs/phase-12/form138-*.xml -text whitespace=cr-at-eol
+
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24Q-*.xls -text
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24Q-*.zip -text
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24Q-*.txt -text whitespace=cr-at-eol
+docs/phase-12/24q-*.xml -text whitespace=cr-at-eol

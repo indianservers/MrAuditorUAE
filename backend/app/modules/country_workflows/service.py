@@ -366,6 +366,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-26q-regular-v7.8": {"text/plain"},
             "india-27eq-regular-v6.9": {"text/plain"},
             "india-27q-regular-v7.5": {"text/plain"},
+            "india-24q-regular-q1q3-v6.3": {"text/plain"},
             "india-form143-regular-20260722-v1.1": {"text/plain"},
             "india-form138-regular-20260722-v1.1": {"text/plain"},
             "un-sc-consolidated-xml": {"application/xml", "text/xml"},

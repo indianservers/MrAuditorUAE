@@ -129,6 +129,10 @@ export function nativeWithholdingPayload(
     throw new Error(
       "Form 138 requires Q1–Q3 and an explicit assessment of the conflicting deposit-date width.",
     );
+  if (form === "24Q" && value.quarter === "Q4")
+    throw new Error(
+      "Historical 24Q Q4 requires its separate annual salary records.",
+    );
   const counts = Object.fromEntries(
     COUNTS.map((key) => {
       if (
@@ -266,11 +270,12 @@ export function NativeWithholdingSource({
           onChange={(e) => update("quarter", e.target.value)}
         >
           <option value="">Select declared quarter</option>
-          {(form === "138" ? ["Q1", "Q2", "Q3"] : ["Q1", "Q2", "Q3", "Q4"]).map(
-            (q) => (
-              <option key={q}>{q}</option>
-            ),
-          )}
+          {(["138", "24Q"].includes(form)
+            ? ["Q1", "Q2", "Q3"]
+            : ["Q1", "Q2", "Q3", "Q4"]
+          ).map((q) => (
+            <option key={q}>{q}</option>
+          ))}
         </select>
       </label>
       <label>
@@ -384,7 +389,8 @@ export function NativeWithholdingLinks({
     "native_tax_date",
     ...(rows.some(
       (row) =>
-        "recorded_section202_opt_out" in row || "recorded_deposit_date" in row,
+        "recorded_section202_opt_out" in row ||
+        ("recorded_deposit_date" in row && "recorded_deposited_flag" in row),
     )
       ? []
       : ["income_tax", "surcharge", "cess"]),
@@ -392,7 +398,12 @@ export function NativeWithholdingLinks({
     "allocated_deposit",
     "payment_base",
     ...(rows.some((row) => "recorded_deposit_date" in row)
-      ? ["recorded_deposit_date", "recorded_deposited_flag"]
+      ? [
+          "recorded_deposit_date",
+          ...(rows.some((row) => "recorded_employee_reference" in row)
+            ? ["recorded_employee_reference"]
+            : ["recorded_deposited_flag"]),
+        ]
       : ["recorded_rate"]),
     "reason_flag",
     "certificate_reference",
@@ -451,7 +462,10 @@ export function NativeWithholdingLinks({
           or tax credit.
         </p>
       )}
-      {rows.some((row) => "recorded_deposit_date" in row) && (
+      {rows.some(
+        (row) =>
+          "recorded_deposit_date" in row && "recorded_deposited_flag" in row,
+      ) && (
         <p>
           Form 138 salary dates and deposited flags are uploaded statement
           claims. This dated workbook v1.1 differs from page v1.2; the deposit

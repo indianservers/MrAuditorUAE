@@ -214,8 +214,6 @@ def parse_form138(content, data):
                 )
             if bool(tax) != bool(deducted) or bool(deposit) != bool(deposited):
                 raise ValueError("Form 138 deduction/deposit dates must agree with nonzero amounts")
-            if deposited is not None and deducted is not None and deposited < deducted:
-                raise ValueError("Form 138 recorded deposit precedes deduction")
             if f[31] not in {"", "A", "C"} or (
                 f[31] == "A" and not re.fullmatch(r"[A-Za-z0-9]{10}|[A-Za-z0-9]{15}", f[32])
             ):

@@ -449,6 +449,7 @@ class SourceInput(Strict):
         "india-26q-regular-v7.8",
         "india-27eq-regular-v6.9",
         "india-27q-regular-v7.5",
+        "india-24q-regular-q1q3-v6.3",
         "india-form143-regular-20260722-v1.1",
         "india-form138-regular-20260722-v1.1",
     ] = "canonical-csv"
@@ -595,6 +596,7 @@ class SourceInput(Strict):
             "india-26q-regular-v7.8",
             "india-27eq-regular-v6.9",
             "india-27q-regular-v7.5",
+            "india-24q-regular-q1q3-v6.3",
         }:
             if (
                 self.table_type != "withholding-records"
