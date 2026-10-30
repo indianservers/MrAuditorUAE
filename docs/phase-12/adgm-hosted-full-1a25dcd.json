@@ -1,0 +1,49 @@
+{
+  "source_commit": "1a25dcde4a256fcb80f2032f75f5125b34646921",
+  "run_id": 41129296629,
+  "job_id": 124315807154,
+  "conclusion": "success",
+  "passed": 5394,
+  "skipped": 9,
+  "failed": 0,
+  "duration_seconds": 4658.99,
+  "overall_coverage_percent": 87.01917379660134,
+  "core_coverage": {
+    "percent": 89.35,
+    "covered": 831,
+    "statements": 930
+  },
+  "artifact": {
+    "id": 13017481476,
+    "size_bytes": 251937,
+    "sha256": "f7bf89774de6f5dc2b2f1c8b2460b4bb947c99ab18002da7a1349f4941e9e251"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/1a25dcd-hosted-full.xml",
+      "bytes": 841225,
+      "sha256": "dee62698a6f2d9d661f01cf04e1b69e1326c3ff955d611298afe3ed5f2dce529"
+    },
+    {
+      "path": "docs/phase-12/1a25dcd-hosted-coverage.json",
+      "bytes": 1890330,
+      "sha256": "f9cd9fa1e068e39e65517b76abccd4796206c333cb7a47ca3df121559667be04"
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "security": "success",
+    "containers": "success",
+    "ml": "success"
+  },
+  "separate_original_evidence": [
+    "docs/phase-12/adgm-browser-1a25dcd.json",
+    "docs/phase-12/adgm-authority-scans-1a25dcd.json"
+  ],
+  "limits": [
+    "Source includes ADGM filing-duty v2 and scanner changes; later India Form138/24Q/140/144 changes have separate validation.",
+    "Nine skipped tests remain skipped. Synthetic CI does not establish production, professional or real-client qualification."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "authority": "DIFC",
+  "country": "AE",
+  "retrieved_on": "2026-10-31",
+  "source_page": "https://www.difc.com/business/laws-and-regulations/legal-database/difc-laws/companies-law-difc-law-no-5-2018",
+  "source_url": "https://edge.sitecorecloud.io/dubaiintern0078-difcexperie96c5-production-3253/media/project/difcexperiences/difc/difcwebsite/documents/laws--regulations/companies_law.pdf",
+  "original_file": "difc-companies-law-consolidated-march-2022.pdf",
+  "bytes": 1485165,
+  "sha256": "e4025e807af4c7f81cce763c02531e4c74628446d3a9fa2480a1a9b526cd9e7c",
+  "pages": 102,
+  "version_on_cover": "March 2022 consolidated version, amended by DIFC Law No. 2 of 2022",
+  "source_page_status_at_inspection": "Inactive",
+  "adoption_status": "NOT_ADOPTED_CURRENTNESS_UNRESOLVED",
+  "automatic_rule_enabled": false,
+  "visual_review": {
+    "pdf_pages_one_based": [77, 78],
+    "printed_pages": [72, 73],
+    "method": "Read complete text and inspect original PDF pages rendered with bundled Poppler; original PDF bytes unchanged",
+    "render_diagnostics": "Poppler reported missing Symbol and ArialUnicode display fonts; inspected relevant English text remains legible"
+  },
+  "requirements_identified_for_future_profile": [
+    "Separate preparation/approval, audit, shareholder circulation, registrar filing and shareholder copy-request procedures",
+    "Assess current and preceding-year consolidated turnover and whole-year shareholder counts separately; first financial year has a different preceding-year condition",
+    "Retain articles-of-association overrides and shareholder audit notices instead of assuming threshold eligibility settles all duties",
+    "Retain actual circulation date for the registrar filing trigger; do not replace it with financial year end",
+    "Do not infer that audit exemption removes preparation duties",
+    "Do not carry ADGM or DMCC calendars, exemptions, deadlines or filing procedures into DIFC",
+    "Qualify applicable amendments and special company/regulatory regimes before adopting this dated source"
+  ],
+  "open_evidence": [
+    "Resolve the official page Inactive label and identify the operative version and amendment population for each claimed period",
+    "Retain operative Companies Regulations and relevant Prescribed/Variable Capital/regulated-entity modifications",
+    "Independently assessed entity facts, originals, authority notices and expected schedules",
+    "Professional adoption and representative client qualification"
+  ],
+  "limitations": "Archival and source investigation only. No DIFC rule profile, legal conclusion, audit exemption, deadline or filing acceptance is enabled by this record."
+}
