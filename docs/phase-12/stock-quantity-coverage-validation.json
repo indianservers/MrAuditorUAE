@@ -1,0 +1,75 @@
+{
+  "scope": "Declared per-position stock count quantities, conservative signed coverage and retained draft/export basis",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "42c620af31ffb22a62676a7dd2e225305cc2a94c8851ae4470e2fb3f7b8be79c"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "77f3b7a87a170192d03b35931d2887f6a5f78cb0385c0493fcb8a60b9970ffcd"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "116e2cadb93720611fb6d0d66989c5d78abb3173c077e5ae507e1b75d67a0b22"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "7756b678ac9c7e4b8597de8317779058b772d754d8648376e5976cb231d1d8be"
+    },
+    {
+      "path": "backend/tests/unit/test_stock_quantity_coverage.py",
+      "sha256": "162444b9ced397daffc870696da4dd323971ed31b1835e74730e45ddee92caad"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_stock_quantity_coverage.py",
+      "sha256": "a79e6db11cca550d9b83e4df6d1fef40710f75d995a7cbf327250bafe543fb2c"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "55892c729206ed8e5aa14b3f59c73c162d3cd4c6651e5244c5fbd404cb3ce7ad"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "84093a55d6479417b0c2bdd6898b6feb0fbba5efc9273e86cf45dff70227fa25"
+    },
+    {
+      "path": "docs/phase-12/stock-quantity-coverage-final.xml",
+      "sha256": "72ecc450f2c5b0615a092c809f2d4ffc557f73e0d482a915ba605385f963eb87"
+    },
+    {
+      "path": "docs/phase-12/stock-quantity-coverage-frontend-all.xml",
+      "sha256": "de69148c97d5ae7f52eea76999bdf9b3969287248084c226a5fcea270514ecd4"
+    },
+    {
+      "path": "docs/phase-12/stock-quantity-coverage-initial.xml",
+      "sha256": "fac271ae0f7593cf1af2934c8ab10cdeb94932322950fd318ee5e04525f4aba1"
+    },
+    {
+      "path": "docs/phase-12/stock-quantity-coverage-frontend-final.xml",
+      "sha256": "fb6c10b2bf3fbe78918655db36b03395a41b3422de2e79c2d5d9a699988969ef"
+    }
+  ],
+  "verification": {
+    "backend_passed": 210,
+    "backend_failed": 0,
+    "frontend_passed": 416,
+    "frontend_files": 77,
+    "ruff": "passed",
+    "mypy": "passed, 415 files",
+    "frontend_typecheck": "passed",
+    "scoped_eslint": "passed",
+    "production_build": "passed, Next.js 16.4.2",
+    "frontend_junit": "docs/phase-12/stock-quantity-coverage-frontend-final.xml"
+  },
+  "initial_regression": {
+    "passed": 185,
+    "failed": 2,
+    "reason": "API test omitted required partial-count exception disposition; approval correctly failed 409. Corrected test records disposition and retains unchanged 40% coverage. Original failed JUnit retained."
+  },
+  "limits": [
+    "Synthetic declared source quantities; no source authenticity, physical count attendance or complete-population qualification.",
+    "Prior hosted stock/GP captures are separate and do not verify this newer quantity-coverage UI.",
+    "No aggregate quantity is calculated across site/SKU/lot/UOM/currency positions."
+  ]
+}

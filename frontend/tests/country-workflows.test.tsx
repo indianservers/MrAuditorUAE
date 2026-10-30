@@ -3707,6 +3707,17 @@ it.each(["AE", "IN"])("queues an explicit FIFO cost period and assessment for %s
 });
 
 
+it.each(["AE", "IN"])("shows per-position quantity coverage and its declaration boundary (%s)", (country) => {
+  state.country = country;
+  state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: { workflow: "stock-audit", title: "Declared count coverage", quantity_coverage_contract: "stock-declared-count-coverage/1", quantity_coverage_basis: "Aligned declared owned-count quantities capped at each book position; no quantity aggregation or physical verification", rows: [{ id: "stock-1", site: "WH", sku: "S", lot: "L", uom: "PCS", currency: country === "AE" ? "AED" : "INR", book_quantity: "10", count_quantity: "4", count_supported_quantity: "4", quantity_coverage_percent: "40.0", state: "VARIANCE" }] } };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+  expect(screen.getByText(/Quantity coverage: Aligned declared/)).toHaveTextContent("no quantity aggregation or physical verification");
+  expect(screen.getByRole("columnheader", { name: "count supported quantity" })).toBeVisible();
+  expect(screen.getByRole("columnheader", { name: "quantity coverage percent" })).toBeVisible();
+  expect(screen.getByRole("cell", { name: "40.0" })).toBeVisible();
+});
+
 it("shows FIFO closing quantities and cost differences before expanded arithmetic provenance", () => {
   state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: { workflow: "inventory-fifo-cost", title: "Assessed FIFO cost", blocked: false, rows: [{ id: "fifo:1", site: "WH", sku: "S", lot: "L", uom: "PCS", currency: "AED", expected_closing_quantity: "1", book_quantity: "1", rounded_fifo_closing_cost: "12.19", rounded_book_gross_cost: "12.19", book_minus_fifo: "0.00", raw_fifo_closing_cost: "12.1932631112635269", raw_cost_rollforward_difference: "0", state: "MATCHED" }] } };
   render(<CountryWorkflows eid="engagement" mode="country-workflow" />);

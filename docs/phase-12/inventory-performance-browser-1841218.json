@@ -1,0 +1,90 @@
+{
+  "scope": "Source-specific hosted UAE then India stock/GP browser proof, not newer quantity-coverage proof or real-client qualification",
+  "head_sha": "1841218d1530638bc8243a62aa6aefbec49268ab",
+  "run_id": 41046105119,
+  "job_id": 124030474549,
+  "result": {
+    "passed": 9,
+    "failed": 0,
+    "minutes": 6.4,
+    "dedicated_stock_gp_seconds": 16.2
+  },
+  "archive": {
+    "artifact_id": 12972473301,
+    "bytes": 12833637,
+    "sha256": "66b8faa3134b454337328759d9d6c95c57756b3bcea2032e994d13c9c163a829"
+  },
+  "tested_sources": [
+    {
+      "path": "frontend/e2e/inventory-performance-release.spec.ts",
+      "sha256": "0eba3d12314a1c9b8fac0209de2d764251aaac827c5be3922e569032523ade22"
+    },
+    {
+      "path": "frontend/src/features/inventory-performance.tsx",
+      "sha256": "c095b1a1ff251f2e646deb50fc76bdd45e69825ba75222e563ecfb7ca0cb52d2"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/inventory_performance.py",
+      "sha256": "949ce7d599e131a8647c9326bc52e44e6ff538a1899e963396aec854db7d83bc"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "2c12eec1eba1e6f4f6ea08ba50634e00db5590007c55a0540589f386ed336603"
+    }
+  ],
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-stock-GP-reviewed-lineage-1841218.png",
+      "sha256": "309efc7d7d29f310a26781557e30691c84f890495480c22e2ac6ea8438381479",
+      "dimensions": [
+        1963,
+        1737
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-stock-GP-prior-superseded-stale-1841218.png",
+      "sha256": "c96963a78392161b02ceca74c20f542e53ac72a8c455f9a8ede534e7630d7adc",
+      "dimensions": [
+        1963,
+        1118
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-stock-GP-reviewed-lineage-1841218.png",
+      "sha256": "2b1dc5d8f883baa74ddd405f25b72eb549f932c8580ec326c4edd1cc303f7b5f",
+      "dimensions": [
+        1963,
+        1737
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-stock-GP-prior-superseded-stale-1841218.png",
+      "sha256": "34127609d5a15c2874cbc58f20b1e6e34cd3a94eede5e9a8cb0790229c2c4395",
+      "dimensions": [
+        1963,
+        1118
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "verified": [
+    "Real BFF authentication, explicit current/prior GL import controls, actual stock/GP form and source-account selection in UAE then India.",
+    "Self-approval rejected; separate reviewer approval retained. Six independent metric controls, 46 account links and last page rows 41-46.",
+    "Complete XLSX: 47 lineage rows and 7 control rows, GP movement -5.00 percentage points.",
+    "Prior ledger supersession marks saved result STALE with unchanged body/version; independent approval disabled.",
+    "Original reviewed captures show 126/105 stock, 20/25 GP margin, AED for UAE and INR for India, and the correct distinct annual periods.",
+    "Original stale captures retain numeric rows and show REVIEWED plus STALE, with disabled approval."
+  ],
+  "limits": [
+    "Synthetic source-account controls only; no physical verification, statutory reporting qualification or independently checked client pilot.",
+    "This tested source predates the new per-position declared-count quantity coverage.",
+    "Full backend job was still running when this browser evidence was archived; browser success is not full-suite success."
+  ]
+}

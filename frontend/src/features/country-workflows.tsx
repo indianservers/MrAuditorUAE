@@ -468,6 +468,8 @@ type Result = {
     inventory_performance_controls?: Record<string, unknown>[];
     inventory_performance_scope?: Record<string, unknown>;
     gp_arithmetic_observation?: string;
+    quantity_coverage_basis?: string;
+    quantity_coverage_contract?: string;
     inventory_quantity_controls?: Record<string, unknown>[];
     purchase_quantity_controls?: Record<string, unknown>[];
     limitations?: string[];
@@ -7062,6 +7064,19 @@ export function CountryWorkflows({
               purchase
             />
           )}
+          {body.quantity_coverage_basis && (
+            <p className="text-sm">
+              Quantity coverage: {body.quantity_coverage_basis}
+            </p>
+          )}
+          {body.workflow === "stock-audit" &&
+            body.quantity_coverage_contract !==
+              "stock-declared-count-coverage/1" && (
+              <p role="status">
+                Regenerate stock count coverage with current quantity and sign
+                controls before approval or working-paper generation.
+              </p>
+            )}
           {body.workflow === "inventory-performance" &&
             body.inventory_performance_scope && (
               <InventoryPerformanceEvidence

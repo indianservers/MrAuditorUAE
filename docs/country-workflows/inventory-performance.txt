@@ -77,3 +77,11 @@ reviewed result; unreviewed and superseded sources cannot generate a new paper.
 Generation continues to require auditor-authored procedures and conclusions.
 The dedicated UAE/India API checks and existing workflow regression passed
 (21 tests); this does not qualify statutory ratios or real-client results.
+
+Hosted stock/GP source 1841218 passed all nine browser release cases (6.4m).
+The dedicated UAE then India case passed in 16.2s, including actual form inputs,
+independent approval, last account-lineage page, complete XLSX and unchanged
+stale history after prior-source supersession. Four original reviewed/stale
+captures were downloaded with exact archive size/hash and individually viewed;
+see docs/phase-12/inventory-performance-browser-1841218.json. That proof predates
+the separate new declared-count quantity-coverage changes.

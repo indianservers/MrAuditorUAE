@@ -1609,6 +1609,14 @@ async def generate_paper(
         raise HTTPException(
             409, "Independently reviewed source result required before working-paper generation"
         )
+    if (
+        obj.body.get("workflow") == "stock-audit"
+        and obj.body.get("quantity_coverage_contract") != "stock-declared-count-coverage/1"
+    ):
+        raise HTTPException(
+            409,
+            "Regenerate stock count coverage with current quantity and sign controls before paper generation",
+        )
     summary = {
         key: value
         for key, value in obj.body.items()
@@ -1640,6 +1648,9 @@ async def generate_paper(
             "inventory_fifo_contract",
             "inventory_fifo_scope",
             "inventory_fifo_document_binding",
+            "coverage",
+            "quantity_coverage_basis",
+            "quantity_coverage_contract",
             "population_completeness",
             "statutory_calculation_qualified",
             "box_comparison_scope",

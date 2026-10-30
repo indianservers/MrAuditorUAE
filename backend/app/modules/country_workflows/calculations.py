@@ -765,6 +765,23 @@ def inventory(data, tables):
             * max(Decimal(0), amount(b, "quantity"))
         )
         aligned = bool(b and c and b["count_date"] == c["count_date"] == data.as_of.isoformat())
+        book_quantity = amount(b, "quantity") if b else None
+        count_quantity = amount(c, "quantity") if c else None
+        quantity_supported = (
+            min(book_quantity, count_quantity)
+            if aligned
+            and b["ownership"] == c["ownership"] == "owned"
+            and book_quantity is not None
+            and count_quantity is not None
+            and book_quantity >= 0
+            and count_quantity >= 0
+            else None
+        )
+        quantity_coverage = (
+            quantity_supported / book_quantity * 100
+            if quantity_supported is not None and book_quantity is not None and book_quantity > 0
+            else None
+        )
         state = (
             "BOOKS_ONLY"
             if not c
@@ -788,10 +805,8 @@ def inventory(data, tables):
         )
         if carrying is not None:
             total += abs(carrying)
-            if aligned and c["ownership"] == b["ownership"] == "owned":
-                covered += min(abs(amount(c, "quantity")), abs(amount(b, "quantity"))) * amount(
-                    b, "unit_cost"
-                )
+            if quantity_supported is not None:
+                covered += quantity_supported * amount(b, "unit_cost")
         rows.append(
             {
                 "id": f"stock-{index}",
@@ -800,6 +815,14 @@ def inventory(data, tables):
                 "lot": k[4],
                 "uom": k[2],
                 "currency": k[3],
+                "book_quantity": str(book_quantity) if book_quantity is not None else None,
+                "count_quantity": str(count_quantity) if count_quantity is not None else None,
+                "count_supported_quantity": str(quantity_supported)
+                if quantity_supported is not None
+                else None,
+                "quantity_coverage_percent": str(quantity_coverage)
+                if quantity_coverage is not None
+                else None,
                 "state": state,
                 "quantity_difference": str(variance) if variance is not None else None,
                 "carrying_value": str(carrying) if carrying is not None else None,
@@ -820,6 +843,8 @@ def inventory(data, tables):
             "count_supported_value": str(covered) if len(currencies) == 1 else None,
             "percent": str(covered / total * 100) if total and len(currencies) == 1 else None,
         },
+        "quantity_coverage_contract": "stock-declared-count-coverage/1",
+        "quantity_coverage_basis": "Aligned declared owned-count quantities capped at each book position; no quantity aggregation or physical verification",
         "limitations": [
             "No physical attendance, ownership assurance or drawing-power calculation is implied",
             "Counts before reporting date require a separately evidenced movement bridge",

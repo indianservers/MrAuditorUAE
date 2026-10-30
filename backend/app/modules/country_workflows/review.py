@@ -1,4 +1,9 @@
 def approval_error(body):
+    if (
+        body.get("workflow") == "stock-audit"
+        and body.get("quantity_coverage_contract") != "stock-declared-count-coverage/1"
+    ):
+        return "Regenerate stock count coverage with the current quantity and sign controls before approval"
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
     if body.get("workflow") == "inventory-performance" and (

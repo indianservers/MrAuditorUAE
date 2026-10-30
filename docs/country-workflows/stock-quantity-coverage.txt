@@ -1,0 +1,34 @@
+Stock declared-count quantity coverage
+
+Shared source arithmetic for UAE, India and other engagement countries. It uses
+each original site/SKU/lot/UOM/currency position separately; quantities are never
+summed across different positions or units. No FX conversion is inferred.
+
+Book quantity, uploaded count quantity, supported quantity and coverage percent
+are retained in each stock-audit row, shown in the result table and exported to
+XLSX. Only aligned reporting-date, declared-owned, nonnegative book/count pairs
+have a supported quantity. That quantity is capped at the book quantity, so an
+excess count preserves its variance without increasing coverage above 100%.
+Positive book quantity with an explicit zero count has zero coverage. A zero
+book denominator has no percentage. Missing, misdated, negative or ownership-
+unconfirmed evidence has null quantity coverage, not an assumed zero count.
+
+Count condition remains a separate risk state. Fully counted damaged stock does
+not become a matched result. Negative counts no longer contribute absolute
+quantities to the monetary coverage numerator. Existing monetary coverage remains
+separate and is unavailable across mixed currencies. No new quantity total or
+warehouse-wide physical verification conclusion is produced.
+
+Current result contract: stock-declared-count-coverage/1. Historical result bytes
+are retained. Results without this contract require regeneration before approval
+or new working-paper generation. Papers retain the coverage basis and monetary
+summary with the source ID/hash/version and original per-position result rows.
+Partial-count exceptions still need a documented disposition before independent
+approval; acknowledgement does not change 40% into complete evidence coverage.
+
+Local proof: 210 backend tests including UAE/India upload, review, exception
+disposition, complete XLSX and generated-paper checks; 416 frontend tests in
+77 files. The initial API test omitted the required exception disposition and
+was correctly rejected; its original failed JUnit is retained separately.
+Synthetic tests do not establish source authenticity, physical attendance,
+title, condition assessment, statutory methodology or real-client qualification.
