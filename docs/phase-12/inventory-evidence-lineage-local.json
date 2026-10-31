@@ -1,0 +1,47 @@
+{
+  "recorded_at": "2026-10-31T05:09:15.573402+00:00",
+  "base_commit": "c094783ac2d7d5b5f6cfc0ff4067fa13876f1681",
+  "scope": "Original attachment replacement, recursive inventory dependency freshness and retained downloads across both countries and costing bases",
+  "report": {
+    "path": "docs/phase-12/inventory-evidence-lineage-http.xml",
+    "sha256": "edd1ee2189afb8b28265838ff57ea210d03e9b0da0e787701452ee85f854688c",
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "implementation_files": [
+    {
+      "path": "backend/tests/qa_crud/test_inventory_identified_units.py",
+      "normalization": "LF",
+      "sha256": "51242a127452e8be2a99a0f88e048d3dee29637e8d6110dd9bd35624bbb8df72"
+    },
+    {
+      "path": "backend/app/api/v1/audit_evidence.py",
+      "normalization": "LF",
+      "sha256": "83090353bc9b28c20f8575fc9b0e5a03e5119f8e1f383ee3eef8d572cb043622"
+    },
+    {
+      "path": "backend/app/modules/lineage/working_papers.py",
+      "normalization": "LF",
+      "sha256": "94593eb3267999dd95d39e1204b440d4e36983da7f50a354218b477dfabf7836"
+    },
+    {
+      "path": "backend/app/modules/ifrs/service.py",
+      "normalization": "LF",
+      "sha256": "11bf4baedea18509d275076a9a7a68cd1025790ff6908269f767557481710772"
+    }
+  ],
+  "runtime_code_changed": false,
+  "checks": {
+    "ruff": "PASS",
+    "format": "PASS",
+    "api_cases": "8 PASS; four original revision regressions and four attachment replacement cases"
+  },
+  "limitations": [
+    "Synthetic private attachments and assessed inventory inputs",
+    "Scanner explicitly doubled to CLEAN",
+    "No semantic cost extraction or professional/client qualification",
+    "No full-suite re-execution claimed; runtime implementation remains c094783"
+  ]
+}

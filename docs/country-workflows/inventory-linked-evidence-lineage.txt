@@ -1,0 +1,34 @@
+Linked original evidence and inventory calculations
+
+Use the existing sources list on the approved IFRS inventory input to link an
+evidence AuditRecord: kind record and the evidence record ID, not an attachment
+version ID. Upload and independently review the evidence through the existing
+private evidence workspace before reviewing the inventory assumptions.
+
+Each upload increments the evidence record version. The inventory input's
+retained dependency receipt captures that record version; calculation freshness
+recursively checks it. Reopening or replacing that evidence therefore makes an
+earlier calculation stale even when the saved inventory quantities and costs
+have not changed. Reapproving the evidence alone does not repair the old input's
+receipt. Reassess and revise the inventory input, then complete its independent
+review before calculating a new run. Historical results and original attachment
+versions remain available without rewriting their amounts or original bytes.
+
+The sources list validates tenant and engagement scope. Free-text opening-cost,
+receipt, NRV and allocation references are narratives; writing an invoice name
+there does not create an original-file dependency. This distinction also applies
+to the new unit and segregated-project-lot costing methods.
+
+Verification: inventory-evidence-lineage-http.xml contains eight passing API
+cases. Four existing country/method input-revision cases remain. Four new cases
+cover individual units and segregated project lots in UAE/AED and India/INR,
+using actual uploads, private storage, file hashes and exact original/replacement
+downloads. They independently approve the linked evidence and assumptions,
+replace the original, check unchanged historical results and stale status,
+reject recalculation with HTTP 409, and restore a current run only after a newly
+reviewed input revision. The scanner alone is explicitly doubled to CLEAN.
+
+No calculation engine or existing review policy was changed. All evidence is
+synthetic. These tests verify the version linkage and stored bytes, not invoice
+authenticity, semantic agreement with declared costs, legal eligibility, physical
+stock, a real client pilot or production/statutory readiness.

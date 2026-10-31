@@ -272,3 +272,4 @@ docs/phase-12/tax-group-workpaper-*.xml -text whitespace=cr-at-eol
 docs/phase-12/identified-unit-*.xml -text whitespace=cr-at-eol
 docs/phase-12/retained-status-*.xml -text whitespace=cr-at-eol
 docs/phase-12/project-layers-*.xml -text whitespace=cr-at-eol
+docs/phase-12/inventory-evidence-lineage-*.xml -text whitespace=cr-at-eol
