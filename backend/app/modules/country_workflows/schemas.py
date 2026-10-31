@@ -17,6 +17,7 @@ from app.modules.country_workflows.cutoff_schedules import CutoffPosting, Cutoff
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.document_series import DocumentSeries, SeriesCounts
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
+from app.modules.country_workflows.employment_payroll import ROW_TYPES as EMPLOYMENT_ROW_TYPES
 from app.modules.country_workflows.esic_population import ESICMember
 from app.modules.country_workflows.grant_utilisation import ROW_TYPES as GRANT_ROW_TYPES
 from app.modules.country_workflows.gst_annual_scope import AnnualGSTScope
@@ -359,6 +360,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **PRORATION_ROW_TYPES,
     **CHARGE_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
+    **EMPLOYMENT_ROW_TYPES,
     **PENSION_ROW_TYPES,
     **AUDIT_ROW_TYPES,
     **DILIGENCE_ROW_TYPES,
@@ -517,6 +519,9 @@ class SourceInput(Strict):
         "gst-summary-metrics",
         "payroll-account-balances",
         "payroll-ledger-lines",
+        "employment-payroll-episodes",
+        "employment-payroll-controls",
+        "employment-payroll-register",
         "obligation-allocations",
         "fx-rates",
         "bank-outstanding",
@@ -1159,6 +1164,7 @@ class WorkflowInput(Strict):
         "india-esic-population",
         "india-document-series",
         "payroll-ledger-rollforward",
+        "employment-payroll-review",
         "obligation-bank-allocations",
         "bank-subsequent-clearance",
         "india-withholding-liability",
@@ -1418,13 +1424,15 @@ class WorkflowInput(Strict):
                 raise ValueError(
                     "A selected VAT201 layout requires all its explicit boxes without selected-box exclusion"
                 )
-        if self.workflow == "payroll-ledger-rollforward" and (
+        if self.workflow in {"payroll-ledger-rollforward", "employment-payroll-review"} and (
             self.period_start is None
             or self.period_start <= date.min
             or self.period_start > self.as_of
         ):
             raise ValueError(
-                "Payroll ledger bridge requires an ordered accounting period and prior-day opening balance"
+                "Employment payroll review requires an ordered review period"
+                if self.workflow == "employment-payroll-review"
+                else "Payroll ledger bridge requires an ordered accounting period and prior-day opening balance"
             )
         if self.arrear_only and self.workflow not in {
             "statutory-dues",

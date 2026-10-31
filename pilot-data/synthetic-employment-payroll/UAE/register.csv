@@ -1,0 +1,2 @@
+registration,employee_token,episode_reference,component,currency,evidence_reference,payroll_month,earning_month,category,entry_reference,amount,id,revision,record_status,run_reference
+SYNTHETIC-EMPLOYER,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,SYN-EP1,GROSS,AED,SYNTHETIC-EVIDENCE,2026-06,2026-06,regular,SYN-ENTRY,1000,R1,1,current,SYN-RUN

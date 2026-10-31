@@ -277,6 +277,8 @@ def _parse_csv(content, data, defaults=None):
         "transactions",
         "payroll-account-balances",
         "payroll-ledger-lines",
+        "employment-payroll-controls",
+        "employment-payroll-register",
         "tax-documents",
         "import-vat-lines",
         "obligations",

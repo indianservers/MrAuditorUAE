@@ -343,6 +343,7 @@
               "india-esic-population",
               "india-document-series",
               "payroll-ledger-rollforward",
+              "employment-payroll-review",
               "obligation-bank-allocations",
               "bank-subsequent-clearance",
               "india-withholding-liability",
@@ -4390,6 +4391,9 @@
               "gst-summary-metrics",
               "payroll-account-balances",
               "payroll-ledger-lines",
+              "employment-payroll-episodes",
+              "employment-payroll-controls",
+              "employment-payroll-register",
               "obligation-allocations",
               "fx-rates",
               "bank-outstanding",
@@ -7142,6 +7146,358 @@
         "methodology"
       ],
       "title": "LossRate",
+      "type": "object"
+    },
+    "employment-payroll-controls": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "employee_token": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Employee Token",
+          "type": "string"
+        },
+        "episode_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Episode Reference",
+          "type": "string"
+        },
+        "component": {
+          "enum": [
+            "BASIC",
+            "ALLOWANCE",
+            "GROSS",
+            "DEDUCTION",
+            "BONUS",
+            "OTHER_ASSESSED"
+          ],
+          "title": "Component",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "payroll_month": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Payroll Month",
+          "type": "string"
+        },
+        "earning_month": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Earning Month",
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "regular",
+            "arrears",
+            "settlement",
+            "assessed_adjustment"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "entry_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Entry Reference",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "service_from": {
+          "format": "date",
+          "title": "Service From",
+          "type": "string"
+        },
+        "service_through": {
+          "format": "date",
+          "title": "Service Through",
+          "type": "string"
+        },
+        "contract_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Contract Reference",
+          "type": "string"
+        },
+        "attendance_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Attendance Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "employee_token",
+        "episode_reference",
+        "component",
+        "currency",
+        "evidence_reference",
+        "payroll_month",
+        "earning_month",
+        "category",
+        "entry_reference",
+        "amount",
+        "service_from",
+        "service_through",
+        "contract_reference",
+        "attendance_reference",
+        "assessment"
+      ],
+      "title": "EmploymentPayrollControl",
+      "type": "object"
+    },
+    "employment-payroll-episodes": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "employee_token": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Employee Token",
+          "type": "string"
+        },
+        "episode_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Episode Reference",
+          "type": "string"
+        },
+        "component": {
+          "enum": [
+            "BASIC",
+            "ALLOWANCE",
+            "GROSS",
+            "DEDUCTION",
+            "BONUS",
+            "OTHER_ASSESSED"
+          ],
+          "title": "Component",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "started_on": {
+          "format": "date",
+          "title": "Started On",
+          "type": "string"
+        },
+        "ended_on": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ended On"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "employee_token",
+        "episode_reference",
+        "component",
+        "currency",
+        "evidence_reference",
+        "started_on",
+        "assessment"
+      ],
+      "title": "EmploymentEpisode",
+      "type": "object"
+    },
+    "employment-payroll-register": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "employee_token": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Employee Token",
+          "type": "string"
+        },
+        "episode_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Episode Reference",
+          "type": "string"
+        },
+        "component": {
+          "enum": [
+            "BASIC",
+            "ALLOWANCE",
+            "GROSS",
+            "DEDUCTION",
+            "BONUS",
+            "OTHER_ASSESSED"
+          ],
+          "title": "Component",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "payroll_month": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Payroll Month",
+          "type": "string"
+        },
+        "earning_month": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Earning Month",
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "regular",
+            "arrears",
+            "settlement",
+            "assessed_adjustment"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "entry_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Entry Reference",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "revision": {
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "record_status": {
+          "enum": [
+            "current",
+            "superseded",
+            "cancelled"
+          ],
+          "title": "Record Status",
+          "type": "string"
+        },
+        "run_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Run Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "employee_token",
+        "episode_reference",
+        "component",
+        "currency",
+        "evidence_reference",
+        "payroll_month",
+        "earning_month",
+        "category",
+        "entry_reference",
+        "amount",
+        "revision",
+        "record_status",
+        "run_reference"
+      ],
+      "title": "EmploymentPayrollRegister",
       "type": "object"
     },
     "escrow-authorisations": {

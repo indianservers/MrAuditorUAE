@@ -1,0 +1,111 @@
+{
+  "recorded_date": "2026-10-31",
+  "base_commit": "9fe2f7132606a6d1e2b0e9a793b4fbb76f6482c5",
+  "scope": "Shared assessed employment-month payroll evidence review, AE then IN; synthetic fixtures only",
+  "checks": {
+    "backend_unit": {
+      "passed": 5083,
+      "skipped": 4
+    },
+    "owned_http_payroll": {
+      "passed": 6,
+      "includes": "AE/IN independent source and result review, full XLSX revision history, source withdrawal freshness, restricted preparer event/source/export denial, existing payroll-ledger regressions"
+    },
+    "frontend": {
+      "passed": 543,
+      "files": 96
+    },
+    "mypy": {
+      "application_files": 441,
+      "status": "PASS"
+    },
+    "ruff": "PASS",
+    "scoped_eslint": "PASS",
+    "typecheck": "PASS",
+    "production_build": "PASS",
+    "api_snapshots": "PASS",
+    "api_types": "PASS",
+    "playwright_discovery": {
+      "tests": 19,
+      "files": 16,
+      "executed_locally": false
+    }
+  },
+  "hosted_browser_prior_source": {
+    "run_id": 41180618851,
+    "job_id": 124477095868,
+    "passed": 17,
+    "failed": 2,
+    "failure": "Both CARO exports asserted read-only XLSX max_row; streaming worksheet has no reliable dimension metadata",
+    "correction": "Iterate exported rows and verify complete exact requirement-key set",
+    "rerun_status": "PENDING_NEW_SOURCE_PUSH"
+  },
+  "limits": [
+    "No real client inputs or independently approved client outcomes supplied",
+    "154-case synthetic catalogue unchanged; new starter CSVs are separate fictional examples",
+    "No statutory or complete HR audit qualification",
+    "Full hosted backend verify for previous source remains in progress; latest source requires its own CI run"
+  ],
+  "files": [
+    {
+      "path": "backend/app/modules/country_workflows/employment_payroll.py",
+      "normalization": "LF",
+      "sha256": "fed272832be8b5499c853160ee5c80e79c42733a0f0cafd5f988cb9a4df67d0e"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "normalization": "LF",
+      "sha256": "ef2dd20aeaa246b157af602f7d7871b63904da5008b9837c4c36661e48bb9415"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "normalization": "LF",
+      "sha256": "eb738c54f08b472c7612c6cb36df9971bf46c3480b376e94e99d307d57333e07"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "normalization": "LF",
+      "sha256": "c123b8d11deefe6f613ddfd6673911f2266045bac5b9ba03bbe41034d7cd7073"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "normalization": "LF",
+      "sha256": "bb6d58341459afa8ac55aba941fd6fa64228743a24646245be9f715f4f8e02a9"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "normalization": "LF",
+      "sha256": "0938dd375955d75d3913a6a99f9572999dc6acef5ac70ef6d81f20bd4c66c5f0"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "normalization": "LF",
+      "sha256": "6c2187ebc79652e3c3436753b8a5043c44e7a27077259eb8e2e8cb74699bb452"
+    },
+    {
+      "path": "backend/tests/unit/test_employment_payroll.py",
+      "normalization": "LF",
+      "sha256": "91a3771ed0bddf053ec916564891ed2de62bf2498c20fe2b7bf1adad5be29764"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_employment_payroll.py",
+      "normalization": "LF",
+      "sha256": "217107fc643aa84324435b6c16eeed3ef736b5aa4958e4b1b4708e8d549e3551"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "normalization": "LF",
+      "sha256": "1096a655a44f081d37ce07d17e3e21bff53d2adeb27c7800963e57563b8298ef"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "normalization": "LF",
+      "sha256": "98ead54e93f9f28e2fcb3a7fd0d3156cb6c6b2b038e1619e9ef31da99e85eb66"
+    },
+    {
+      "path": "frontend/e2e/caro-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "d044e90ac996ea84120777279621abbeb8e6bab289d7193f6588eca225f1e5c0"
+    }
+  ]
+}

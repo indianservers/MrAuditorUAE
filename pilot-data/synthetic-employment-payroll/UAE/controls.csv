@@ -1,0 +1,2 @@
+registration,employee_token,episode_reference,component,currency,evidence_reference,payroll_month,earning_month,category,entry_reference,amount,id,service_from,service_through,contract_reference,attendance_reference,assessment
+SYNTHETIC-EMPLOYER,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,SYN-EP1,GROSS,AED,SYNTHETIC-EVIDENCE,2026-06,2026-06,regular,SYN-ENTRY,1000,C1,2026-06-15,2026-06-30,SYN-CONTRACT,SYN-ATTENDANCE,Synthetic independent expected pay; no formula inferred

@@ -33,6 +33,15 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "employment-payroll-review": (
+        "Assessed employment periods / employee-month controls / corrected payroll register",
+        ["AE", "IN"],
+        {
+            "employment": "employment-payroll-episodes",
+            "controls": "employment-payroll-controls",
+            "register": "employment-payroll-register",
+        },
+    ),
     "india-msme-annual-tax": (
         "India assessed MSE annual tax / P&L interest / prior disallowance release",
         ["IN"],

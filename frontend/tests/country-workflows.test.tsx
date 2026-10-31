@@ -312,6 +312,8 @@ vi.mock("@/hooks/use-api", () => ({
                 available: state.country === "IN",
                 roles: { books: "tax-documents", invoices: "tax-documents" },
               },
+              { id: "employment-payroll-review", title: "Employment payroll review", available: true,
+                roles: { employment: "employment-payroll-episodes", controls: "employment-payroll-controls", register: "employment-payroll-register" } },
               {
                 id: "payroll-ledger-rollforward",
                 title: "Payroll accounting bridge",
@@ -505,6 +507,9 @@ vi.mock("@/hooks/use-api", () => ({
                 id: { required: true, type: "str" },
                 account: { required: true, type: "str" },
               },
+              "employment-payroll-episodes": { id: { required: true, type: "str" } },
+              "employment-payroll-controls": { id: { required: true, type: "str" }, amount: { required: true, type: "Decimal" } },
+              "employment-payroll-register": { id: { required: true, type: "str" }, amount: { required: true, type: "Decimal" } },
               "payroll-account-balances": {
                 id: { required: true, type: "str" },
                 amount: { required: true, type: "Decimal" },
@@ -663,6 +668,12 @@ vi.mock("@/hooks/use-api", () => ({
                       ...["documents", "recognitions", "postings"].map(role => ({id:"cutoff-"+role,label:"Reviewed cutoff "+role,kind:"workflow-source",table_type:role === "documents" ? "cutoff-documents" : role === "recognitions" ? "cutoff-recognition-lines" : "cutoff-posting-lines",freshness:"CURRENT",version:1,review_status:"REVIEWED"})),
                       ...["REVIEWED", "UNVERIFIED"].map(status => ({id: "coverage-" + status, label: "Coverage " + status, kind: "workflow-source", table_type: "confirmation-item-coverage", freshness: "CURRENT", version: 1, review_status: status})),
                       { id: "party-unreviewed", label: "Unreviewed party responses", kind: "workflow-source", table_type: "party-confirmations", freshness: "CURRENT", version: 1, review_status: "UNVERIFIED" },
+                      ...["episodes", "controls", "register"].map((role) => ({
+                        id: "employment-" + role, label: "Reviewed employment " + role,
+                        kind: "workflow-source", table_type: "employment-payroll-" + role,
+                        freshness: "CURRENT", review_status: "REVIEWED", version: 1,
+                      })),
+                      { id: "employment-unreviewed", label: "Unreviewed employment register", kind: "workflow-source", table_type: "employment-payroll-register", freshness: "CURRENT", review_status: "UNVERIFIED", version: 1 },
                       ...["opening", "payroll", "posted", "closing"].map(
                         (role) => ({
                           id: "ledger-" + role,
@@ -3873,4 +3884,30 @@ it("shows missing-PAN treatment review on the withholding result",()=>{
   fireEvent.change(screen.getByLabelText("Saved source or result"),{target:{value:"result"}});
   expect(screen.getByRole("region",{name:"Missing PAN treatment review"})).toHaveTextContent("1 pending");
   expect(screen.getByRole("button",{name:"Independent approval"})).toBeDisabled();
+});
+
+
+it.each(["AE", "IN"])("queues independently reviewed employment months for %s", async (country) => {
+  state.country = country;
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {target:{value:"employment-payroll-review"}});
+  expect(screen.getByText(/Missing employee-month controls remain exceptions/)).toBeVisible();
+  expect(screen.getByLabelText("register source")).not.toHaveTextContent("Unreviewed employment register");
+  for (const [label, value] of [["Schedule title", "Synthetic employment review"], ["Reporting period start", "2026-06-01"], ["Reconciliation date", "2026-06-30"], ["Scope and source rationale", "Independent contract, service and payroll expectations assessed"], ["employment source", "employment-episodes"], ["controls source", "employment-controls"], ["register source", "employment-register"]]) {
+    fireEvent.change(screen.getByLabelText(label), {target:{value}});
+  }
+  fireEvent.click(screen.getByRole("button", {name:"Queue calculation"}));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({workflow:"employment-payroll-review", period_start:"2026-06-01", as_of:"2026-06-30", source_ids:{employment:"employment-episodes", controls:"employment-controls", register:"employment-register"}});
+});
+
+
+it.each(["controls", "register"])("retains independent import totals for employment %s", async (role) => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  for (const [label, value] of [["Source table type", "employment-payroll-" + role], ["Clean retained evidence", "clean"], ["Schedule title", "Synthetic employment source"], ["Expected data rows", "2"], ["Independent totals by currency", "AED=2500"]]) {
+    fireEvent.change(screen.getByLabelText(label), {target:{value}});
+  }
+  fireEvent.click(screen.getByRole("button", {name:"Queue calculation"}));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({table_type:"employment-payroll-" + role, control_totals:{AED:"2500"}, expected_rows:2});
 });

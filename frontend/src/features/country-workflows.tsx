@@ -597,6 +597,8 @@ const moneyTables = [
   "turnover-adjustments",
   "payroll-account-balances",
   "payroll-ledger-lines",
+  "employment-payroll-controls",
+  "employment-payroll-register",
   "esic-members",
   "obligation-allocations",
   "cash-payments",
@@ -2326,6 +2328,7 @@ export function CountryWorkflows({
             "gold-reconciliation",
             "asset-register-review",
             "payroll-ledger-rollforward",
+            "employment-payroll-review",
             "merchant-reserve-rollforward",
           ].includes(workflow)
             ? { period_start: periodStart }
@@ -4974,6 +4977,7 @@ export function CountryWorkflows({
                 "gold-reconciliation",
                 "asset-register-review",
                 "payroll-ledger-rollforward",
+                "employment-payroll-review",
                 "merchant-reserve-rollforward",
               ].includes(workflow) && (
                 <label>
@@ -5094,6 +5098,7 @@ export function CountryWorkflows({
                             "india-payroll-basis-proration",
                             "india-establishment-charges",
                             "payroll-ledger-rollforward",
+                            "employment-payroll-review",
                             "india-esic-population",
                             "india-document-series",
                             "india-gstr1-documents",
@@ -5525,6 +5530,15 @@ export function CountryWorkflows({
                   separate procedures. Native XLS preparation supports the
                   explicit text-only profile with independently retained
                   employer/month context.
+                </p>
+              )}
+              {workflow === "employment-payroll-review" && (
+                <p>
+                  Compare independently reviewed employment episodes, employee-month
+                  expectations and corrected payroll entries. Use pseudonymous employee
+                  tokens. Expected pay and service dates require independent contract
+                  and attendance assessments; salary entitlement and proration are not
+                  calculated. Missing employee-month controls remain exceptions.
                 </p>
               )}
               {workflow === "payroll-ledger-rollforward" && (

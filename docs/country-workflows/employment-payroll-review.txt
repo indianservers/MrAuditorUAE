@@ -1,0 +1,47 @@
+Shared employment and payroll evidence review (AE and IN)
+
+Workflow: employment-payroll-review
+Contract: employment-payroll-period-controls/1
+
+Reuse: retained original CSV evidence, validated row schemas, independent source
+reviews, immutable calculated events, recursive freshness, separately authorized
+review, retained-result paging and complete XLSX exports. Source and result
+access also requires audit.evidence.review, as used for sensitive diligence.
+Raw evidence attachments remain governed by the existing evidence authorization.
+
+Inputs: employment-payroll-episodes, employment-payroll-controls and
+employment-payroll-register. Separate source versions are required. Import and
+independently review all three, then select complete calendar review months.
+Employment episodes declare employer, pseudonymous employee token, episode,
+component, currency and start/end dates. Independent controls declare exact pay,
+original earning month, payroll processing month, service dates and contract /
+master-change and attendance assessment references. Register entries preserve
+explicit revision numbers and current, superseded or cancelled status.
+
+The review compares entries separately by employer, token, episode, component,
+currency, processing month, earning month, category and entry reference. It never
+nets offsetting entry differences. Only the latest unambiguous current revision
+counts; all supplied history remains in output. A cancelled entry is not proof
+of zero payroll. Each active episode/component/month needs a regular expected
+control, including explicit assessed zero. Missing both sides is an exception.
+Arrears can be processed after termination when the declared original service
+period lies within employment; no current-month entitlement is inferred.
+
+Country boundary: these shared controls assess evidence consistency. They do not
+calculate salary proration, tax, PF/ESI/PT, GPSSA, WPS, benefits, pensions or end
+of service entitlements. Use the existing country-specific workflows separately.
+No contract authenticity, attendance authenticity, national-ID verification,
+bank-account duplication, employment-law eligibility or full HR completeness is
+claimed. A 64-hex token field is a format control; upstream pseudonymization and
+free-text reference hygiene remain the operator's responsibility.
+
+Synthetic starter CSVs: pilot-data/synthetic-employment-payroll/{UAE,India}/.
+These are fictional joiner examples for mechanics, not real client files,
+independently certified expected outcomes or additions to the 154-case catalogue.
+Client inputs and independently checked expectations belong in the existing
+ignored pilot-data/UAE and pilot-data/India folders.
+
+Known release boundary: current hosted CARO browser export checks failed using
+read-only worksheet max_row metadata. The browser assertion now iterates rows
+and verifies the complete expected requirement-key set; hosted rerun is pending.
+Full product/client and country legal qualification remain incomplete.

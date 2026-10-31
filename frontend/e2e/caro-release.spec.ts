@@ -456,7 +456,7 @@ for (const scope of ["standalone", "consolidated"] as const) {
           : "../backend/.venv/bin/python",
         [
           "-c",
-          `import io,sys;from openpyxl import load_workbook;w=load_workbook(io.BytesIO(sys.stdin.buffer.read()),read_only=True);assert w['Requirements coverage'].max_row==${pack.requirements.length + 1}`,
+          `import io,sys;from openpyxl import load_workbook;w=load_workbook(io.BytesIO(sys.stdin.buffer.read()),read_only=True);rows=list(w['Requirements coverage'].values);expected=${JSON.stringify(pack.requirements.map((item) => item.key))};assert len(rows)==len(expected)+1;assert {r[0] for r in rows[1:]}==set(expected)`,
         ],
         { input: readFileSync(file!), timeout: 15000 },
       );

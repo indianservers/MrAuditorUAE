@@ -88,9 +88,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         DILIGENCE_ROW_TYPES,
         DILIGENCE_WORKFLOWS,
     )
+    from app.modules.country_workflows.employment_payroll import ROW_TYPES as EMPLOYMENT_TYPES
 
-    if (operation == "workflow-source" and data.table_type in DILIGENCE_ROW_TYPES) or (
-        operation == "country-workflow" and data.workflow in DILIGENCE_WORKFLOWS
+    if (
+        operation == "workflow-source"
+        and data.table_type in {*DILIGENCE_ROW_TYPES, *EMPLOYMENT_TYPES}
+    ) or (
+        operation == "country-workflow"
+        and data.workflow in {*DILIGENCE_WORKFLOWS, "employment-payroll-review"}
     ):
         await engagement_permissions(db, ctx, eng.id, "audit.evidence.review")
     if operation == "workflow-ledger":
@@ -857,7 +862,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         )
     if data.tax_year_start and data.tax_year_start > data.as_of:
         raise HTTPException(422, "Tax year cannot start after the reconciliation date")
-    if data.workflow == "payroll-ledger-rollforward":
+    if data.workflow in {"payroll-ledger-rollforward", "employment-payroll-review"}:
         if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
             raise HTTPException(
                 422, "Payroll accounting window must be within the engagement period"
@@ -1094,12 +1099,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 "Independently review emirate allocation and filed VAT201 sources before comparison",
             )
         if (
-            data.workflow == "payroll-ledger-rollforward"
+            data.workflow in {"payroll-ledger-rollforward", "employment-payroll-review"}
             and source.body.get("review_status") != "REVIEWED"
         ):
             raise HTTPException(
                 409,
-                "Independently review payroll accounting allocations and both GL balances before comparison",
+                "Independently review employment episodes, employee-month controls and payroll register before comparison"
+                if data.workflow == "employment-payroll-review"
+                else "Independently review payroll accounting allocations and both GL balances before comparison",
             )
         if source.body.get("parser_version") == "bank-clearance-carryforward/1":
             if data.workflow != "bank-subsequent-clearance" or role != "outstanding":

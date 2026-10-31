@@ -1233,6 +1233,12 @@ def calculate(
             from app.modules.country_workflows.payroll_ledger import reconcile
 
             result = reconcile(data, tables, country)
+        elif data.workflow == "employment-payroll-review":
+            from app.modules.country_workflows.employment_payroll import (
+                reconcile as employment_review,
+            )
+
+            result = employment_review(data, tables)
         elif data.workflow == "obligation-bank-allocations":
             from app.modules.country_workflows.dues_allocations import allocate
 
