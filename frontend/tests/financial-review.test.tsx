@@ -7,16 +7,33 @@ const state = vi.hoisted(() => ({
     isLoading: false,
   },
   paths: [] as string[],
+  count: 1,
 }));
 vi.mock("@/hooks/use-api", () => ({
   useAPI: (path: string) => {
     state.paths.push(path);
+    if (path.includes("/runs?kind=financials&")) {
+      const offset = Number(
+        new URLSearchParams(path.split("?")[1]).get("offset"),
+      );
+      const rows = Array.from({ length: state.count }, (_, i) => ({
+        id: state.count === 1 ? "old" : i === 0 ? "new" : `old-${i}`,
+        kind: "financials",
+        created_at: "2026-10-24",
+      }));
+      return {
+        data: { items: rows.slice(offset, offset + 50), total: rows.length },
+        error: null,
+        isLoading: false,
+      };
+    }
     return state.query;
   },
 }));
 import { FinancialReview } from "@/features/financial-review";
 beforeEach(() => {
   state.paths = [];
+  state.count = 1;
   state.query = { data: undefined, error: null, isLoading: false };
 });
 it("shows stale sources and preserves issue evidence and draft selection", () => {
@@ -38,19 +55,15 @@ it("shows stale sources and preserves issue evidence and draft selection", () =>
       },
     ],
   };
-  render(
-    <FinancialReview
-      base="ifrs/engagements/e"
-      rid="new"
-      runs={[{ id: "old", kind: "financials", created_at: "2026-10-24" }]}
-    />,
-  );
+  render(<FinancialReview base="ifrs/engagements/e" rid="new" />);
   expect(screen.getByRole("alert")).toHaveTextContent("Source inputs changed");
   expect(screen.getByText(/Carried forward/)).toBeVisible();
   fireEvent.change(screen.getByLabelText("Compare earlier draft"), {
     target: { value: "old" },
   });
-  expect(state.paths.at(-1)).toContain("comparison_run_id=old");
+  expect(
+    state.paths.some((path) => path.includes("comparison_run_id=old")),
+  ).toBe(true);
   expect(
     screen.getByText("No statement line, note or package changes."),
   ).toBeVisible();
@@ -59,7 +72,29 @@ it("displays request failures instead of a successful review", () => {
   state.query.error = new Error(
     "Draft comparison requires the same reporting period",
   );
-  render(<FinancialReview base="ifrs/engagements/e" rid="new" runs={[]} />);
+  render(<FinancialReview base="ifrs/engagements/e" rid="new" />);
   expect(screen.getByRole("alert")).toHaveTextContent("same reporting period");
   expect(screen.queryByText("Checks passed")).not.toBeInTheDocument();
+});
+
+it("reaches an earlier draft beyond100, omits the current run and retains the selected comparison across pages", () => {
+  state.count = 151;
+  render(<FinancialReview base="ifrs/engagements/e" rid="new" />);
+  const select = screen.getByLabelText("Compare earlier draft");
+  expect(select.querySelector('option[value="new"]')).toBeNull();
+  for (let i = 0; i < 3; i++)
+    fireEvent.click(
+      screen.getByRole("button", { name: "Next compare earlier draft" }),
+    );
+  fireEvent.change(select, { target: { value: "old-150" } });
+  expect(
+    state.paths.some((path) => path.includes("comparison_run_id=old-150")),
+  ).toBe(true);
+  fireEvent.click(
+    screen.getByRole("button", { name: "Previous compare earlier draft" }),
+  );
+  expect(select).toHaveValue("old-150");
+  expect(screen.getByRole("option", { selected: true })).toHaveTextContent(
+    "2026-10-24",
+  );
 });

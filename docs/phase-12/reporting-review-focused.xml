@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="15" failures="0" errors="0" time="0.9373211">
+    <testsuite name="tests/financial-review.test.tsx" timestamp="2026-10-31T01:54:09.783Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.2076108">
+        <testcase classname="tests/financial-review.test.tsx" name="shows stale sources and preserves issue evidence and draft selection" time="0.125644">
+        </testcase>
+        <testcase classname="tests/financial-review.test.tsx" name="displays request failures instead of a successful review" time="0.0116999">
+        </testcase>
+        <testcase classname="tests/financial-review.test.tsx" name="reaches an earlier draft beyond100, omits the current run and retains the selected comparison across pages" time="0.068273">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ifrs-calculation-navigation.test.tsx" timestamp="2026-10-31T01:54:09.785Z" hostname="DESKTOP-B3SR465" tests="8" failures="0" errors="0" skipped="0" time="0.3657081">
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="clears retained record selections when the active tenant changes" time="0.1551897">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE inventory assumptions through the existing numeric engine" time="0.0237465">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN inventory assumptions through the existing numeric engine" time="0.020263">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE employee-benefits assumptions through the existing numeric engine" time="0.031408">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN employee-benefits assumptions through the existing numeric engine" time="0.0219579">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="clears selected assumptions and immutable runs when switching calculation subtype" time="0.0550723">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="does not carry instrument mode or a selected record into an inventory workspace" time="0.0427153">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="keeps workflows without a standalone numeric engine disabled" time="0.0125906">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/reporting-record-select.test.tsx" timestamp="2026-10-31T01:54:09.787Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.3640022">
+        <testcase classname="tests/reporting-record-select.test.tsx" name="reaches all 151 profiles, assumptions and immutable versions with independent paging and retained selection" time="0.3257618">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="preserves a newly generated selected run outside the current page without choosing another run" time="0.0232966">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="keeps an unavailable page visible as an error and never clears the retained ID" time="0.0085669">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="does not advance while a page is loading or infer a selected record" time="0.0043239">
+        </testcase>
+    </testsuite>
+</testsuites>

@@ -46,3 +46,12 @@ places each selected approved stock/benefit input behind 55 newer unapproved
 drafts, navigates to it, returns to the first page and calculates the retained
 selection. Source-specific hosted execution is required before claiming this
 later browser case has passed.
+
+Financial statement review also pages the existing kind-filtered immutable
+financial-run list. It no longer receives a mixed-kind first-page list from
+the parent workbench. Creation dates accompany the run identifiers, and the
+current run is omitted from comparison choices. Displayed page counts describe
+the server population and explicitly include that omitted current run. An
+earlier draft beyond the first 100 records remains selected when paging back;
+the comparison request retains its exact ID. This changes selection access,
+not the backend comparison, source-freshness or independent approval rules.

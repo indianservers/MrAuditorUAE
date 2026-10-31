@@ -1,0 +1,1229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="521" failures="0" errors="0" time="97.1506685">
+    <testsuite name="tests/accounting-execution-notice.test.tsx" timestamp="2026-10-31T01:55:29.657Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.1469996">
+        <testcase classname="tests/accounting-execution-notice.test.tsx" name="accounting execution controls &gt; requires provenance regeneration for historical runs" time="0.130687">
+        </testcase>
+        <testcase classname="tests/accounting-execution-notice.test.tsx" name="accounting execution controls &gt; shows draft posting state separately from reviewed inputs and unresolved issues" time="0.0129236">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/adgm-accounts-result.test.tsx" timestamp="2026-10-31T01:55:29.659Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.2369327">
+        <testcase classname="tests/adgm-accounts-result.test.tsx" name="shows the reference period and retained status without claiming accounts acceptance" time="0.1688598">
+        </testcase>
+        <testcase classname="tests/adgm-accounts-result.test.tsx" name="does not reuse a previous version&apos;s determination while verification is pending" time="0.0163779">
+        </testcase>
+        <testcase classname="tests/adgm-accounts-result.test.tsx" name="retains the historical assessment with a stale-source warning" time="0.0122649">
+        </testcase>
+        <testcase classname="tests/adgm-accounts-result.test.tsx" name="distinguishes an assessed exemption from unresolved applicability" time="0.0362206">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/adgm-filing-duty-result.test.tsx" timestamp="2026-10-31T01:55:29.661Z" hostname="DESKTOP-B3SR465" tests="5" failures="0" errors="0" skipped="0" time="0.4356877">
+        <testcase classname="tests/adgm-filing-duty-result.test.tsx" name="keeps individual-accounts exemption separate from all five supporting filings" time="0.2099484">
+        </testcase>
+        <testcase classname="tests/adgm-filing-duty-result.test.tsx" name="retains and displays all source-bound checks beyond twenty" time="0.1058595">
+        </testcase>
+        <testcase classname="tests/adgm-filing-duty-result.test.tsx" name="shows missing conditions and delivery as unresolved instead of a clean exemption" time="0.0551484">
+        </testcase>
+        <testcase classname="tests/adgm-filing-duty-result.test.tsx" name="does not present missing current-version metadata as a previous v2 exemption" time="0.007798">
+        </testcase>
+        <testcase classname="tests/adgm-filing-duty-result.test.tsx" name="retains the scoped v2 outcome and supporting duties with a stale-source warning" time="0.0534547">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/adverse-media-evidence.test.tsx" timestamp="2026-10-31T01:55:29.662Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.2220582">
+        <testcase classname="tests/adverse-media-evidence.test.tsx" name="discloses declared query scope, no clearance and disabled automatic monitoring" time="0.1567522">
+        </testcase>
+        <testcase classname="tests/adverse-media-evidence.test.tsx" name="shows retained human identity and risk reasons rather than interpreting a headline" time="0.0204957">
+        </testcase>
+        <testcase classname="tests/adverse-media-evidence.test.tsx" name="downloads original media evidence through the tenant-scoped authenticated route" time="0.0412115">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/analytics-calendar.test.tsx" timestamp="2026-10-31T01:55:29.663Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.3414159">
+        <testcase classname="tests/analytics-calendar.test.tsx" name="analytics operating calendar &gt; submits no assumed weekend by default" time="0.2548845">
+        </testcase>
+        <testcase classname="tests/analytics-calendar.test.tsx" name="analytics operating calendar &gt; requires an assessment and submits selected weekdays using Monday-zero numbering" time="0.0826191">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/annual-gst-scope.test.tsx" timestamp="2026-10-31T01:55:29.664Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.3010966">
+        <testcase classname="tests/annual-gst-scope.test.tsx" name="keeps absent turnover distinct from exact zero and retains decimal input strings" time="0.0031923">
+        </testcase>
+        <testcase classname="tests/annual-gst-scope.test.tsx" name="collects explicit PAN, year, rule review and taxpayer facts without defaulting completeness" time="0.2582428">
+        </testcase>
+        <testcase classname="tests/annual-gst-scope.test.tsx" name="shows separate annual-return and self-certified reconciliation candidates with pending reasons" time="0.0362698">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/api-page-retention.test.tsx" timestamp="2026-10-31T01:55:29.664Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.4159474">
+        <testcase classname="tests/api-page-retention.test.tsx" name="never retains another scope or without opt-in: result" time="0.1022142">
+        </testcase>
+        <testcase classname="tests/api-page-retention.test.tsx" name="never retains another scope or without opt-in: tenant" time="0.0767118">
+        </testcase>
+        <testcase classname="tests/api-page-retention.test.tsx" name="never retains another scope or without opt-in: disabled-option" time="0.0777166">
+        </testcase>
+        <testcase classname="tests/api-page-retention.test.tsx" name="retains only the same result while the next page is pending, then replaces it with the actual page" time="0.1561743">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/audit-journey.test.tsx" timestamp="2026-10-31T01:55:29.665Z" hostname="DESKTOP-B3SR465" tests="1" failures="0" errors="0" skipped="0" time="0.5343933">
+        <testcase classname="tests/audit-journey.test.tsx" name="keeps stale approved papers in attention and links the reviewer to the actual blocker" time="0.5302462">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/audit-studio.test.tsx" timestamp="2026-10-31T01:55:29.665Z" hostname="DESKTOP-B3SR465" tests="8" failures="0" errors="0" skipped="0" time="0.4050749">
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; rescans only the latest quarantined original and preserves its version ID" time="0.2140586">
+        </testcase>
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; does not rescan a APPROVED record" time="0.0221615">
+        </testcase>
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; does not rescan a LOCKED record" time="0.0188755">
+        </testcase>
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; does not rescan a REVIEW_REQUIRED record" time="0.0149109">
+        </testcase>
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; saves structured sections and preserves source references" time="0.061672">
+        </testcase>
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; rejects malformed source JSON before sending a request" time="0.0528378">
+        </testcase>
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; shows backend permission denial without an editor" time="0.0078804">
+        </testcase>
+        <testcase classname="tests/audit-studio.test.tsx" name="structured audit editor &gt; client portal exposes only the request workspace" time="0.009146">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/bank-account-evidence.test.tsx" timestamp="2026-10-31T01:55:29.666Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2525881">
+        <testcase classname="tests/bank-account-evidence.test.tsx" name="keeps three source identities and leading zeros visible without claiming bank authentication" time="0.2259652">
+        </testcase>
+        <testcase classname="tests/bank-account-evidence.test.tsx" name="shows separately assessed account document coverage without moving the financial cutoff" time="0.0233525">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/bank-account-link.test.tsx" timestamp="2026-10-31T01:55:29.667Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.2654574">
+        <testcase classname="tests/bank-account-link.test.tsx" name="bank account evidence link &gt; shows the original number, ledger alias, scope and retained review action" time="0.2194285">
+        </testcase>
+        <testcase classname="tests/bank-account-link.test.tsx" name="bank account evidence link &gt; does not present NOT_LINKED_ARITHMETIC_SCOPE_ONLY as reviewed bank evidence" time="0.0109145">
+        </testcase>
+        <testcase classname="tests/bank-account-link.test.tsx" name="bank account evidence link &gt; does not present LINK_REQUESTED_NOT_VERIFIED as reviewed bank evidence" time="0.0111139">
+        </testcase>
+        <testcase classname="tests/bank-account-link.test.tsx" name="distinguishes the linked annual cutoff from post-year document coverage" time="0.011262">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/bank-cash-review.test.tsx" timestamp="2026-10-31T01:55:29.668Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.3108768">
+        <testcase classname="tests/bank-cash-review.test.tsx" name="requires a reason and sends a version-bound explicit withdrawal" time="0.2524263">
+        </testcase>
+        <testcase classname="tests/bank-cash-review.test.tsx" name="shows conflicts and navigates to the retained competing review" time="0.0167453">
+        </testcase>
+        <testcase classname="tests/bank-cash-review.test.tsx" name="does not show a successful capacity check when the request fails" time="0.0233404">
+        </testcase>
+        <testcase classname="tests/bank-cash-review.test.tsx" name="links authorized peer reviews to their own engagement and selected event" time="0.0151215">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/bank-matched-proposals.test.tsx" timestamp="2026-10-31T01:55:29.669Z" hostname="DESKTOP-B3SR465" tests="1" failures="0" errors="0" skipped="0" time="0.4823516">
+        <testcase classname="tests/bank-matched-proposals.test.tsx" name="pages every retained proposal and inspects original rows without changing a decision" time="0.4791827">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/bank-matching-candidates.test.tsx" timestamp="2026-10-31T01:55:29.669Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="1.5442124">
+        <testcase classname="tests/bank-matching-candidates.test.tsx" name="pages every ambiguous book item and every candidate independently" time="0.9734343">
+        </testcase>
+        <testcase classname="tests/bank-matching-candidates.test.tsx" name="retains exact source text and amounts and resets candidate paging for a new book item" time="0.5630852">
+        </testcase>
+        <testcase classname="tests/bank-matching-candidates.test.tsx" name="requires historical incomplete candidates to be regenerated" time="0.0045191">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/bank-transaction-dates.test.tsx" timestamp="2026-10-31T01:55:29.670Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2523043">
+        <testcase classname="tests/bank-transaction-dates.test.tsx" name="bank transaction dates &gt; keeps booking and value dates separate and pages independently" time="0.2170943">
+        </testcase>
+        <testcase classname="tests/bank-transaction-dates.test.tsx" name="bank transaction dates &gt; does not show initial rows as a failed later page and offers retry" time="0.0293762">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/benefit-service-calendar.test.tsx" timestamp="2026-10-31T01:55:29.670Z" hostname="DESKTOP-B3SR465" tests="7" failures="0" errors="0" skipped="0" time="0.2196511">
+        <testcase classname="tests/benefit-service-calendar.test.tsx" name="does not invent missing or fractional calendar controls {&quot;employees&quot;:&quot;&quot;,&quot;days&quot;:&quot;0&quot;}" time="0.0027068">
+        </testcase>
+        <testcase classname="tests/benefit-service-calendar.test.tsx" name="does not invent missing or fractional calendar controls {&quot;employees&quot;:&quot;1&quot;,&quot;days&quot;:&quot;&quot;}" time="0.0004754">
+        </testcase>
+        <testcase classname="tests/benefit-service-calendar.test.tsx" name="does not invent missing or fractional calendar controls {&quot;employees&quot;:&quot;0&quot;,&quot;days&quot;:&quot;0&quot;}" time="0.0003759">
+        </testcase>
+        <testcase classname="tests/benefit-service-calendar.test.tsx" name="does not invent missing or fractional calendar controls {&quot;employees&quot;:&quot;1&quot;,&quot;days&quot;:&quot;-1&quot;}" time="0.0003474">
+        </testcase>
+        <testcase classname="tests/benefit-service-calendar.test.tsx" name="does not invent missing or fractional calendar controls {&quot;employees&quot;:&quot;1&quot;,&quot;days&quot;:&quot;1.5&quot;}" time="0.000269">
+        </testcase>
+        <testcase classname="tests/benefit-service-calendar.test.tsx" name="keeps employee counts separate from an explicitly assessed zero day total" time="0.0624024">
+        </testcase>
+        <testcase classname="tests/benefit-service-calendar.test.tsx" name="distinguishes a missing calendar from an explicitly recorded zero and preserves evidence references" time="0.1498989">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/benefit-settlement-source.test.tsx" timestamp="2026-10-31T01:55:29.672Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.4861694">
+        <testcase classname="tests/benefit-settlement-source.test.tsx" name="requires independent controls and explicit service selection without inferring due dates or paid cash" time="0.3730762">
+        </testcase>
+        <testcase classname="tests/benefit-settlement-source.test.tsx" name="keeps explicit selections across result pages without silently assuming whole-population coverage" time="0.0977567">
+        </testcase>
+        <testcase classname="tests/benefit-settlement-source.test.tsx" name="does not expose an undated legacy result as a selectable final settlement" time="0.0120678">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/completion-controls.test.tsx" timestamp="2026-10-31T01:55:29.672Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.3757943">
+        <testcase classname="tests/completion-controls.test.tsx" name="shows stale approvals as outstanding and links the records for reassessment" time="0.2007688">
+        </testcase>
+        <testcase classname="tests/completion-controls.test.tsx" name="makes every affected record available beyond the first 25" time="0.1653961">
+        </testcase>
+        <testcase classname="tests/completion-controls.test.tsx" name="preserves a current ready state without presenting source issues" time="0.0056574">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/compliance-filing.test.tsx" timestamp="2026-10-31T01:55:29.673Z" hostname="DESKTOP-B3SR465" tests="20" failures="0" errors="0" skipped="0" time="0.4740903">
+        <testcase classname="tests/compliance-filing.test.tsx" name="retains the rolling calendar scope, evidence and holiday control (2)" time="0.16571">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="retains the rolling calendar scope, evidence and holiday control (0)" time="0.0189868">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="retains the rolling calendar scope, evidence and holiday control (undefined)" time="0.016555">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="shows month-end preservation only when explicitly declared for AE" time="0.0267747">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="shows month-end preservation only when explicitly declared for IN" time="0.0112325">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="retains all comparison triggers and blocks a missing candidate period for AE" time="0.0228069">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="retains all comparison triggers and blocks a missing candidate period for IN" time="0.013629">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="shows the explicit business-day calendar and trigger treatment for AE" time="0.0074305">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="shows the explicit business-day calendar and trigger treatment for IN" time="0.007332">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="distinguishes a declared zero from a missing holiday control (0)" time="0.0108138">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="distinguishes a declared zero from a missing holiday control (undefined)" time="0.0129609">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="requires actual submission evidence and retains the scoped version" time="0.0254949">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="keeps acknowledgment evidence separate from a submission" time="0.0135362">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="returns an approved filing to preparing without replacing retained receipts" time="0.0278926">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="requires reopening locked records and does not offer an enabled transition" time="0.0081615">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="rejects a 36-character non-UUID receipt" time="0.0075577">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="requires the stage-specific permission for approval and management" time="0.0200327">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="keeps entity country and foreign obligation country distinct and blocks unassessed filing approval" time="0.0172986">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="shows the explicit obligation period without substituting the home engagement year" time="0.0159232">
+        </testcase>
+        <testcase classname="tests/compliance-filing.test.tsx" name="flags a historical country-scoped period rule without inventing a period" time="0.0202643">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/components.test.tsx" timestamp="2026-10-31T01:55:29.676Z" hostname="DESKTOP-B3SR465" tests="9" failures="0" errors="0" skipped="0" time="0.3178148">
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; does not label inactive or unbalanced states as successful" time="0.0465467">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; activates enabled buttons and prevents disabled actions" time="0.0154035">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; paginates only available server pages" time="0.0485876">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; exposes tab selection" time="0.1163666">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; shows unavailable and permission errors honestly" time="0.0220166">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; provides an accessible detail dialog" time="0.0555677">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; clears downstream business context on every scope change" time="0.0027317">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; stores layout preference without session or financial data" time="0.0010068">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="professional states and interactions &gt; normalizes backend errors and passes cancellation" time="0.0053699">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/connector-operations.test.tsx" timestamp="2026-10-31T01:55:29.677Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.3303094">
+        <testcase classname="tests/connector-operations.test.tsx" name="replays a saved session through the matching source sync endpoint" time="0.248162">
+        </testcase>
+        <testcase classname="tests/connector-operations.test.tsx" name="retains saved Zoho evidence preferences when enabling document deltas" time="0.0336316">
+        </testcase>
+        <testcase classname="tests/connector-operations.test.tsx" name="requires a complete company fingerprint before enrolling Tally identity" time="0.0448139">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/contribution-obligation-source.test.tsx" timestamp="2026-10-31T01:55:29.677Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.4018225">
+        <testcase classname="tests/contribution-obligation-source.test.tsx" name="sends independent controls and the exact reviewed parent without pension scope for India" time="0.2758009">
+        </testcase>
+        <testcase classname="tests/contribution-obligation-source.test.tsx" name="leaves independent amounts blank in the format and rejects malformed controls" time="0.0747149">
+        </testcase>
+        <testcase classname="tests/contribution-obligation-source.test.tsx" name="retains explicit pension scope and never infers due dates" time="0.0481091">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/country-workflows.test.tsx" timestamp="2026-10-31T01:55:29.678Z" hostname="DESKTOP-B3SR465" tests="151" failures="0" errors="0" skipped="0" time="41.9292802">
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (undefined)" time="0.5205935">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (india-monthly-rule-intersections/1)" time="0.1900436">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (india-monthly-rule-intersections/2)" time="0.2124405">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers establishment charge sources only for India (AE)" time="0.1725971">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers establishment charge sources only for India (IN)" time="0.1996401">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1818433">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (STALE/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1993009">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/UNVERIFIED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1795872">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/true/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.187935">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/false/NOT_VERIFIED)" time="0.1990085">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers MOHRE savings source contracts only for UAE (AE)" time="0.1556072">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers MOHRE savings source contracts only for UAE (IN)" time="0.1493794">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="binds separate retained enrolment evidence and independent wage controls for savings sources" time="0.3479478">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.2203743">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (STALE/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.2342005">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/UNVERIFIED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.2119264">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/true/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.209876">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/false/NOT_VERIFIED)" time="0.2118947">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps savings fund and membership identity visible in compact bank allocations" time="0.1950603">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/false/india-payroll-basis-proration/1)" time="0.2049761">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (STALE/REVIEWED/false/india-payroll-basis-proration/1)" time="0.2067392">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/UNVERIFIED/false/india-payroll-basis-proration/1)" time="0.2079695">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/true/india-payroll-basis-proration/1)" time="0.1843361">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/false/old)" time="0.2043283">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows the selected workbook population and excluded scope before approval" time="0.2226414">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains the explicit worksheet and population assessment in a workbook source" time="0.2976203">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues separate requested and written-response controls with retained party documents" time="0.3833666">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues only reviewed positive-party sources with an explicit review window" time="0.6722108">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains independent purchase quantity controls separately from money controls" time="0.274396">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows an explicit salary eligibility exclusion alongside zero pension contributions" time="0.2178049">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers every export format and actionable errors in AE" time="0.2665911">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers every export format and actionable errors in IN" time="0.2076724">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; opens a linked retained review even outside the first source-history page" time="0.25677">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps obligation, reported and bank amounts readable without changing retained provenance" time="0.3474251">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; requires explicit settlement choices and independently reviewed obligation sources" time="1.0287775">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows readable CAMT page controls and retains the complete page provenance" time="0.3772003">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; prepares only explicitly selected reviewed BRS book exceptions with independent controls" time="0.8468028">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds a selected retained assessment document when preparing withholding records" time="0.3864421">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds the selected retained quote while preparing an exchange rate source" time="0.3221395">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows unsupported assessment scope even when the numerical comparison matches" time="0.2730678">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile 26AS" time="0.2060723">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile 168" time="0.1898855">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile TRACES" time="0.1683289">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: AE CURRENT" time="0.2672438">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: AE STALE" time="0.2031654">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: IN CURRENT" time="0.17972">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows employment service dates in the compact gratuity settlement comparison" time="0.2432397">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; renders withholding amounts as labelled values with readable differences" time="0.2258165">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the withdrawn TCS reason even when source amounts match ({&quot;issues&quot;:[]})" time="0.2591564">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the withdrawn TCS reason even when source amounts match ({&quot;issues&quot;:[&quot;RETAINED_ASSESSMENT_DOCUMENT_MISSING&quot;]})" time="0.2294822">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps liability and credit role choices separate and requires explicit assessment" time="0.3384848">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps credit residual balances visible before expanding application provenance" time="0.3046221">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; requires a pre-application balance confirmation for credit applications" time="0.5695365">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows open-item balances first while retaining every provenance column" time="0.2127801">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps recent job results accessible without expanding the entire history" time="0.2324197">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues reviewed open items with explicit payable sign and reporting-date scope" time="0.40953">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues reviewed bank-table reuse with its original evidence and independent controls" time="0.3042034">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the explicitly selected bank debit/credit convention" time="0.4087553">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; submits explicit original CSV headings and exclusions without changing values" time="0.4616776">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues GSTR-2B with the recipient, return month and separate document control" time="0.4136475">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows pension amounts in AED with the authority and membership cohort" time="0.3342159">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues AED pension review using only independently reviewed sources" time="0.5639382">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; does not offer UAE pension review for an India engagement" time="0.1550491">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows payroll amounts first and reveals rule references on request" time="0.3177584">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds payroll-rules imports to a selected clean retained document" time="0.2722776">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds pension-rules imports to a selected clean retained document" time="0.265416">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds benefit-rules imports to a selected clean retained document" time="0.2722943">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps derived expected dues out of the independent return role" time="0.1828032">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues original numbered GSTR-2B files with independent per-file controls" time="0.5448318">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues INR payroll calculations using only independently reviewed rule sources" time="0.5287582">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; links only reviewed ESIC populations with explicit component coverage and reviewed sources" time="0.6652143">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; prepares ECR with declared establishment, wage month, members and amounts" time="0.4008471">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues an India invoice with explicit GSTIN, direction, month and component controls" time="0.4234853">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a credit-normal payable GL control without a movement date" time="0.3699007">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a committed account selection without asking for an exported copy" time="0.3597909">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; filters unavailable country workflows and wrong source types" time="0.2396525">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers native instructions only for the channel role, keeping independent schedules selectable" time="0.23337">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the selected independent bank sources and exact balances" time="0.7940489">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues subsequent bank clearance with an explicit window and AED scope" time="0.7544617">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues subsequent bank clearance with an explicit window and INR scope" time="0.7327446">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps quarantined evidence disabled and rejects malformed currency controls" time="0.2424263">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows missing evidence as a blocker and disables approval" time="0.2119189">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; submits an explicit selected-box scope rather than silently filtering a full return" time="0.7110237">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; pages excluded rows without changing the selected comparison rows" time="1.6140031">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; prepares selected boxes only from a current independently reviewed import result" time="0.8719468">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; requires an explicitly entered zero row count rather than coercing a blank" time="0.7412864">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for unreviewed results" time="0.1951488">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for stale results" time="0.1821592">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for blocked results" time="0.1727411">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; requires separate source tax and taxable-base controls" time="0.310132">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer a domestic UAE import review in India" time="0.1576331">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows VAT201 monetary differences first and preserves original provenance" time="0.2980148">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues the explicit WPS EVP profile with separate employee and component controls" time="0.3145765">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="submits independently declared inventory partition controls with the retained CSV" time="0.2319927">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uses only reviewed quantity-controlled inventory sources in bidirectional mode" time="0.380178">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues the separate arrear profile with retained context and six independent controls" time="0.125908">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps regular payments out of an explicitly arrear-only comparison" time="0.3147492">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; requires independent directional controls before carrying the full residual population" time="0.1794508">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; hides carry-forward for UNVERIFIED / CURRENT" time="0.0952759">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; hides carry-forward for REVIEWED / STALE" time="0.0938206">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="prepares native ESIC XLS with separate employer/month context and independent controls" time="0.1123329">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues retained inventory valuation documents with separate extended cost and NRV controls" time="0.0446377">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires explicit recorded GL basis and inventory review scope" time="0.0973512">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independently controlled ESIC wage populations without contribution inference" time="0.2032336">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; queues a scoped accounting window with reviewed sources for AE" time="0.336302">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; queues a scoped accounting window with reviewed sources for IN" time="0.204505">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; pages individual posting links independently of the comparison rows" time="0.4474845">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires all twenty explicit VAT201 boxes after selecting the emirate layout" time="0.2846475">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="compares invoice evidence with an independent register without offering it as filed return evidence" time="0.2533399">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps native invoice JSON out of the India GST return selector" time="0.0830394">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues GSTR-1 summary metrics with separate independent controls and no mixed currency total" time="0.1207154">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows original summary metrics and count units without inventing liability totals" time="0.0289833">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues outward invoice sections with distinct request context and independent section controls" time="0.0663851">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps inward GSTR-2B and outward GSTR-1 native responses in their own workflow return pickers" time="0.0359507">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows the bank date blocker and avoids an inverted range on an empty exception schedule" time="0.0461342">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires scoped owner evidence and only offers independently reviewed account sources" time="0.3810123">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="links only current reviewed account evidence with an explicit financial scope assessment" time="0.3604041">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues document-series counts independently from money with separately retained scope context" time="0.0518528">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows document counts and missing ranges as labelled values without currency tolerance" time="0.0572402">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues expense cutoff with explicit reviewed recognition and posting sources" time="0.1157437">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independently controlled inventory response quantities with retained correspondence" time="0.0343412">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows independent VAT201 summary errors even when box comparisons match" time="0.032465">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="pages all retained turnover adjustments independently of registration rows" time="0.4569812">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains independent signed monetary controls when preparing turnover amounts" time="0.1458002">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads merchant-reserve-movements with distinct controls and no mixed generic total" time="0.2129883">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads merchant-reserve-balances with distinct controls and no mixed generic total" time="0.2181418">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads dated benefit exclusions with independent day/count controls and clears them when changing source type" time="0.2444431">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows exact eligible days in compact benefits while preserving full service-year precision in provenance" time="0.0996411">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires explicit complete account coverage dates without changing the reporting cutoff" time="0.3931586">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for AE (shared=false)" time="0.1586144">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for AE (shared=true)" time="0.1701242">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for IN (shared=false)" time="0.097855">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent FIFO controls for IN (shared=true)" time="0.0306167">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues an explicit FIFO cost period and assessment for AE" time="0.0755427">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues an explicit FIFO cost period and assessment for IN" time="0.0537917">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows per-position quantity coverage and its declaration boundary (AE)" time="0.066343">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows per-position quantity coverage and its declaration boundary (IN)" time="0.1133814">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="disables legacy stock approval while retaining the saved result (AE)" time="0.1114328">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="disables legacy stock approval while retaining the saved result (IN)" time="0.0991563">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows FIFO closing quantities and cost differences before expanded arithmetic provenance" time="0.1605839">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent UN snapshot controls without monetary totals for AE" time="0.3018732">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independent UN snapshot controls without monetary totals for IN" time="0.1058702">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues a native regular statement with separate retained crosswalk and independent tax controls (india-26q-regular-v7.8)" time="0.117816">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues a native regular statement with separate retained crosswalk and independent tax controls (india-27q-regular-v7.5)" time="0.5712846">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps assessed native history status visible without opening all provenance" time="0.0960283">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows shared cash controls for merchant approvals (AE)" time="0.0980353">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows shared cash controls for merchant approvals (IN)" time="0.0386855">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues dated Form 143 with its own tax-year and allocation controls" time="0.1328046">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues dated Form 140 with its own tax-year and allocation controls" time="0.4130837">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues dated Form 144 with its own tax-year and allocation controls" time="0.4579523">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows missing-PAN treatment review on the withholding result" time="0.0251092">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ct-audit-obligation.test.tsx" timestamp="2026-10-31T01:55:29.696Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.1953166">
+        <testcase classname="tests/ct-audit-obligation.test.tsx" name="CT audit obligation &gt; preserves unknown revenue and obligation without displaying a zero or exemption" time="0.1890774">
+        </testcase>
+        <testcase classname="tests/ct-audit-obligation.test.tsx" name="CT audit obligation &gt; does not invent an audit assessment for a legacy run" time="0.0027967">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/dmcc-audit-result.test.tsx" timestamp="2026-10-31T01:55:29.696Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.2116364">
+        <testcase classname="tests/dmcc-audit-result.test.tsx" name="keeps a branch auditor exception separate from required portal submission" time="0.1585067">
+        </testcase>
+        <testcase classname="tests/dmcc-audit-result.test.tsx" name="shows unknown applicability and unresolved issues rather than a false exemption" time="0.0160106">
+        </testcase>
+        <testcase classname="tests/dmcc-audit-result.test.tsx" name="does not treat unavailable current-version metadata as a determination" time="0.0074596">
+        </testcase>
+        <testcase classname="tests/dmcc-audit-result.test.tsx" name="retains the assessed determination with a stale-source warning" time="0.0259984">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/enterprise-ai.test.tsx" timestamp="2026-10-31T01:55:29.697Z" hostname="DESKTOP-B3SR465" tests="1" failures="0" errors="0" skipped="0" time="0.1851946">
+        <testcase classname="tests/enterprise-ai.test.tsx" name="enterprise investigation entry &gt; includes the UAE workflows alongside distinct investigation workspaces and requires engagement selection" time="0.1818221">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/event-history.test.tsx" timestamp="2026-10-31T01:55:29.698Z" hostname="DESKTOP-B3SR465" tests="5" failures="0" errors="0" skipped="0" time="0.8478315">
+        <testcase classname="tests/event-history.test.tsx" name="event source history &gt; does not fetch history or load older pages when disabled" time="0.0238332">
+        </testcase>
+        <testcase classname="tests/event-history.test.tsx" name="event source history &gt; keeps the loaded boundary rows when live results push them off the newest page" time="0.1609786">
+        </testcase>
+        <testcase classname="tests/event-history.test.tsx" name="event source history &gt; loads older sources on demand, prefers refreshed current versions and invalidates older choices" time="0.2343856">
+        </testcase>
+        <testcase classname="tests/event-history.test.tsx" name="event source history &gt; keeps retry available after an older-page failure" time="0.2524638">
+        </testcase>
+        <testcase classname="tests/event-history.test.tsx" name="event source history &gt; continues past a page with no visible events and resets history on engagement change" time="0.1726658">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/financial-components.test.tsx" timestamp="2026-10-31T01:55:29.699Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.7967665">
+        <testcase classname="tests/financial-components.test.tsx" name="sorts scientific zeros and large decimal amounts without floating point" time="0.0031027">
+        </testcase>
+        <testcase classname="tests/financial-components.test.tsx" name="shows a truthful empty chart without inventing data" time="0.2377645">
+        </testcase>
+        <testcase classname="tests/financial-components.test.tsx" name="provides usable financial grid controls and error state" time="0.5522794">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/financial-review.test.tsx" timestamp="2026-10-31T01:55:29.699Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.3137792">
+        <testcase classname="tests/financial-review.test.tsx" name="shows stale sources and preserves issue evidence and draft selection" time="0.1849817">
+        </testcase>
+        <testcase classname="tests/financial-review.test.tsx" name="displays request failures instead of a successful review" time="0.0145472">
+        </testcase>
+        <testcase classname="tests/financial-review.test.tsx" name="reaches an earlier draft beyond100, omits the current run and retains the selected comparison across pages" time="0.1109871">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/formatting.test.ts" timestamp="2026-10-31T01:55:29.700Z" hostname="DESKTOP-B3SR465" tests="5" failures="0" errors="0" skipped="0" time="0.0072499">
+        <testcase classname="tests/formatting.test.ts" name="financial presentation without float calculations &gt; preserves large NUMERIC whole digits" time="0.002192">
+        </testcase>
+        <testcase classname="tests/formatting.test.ts" name="financial presentation without float calculations &gt; formats negatives and explicit precision" time="0.000564">
+        </testcase>
+        <testcase classname="tests/formatting.test.ts" name="financial presentation without float calculations &gt; does not invent missing values" time="0.0003878">
+        </testcase>
+        <testcase classname="tests/formatting.test.ts" name="financial presentation without float calculations &gt; neutralizes spreadsheet formula injection" time="0.0006867">
+        </testcase>
+        <testcase classname="tests/formatting.test.ts" name="financial presentation without float calculations &gt; encodes filters without losing zero" time="0.0005115">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/foundation-validation.test.tsx" timestamp="2026-10-31T01:55:29.701Z" hostname="DESKTOP-B3SR465" tests="1" failures="0" errors="0" skipped="0" time="0.3177551">
+        <testcase classname="tests/foundation-validation.test.tsx" name="foundation validation workspace &gt; shows independent control states and navigable blockers, and queues the actual operation" time="0.3146916">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/generic-matching-candidates.test.tsx" timestamp="2026-10-31T01:55:29.701Z" hostname="DESKTOP-B3SR465" tests="16" failures="0" errors="0" skipped="0" time="2.3904239">
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="connects complete generic reconciliation candidates with independent item and candidate pagination" time="0.9993584">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="shows recalculation guidance for historical generic results with incomplete candidates" time="0.0336275">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="does not interpret another result kind as a reconciliation candidate population" time="0.0266377">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="shows full-population review counts even when a result page contains fewer rows" time="0.0673819">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="retains the original account identity and mapping assessment in source review" time="0.0443689">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="queues an explicit source account declaration without changing the original file" time="0.1552833">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/true//)" time="0.0687387">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (STALE/true//)" time="0.0727131">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/false//)" time="0.0966603">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/true/stock-audit/)" time="0.0548129">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="gates new papers by freshness, review and stock coverage (CURRENT/true/stock-audit/stock-declared-count-coverage/1)" time="0.0665253">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="keeps stock quantities visible in stale lead history with provenance available separately" time="0.5275798">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="retains a directly opened stale report in its result selector without enabling approval" time="0.0406308">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="does not name a different result as the selected historical event" time="0.0429701">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="retains the requested ID while report detail loads and then shows the authorized stale result" time="0.068479">
+        </testcase>
+        <testcase classname="tests/generic-matching-candidates.test.tsx" name="shows a failed detail request and retries that request without treating it as an empty selection" time="0.0212033">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/grant-utilisation-evidence.test.tsx" timestamp="2026-10-31T01:55:29.703Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.2243354">
+        <testcase classname="tests/grant-utilisation-evidence.test.tsx" name="separates signed book utilisation from cash, legal eligibility and certificates" time="0.0396559">
+        </testcase>
+        <testcase classname="tests/grant-utilisation-evidence.test.tsx" name="uses retained evidence record/version identifiers for authenticated downloads" time="0.1660249">
+        </testcase>
+        <testcase classname="tests/grant-utilisation-evidence.test.tsx" name="explains mixed file totals as integrity controls rather than available grant funds" time="0.0128981">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/grc-filing-freshness.test.tsx" timestamp="2026-10-31T01:55:29.703Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.6219298">
+        <testcase classname="tests/grc-filing-freshness.test.tsx" name="shows the server comparison only for the selected version and blocks a mismatched saved deadline" time="0.3142364">
+        </testcase>
+        <testcase classname="tests/grc-filing-freshness.test.tsx" name="requires a currentness projection matching the selected record version" time="0.1618641">
+        </testcase>
+        <testcase classname="tests/grc-filing-freshness.test.tsx" name="fails closed on unavailable or wrong-record projections" time="0.0868936">
+        </testcase>
+        <testcase classname="tests/grc-filing-freshness.test.tsx" name="blocks independent obligation review when current sources require reassessment" time="0.0556045">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/grc-optional-profile.test.tsx" timestamp="2026-10-31T01:55:29.704Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2290391">
+        <testcase classname="tests/grc-optional-profile.test.tsx" name="includes the required fixed profile identifier when an optional object is first edited" time="0.2118738">
+        </testcase>
+        <testcase classname="tests/grc-optional-profile.test.tsx" name="preserves and displays a retained fixed value rather than silently upgrading an existing object" time="0.0140084">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/grc.test.tsx" timestamp="2026-10-31T01:55:29.704Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2828371">
+        <testcase classname="tests/grc.test.tsx" name="GRC evidence editor &gt; keeps numeric matrix options numeric and requires explicit conclusions" time="0.0681635">
+        </testcase>
+        <testcase classname="tests/grc.test.tsx" name="GRC evidence editor &gt; keeps a business review date while stripping only workflow metadata" time="0.2070422">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/group-source-lineage.test.tsx" timestamp="2026-10-31T01:55:29.705Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.6971547">
+        <testcase classname="tests/group-source-lineage.test.tsx" name="pages full current and comparative populations independently without dropping later source fields" time="0.6672655">
+        </testcase>
+        <testcase classname="tests/group-source-lineage.test.tsx" name="reports unstructured rows and preserves valid rows instead of silently declaring a complete table" time="0.0249908">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ifrs-calculation-navigation.test.tsx" timestamp="2026-10-31T01:55:29.705Z" hostname="DESKTOP-B3SR465" tests="8" failures="0" errors="0" skipped="0" time="0.7527448">
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="clears retained record selections when the active tenant changes" time="0.2876936">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE inventory assumptions through the existing numeric engine" time="0.0662254">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN inventory assumptions through the existing numeric engine" time="0.042819">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE employee-benefits assumptions through the existing numeric engine" time="0.0583924">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN employee-benefits assumptions through the existing numeric engine" time="0.0252104">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="clears selected assumptions and immutable runs when switching calculation subtype" time="0.1298034">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="does not carry instrument mode or a selected record into an inventory workspace" time="0.1001426">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="keeps workflows without a standalone numeric engine disabled" time="0.0384451">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/import-nil-scope.test.tsx" timestamp="2026-10-31T01:55:29.706Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2154476">
+        <testcase classname="tests/import-nil-scope.test.tsx" name="explicit nil imports &gt; starts disabled without silently declaring either box nil" time="0.0589035">
+        </testcase>
+        <testcase classname="tests/import-nil-scope.test.tsx" name="explicit nil imports &gt; requires separate kind choices and binds the selected clean document hash" time="0.1532329">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/intelligence-exports.test.tsx" timestamp="2026-10-31T01:55:29.707Z" hostname="DESKTOP-B3SR465" tests="10" failures="0" errors="0" skipped="0" time="0.38673">
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; downloads the requested XLSX bytes with tenant scope" time="0.2076863">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; downloads the requested PDF bytes with tenant scope" time="0.018017">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; downloads the requested DOCX bytes with tenant scope" time="0.0242813">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; shows actionable unsupported-font guidance and its request reference without an attachment" time="0.0291073">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; retains permission errors and handles a non-JSON outage without a fake file" time="0.0386534">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; blocks overlapping exports while a real response is pending" time="0.0211727">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; cancels the old result on scope change even if the response ignores abort" time="0.0190859">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; refreshes an expired session before reading the binary attachment" time="0.0105651">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; keeps existing JSON and no-content API behavior" time="0.0020233">
+        </testcase>
+        <testcase classname="tests/intelligence-exports.test.tsx" name="reviewable intelligence downloads &gt; shares one pending session refresh between JSON requests and downloads" time="0.0126019">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/inventory-evidence-table.test.tsx" timestamp="2026-10-31T01:55:29.708Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="2.6722195">
+        <testcase classname="tests/inventory-evidence-table.test.tsx" name="inventory evidence pagination &gt; pages purchase controls independently and retains declared units" time="1.3699739">
+        </testcase>
+        <testcase classname="tests/inventory-evidence-table.test.tsx" name="inventory evidence pagination &gt; pages control partitions independently without aggregating units or signs" time="0.9014865">
+        </testcase>
+        <testcase classname="tests/inventory-evidence-table.test.tsx" name="pages reviewed confirmation links using an independent offset" time="0.1240735">
+        </testcase>
+        <testcase classname="tests/inventory-evidence-table.test.tsx" name="pages cutoff controls and original ledger links independently" time="0.2711672">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/inventory-fifo-details.test.tsx" timestamp="2026-10-31T01:55:29.708Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2548669">
+        <testcase classname="tests/inventory-fifo-details.test.tsx" name="FIFO retained cost evidence &gt; pages allocations independently from events and retains zero cost" time="0.2263309">
+        </testcase>
+        <testcase classname="tests/inventory-fifo-details.test.tsx" name="FIFO retained cost evidence &gt; resets collection offsets when a different result is selected" time="0.0246667">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/inventory-performance.test.tsx" timestamp="2026-10-31T01:55:29.709Z" hostname="DESKTOP-B3SR465" tests="6" failures="0" errors="0" skipped="0" time="3.4242637">
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains the entity functional currency AED without legal or account defaults" time="0.9757205">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains the entity functional currency INR without legal or account defaults" time="0.7264193">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains the entity functional currency USD without legal or account defaults" time="0.5834429">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains selected accounts outside the search and clears scopes on snapshot change" time="0.5392408">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; requires an explicit zero inventory assessment before accepting a zero control" time="0.4892237">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; pages complete account lineage without hiding zero or changing controls" time="0.1067198">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/merchant-reserve-controls.test.tsx" timestamp="2026-10-31T01:55:29.710Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.0720315">
+        <testcase classname="tests/merchant-reserve-controls.test.tsx" name="requires both independently declared merchant-reserve-movements controls" time="0.0037744">
+        </testcase>
+        <testcase classname="tests/merchant-reserve-controls.test.tsx" name="requires both independently declared merchant-reserve-balances controls" time="0.0007136">
+        </testcase>
+        <testcase classname="tests/merchant-reserve-controls.test.tsx" name="preserves separately entered gross controls and starts without invented zeros" time="0.064397">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/merchant-settlement-details.test.tsx" timestamp="2026-10-31T01:55:29.710Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2014329">
+        <testcase classname="tests/merchant-settlement-details.test.tsx" name="keeps missing components distinct from an explicit zero" time="0.1919119">
+        </testcase>
+        <testcase classname="tests/merchant-settlement-details.test.tsx" name="identifies the original unallocated bank movement with its signed residual" time="0.0064641">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/merchant-settlement-workflow.test.tsx" timestamp="2026-10-31T01:55:29.711Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="2.1113319">
+        <testcase classname="tests/merchant-settlement-workflow.test.tsx" name="submits explicit AE bank scope and four independent sources" time="1.1942144">
+        </testcase>
+        <testcase classname="tests/merchant-settlement-workflow.test.tsx" name="submits explicit IN bank scope and four independent sources" time="0.5978681">
+        </testcase>
+        <testcase classname="tests/merchant-settlement-workflow.test.tsx" name="requires independent processor component totals alongside net totals" time="0.1426405">
+        </testcase>
+        <testcase classname="tests/merchant-settlement-workflow.test.tsx" name="shows gross-to-net components and the bank residual separately" time="0.1735196">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ml-signals.test.tsx" timestamp="2026-10-31T01:55:29.711Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.0447861">
+        <testcase classname="tests/ml-signals.test.tsx" name="ML execution provenance &gt; shows baseline execution without pretending a trained model was used" time="0.0344324">
+        </testcase>
+        <testcase classname="tests/ml-signals.test.tsx" name="ML execution provenance &gt; labels a missing local runtime while preserving deterministic workflows" time="0.0033697">
+        </testcase>
+        <testcase classname="tests/ml-signals.test.tsx" name="ML execution provenance &gt; preserves explicitly diagnostic mode and model identity for trained execution" time="0.0042434">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/msme-interest.test.tsx" timestamp="2026-10-31T01:55:29.712Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.3135984">
+        <testcase classname="tests/msme-interest.test.tsx" name="separates a partial interest subtotal from retained principal timing exceptions" time="0.1709203">
+        </testcase>
+        <testcase classname="tests/msme-interest.test.tsx" name="paginates every trace row without converting exact financial strings to floating point" time="0.1395142">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/msme-payment-workflow.test.tsx" timestamp="2026-10-31T01:55:29.712Z" hostname="DESKTOP-B3SR465" tests="11" failures="0" errors="0" skipped="0" time="4.6244735">
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="describes retained document verification honestly for a CURRENT result" time="0.3684695">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="describes retained document verification honestly for a STALE result" time="0.1637283">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="queues eight reviewed tax sources with separate annual and post-year observation scope" time="1.1153297">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="binds a clean retained supporting document for msme-interest-policies" time="0.2542928">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="binds a clean retained supporting document for msme-bank-rates" time="0.1999224">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="binds a clean retained supporting document for msme-tax-bases" time="0.2341568">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="binds a clean retained supporting document for msme-interest-pnl" time="0.241116">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="requires explicit buyer and bank/calendar scope, with reviewed sources for india-msme-payment-timing" time="0.701658">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="requires explicit buyer and bank/calendar scope, with reviewed sources for india-msme-interest" time="0.9358543">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="does not offer the India workflow for a UAE engagement" time="0.1042961">
+        </testcase>
+        <testcase classname="tests/msme-payment-workflow.test.tsx" name="selects a distinct clean MSE context and requires a document-scope assessment without manual IDs" time="0.3018967">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/msme-tax.test.tsx" timestamp="2026-10-31T01:55:29.713Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.7637026">
+        <testcase classname="tests/msme-tax.test.tsx" name="keeps three adjustments, annual cutoff and observation date separate" time="0.3960428">
+        </testcase>
+        <testcase classname="tests/msme-tax.test.tsx" name="pages invoice evidence independently and preserves original advance cash and assessed application dates" time="0.2118022">
+        </testcase>
+        <testcase classname="tests/msme-tax.test.tsx" name="labels partial totals and unresolved net without losing financial precision or stale status" time="0.1527482">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/native-connection.test.tsx" timestamp="2026-10-31T01:55:29.714Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.2955825">
+        <testcase classname="tests/native-connection.test.tsx" name="saves direct configuration and new secrets through PATCH without displaying stored credentials" time="0.2501171">
+        </testcase>
+        <testcase classname="tests/native-connection.test.tsx" name="exposes direct API sync and identifies desktop partner requirements rather than using Online endpoints" time="0.0424223">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/native-salary-annual.test.tsx" timestamp="2026-10-31T01:55:29.714Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.7871394">
+        <testcase classname="tests/native-salary-annual.test.tsx" name="complete annual salary records &gt; pages every original record and all numbered fields independently" time="0.7059988">
+        </testcase>
+        <testcase classname="tests/native-salary-annual.test.tsx" name="complete annual salary records &gt; keeps empty fields distinct from recorded zero and a signed amount" time="0.0363819">
+        </testcase>
+        <testcase classname="tests/native-salary-annual.test.tsx" name="complete annual salary records &gt; exposes missing saved annual data instead of rendering a partial healthy table" time="0.0064448">
+        </testcase>
+        <testcase classname="tests/native-salary-annual.test.tsx" name="complete annual salary records &gt; requires all six independent annual counts and a distinct Q4 payload" time="0.0349913">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/native-withholding-source.test.tsx" timestamp="2026-10-31T01:55:29.715Z" hostname="DESKTOP-B3SR465" tests="19" failures="0" errors="0" skipped="0" time="1.3209655">
+        <testcase classname="tests/native-withholding-source.test.tsx" name="dated salary source &gt; requires the source-date assessment and excludes Q4" time="0.281708">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="dated salary source &gt; shows deposit dates and penalty without invented rate or component tax" time="0.1684509">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="historical salary source &gt; retains component tax and employee reference without a fabricated rate" time="0.092282">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="historical salary source &gt; uses historical controls and requires a separate Q4 salary format" time="0.0336796">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="numbered non-salary deductions &gt; keeps deducted tax, penalty and independent cash controls separate for Form 140" time="0.0462318">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="numbered non-salary deductions &gt; keeps deducted tax, penalty and independent cash controls separate for Form 144" time="0.021896">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="numbered non-salary deductions &gt; retains numbered nonresident fields without legacy flags or invented component tax" time="0.0878071">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; separates dated Form 143 controls from legacy component and financial-year inputs" time="0.03259">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; shows Form 143 source flags and book mode without presenting bank settlement or invented component tax" time="0.1119884">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; preserves nonresident source codes and blanks while distinguishing treaty claims from qualification" time="0.1307066">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; shows each challan once and preserves leading-zero references and distinct gross/allocated amounts" time="0.031628">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; keeps prepared tax, allocated deposit and challan gross separate without floating point conversion" time="0.0007319">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; requires an explicit surcharge rather than supplying defaults" time="0.0006281">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; requires an explicit cess rather than supplying defaults" time="0.0003192">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; requires an explicit record_status rather than supplying defaults" time="0.0002085">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; requires an explicit crosswalk_document_version_id rather than supplying defaults" time="0.0001496">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; rejects successor periods, decimal counts, inconsistent group totals and invalid JSON" time="0.0011026">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; collects separate clean-document selection and explicit status without inferring filing" time="0.0302636">
+        </testcase>
+        <testcase classname="tests/native-withholding-source.test.tsx" name="native withholding controls &gt; pages complete party lineage and resets the page on an exact group filter" time="0.2438245">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/nonresident-audit-revenue.test.tsx" timestamp="2026-10-31T01:55:29.717Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.260241">
+        <testcase classname="tests/nonresident-audit-revenue.test.tsx" name="nonresident revenue scope adoption &gt; adopts exact zero and incomplete facts without defaulting completeness" time="0.182529">
+        </testcase>
+        <testcase classname="tests/nonresident-audit-revenue.test.tsx" name="nonresident revenue scope adoption &gt; keeps the selected paper when switching a retained table and binds the new table" time="0.0335929">
+        </testcase>
+        <testcase classname="tests/nonresident-audit-revenue.test.tsx" name="nonresident revenue scope adoption &gt; rejects unassessed string booleans rather than coercing them" time="0.0299166">
+        </testcase>
+        <testcase classname="tests/nonresident-audit-revenue.test.tsx" name="nonresident revenue scope adoption &gt; does not allow adoption from an unreviewed source" time="0.0105577">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/ownership-path-evidence.test.tsx" timestamp="2026-10-31T01:55:29.717Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.6886195">
+        <testcase classname="tests/ownership-path-evidence.test.tsx" name="retained ownership path evidence &gt; pages complete source steps independently from calculated paths" time="0.6592363">
+        </testcase>
+        <testcase classname="tests/ownership-path-evidence.test.tsx" name="retained ownership path evidence &gt; retains exact fractions and explicit unknown person identities on graph gaps" time="0.0223972">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/party-confirmation-evidence.test.tsx" timestamp="2026-10-31T01:55:29.718Z" hostname="DESKTOP-B3SR465" tests="6" failures="0" errors="0" skipped="0" time="0.6429899">
+        <testcase classname="tests/party-confirmation-evidence.test.tsx" name="positive party confirmation evidence &gt; pages all linked item IDs and resets the item page when party changes" time="0.4215072">
+        </testcase>
+        <testcase classname="tests/party-confirmation-evidence.test.tsx" name="positive party confirmation evidence &gt; requires a matching retained hash receipt for download and surfaces permission failures" time="0.0856391">
+        </testcase>
+        <testcase classname="tests/party-confirmation-evidence.test.tsx" name="keeps blank request amounts absent and exposes partial reply membership" time="0.0530591">
+        </testcase>
+        <testcase classname="tests/party-confirmation-evidence.test.tsx" name="does not invent membership for an unmapped partial reply" time="0.0304974">
+        </testcase>
+        <testcase classname="tests/party-confirmation-evidence.test.tsx" name="shows inventory quantity and condition evidence without financial fields or open-item links" time="0.0281403">
+        </testcase>
+        <testcase classname="tests/party-confirmation-evidence.test.tsx" name="keeps unanswered inventory quantity and condition absent" time="0.0203597">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/payroll-basis-proration.test.tsx" timestamp="2026-10-31T01:55:29.719Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.4368401">
+        <testcase classname="tests/payroll-basis-proration.test.tsx" name="starts with blank independent count and amount controls" time="0.1879883">
+        </testcase>
+        <testcase classname="tests/payroll-basis-proration.test.tsx" name="posts exact typed control text and a whole-result identity" time="0.1242639">
+        </testcase>
+        <testcase classname="tests/payroll-basis-proration.test.tsx" name="does not accept a partial count or negative total" time="0.0221941">
+        </testcase>
+        <testcase classname="tests/payroll-basis-proration.test.tsx" name="labels an explicit exclusion, unknown policy and the bounded preview" time="0.0992469">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/pdf-grid-editor.test.tsx" timestamp="2026-10-31T01:55:29.719Z" hostname="DESKTOP-B3SR465" tests="6" failures="0" errors="0" skipped="0" time="0.0069333">
+        <testcase classname="tests/pdf-grid-editor.test.tsx" name="explicit PDF grid &gt; serializes declared geometry and sign convention without adding unused columns" time="0.0029924">
+        </testcase>
+        <testcase classname="tests/pdf-grid-editor.test.tsx" name="explicit PDF grid &gt; rejects blank mappings before queuing" time="0.0008788">
+        </testcase>
+        <testcase classname="tests/pdf-grid-editor.test.tsx" name="explicit PDF grid &gt; rejects overlap mappings before queuing" time="0.0003157">
+        </testcase>
+        <testcase classname="tests/pdf-grid-editor.test.tsx" name="explicit PDF grid &gt; rejects duplicate-page mappings before queuing" time="0.0002545">
+        </testcase>
+        <testcase classname="tests/pdf-grid-editor.test.tsx" name="explicit PDF grid &gt; rejects row-bound mappings before queuing" time="0.0001799">
+        </testcase>
+        <testcase classname="tests/pdf-grid-editor.test.tsx" name="explicit PDF grid &gt; rejects missing-convention mappings before queuing" time="0.0001495">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/pension-proposal.test.tsx" timestamp="2026-10-31T01:55:29.720Z" hostname="DESKTOP-B3SR465" tests="1" failures="0" errors="0" skipped="0" time="0.2337702">
+        <testcase classname="tests/pension-proposal.test.tsx" name="exposes separate optional eligibility and salary-cap parameters without seeding legal values" time="0.2308064">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/published-benefit-source.test.tsx" timestamp="2026-10-31T01:55:29.720Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.648363">
+        <testcase classname="tests/published-benefit-source.test.tsx" name="uses India profiles and wage-basis bindings for payroll preparation" time="0.347042">
+        </testcase>
+        <testcase classname="tests/published-benefit-source.test.tsx" name="excludes stale, unreviewed and unrelated employee sources and unpublished profiles" time="0.0269751">
+        </testcase>
+        <testcase classname="tests/published-benefit-source.test.tsx" name="retains selected profile versions across pages and submits explicit employee controls" time="0.1569341">
+        </testcase>
+        <testcase classname="tests/published-benefit-source.test.tsx" name="prepares UAE pension profiles with their exact reviewed salary-basis event" time="0.1131988">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/regulatory-conversion.test.tsx" timestamp="2026-10-31T01:55:29.721Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.4735638">
+        <testcase classname="tests/regulatory-conversion.test.tsx" name="requires explicit rounding and preserves the selected quote across rate pages" time="0.395789">
+        </testcase>
+        <testcase classname="tests/regulatory-conversion.test.tsx" name="uses only independently reviewed conversions and retains older-source access" time="0.0746712">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/regulatory-currency.test.tsx" timestamp="2026-10-31T01:55:29.721Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.3102185">
+        <testcase classname="tests/regulatory-currency.test.tsx" name="regulatory rule currency &gt; loads rules for the selected engagement country instead of the global country" time="0.0583093">
+        </testcase>
+        <testcase classname="tests/regulatory-currency.test.tsx" name="regulatory rule currency &gt; shows each declared currency and requires review of legacy unspecified rates" time="0.2485671">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/regulatory-sources.test.tsx" timestamp="2026-10-31T01:55:29.721Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.3605971">
+        <testcase classname="tests/regulatory-sources.test.tsx" name="retained regulatory sources &gt; binds only the selected citation without granting content qualification" time="0.0048364">
+        </testcase>
+        <testcase classname="tests/regulatory-sources.test.tsx" name="retained regulatory sources &gt; retains selected copies across source pages for explicit attachment" time="0.2957826">
+        </testcase>
+        <testcase classname="tests/regulatory-sources.test.tsx" name="retained regulatory sources &gt; sends actual reference bytes and explicitly entered metadata" time="0.0523483">
+        </testcase>
+        <testcase classname="tests/regulatory-sources.test.tsx" name="retained regulatory sources &gt; requires the source-management permission for uploading" time="0.004212">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/report-import.test.tsx" timestamp="2026-10-31T01:55:29.722Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.4491819">
+        <testcase classname="tests/report-import.test.tsx" name="accounting report-set import &gt; requires all three reports and retains the selected accounting provider" time="0.3751492">
+        </testcase>
+        <testcase classname="tests/report-import.test.tsx" name="accounting report-set import &gt; rejects multi-sheet workbooks before allowing a report-set upload" time="0.0699321">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/report-requirements.test.tsx" timestamp="2026-10-31T01:55:29.722Z" hostname="DESKTOP-B3SR465" tests="5" failures="0" errors="0" skipped="0" time="1.1208294">
+        <testcase classname="tests/report-requirements.test.tsx" name="report requirement navigation &gt; edits later pages without losing hidden requirements or unlocking source guards" time="0.7039478">
+        </testcase>
+        <testcase classname="tests/report-requirements.test.tsx" name="report requirement navigation &gt; combines key, title and basis search with assessment filters and saves the whole scope" time="0.1295479">
+        </testcase>
+        <testcase classname="tests/report-requirements.test.tsx" name="report requirement navigation &gt; clamps the last page after deletion" time="0.1395521">
+        </testcase>
+        <testcase classname="tests/report-requirements.test.tsx" name="report requirement navigation &gt; reveals a newly added requirement after clearing active filters" time="0.0901873">
+        </testcase>
+        <testcase classname="tests/report-requirements.test.tsx" name="preserves hidden block selections and enforces the 100-item block limit" time="0.0539837">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/reporting-record-select.test.tsx" timestamp="2026-10-31T01:55:29.723Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.6726625">
+        <testcase classname="tests/reporting-record-select.test.tsx" name="reaches all 151 profiles, assumptions and immutable versions with independent paging and retained selection" time="0.5946688">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="preserves a newly generated selected run outside the current page without choosing another run" time="0.0443221">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="keeps an unavailable page visible as an error and never clears the retained ID" time="0.0157835">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="does not advance while a page is loading or infer a selected record" time="0.0096489">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/rule-fixture-editor.test.tsx" timestamp="2026-10-31T01:55:29.724Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.3265216">
+        <testcase classname="tests/rule-fixture-editor.test.tsx" name="refuses an empty fixture list without claiming validation" time="0.2312938">
+        </testcase>
+        <testcase classname="tests/rule-fixture-editor.test.tsx" name="hides a previously passing receipt when its inputs or expected values change" time="0.0452936">
+        </testcase>
+        <testcase classname="tests/rule-fixture-editor.test.tsx" name="keeps independently entered expectations unchanged when the machine reports a mismatch" time="0.046836">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/salary-annual-comparison.test.tsx" timestamp="2026-10-31T01:55:29.724Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.4729895">
+        <testcase classname="tests/salary-annual-comparison.test.tsx" name="Annual salary current-employer comparison &gt; requires every quarter and explicit nil support, preserving full employee JSON" time="0.3117473">
+        </testcase>
+        <testcase classname="tests/salary-annual-comparison.test.tsx" name="Annual salary current-employer comparison &gt; pages full assigned coverage and keeps unassigned senior parties visible" time="0.1551126">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/savings-scheme.test.tsx" timestamp="2026-10-31T01:55:29.725Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.4978866">
+        <testcase classname="tests/savings-scheme.test.tsx" name="binds only clean retained enrolment documents and keeps registry limits visible" time="0.1926326">
+        </testcase>
+        <testcase classname="tests/savings-scheme.test.tsx" name="preserves selected fund controls across result pages without pooling funds" time="0.2011009">
+        </testcase>
+        <testcase classname="tests/savings-scheme.test.tsx" name="never fills an independent fund-observation count or amount from a result" time="0.0097519">
+        </testcase>
+        <testcase classname="tests/savings-scheme.test.tsx" name="can request an explicitly controlled nil original population without manufacturing rows" time="0.090503">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/screening-candidates.test.tsx" timestamp="2026-10-31T01:55:29.725Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.7815596">
+        <testcase classname="tests/screening-candidates.test.tsx" name="complete screening candidate review &gt; pages candidates beyond 20 and 100, resets on subject change, and preserves context" time="0.7149821">
+        </testcase>
+        <testcase classname="tests/screening-candidates.test.tsx" name="complete screening candidate review &gt; warns on incomplete historical results (flag true) and does not label zero hits as cleared" time="0.0311692">
+        </testcase>
+        <testcase classname="tests/screening-candidates.test.tsx" name="complete screening candidate review &gt; warns on incomplete historical results (flag false) and does not label zero hits as cleared" time="0.0322694">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/sod-import.test.tsx" timestamp="2026-10-31T01:55:29.726Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.4246496">
+        <testcase classname="tests/sod-import.test.tsx" name="preserves the point-in-time default without invented history or controls" time="0.2645013">
+        </testcase>
+        <testcase classname="tests/sod-import.test.tsx" name="sends explicit history coverage, analysis period and numeric independent counts" time="0.1563798">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/sod-results.test.tsx" timestamp="2026-10-31T01:55:29.726Z" hostname="DESKTOP-B3SR465" tests="6" failures="0" errors="0" skipped="0" time="0.5541666">
+        <testcase classname="tests/sod-results.test.tsx" name="pages conflicts independently without fetching closed collections or inventing values" time="0.2179644">
+        </testcase>
+        <testcase classname="tests/sod-results.test.tsx" name="labels stale results and downloads the complete authenticated workbook" time="0.0535269">
+        </testcase>
+        <testcase classname="tests/sod-results.test.tsx" name="keeps imported draft assignments bounded and original indices stable" time="0.1489233">
+        </testcase>
+        <testcase classname="tests/sod-results.test.tsx" name="uses compact calculate and history requests instead of returning full collections" time="0.0324946">
+        </testcase>
+        <testcase classname="tests/sod-results.test.tsx" name="keeps saved snapshots readable when recalculation is unavailable" time="0.0438767">
+        </testcase>
+        <testcase classname="tests/sod-results.test.tsx" name="uses gateway-compatible hyphenated routes when a collection opens" time="0.0541836">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/statutory-report-preview.test.tsx" timestamp="2026-10-31T01:55:29.727Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.8698552">
+        <testcase classname="tests/statutory-report-preview.test.tsx" name="retained statutory report preview &gt; pages all fields and source blocks independently while preserving the full saved body" time="0.7340901">
+        </testcase>
+        <testcase classname="tests/statutory-report-preview.test.tsx" name="retained statutory report preview &gt; shows staleness without altering saved assertions and lazily exposes exact source values" time="0.0459646">
+        </testcase>
+        <testcase classname="tests/statutory-report-preview.test.tsx" name="retained statutory report preview &gt; supports a common UAE report without inventing tax scope or missing source metadata" time="0.0228236">
+        </testcase>
+        <testcase classname="tests/statutory-report-preview.test.tsx" name="retained statutory report preview &gt; retains late source columns and pages original rows independently of report requirements" time="0.0635796">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/supporting-spreadsheet.test.tsx" timestamp="2026-10-31T01:55:29.728Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.9194995">
+        <testcase classname="tests/supporting-spreadsheet.test.tsx" name="shows supporting-table amounts before expanded PDF provenance" time="0.3264601">
+        </testcase>
+        <testcase classname="tests/supporting-spreadsheet.test.tsx" name="queues PDF geometry with header scope and clears worksheet-only configuration" time="0.5057401">
+        </testcase>
+        <testcase classname="tests/supporting-spreadsheet.test.tsx" name="submits an explicit XLSX worksheet with the supporting-table conventions" time="0.0459338">
+        </testcase>
+        <testcase classname="tests/supporting-spreadsheet.test.tsx" name="keeps selected VAT coverage visible in workpaper actions and does not mix exclusion paging with result paging" time="0.0379764">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/tax-audit-report-builder.test.tsx" timestamp="2026-10-31T01:55:29.728Z" hostname="DESKTOP-B3SR465" tests="6" failures="0" errors="0" skipped="0" time="1.8396233">
+        <testcase classname="tests/tax-audit-report-builder.test.tsx" name="tax audit report builder &gt; sends the explicitly assessed scope and clears it when changing engagement" time="0.6367891">
+        </testcase>
+        <testcase classname="tests/tax-audit-report-builder.test.tsx" name="maps a declared authored requirement to a retained draft block and sends its explicit scope" time="0.2686066">
+        </testcase>
+        <testcase classname="tests/tax-audit-report-builder.test.tsx" name="loads an unassessed operational preset, locks mandatory source coverage and resets it on engagement change" time="0.1359274">
+        </testcase>
+        <testcase classname="tests/tax-audit-report-builder.test.tsx" name="shows retained requirement gaps to reviewers and blocks approval without editing a draft" time="0.0659044">
+        </testcase>
+        <testcase classname="tests/tax-audit-report-builder.test.tsx" name="offers the India index only for tax audit and retains evidence for not-applicable items" time="0.1206971">
+        </testcase>
+        <testcase classname="tests/tax-audit-report-builder.test.tsx" name="saves every expanded field after searching and editing the last field" time="0.6081226">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/tax-audit-scope.test.tsx" timestamp="2026-10-31T01:55:29.729Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.2541783">
+        <testcase classname="tests/tax-audit-scope.test.tsx" name="tax audit scope selection &gt; requires explicit audit basis, accepting an assessed false value" time="0.0037805">
+        </testcase>
+        <testcase classname="tests/tax-audit-scope.test.tsx" name="tax audit scope selection &gt; requires the Form 26 report part without inferring it" time="0.0007532">
+        </testcase>
+        <testcase classname="tests/tax-audit-scope.test.tsx" name="tax audit scope selection &gt; requires reselection when loading obsolete report-part letters" time="0.0004836">
+        </testcase>
+        <testcase classname="tests/tax-audit-scope.test.tsx" name="tax audit scope selection &gt; offers only current reviewed tax cases and retains a selected older case" time="0.2453112">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/tax-close-exposures.test.tsx" timestamp="2026-10-31T01:55:29.730Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.4045958">
+        <testcase classname="tests/tax-close-exposures.test.tsx" name="tax-close exposure source population &gt; retains papers across pages, excludes drafts and sends exact source identities" time="0.3066595">
+        </testcase>
+        <testcase classname="tests/tax-close-exposures.test.tsx" name="tax-close exposure source population &gt; does not enable independent approval for an incomplete result" time="0.0634306">
+        </testcase>
+        <testcase classname="tests/tax-close-exposures.test.tsx" name="tax-close exposure source population &gt; resets selected papers when the country changes" time="0.0265097">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/tax-execution-notice.test.tsx" timestamp="2026-10-31T01:55:29.730Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.0370391">
+        <testcase classname="tests/tax-execution-notice.test.tsx" name="tax execution state separation &gt; discloses legacy provenance without manufacturing a status" time="0.0228822">
+        </testcase>
+        <testcase classname="tests/tax-execution-notice.test.tsx" name="tax execution state separation &gt; keeps calculation, review, filing and payment states separate" time="0.0117321">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/toast.test.tsx" timestamp="2026-10-31T01:55:29.731Z" hostname="DESKTOP-B3SR465" tests="1" failures="0" errors="0" skipped="0" time="0.1280385">
+        <testcase classname="tests/toast.test.tsx" name="announces backend acknowledgement and allows dismissal" time="0.1253009">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/turnover-books-composition.test.tsx" timestamp="2026-10-31T01:55:29.731Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.4005921">
+        <testcase classname="tests/turnover-books-composition.test.tsx" name="Reviewed turnover books &gt; combines eligible AE schedules only against explicit controls" time="0.2876821">
+        </testcase>
+        <testcase classname="tests/turnover-books-composition.test.tsx" name="Reviewed turnover books &gt; combines eligible IN schedules only against explicit controls" time="0.1086032">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/turnover-ledger-source.test.tsx" timestamp="2026-10-31T01:55:29.731Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.6433021">
+        <testcase classname="tests/turnover-ledger-source.test.tsx" name="Committed turnover controls &gt; requires explicit AE counts, nil assessment and signed amounts" time="0.3630938">
+        </testcase>
+        <testcase classname="tests/turnover-ledger-source.test.tsx" name="Committed turnover controls &gt; requires explicit IN counts, nil assessment and signed amounts" time="0.2764612">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/uae-advanced-inputs.test.tsx" timestamp="2026-10-31T01:55:29.732Z" hostname="DESKTOP-B3SR465" tests="5" failures="0" errors="0" skipped="0" time="0.5453922">
+        <testcase classname="tests/uae-advanced-inputs.test.tsx" name="Advanced typed inputs &gt; shows contextual facts, preserves unresolved booleans and excludes unapproved sources" time="0.2860642">
+        </testcase>
+        <testcase classname="tests/uae-advanced-inputs.test.tsx" name="Advanced typed inputs &gt; runs only the selected approved input and sends no rate/value overrides" time="0.0685435">
+        </testcase>
+        <testcase classname="tests/uae-advanced-inputs.test.tsx" name="Advanced typed inputs &gt; requires preparation permission and keeps workbook inspection separate" time="0.0397545">
+        </testcase>
+        <testcase classname="tests/uae-advanced-inputs.test.tsx" name="Continuation framework and structured cashflows &gt; requires an explicit framework and offers typed cashflow and source editors" time="0.0906653">
+        </testcase>
+        <testcase classname="tests/uae-advanced-inputs.test.tsx" name="Assurance source and dependency editors &gt; exposes source lists without treating them as trained inference" time="0.0556031">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/uae-business-cases.test.tsx" timestamp="2026-10-31T01:55:29.732Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.3170501">
+        <testcase classname="tests/uae-business-cases.test.tsx" name="UAE business workflow entry &gt; shows actual scoped records and required facts without a compliance badge" time="0.2148872">
+        </testcase>
+        <testcase classname="tests/uae-business-cases.test.tsx" name="UAE business workflow entry &gt; invokes the governed action with an approved input, never a posting endpoint" time="0.0682934">
+        </testcase>
+        <testcase classname="tests/uae-business-cases.test.tsx" name="UAE business workflow entry &gt; disables actions without permission" time="0.0304347">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/uae-company-accounts.test.tsx" timestamp="2026-10-31T01:55:29.733Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.6243911">
+        <testcase classname="tests/uae-company-accounts.test.tsx" name="binds four distinct retained roles and preserves unknown publication and legal applicability" time="0.6030429">
+        </testcase>
+        <testcase classname="tests/uae-company-accounts.test.tsx" name="shows unknown current duties without implying a company-law exemption" time="0.0098306">
+        </testcase>
+        <testcase classname="tests/uae-company-accounts.test.tsx" name="keeps timely response separate from incomplete copies and an independently required annual audit" time="0.0067904">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/uae-ct-audit-duty-result.test.tsx" timestamp="2026-10-31T01:55:29.733Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.2134411">
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="shows the exact threshold result without implying a company-law audit exemption" time="0.1756507">
+        </testcase>
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="keeps unresolved current rules distinct from a positive dated-source branch and unknown revenue" time="0.0160629">
+        </testcase>
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="preserves exact long AED values and treats string booleans as unresolved" time="0.0065653">
+        </testcase>
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="keeps explicitly reported zero distinct from absent revenue" time="0.01199">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/uae-ct-audit-duty.test.tsx" timestamp="2026-10-31T01:55:29.734Z" hostname="DESKTOP-B3SR465" tests="1" failures="0" errors="0" skipped="0" time="0.5176639">
+        <testcase classname="tests/uae-ct-audit-duty.test.tsx" name="UAE corporate-tax audited statements &gt; retains explicit unknowns, AED strings and separate clean rule and fact evidence" time="0.5141421">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/un-sanctions-source.test.tsx" timestamp="2026-10-31T01:55:29.734Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.0889273">
+        <testcase classname="tests/un-sanctions-source.test.tsx" name="controlled UN XML source &gt; requires explicit independent controls including literal zero; empty aliases are not name rows" time="0.0049246">
+        </testcase>
+        <testcase classname="tests/un-sanctions-source.test.tsx" name="controlled UN XML source &gt; renders labelled controls, retains entered draft and explains population and clearance limits" time="0.0512695">
+        </testcase>
+        <testcase classname="tests/un-sanctions-source.test.tsx" name="controlled UN XML source &gt; shows low-quality source observations and original permanent reference during adjudication" time="0.0231529">
+        </testcase>
+        <testcase classname="tests/un-sanctions-source.test.tsx" name="controlled UN XML source &gt; distinguishes documented observations from an identity disposition" time="0.0064449">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/vat-composition-source.test.tsx" timestamp="2026-10-31T01:55:29.735Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.3589758">
+        <testcase classname="tests/vat-composition-source.test.tsx" name="VAT201 composition &gt; offers only current reviewed box sources and requires explicit independent controls" time="0.2460574">
+        </testcase>
+        <testcase classname="tests/vat-composition-source.test.tsx" name="composes explicitly selected emirate-20 layout" time="0.0623669">
+        </testcase>
+        <testcase classname="tests/vat-composition-source.test.tsx" name="composes explicitly selected ecommerce-20 layout" time="0.0472226">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/withholding-obligation-source.test.tsx" timestamp="2026-10-31T01:55:29.735Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.5516522">
+        <testcase classname="tests/withholding-obligation-source.test.tsx" name="requires independent controls and does not preselect expected liability or a payer role" time="0.2565309">
+        </testcase>
+        <testcase classname="tests/withholding-obligation-source.test.tsx" name="prepares only the explicitly chosen expected purpose and preserves exact amount text" time="0.1324943">
+        </testcase>
+        <testcase classname="tests/withholding-obligation-source.test.tsx" name="prepares only the explicitly chosen reported purpose and preserves exact amount text" time="0.1583301">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/withholding-pan-review.test.tsx" timestamp="2026-10-31T01:55:29.736Z" hostname="DESKTOP-B3SR465" tests="5" failures="0" errors="0" skipped="0" time="0.251733">
+        <testcase classname="tests/withholding-pan-review.test.tsx" name="missing PAN treatment review &gt; keeps matching amounts separate from pending identity/treatment" time="0.1799803">
+        </testcase>
+        <testcase classname="tests/withholding-pan-review.test.tsx" name="missing PAN treatment review &gt; retains document/reference scope without claiming PAN authentication" time="0.041103">
+        </testcase>
+        <testcase classname="tests/withholding-pan-review.test.tsx" name="missing PAN treatment review &gt; shows complete-result pending counts when the affected row is on another page" time="0.0171805">
+        </testcase>
+        <testcase classname="tests/withholding-pan-review.test.tsx" name="missing PAN treatment review &gt; requires regeneration for retained results without the current control" time="0.007774">
+        </testcase>
+        <testcase classname="tests/withholding-pan-review.test.tsx" name="missing PAN treatment review &gt; does not infer a missing PAN from an ordinary internal party identifier" time="0.0021738">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/workflow-currency-defaults.test.tsx" timestamp="2026-10-31T01:55:29.736Z" hostname="DESKTOP-B3SR465" tests="8" failures="0" errors="0" skipped="0" time="2.1245213">
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh IN common workflow (INR)" time="0.4851289">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh AE common workflow (AED)" time="0.1731089">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh IN common workflow (USD)" time="0.1552041">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh AE common workflow (EUR)" time="0.1414293">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="adapts to delayed metadata, preserves an explicit foreign choice on refresh, and scopes it to the engagement" time="0.2302002">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses fixed reporting currency for GST and VAT while preserving an explicit common-account currency" time="0.4002056">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="queues the explicit original-invoice currency rather than substituting INR" time="0.456044">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="keeps a missing configured currency blank instead of inventing AED" time="0.0800085">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/workpaper-report-scope.test.tsx" timestamp="2026-10-31T01:55:29.737Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.4527174">
+        <testcase classname="tests/workpaper-report-scope.test.tsx" name="Workpaper report item declarations &gt; requires deliberate preset, section, protected support and assessment before adding an item" time="0.3168026">
+        </testcase>
+        <testcase classname="tests/workpaper-report-scope.test.tsx" name="Workpaper report item declarations &gt; hides the optional declaration when the country has no compatible preset" time="0.0056579">
+        </testcase>
+        <testcase classname="tests/workpaper-report-scope.test.tsx" name="searches a large inventory while retaining selected fields across searches" time="0.1237098">
+        </testcase>
+    </testsuite>
+</testsuites>

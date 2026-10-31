@@ -1,0 +1,288 @@
+{
+  "source_commit": "3e4b0a2dc0cf22b1d5e1155ff160aaed95e4eb15",
+  "run_id": 41147809464,
+  "job_id": 124376904490,
+  "conclusion": "success",
+  "passed": 5784,
+  "skipped": 9,
+  "failed": 0,
+  "errors": 0,
+  "duration_seconds": 3339.45,
+  "overall_coverage_percent": 87.1790122027462,
+  "artifact": {
+    "id": 13023623852,
+    "bytes": 258960,
+    "sha256": "fbcb24ef87837df5be089ed8306bc7201cd1fd9b726c324d90069c60e6cfcda6"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/3e4b0a2-hosted-full.xml",
+      "bytes": 903246,
+      "sha256": "930bd30691594ed6e0b3be5da7858c3ffcef89d3bc47156bfb6df05b3da6fd0b"
+    },
+    {
+      "path": "docs/phase-12/3e4b0a2-hosted-coverage.json",
+      "bytes": 1925007,
+      "sha256": "be7687edf4f850590bbe449de66062d72ed677a3cc50ff70bb75bc7f0d1b661f"
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "security": "success",
+    "containers": "success",
+    "ml": "success"
+  },
+  "ct_duty_cases": [
+    {
+      "class": "tests.qa_crud.test_uae_ct_audit_duty",
+      "name": "test_dated_duty_review_export_and_original_fact_replacement[False]"
+    },
+    {
+      "class": "tests.qa_crud.test_uae_ct_audit_duty",
+      "name": "test_dated_duty_review_export_and_original_fact_replacement[True]"
+    },
+    {
+      "class": "tests.qa_crud.test_uae_ct_audit_duty",
+      "name": "test_source_and_country_boundaries_fail_closed[wrong-original]"
+    },
+    {
+      "class": "tests.qa_crud.test_uae_ct_audit_duty",
+      "name": "test_source_and_country_boundaries_fail_closed[quarantined-facts]"
+    },
+    {
+      "class": "tests.qa_crud.test_uae_ct_audit_duty",
+      "name": "test_source_and_country_boundaries_fail_closed[cloned-rule-facts]"
+    },
+    {
+      "class": "tests.qa_crud.test_uae_ct_audit_duty",
+      "name": "test_source_and_country_boundaries_fail_closed[other-country]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_strict_threshold_uses_exact_aed_and_never_establishes_entity_audit_exemption[0-False]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_strict_threshold_uses_exact_aed_and_never_establishes_entity_audit_exemption[49999999.99-False]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_strict_threshold_uses_exact_aed_and_never_establishes_entity_audit_exemption[50000000-False]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_strict_threshold_uses_exact_aed_and_never_establishes_entity_audit_exemption[50000000.01-True]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_strict_threshold_uses_exact_aed_and_never_establishes_entity_audit_exemption[99999999999999999999.99-True]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_nonresident_worldwide_revenue_is_not_substituted_for_pe_nexus_revenue"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_group_and_qfzp_duties_do_not_depend_on_revenue[tax_group-AUDITED_SPECIAL_PURPOSE_FINANCIAL_STATEMENTS-None]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_group_and_qfzp_duties_do_not_depend_on_revenue[tax_group-AUDITED_SPECIAL_PURPOSE_FINANCIAL_STATEMENTS-0]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_group_and_qfzp_duties_do_not_depend_on_revenue[tax_group-AUDITED_SPECIAL_PURPOSE_FINANCIAL_STATEMENTS-50000000.01]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_group_and_qfzp_duties_do_not_depend_on_revenue[qualifying_free_zone_person-AUDITED_FINANCIAL_STATEMENTS-None]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_group_and_qfzp_duties_do_not_depend_on_revenue[qualifying_free_zone_person-AUDITED_FINANCIAL_STATEMENTS-0]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_group_and_qfzp_duties_do_not_depend_on_revenue[qualifying_free_zone_person-AUDITED_FINANCIAL_STATEMENTS-50000000.01]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_missing_material_facts_or_operative_rule_changes_remain_unresolved[changes0]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_missing_material_facts_or_operative_rule_changes_remain_unresolved[changes1]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_missing_material_facts_or_operative_rule_changes_remain_unresolved[changes2]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_missing_material_facts_or_operative_rule_changes_remain_unresolved[changes3]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_missing_material_facts_or_operative_rule_changes_remain_unresolved[changes4]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_missing_material_facts_or_operative_rule_changes_remain_unresolved[changes5]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_missing_material_facts_or_operative_rule_changes_remain_unresolved[changes6]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_known_positive_duty_does_not_hide_unknown_statement_type"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_conflicting_classifications_are_not_clean_compliance[changes0]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_conflicting_classifications_are_not_clean_compliance[changes1]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_conflicting_classifications_are_not_clean_compliance[changes2]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_designated_distribution_does_not_claim_complete_additional_procedures"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes0]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes1]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes2]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes3]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes4]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes5]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes6]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes7]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes8]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes9]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes10]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes11]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes12]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes13]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_period_currency_and_amount_boundaries_fail_closed[changes14]"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_dated_positive_requirement_does_not_clear_unresolved_operative_changes"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_assessed_non_taxable_scope_does_not_establish_other_law_audit_exemption"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_rule_and_fact_document_cannot_be_the_same_original"
+    },
+    {
+      "class": "tests.unit.test_uae_ct_audit_duty",
+      "name": "test_retained_source_bytes_match_adopted_original"
+    }
+  ],
+  "skipped_cases": [
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "class": "tests.phase2.test_live_native",
+      "name": "test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_document_worker_runtime",
+      "name": "test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "separate_browser_receipt": "docs/phase-12/ct-audit-browser-3e4b0a2.json",
+  "limits": [
+    "Source includes original MD84 conditional audit-duty assessment, salary all-quarter comparison and pypdf6.21.4 security update; later group/company-law/UI workflow changes require separate proof.",
+    "All six jobs passed for this exact source, not for later main revisions.",
+    "Skipped live-provider cases remain unqualified; no real-client, independent professional or production qualification."
+  ]
+}

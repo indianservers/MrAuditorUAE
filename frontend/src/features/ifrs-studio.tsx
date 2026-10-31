@@ -201,7 +201,6 @@ function ReportingRuns({
   kind: string;
 }) {
   const base = `ifrs/engagements/${id}`;
-  const runs = useAPI<Page<RecordRow>>(base + "/runs");
   const [profile, setProfile] = useState("");
   const [record, setRecord] = useState("");
   const [rid, setRid] = useState("");
@@ -396,7 +395,6 @@ function ReportingRuns({
               key={rid}
               base={base}
               rid={rid}
-              runs={runs.data?.items || []}
               precision={Number(data.precision ?? 2)}
             />
           )}

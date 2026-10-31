@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAPI } from "@/hooks/use-api";
 import { qs } from "@/lib/api/client";
 import { ErrorState, Facts, Status } from "@/components/ui/primitives";
+import { ReportingRecordSelect } from "./reporting-record-select";
 import { money } from "@/lib/formatting/money";
 import type { RecordRow } from "@/types/models";
 
@@ -27,12 +28,10 @@ type Review = {
 export function FinancialReview({
   base,
   rid,
-  runs,
   precision = 2,
 }: {
   base: string;
   rid: string;
-  runs: RecordRow[];
   precision?: number;
 }) {
   const [previous, setPrevious] = useState("");
@@ -43,23 +42,15 @@ export function FinancialReview({
   return (
     <section className="card" aria-label="Financial statement review">
       <h2>Financial statement review</h2>
-      <label>
-        Compare earlier draft{" "}
-        <select
-          aria-label="Compare earlier draft"
-          value={previous}
-          onChange={(e) => setPrevious(e.target.value)}
-        >
-          <option value="">No draft comparison</option>
-          {runs
-            .filter((r) => r.kind === "financials" && r.id !== rid)
-            .map((r) => (
-              <option key={r.id} value={r.id}>
-                {String(r.created_at)} · {r.id.slice(0, 8)}
-              </option>
-            ))}
-        </select>
-      </label>
+      <ReportingRecordSelect
+        path={`${base}/runs?kind=financials`}
+        label="Compare earlier draft"
+        value={previous}
+        onChange={setPrevious}
+        excludeId={rid}
+        runs
+      />
+      <p>The current run is omitted from the choices; page counts include it.</p>
       <ErrorState error={review.error} />
       {review.isLoading && <p role="status">Checking statements…</p>}
       {review.data && (

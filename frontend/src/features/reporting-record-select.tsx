@@ -11,24 +11,26 @@ export function ReportingRecordSelect({
   value,
   onChange,
   runs = false,
+  excludeId,
 }: {
   path: string;
   label: string;
   value: string;
   onChange: (id: string) => void;
   runs?: boolean;
+  excludeId?: string;
 }) {
   const [offset, setOffset] = useState(0);
   const [selected, setSelected] = useState<RecordRow | null>(null);
   const limit = 50;
   const query = useAPI<Page<RecordRow>>(
-    `${path}?offset=${offset}&limit=${limit}`,
+    `${path}${path.includes("?") ? "&" : "?"}offset=${offset}&limit=${limit}`,
   );
   const page = query.data;
   const items = page?.items || [];
   const display = (row: RecordRow) =>
     runs
-      ? `${String(row.kind)} · ${row.id.slice(0, 8)}`
+      ? `${String(row.kind)} · ${row.created_at ? `${String(row.created_at)} · ` : ""}${row.id.slice(0, 8)}`
       : `${String(row.reference)} · ${String(row.status)}`;
   const outside = value && !items.some((row) => row.id === value);
   return (
@@ -52,11 +54,13 @@ export function ReportingRecordSelect({
               {selected?.id === value ? display(selected) : value} · selected
             </option>
           )}
-          {items.map((row) => (
-            <option key={row.id} value={row.id}>
-              {display(row)}
-            </option>
-          ))}
+          {items
+            .filter((row) => row.id !== excludeId)
+            .map((row) => (
+              <option key={row.id} value={row.id}>
+                {display(row)}
+              </option>
+            ))}
         </select>
       </label>
       <ErrorState error={query.error} />
