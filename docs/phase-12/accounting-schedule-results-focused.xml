@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="6" failures="0" errors="0" time="0.6046146">
+    <testsuite name="tests/accounting-schedule-results.test.tsx" timestamp="2026-10-31T02:10:03.124Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.2545702">
+        <testcase classname="tests/accounting-schedule-results.test.tsx" name="retains every item, movement and later-only field with independent pages and exact values" time="0.2190627">
+        </testcase>
+        <testcase classname="tests/accounting-schedule-results.test.tsx" name="keeps benefit and payroll rollforwards separate, preserving zero, unknown and explicit framework" time="0.0155735">
+        </testcase>
+        <testcase classname="tests/accounting-schedule-results.test.tsx" name="keeps complete original execution and unknown metadata available on deliberate expansion" time="0.0075617">
+        </testcase>
+        <testcase classname="tests/accounting-schedule-results.test.tsx" name="exposes malformed retained rows rather than declaring a complete clean schedule" time="0.0098833">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/group-source-lineage.test.tsx" timestamp="2026-10-31T02:10:03.126Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.3500444">
+        <testcase classname="tests/group-source-lineage.test.tsx" name="pages full current and comparative populations independently without dropping later source fields" time="0.3356606">
+        </testcase>
+        <testcase classname="tests/group-source-lineage.test.tsx" name="reports unstructured rows and preserves valid rows instead of silently declaring a complete table" time="0.0117465">
+        </testcase>
+    </testsuite>
+</testsuites>

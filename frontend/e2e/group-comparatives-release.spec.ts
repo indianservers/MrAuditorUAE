@@ -654,7 +654,42 @@ test("prior reported group comparatives retain separate review, original FX, com
       await expect(
         reporting.getByText("CURRENT", { exact: true }),
       ).toBeVisible();
-      await reporting.screenshot({
+      const scheduleResults = reporting.getByRole("region", {
+        name:
+          kind === "inventory"
+            ? "Inventory costing results"
+            : "Employee benefit accounting results",
+        exact: true,
+      });
+      if (kind === "inventory") {
+        await expect(scheduleResults).toContainText("160.00000000");
+        const itemTable = scheduleResults.getByRole("table", {
+          name: "Inventory item costing",
+          exact: true,
+        });
+        await expect(itemTable.getByRole("row")).toHaveCount(2);
+        await itemTable
+          .getByRole("cell", { name: "176.00000000", exact: true })
+          .scrollIntoViewIfNeeded();
+      } else {
+        const obligation = scheduleResults.getByRole("region", {
+          name: "Benefit obligation rollforward",
+          exact: true,
+        });
+        await expect(obligation.getByText("120", { exact: true })).toHaveCount(
+          2,
+        );
+        await expect(
+          obligation.getByText("120", { exact: true }).first(),
+        ).toBeVisible();
+        await expect(
+          scheduleResults.getByRole("region", {
+            name: "Payroll accounting bridge",
+            exact: true,
+          }),
+        ).toContainText("160");
+      }
+      await scheduleResults.screenshot({
         path: `${screenshots}/AE-${kind}-approved-calculation.png`,
       });
       const exportPending = page.waitForEvent("download");

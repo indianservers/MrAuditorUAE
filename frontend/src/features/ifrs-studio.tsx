@@ -5,6 +5,7 @@ import { AuditStudio } from "./audit-studio";
 import { FinancialReview } from "./financial-review";
 import { GroupSourceLineage } from "./group-source-lineage";
 import { ReportingRecordSelect } from "./reporting-record-select";
+import { AccountingScheduleResults } from "./accounting-schedule-results";
 import { AccountingExecutionNotice } from "./accounting-execution-notice";
 import { money } from "@/lib/formatting/money";
 import { PageHeader } from "./shared";
@@ -493,6 +494,12 @@ function ReportingRuns({
                 )}
               </aside>
             </div>
+          ) : ["inventory", "employee-benefits"].includes(result.data?.kind || "") ? (
+            <AccountingScheduleResults
+              key={rid}
+              kind={result.data?.kind || ""}
+              data={data}
+            />
           ) : (
             <Facts data={data} />
           )}

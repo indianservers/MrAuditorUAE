@@ -1,0 +1,47 @@
+{
+  "source_commit": "1be8ec6b4bf85731ebe038a425bfce91464ce9a2",
+  "run_id": 41157389540,
+  "job_id": 124407077271,
+  "conclusion": "success",
+  "suite": {
+    "passed": 16,
+    "duration": "10.3m",
+    "group_paging_and_schedule_case_seconds": 37.8
+  },
+  "artifact": {
+    "id": 13026133145,
+    "bytes": 22681751,
+    "sha256": "ba573c469b8a00c2fb172c0e35cc75682f65660f40dbd4167b8a5ee9e922248a"
+  },
+  "images": [
+    {
+      "file": "AE-employee-benefits-approved-calculation-1be8ec6.png",
+      "bytes": 153768,
+      "sha256": "31582397ef675dc1e61152832c86a31dd619944180b238cce8859e9d659fb5f6"
+    },
+    {
+      "file": "AE-inventory-approved-calculation-1be8ec6.png",
+      "bytes": 175379,
+      "sha256": "4144224e69c0be3e0e05d9851d5c87989293bf839b5811af7360c4c8c3c0e7e1"
+    }
+  ],
+  "visual_review": [
+    "Both original PNGs inspected without modification.",
+    "Separate profile, approved-input and immutable-version paging controls and population counts are readable.",
+    "Both approved-input selectors visibly show the first50 of56 records with the older selected record retained; the actual older-page selection and return navigation are asserted by the browser case.",
+    "Draft/unposted state, CURRENT dependency status and output amounts are retained.",
+    "Dense original JSON schedule/provenance paragraphs remain a usability limitation at this source; later structured result views require their own screenshots."
+  ],
+  "automated_scope": [
+    "55 newer unapproved drafts created after each separately approved stock/benefit input",
+    "Approved input is absent from first-page options; next-page selection then previous-page navigation retains its exact ID",
+    "UI calculation from retained selection yields original expected stock and benefit values",
+    "Complete immutable JSON export remains unchanged and unreleased",
+    "Existing group package approvals, source tables, comparative metadata containment, export and recursive staleness pass"
+  ],
+  "limits": [
+    "Synthetic UAE browser case only; no real-client, national legal, professional or production qualification.",
+    "Full backend job remained live; this is not all-jobs success.",
+    "The later prior-draft review picker and structured inventory/benefit layout are not executed by this older source."
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "source_commit": "b0d26de5e97f41da5c64a647e86127bad933bc16",
+  "run_id": 41156867516,
+  "job_id": 124405476748,
+  "conclusion": "success",
+  "suite": {
+    "passed": 16,
+    "duration": "10.5m",
+    "group_and_schedule_case_seconds": 31.5
+  },
+  "artifact": {
+    "id": 13025418269,
+    "bytes": 22645058,
+    "sha256": "c4c7afcdcc0ac691fd8cf7d464787cb09b15baa1c0f2033866858a8a4d636c7c"
+  },
+  "images": [
+    {
+      "file": "AE-employee-benefits-approved-calculation-b0d26de.png",
+      "bytes": 136852,
+      "sha256": "64053c266d127bd28d37ee4b5ee66961ad41b708915da0876bbb62dd32f9de71"
+    },
+    {
+      "file": "AE-inventory-approved-calculation-b0d26de.png",
+      "bytes": 159694,
+      "sha256": "3d41f7eeca4d44818e0dab917df3ecb61275ecca04cffb5604aebaf9a108a7bb"
+    }
+  ],
+  "visual_review": [
+    "Both original PNGs inspected without modification.",
+    "The existing calculation controls are usable; draft/unposted state and CURRENT dependency status are visible.",
+    "Inventory shows exact closing carrying160 and write-down16, with retained item/movement values. Benefits retain obligation120 and payroll payable160, with separate payment-instruction absence.",
+    "The schedules and execution receipt are dense JSON paragraphs. They preserve data but are difficult to review; this source is not proof of the later structured table and rollforward presentation."
+  ],
+  "automated_scope": [
+    "Separate approved stock and aggregate benefit input records, submitted-record self-approval403 and manager review",
+    "Actual inventory and benefit workspace UI triggers the existing calculate endpoint",
+    "FIFO item cost176, write-down16, carrying160; benefit obligation120, payroll payable160; no unresolved calculation issues in supplied fixtures",
+    "Journal state remains NOT_POSTED, benefit payment state remains NO_PAYMENT_INSTRUCTION_CREATED",
+    "Downloaded immutable JSON retains complete original result and released:false"
+  ],
+  "limits": [
+    "Source-specific synthetic UAE browser proof only; no India backend/legal qualification is established by these two cases.",
+    "Later beyond-first-page record selection and structured result presentation require their own hosted execution.",
+    "Full backend job remained live; this is not an all-jobs-success statement.",
+    "No real-client, professional, actuarial, physical-stock, statutory-filing or production qualification."
+  ]
+}

@@ -3685,16 +3685,19 @@ kbd,
   border: 1px solid var(--border, #e2e8f0);
   border-radius: 8px;
 }
-.group-comparative-source {
+.group-comparative-source,
+.retained-schedules {
   flex: none;
   min-width: 0;
   overflow-wrap: anywhere;
 }
-.group-comparative-source .facts > div {
+.group-comparative-source .facts > div,
+.retained-schedules .facts > div {
   display: grid;
   grid-template-columns: minmax(90px, 20%) minmax(0, 1fr);
 }
-.group-comparative-source .facts dd {
+.group-comparative-source .facts dd,
+.retained-schedules .facts dd {
   min-width: 0;
   max-width: none;
   text-align: left;

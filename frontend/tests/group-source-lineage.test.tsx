@@ -98,5 +98,5 @@ it("reports unstructured rows and preserves valid rows instead of silently decla
   expect(within(current).getByRole("cell", { name: "false" })).toBeVisible();
   expect(
     screen.getByRole("region", { name: "Comparative source accounts" }),
-  ).toHaveTextContent("No structured source accounts retained for this line");
+  ).toHaveTextContent("No structured records retained");
 });

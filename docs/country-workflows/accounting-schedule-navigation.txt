@@ -55,3 +55,19 @@ the server population and explicitly include that omitted current run. An
 earlier draft beyond the first 100 records remains selected when paging back;
 the comparison request retains its exact ID. This changes selection access,
 not the backend comparison, source-freshness or independent approval rules.
+
+Inventory costing results present item values and separate movement, transfer
+and issue populations as complete paged tables. Each table keeps every row and
+the union of original fields; its page controls do not change another table.
+Amounts retain their exact supplied decimal strings. The same renderer serves
+group source-account lineage. Nonstructured retained rows remain explicit
+alerts instead of disappearing from a complete-population claim.
+
+Benefit obligation and payroll bridge values have separate named rollforwards.
+The explicit employment framework, supplied expert figures, payment state,
+zero/unknown distinctions and original calculation limitations remain visible.
+Original provenance and any additional result fields remain available through
+Complete retained calculation and provenance. These are read-only views over
+the original immutable result. New structured-layout browser assertions and
+screenshots require their own hosted execution; earlier JSON-paragraph
+screenshots prove the calculation workflow, not this later presentation.

@@ -1,0 +1,37 @@
+{
+  "scope": "Readable retained inventory item/movement/transfer/issue populations and distinct employee-benefit/payroll rollforwards",
+  "reports": [
+    {
+      "file": "accounting-schedule-results-focused.xml",
+      "tests": 6,
+      "bytes": 1797,
+      "sha256": "70c28783faab011d29ca563782e1bd77011047e61107b27d313adf25c89bc6d5"
+    },
+    {
+      "file": "accounting-schedule-results-frontend.xml",
+      "tests": 525,
+      "bytes": 123906,
+      "sha256": "bbf9754f8d4e955f6dbe7245c42a01df2cdbaeddaaeb3ac4c5fcdabf6860b408"
+    }
+  ],
+  "checks": {
+    "typecheck": "PASS",
+    "lint": "PASS_WITH_EXISTING_UNRELATED_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS",
+    "updated_browser_spec_discovery": "PASS"
+  },
+  "verified": [
+    "Existing complete source-table renderer reused by group and stock schedules; no duplicate truncated row renderer",
+    "101 items and26 movements have independent pages; late-only fields remain visible and exact decimal strings are unchanged",
+    "Benefit obligation and payroll bridge have separate contexts; zero, null and explicit non-UAE framework retained",
+    "Complete original result and provenance available on deliberate expansion, including unknown metadata",
+    "Malformed retained rows remain visible as alerts; existing group lineage regressions pass"
+  ],
+  "limits": [
+    "Focused6 checks overlap full525 tests; no additive unique coverage claim.",
+    "Initial refactor introduced a misdecoded range dash, caught by existing group regression and corrected before final retained successful reports.",
+    "Source-specific hosted structured result screenshots and extra assertions are authored but have not yet executed.",
+    "No backend calculation, approval, account recognition, legal rule or payment behavior changed.",
+    "After full525 suite, only precision wording and JSX formatting changed; focused6 checks and the production build reran on final source."
+  ]
+}
