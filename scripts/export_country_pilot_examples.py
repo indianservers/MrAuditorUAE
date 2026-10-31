@@ -25,8 +25,19 @@ def export(destination=None):
             raise ValueError(
                 "Explicit exports require a separate version inside pilot-data/synthetic-examples"
             )
+    source_bytes = SOURCE.read_bytes()
     cases = runpy.run_path(str(SOURCE))["CASES"]
-    source_hash = hashlib.sha256(SOURCE.read_bytes()).hexdigest()
+    if SOURCE.read_bytes() != source_bytes:
+        raise RuntimeError(
+            "Fixture source changed during export; retry the unchanged source"
+        )
+    source_hash = hashlib.sha256(source_bytes).hexdigest()
+    snapshots = destination / "fixture-sources"
+    snapshot = snapshots / (source_hash + ".txt")
+    if snapshot.exists() and snapshot.read_bytes() != source_bytes:
+        raise FileExistsError(
+            "Preserve and investigate the changed fixture-source snapshot"
+        )
     counts = Counter()
     index = []
     for case in cases:
@@ -82,6 +93,33 @@ def export(destination=None):
                 "source_fixture_sha256": retained_hash,
             }
         )
+    snapshots.mkdir(parents=True, exist_ok=True)
+    if not snapshot.exists():
+        snapshot.write_bytes(source_bytes)
+    retained_sources = []
+    for retained_hash in sorted(
+        {item["source_fixture_sha256"] for item in index} | {source_hash}
+    ):
+        retained = snapshots / (retained_hash + ".txt")
+        if (
+            retained.exists()
+            and hashlib.sha256(retained.read_bytes()).hexdigest() != retained_hash
+        ):
+            raise FileExistsError(
+                "Preserve and investigate the changed fixture-source snapshot"
+            )
+        retained_sources.append(
+            {
+                "sha256": retained_hash,
+                "file": retained.relative_to(destination).as_posix()
+                if retained.exists()
+                else None,
+                "normalization": "ORIGINAL_BYTES",
+                "status": "RETAINED"
+                if retained.exists()
+                else "HISTORICAL_BYTES_NOT_RETAINED",
+            }
+        )
     (destination / "catalog.json").write_text(
         json.dumps(
             {
@@ -90,6 +128,7 @@ def export(destination=None):
                 "source_fixture_sha256": source_hash,
                 "scenario_count": len(cases),
                 "counts_by_country": dict(counts),
+                "source_fixture_snapshots": retained_sources,
                 "cases": index,
             },
             indent=2,

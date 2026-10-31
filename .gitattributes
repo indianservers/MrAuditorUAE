@@ -304,3 +304,4 @@ docs/country-workflows/sample-inputs/SYNTHETIC-icfr-duty-coverage/*/*.csv text e
 docs/country-workflows/sample-inputs/SYNTHETIC-icfr-duty-coverage/*/*.txt -text
 docs/phase-12/screenshots/e15170f-payroll-views/*.png -text
 pilot-data/synthetic-examples/versions/icfr-duty-coverage-2026-10-31/original-fixture-source.txt -text whitespace=cr-at-eol
+pilot-data/synthetic-examples/**/fixture-sources/*.txt -text whitespace=cr-at-eol

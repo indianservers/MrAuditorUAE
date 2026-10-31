@@ -7,6 +7,14 @@
     "UAE": 106,
     "India": 58
   },
+  "source_fixture_snapshots": [
+    {
+      "sha256": "dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e",
+      "file": "fixture-sources/dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e.txt",
+      "normalization": "ORIGINAL_BYTES",
+      "status": "RETAINED"
+    }
+  ],
   "cases": [
     {
       "id": "RW-001",
@@ -1156,11 +1164,5 @@
       "file": "India/RW-164.json",
       "source_fixture_sha256": "dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e"
     }
-  ],
-  "original_fixture_snapshot": {
-    "file": "original-fixture-source.txt",
-    "normalization": "ORIGINAL_BYTES",
-    "sha256": "dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e",
-    "note": "Exact generator input bytes, including local line endings; the executable Git Python source uses normalized LF."
-  }
+  ]
 }

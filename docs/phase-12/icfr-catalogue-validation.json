@@ -11,7 +11,8 @@
   "checks": {
     "focused_pytest_passed": 228,
     "ruff": "PASS",
-    "api_snapshots": "PASS"
+    "api_snapshots": "PASS",
+    "source_preservation_regression_passed": 231
   },
   "preservation": "Historical root examples and catalogue unchanged; some historical examples predate explicit currency controls, so the full current export is retained under a separate version directory Exact generator-source bytes are retained beside the version catalogue because Git normalizes the executable Python source line endings.",
   "limits": [
@@ -43,7 +44,7 @@
     {
       "path": "pilot-data/synthetic-examples/versions/icfr-duty-coverage-2026-10-31/catalog.json",
       "normalization": "LF",
-      "sha256": "4ebc54aaeb4f53e73fb79913bb3d2bd25d11dbd0215f2caff60eb00dc5677cb1"
+      "sha256": "7d9756f72e2adbd31b30440840d95ef2107b64abde7e24254c246d78e8797627"
     }
   ],
   "original_reports": [
@@ -56,6 +57,12 @@
       "path": "pilot-data/synthetic-examples/versions/icfr-duty-coverage-2026-10-31/original-fixture-source.txt",
       "normalization": "ORIGINAL_BYTES",
       "sha256": "dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e"
+    },
+    {
+      "path": "docs/phase-12/icfr-source-preservation.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "d31d09810570aacf247a2d01e4eb68eeab3f1dc579276435ef6a5d88afa72578"
     }
-  ]
+  ],
+  "source_preservation": "Exporter automatically retains original generator bytes by SHA, refuses changed source snapshots, and marks absent historical source bytes explicitly; CRLF, historical hash evolution and tamper controls tested."
 }
