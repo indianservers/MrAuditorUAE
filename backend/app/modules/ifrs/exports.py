@@ -165,6 +165,10 @@ def _rows_for(run, released, reviewers):
             rows.append([key.replace("_", " ").upper()])
             for index, item in enumerate(value if isinstance(value, list) else [value], 1):
                 rows.append([str(index), json.dumps(item, ensure_ascii=False)])
+    if data.get("comparative_status") == "PRIOR_REPORTED_GROUP_AMOUNTS_RETAINED":
+        rows.append(["PRIOR GROUP COMPARATIVE SOURCE"])
+        for key, value in data["comparative"].items():
+            rows.append([key.replace("_", " "), json.dumps(value, ensure_ascii=False)])
     rows.append(
         ["Professional review", "No IFRS compliance certification is made by this software."]
     )

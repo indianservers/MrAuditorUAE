@@ -1,0 +1,48 @@
+Prior reported group comparative figures
+======================================
+
+The shared IFRS group workbench can retain the reported figures from an
+explicit prior-period group calculation. This reuses the existing approved
+assumptions, authorized member packages, immutable runs and exports for both
+UAE and India. It is not the UAE Corporate Tax Group special-purpose framework.
+
+In the consolidation assumptions editor, optional comparative_source contains:
+  engagement_id: the prior group reporting engagement
+  run_id: its immutable consolidation calculation
+  basis: the independently reviewed reason for using those prior figures
+
+The caller needs access to the prior engagement and its supporting members.
+The prior run must be a current consolidation calculation. Its period must
+immediately precede the current period, and its presentation currency must
+agree. The retained legal-entity membership, ownership and acquisition
+classification must match. Earlier runs lacking member legal-entity identities
+must be regenerated from current approved inputs; identities are not guessed
+from names or engagement labels. Duplicate legal entities cannot be aggregated.
+
+The prior run's current figures become the comparative amounts. Its original
+translation and source accounts are retained. Current-period FX rates are not
+applied to prior reported values. Matching chart codes must retain the same
+section/category. Reclassification, membership and ownership changes require
+separately validated treatment rather than an automatic remap.
+
+Every prior chart line is retained, including a line absent from the current
+chart. Its current amount is explicitly zero and its comparative amount stays
+visible. A new current line has an explicit absent-from-prior-chart observation
+and zero comparative amount. Both full source populations remain in the
+immutable run. No source package is edited.
+
+The result records prior run ID, SHA-256, exact period, reviewed basis, totals,
+validation and unresolved issues. The workbench displays that source and draft
+boundary. PDF, DOCX and XLSX presentation rows include the source metadata;
+XLSX and JSON also retain the complete immutable result and source accounts.
+The execution receipt recursively checks the prior run as well as copying
+its approved record dependencies. A newly approved prior-period disclosure
+can therefore stale the comparative even though it was not an original
+dependency. Stale prior calculations cannot create a new comparative result.
+
+The missing-comparative default stays unchanged when no source is selected.
+This feature reproduces prior reported draft amounts; it does not establish
+an audited comparative, validate restatements, complete acquisition accounting,
+group equity rollforward, cash eliminations or all group disclosures. Group
+readiness remains false pending those separate procedures and professional
+review. There is no automatic IFRS certification or statutory issuance.

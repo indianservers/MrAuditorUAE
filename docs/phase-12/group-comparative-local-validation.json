@@ -1,0 +1,52 @@
+{
+  "scope": "Prior reported comparative figures for unchanged shared IFRS groups; not a UAE Corporate Tax Group special-purpose statement framework",
+  "reports": [
+    {
+      "file": "group-comparative-focused.xml",
+      "bytes": 3390,
+      "sha256": "7f977adb690bf3a279661ebf0a43eaf0ac17cb6555ec81e0bff89d8df70fabfc",
+      "tests": 21,
+      "skipped": 0
+    },
+    {
+      "file": "group-comparative-all-units.xml",
+      "bytes": 754107,
+      "sha256": "ce4a7c330064c5772865bf31ed49854593679cc2970982f50422d32dc1f06231",
+      "tests": 4786,
+      "skipped": 4
+    },
+    {
+      "file": "group-comparative-frontend.xml",
+      "bytes": 117477,
+      "sha256": "7247301528fe996d658de72491fdcdfb8afc7a2839cce45f90e0651b7ad540c3",
+      "tests": 499,
+      "skipped": 0
+    }
+  ],
+  "focused_scope": "13 unit scenarios, one new four-member-package/two-year PostgreSQL workflow and seven existing reporting regressions; overlaps with the full unit suite, not additive unique coverage",
+  "runtime": "Existing owned PostgreSQL/Redis environment; isolated pypdf6.21.4 overlay including child processes",
+  "checks": {
+    "backend_ruff": "PASS",
+    "backend_format": "PASS",
+    "mypy_432_app_files": "PASS",
+    "api_snapshots": "CURRENT_NO_CHANGE_REQUIRED",
+    "frontend_typecheck": "PASS",
+    "frontend_lint": "PASS_WITH_EXISTING_UNRELATED_UNUSED_VARIABLE_WARNING",
+    "frontend_production_build": "PASS"
+  },
+  "verified": [
+    "Prior reported currency amounts and original FX lineage retained; prior-only chart lines kept; no source mutation",
+    "Currency, consecutive periods, legal-entity membership, ownership and chart classifications checked",
+    "Duplicate entity and chart-line controls; older member identity metadata cannot be inferred",
+    "PostgreSQL case retains AED390 comparative cash against AED910 current cash, with distinct historical and current rates",
+    "XLSX presentation retains comparative cash and prior source metadata; complete immutable run retains original source values",
+    "A newly approved prior-period note invalidates the result through recursive prior-run freshness; stale prior results cannot regenerate comparatives",
+    "Group validation remains draft; prior validation and unresolved issues are retained"
+  ],
+  "limits": [
+    "Synthetic inputs only; no independently supplied real client results or professional qualification",
+    "No new browser screenshot proof for group comparatives in this receipt",
+    "Changed membership/ownership, restatements, acquisition accounting, complete equity rollforward, cash eliminations and all group disclosures require separate validated procedures",
+    "No statutory issuance or IFRS compliance certification"
+  ]
+}

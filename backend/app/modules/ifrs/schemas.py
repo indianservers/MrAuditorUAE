@@ -431,6 +431,18 @@ class IntercompanyNilAssessment(Strict):
         return self
 
 
+class GroupComparative(Strict):
+    engagement_id: uuid.UUID
+    run_id: uuid.UUID
+    basis: str = Field(min_length=10, max_length=4000)
+
+    @model_validator(mode="after")
+    def meaningful_basis(self):
+        if len(self.basis.strip()) < 10:
+            raise ValueError("A meaningful prior-period comparison basis is required")
+        return self
+
+
 class Consolidation(Body):
     presentation_currency: str = Field(pattern=r"^[A-Z]{3}$")
     members: list[GroupMember] = Field(min_length=2, max_length=100)
@@ -441,6 +453,7 @@ class Consolidation(Body):
     unrealised_profit_source: str = Field(default="", max_length=4000)
     intercompany: list[IntercompanyBalance] = Field(default_factory=list, max_length=10000)
     intercompany_nil_assessment: IntercompanyNilAssessment | None = None
+    comparative_source: GroupComparative | None = None
 
     @model_validator(mode="after")
     def nil_population(self):

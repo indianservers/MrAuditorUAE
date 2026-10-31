@@ -55,6 +55,7 @@ def implementation_hash():
         "inventory.py",
         "employee_benefits.py",
         "intercompany.py",
+        "group_comparatives.py",
         "service.py",
         "contracts.py",
     ]
@@ -163,6 +164,9 @@ async def attach(db, ctx, eid, inputs, deps, results):
                 "remediation": "Attach an approved full-IFRS reporting profile",
             }
         )
+    if inputs.get("comparative_source"):
+        source = inputs["comparative_source"]
+        supporting.add((str(source["engagement_id"]), str(source["run_id"])))
     complete = bool(snapshots) and all(s["source_complete"] for s in snapshots)
     if not complete:
         issues.append(

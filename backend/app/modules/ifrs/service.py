@@ -986,6 +986,7 @@ async def consolidate(db, ctx, eid, rid):
     lines: dict[str, Any] = {}
     deps = [dependency(obj)]
     members = []
+    member_entities = set()
     nci = ZERO
     goodwill = ZERO
     periods = set()
@@ -1012,6 +1013,10 @@ async def consolidate(db, ctx, eid, rid):
             raise HTTPException(409, "Approved entity reporting package required")
         if not calc.results.get("validation", {}).get("ready"):
             raise HTTPException(409, "Member package reconciliation is incomplete")
+        entity_id = calc.results["entity_id"]
+        if entity_id in member_entities:
+            raise HTTPException(422, "A legal entity cannot be counted more than once in a group")
+        member_entities.add(entity_id)
         start = date.fromisoformat(calc.results["period_start"])
         end = date.fromisoformat(calc.results["period_end"])
         if member.hyperinflationary:
@@ -1146,6 +1151,8 @@ async def consolidate(db, ctx, eid, rid):
             {
                 "engagement_id": str(member.engagement_id),
                 "financial_run_id": str(calc.id),
+                "entity_id": entity_id,
+                "acquisition_type": member.acquisition_type,
                 "source_currency": calc.results["currency"],
                 "control_effective_from": member.control_effective_from,
                 "control_effective_to": member.control_effective_to,
@@ -1352,4 +1359,31 @@ async def consolidate(db, ctx, eid, rid):
         },
         "scope": "Full aggregation of approved controlled packages; explicit eliminations and rate translation. Draft only until group notes/cash-flow/acquisition and professional validation are complete",
     }
+    if data.comparative_source is not None:
+        from app.modules.ifrs.group_comparatives import apply
+
+        source = data.comparative_source
+        previous = await run(db, ctx, source.engagement_id, source.run_id)
+        if previous.kind != "consolidation":
+            raise HTTPException(422, "A prior group calculation is required for group comparatives")
+        if not await current_dependencies(db, ctx, source.engagement_id, previous):
+            raise HTTPException(409, "The prior group calculation has stale sources")
+        try:
+            results["lines"] = apply(results, previous.results)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from None
+        results["comparative"] = {
+            "engagement_id": str(source.engagement_id),
+            "run_id": str(previous.id),
+            "sha256": previous.sha256,
+            "period_start": previous.results["period_start"],
+            "period_end": previous.results["period_end"],
+            "basis": source.basis,
+            "totals": previous.results["totals"],
+            "prior_validation": previous.results["validation"],
+            "prior_issues": previous.results.get("issues", []),
+            "scope": "Prior reported draft group amounts; no restatement, comparative audit or complete group reporting qualification",
+        }
+        results["comparative_status"] = "PRIOR_REPORTED_GROUP_AMOUNTS_RETAINED"
+        deps += previous.dependencies
     return await save_run(db, ctx, eid, "consolidation", obj.body, deps, results, obj.id)

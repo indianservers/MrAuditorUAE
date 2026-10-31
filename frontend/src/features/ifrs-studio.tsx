@@ -389,6 +389,19 @@ function ReportingRuns({
             ))}
           </div>
           {downloadError && <p role="alert">{downloadError}</p>}
+          {data.comparative_status ===
+            "PRIOR_REPORTED_GROUP_AMOUNTS_RETAINED" && (
+            <section aria-label="Prior group comparative source">
+              <h3>Prior reported group figures</h3>
+              <p>
+                These figures retain the selected prior group calculation and
+                its original translation. They do not establish an audited
+                comparative or complete group report. Membership, ownership,
+                currency and chart classification must remain compatible.
+              </p>
+              <Facts data={data.comparative as RecordRow} />
+            </section>
+          )}
           {result.data?.kind === "financials" && (
             <FinancialReview
               key={rid}
