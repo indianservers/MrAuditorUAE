@@ -52,6 +52,7 @@ ignored pilot-data/UAE and pilot-data/India folders.
 Known release boundary: the corrected CARO export checks passed with all 19
 browser cases on e7a06f5. The later 076a310 payroll browser case reached separate
 approval but timed out waiting for its export; 071dc57 adds explicit approved-event
-selection and export-response synchronization. Its hosted rerun remains pending.
+selection and export-response synchronization. All 20 browser cases then passed,
+including UAE/India exports, missing July controls and source-withdrawal staleness.
 The server-paged payroll review views require their own hosted browser proof.
 Full product/client and country legal qualification remain incomplete.

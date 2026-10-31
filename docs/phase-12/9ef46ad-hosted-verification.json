@@ -1,0 +1,113 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_commit": "9ef46adfb353913735dfb931915c7bf9cc26fe34",
+  "run_id": 41176869485,
+  "verify_job_id": 124466130356,
+  "all_six_jobs": "SUCCESS",
+  "jobs": {
+    "browser-smoke": 124466130097,
+    "frontend": 124466130184,
+    "containers": 124466130224,
+    "ml": 124466130234,
+    "verify": 124466130356,
+    "security": 124466130877
+  },
+  "full_backend": {
+    "total": 6131,
+    "passed": 6122,
+    "skipped": 9,
+    "failures": 0,
+    "errors": 0,
+    "pytest_seconds": 4429.02,
+    "coverage_percent": 87.42211925594368,
+    "core_coverage_percent": 89.35,
+    "core_covered_statements": 831,
+    "core_statements": 930,
+    "company_scope_cases": 70
+  },
+  "artifact": {
+    "id": 13035670866,
+    "bytes": 269564,
+    "sha256": "c29a536be3121fb110709ecc4e7e9912406c15a972ac568c62b6d3b8406971f4"
+  },
+  "skips": [
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "test": "tests.phase2.test_live_native.test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_document_worker_runtime.test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "separate_current_source_supplement": {
+    "source_commit": "481b2ab482dfd467a6f1f2083972ab407f25bcb7",
+    "isolated_connector_tests": {
+      "passed": 4,
+      "skipped": 0,
+      "scope": "New UUID database and NOBYPASSRLS role, owned Redis DB14 with UUID-only keys; script cleaned only its own database/role"
+    },
+    "windows_suspended_start_failure_test": {
+      "passed": 1,
+      "skipped": 0
+    },
+    "live_vendor_tests": "Four remain unverified; explicit authorized Zoho/Tally/direct-API access and independent source controls required"
+  },
+  "limits": [
+    "Historical full-source baseline; does not cover later CARO, employment payroll or paged-view changes",
+    "Seventeen browser cases on this source were separately archived; not the later 20-case suite",
+    "Supplemental five passes are separate executions, not a rewritten full-suite count",
+    "Current later-source complete backend jobs remain live",
+    "No live-vendor, real-client, complete legal-pack or professional issuance qualification"
+  ],
+  "files": [
+    {
+      "path": "docs/phase-12/9ef46ad-hosted-full.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "92e35a0f6b896a2ecccca0b51cbb40a83c13350b9baa0f13043293479692e6c2"
+    },
+    {
+      "path": "docs/phase-12/9ef46ad-hosted-coverage.json",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "ea5d9cf8a8309783459107ed50cd5886a8b1074234e6faf09df97502890f30a5"
+    },
+    {
+      "path": "docs/phase-12/connector-current-isolated.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "412b2292c6d821d913c875a7ccf9c6d771ce3512935902456484143fa95a3b3d"
+    },
+    {
+      "path": "docs/phase-12/windows-assignment-current.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "1d4bcd3950a04ab2fe4c592077dd9245b54f50c596fd624399f011337e68fcae"
+    }
+  ]
+}

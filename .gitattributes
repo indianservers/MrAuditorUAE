@@ -293,3 +293,8 @@ docs/phase-12/screenshots/e7a06f5-caro-reviewed/*.png -text
 docs/phase-12/authority-scan-e7a06f5.json -text
 docs/phase-12/screenshots/076a310-employment-failure/*.png -text
 docs/phase-12/screenshots/bf48577-caro-reviewed/*.png -text
+docs/phase-12/screenshots/071dc57-employment-reviewed/*.png -text
+docs/phase-12/9ef46ad-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/9ef46ad-hosted-coverage.json -text
+docs/phase-12/connector-current-isolated.xml -text whitespace=cr-at-eol
+docs/phase-12/windows-assignment-current.xml -text whitespace=cr-at-eol

@@ -1,0 +1,60 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_commit": "071dc57508bf596e1e9f888db1d18085651e984e",
+  "run_id": 41183714197,
+  "browser_job_id": 124486231755,
+  "browser_result": {
+    "passed": 20,
+    "failed": 0,
+    "duration": "12.7 minutes",
+    "payroll_case_seconds": 22.8
+  },
+  "artifact": {
+    "id": 13035862382,
+    "bytes": 25327204,
+    "sha256": "0a8bed68eaaf658aaae3be527703ccfa6eb71febe3d0ea9a16a89d6cae91aecc"
+  },
+  "verified_behavior": [
+    "UAE then India private CSV upload through real scanner, source review and worker execution",
+    "UI calculation preserves corrected payroll once while retaining both register revisions",
+    "Author approval denied; independent UI approval succeeds",
+    "UI waits for approved event selection; export response 200 and complete XLSX has expected/reported 1000, zero variance and retained revisions 1/2 with 1500/1000",
+    "Additional declared July without expected/current pay remains blocked and cannot be approved",
+    "Withdrawing employment source stales saved result with whole-body equality and disables approval"
+  ],
+  "visual_review": [
+    "All four original PNGs inspected after exact archive size and digest verification",
+    "Reviewed views show country/currency AE/AED and IN/INR, 0 exceptions, 1000 expected and reported with zero difference and three retained rows",
+    "Stale views preserve amounts and show STALE warning plus disabled independent approval",
+    "Old wide tables clip later revision detail columns; newer independently paged views require separate later-source proof",
+    "Reviewed notifications appear below financial rows; no financial cell is obscured in these captures"
+  ],
+  "download_validation": "Initial bounded transfer failed verification; a fresh transfer matched the exact advertised byte count and SHA256 before extraction",
+  "limits": [
+    "This passing source predates the independently paged history and assessment views",
+    "Current complete backend verification remains live; no full latest-source CI claim",
+    "Synthetic assessed records are not real client, full payroll-population, legal or professional qualification"
+  ],
+  "files": [
+    {
+      "path": "docs/phase-12/screenshots/071dc57-employment-reviewed/AE-employment-payroll-reviewed.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "b46127e7bba9a470853a5963f92de06da8de13111d2df70897fb8e139b1ece66"
+    },
+    {
+      "path": "docs/phase-12/screenshots/071dc57-employment-reviewed/AE-employment-payroll-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "9b79f16ed02fb04e8c07266b1a4381576e0cacabb98944b0833ed50e0169de34"
+    },
+    {
+      "path": "docs/phase-12/screenshots/071dc57-employment-reviewed/IN-employment-payroll-reviewed.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "59cde7dd8a280c0ab5bfaf9b0cabb01517cbe4fa1faf9341cfbe5d0ee9063e89"
+    },
+    {
+      "path": "docs/phase-12/screenshots/071dc57-employment-reviewed/IN-employment-payroll-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "2756dc54c5568027d0e78f51f196635c7b9bec0227065153f3833049bacd4188"
+    }
+  ]
+}
