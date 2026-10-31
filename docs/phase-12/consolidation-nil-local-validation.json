@@ -1,0 +1,42 @@
+{
+  "scope": "Explicit complete-period nil intercompany assessment in the existing shared IFRS consolidation workflow",
+  "reports": [
+    {
+      "file": "consolidation-nil-all-units.xml",
+      "bytes": 751990,
+      "sha256": "c73199c75cf7065e8fd8b8cfe1e5a5273f7699a7b78e7dfbbc106af467dd5602",
+      "tests": 4773,
+      "skipped": 4,
+      "seconds": "142.773"
+    },
+    {
+      "file": "consolidation-nil-final-reporting.xml",
+      "bytes": 2460,
+      "sha256": "8744245011697a927255223e0795bcfa32a707a1e49127bdc0f5e5ce55cb5785",
+      "tests": 16,
+      "skipped": 0,
+      "seconds": "41.958"
+    }
+  ],
+  "runtime": "Existing isolated PostgreSQL/Redis test environment; isolated pypdf6.21.4 overlay including child processes; shared primary environment unchanged",
+  "checks": [
+    "Ruff app and changed tests passed",
+    "Formatting app and changed tests passed",
+    "Mypy all431 app source files passed",
+    "Current API snapshots verified; no snapshot change required for the existing generic approved-assumptions body"
+  ],
+  "verified": [
+    "Missing input remains unconfirmed, distinct from an explicit nil assessment",
+    "Complete unique member scope, ordered period, meaningful rationale and distinct source references",
+    "Balances, even explicit zero pairs, and eliminations cannot accompany a nil declaration",
+    "PostgreSQL: valid approved evidence from every member retained as dependencies; mismatched reporting period and missing member evidence rejected",
+    "PostgreSQL: reopening and editing one member evidence record invalidates the retained nil calculation",
+    "Existing non-nil translation, NCI, approved elimination and reporting/export cases pass"
+  ],
+  "limits": [
+    "Synthetic verification only, no real client or independent professional qualification",
+    "Group readiness remains false; comparative translation, equity rollforward and other group reporting work are not completed by a nil assessment",
+    "Not a UAE Corporate Tax Group special-purpose aggregation implementation; original FTA sources remain separately required",
+    "No browser verification of the new optional assumptions field in this receipt"
+  ]
+}

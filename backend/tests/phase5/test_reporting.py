@@ -369,6 +369,8 @@ async def test_group_translation_eliminations_and_nci(environment):
     assert result["validation"]["checks"][0]["passed"]
     assert not result["validation"]["ready"]  # Group cash-flow/notes release remains unsupported.
     assert result["cash_flow"]["status"] == "BEFORE_GROUP_CASH_ELIMINATIONS"
+    assert result["intercompany_population"]["status"] == "UNCONFIRMED"
+    assert any(i["code"] == "INTERCOMPANY_POPULATION_UNCONFIRMED" for i in result["issues"])
     assert Decimal(result["cash_flow"]["presentation_translation_effect"]) == 115
     if os.getenv("ACCOUNTING_ARTIFACT_DIR"):
         import json
@@ -385,6 +387,38 @@ async def test_group_translation_eliminations_and_nci(environment):
     from copy import deepcopy
 
     group_body = {k: v for k, v in group["body"].items() if not k.startswith("review_")}
+    nil_assessment = {
+        "member_engagement_ids": [eid, eid2],
+        "period_start": "2026-01-01",
+        "period_end": "2026-12-31",
+        "rationale": "SYNTHETIC separately reviewed full-period member records contain no intercompany population",
+        "source_record_ids": [note["id"], note2["id"]],
+    }
+    nil_body = {**group_body, "eliminations": [], "intercompany_nil_assessment": nil_assessment}
+    nil_source = await ready("consolidation", nil_body)
+    nil_run = await post(f"ifrs/engagements/{eid}/consolidation/{nil_source['id']}", None)
+    assert (
+        nil_run["results"]["intercompany_population"]["status"]
+        == "EXPLICIT_RETAINED_NIL_ASSESSMENT"
+    )
+    assert not any(
+        i["code"] == "INTERCOMPANY_POPULATION_UNCONFIRMED" for i in nil_run["results"]["issues"]
+    )
+    assert not nil_run["results"]["validation"]["ready"]
+    assert {note["id"], note2["id"]} <= {d["id"] for d in nil_run["dependencies"]}
+    for changed in [
+        {"period_end": "2026-11-30"},
+        {"source_record_ids": [note["id"], mapping["id"]]},
+    ]:
+        invalid_nil = await ready(
+            "consolidation",
+            {**nil_body, "intercompany_nil_assessment": {**nil_assessment, **changed}},
+        )
+        assert (
+            await c.post(
+                f"/api/v1/ifrs/engagements/{eid}/consolidation/{invalid_nil['id']}", headers=h
+            )
+        ).status_code == 422
     pair = {
         "reference": "SYN-IC",
         "from_engagement_id": eid,
@@ -432,6 +466,23 @@ async def test_group_translation_eliminations_and_nci(environment):
         assert (
             await c.post(f"/api/v1/ifrs/engagements/{eid}/consolidation/{source['id']}", headers=h)
         ).status_code == 422
+
+    validation_path = f"/api/v1/ifrs/engagements/{eid}/runs/{nil_run['id']}/validate"
+    assert (await c.get(validation_path, headers=h)).json()["dependencies_current"]
+    note2 = await action(c, rev2[0], base2, note2, "reopen")
+    assert not (await c.get(validation_path, headers=h)).json()["dependencies_current"]
+    changed_note = await c.patch(
+        base2 + "/records/" + note2["id"],
+        headers=h,
+        json={
+            "version": note2["version"],
+            "body": {k: v for k, v in note2["body"].items() if not k.startswith("review_")},
+            "title": "SYNTHETIC reassessed subsidiary evidence",
+            "reference": note2["reference"],
+        },
+    )
+    assert changed_note.status_code == 200, changed_note.text
+    assert not (await c.get(validation_path, headers=h)).json()["dependencies_current"]
 
 
 async def test_comparatives_opening_consistency_and_tenant_rls(environment):

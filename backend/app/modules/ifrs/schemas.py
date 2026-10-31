@@ -411,6 +411,26 @@ class Elimination(Strict):
     intercompany_reference: str = Field(default="", max_length=100)
 
 
+class IntercompanyNilAssessment(Strict):
+    member_engagement_ids: list[uuid.UUID] = Field(min_length=2, max_length=100)
+    period_start: date
+    period_end: date
+    rationale: str = Field(min_length=10, max_length=4000)
+    source_record_ids: list[uuid.UUID] = Field(min_length=2, max_length=200)
+
+    @model_validator(mode="after")
+    def complete_scope(self):
+        if self.period_end < self.period_start or len(self.rationale.strip()) < 10:
+            raise ValueError(
+                "An ordered period and meaningful nil-population assessment are required"
+            )
+        if len(set(self.member_engagement_ids)) != len(self.member_engagement_ids) or len(
+            set(self.source_record_ids)
+        ) != len(self.source_record_ids):
+            raise ValueError("Nil-population members and evidence records must be unique")
+        return self
+
+
 class Consolidation(Body):
     presentation_currency: str = Field(pattern=r"^[A-Z]{3}$")
     members: list[GroupMember] = Field(min_length=2, max_length=100)
@@ -420,6 +440,22 @@ class Consolidation(Body):
     unrealised_profit_expense_line: str = Field(default="", max_length=100)
     unrealised_profit_source: str = Field(default="", max_length=4000)
     intercompany: list[IntercompanyBalance] = Field(default_factory=list, max_length=10000)
+    intercompany_nil_assessment: IntercompanyNilAssessment | None = None
+
+    @model_validator(mode="after")
+    def nil_population(self):
+        if self.intercompany_nil_assessment is not None:
+            if self.intercompany or self.eliminations or self.unrealised_profit:
+                raise ValueError(
+                    "A nil population cannot accompany intercompany balances or eliminations"
+                )
+            if set(self.intercompany_nil_assessment.member_engagement_ids) != {
+                member.engagement_id for member in self.members
+            }:
+                raise ValueError(
+                    "The nil assessment must cover every declared group member exactly once"
+                )
+        return self
 
 
 class StockReceipt(Strict):

@@ -1,0 +1,37 @@
+Explicit nil intercompany population
+===================================
+
+The existing IFRS consolidation and intercompany workbenches accept an optional
+intercompany_nil_assessment in the approved consolidation assumptions. It is a
+shared accounting workflow available to UAE and India engagements. It does not
+determine UAE Corporate Tax Group membership or implement its special-purpose
+aggregation framework.
+
+Use the existing assumptions editor to record:
+  member_engagement_ids: every declared consolidation member exactly once
+  period_start / period_end: the exact reporting period of all member packages
+  rationale: a meaningful assessment of the complete reciprocal population
+  source_record_ids: distinct approved records covering every member engagement
+
+The preparer and reviewer still need authorized access to the member packages.
+The calculation checks that all evidence records are approved, belong to the
+same tenant and declared member engagements, and cover every member. Their
+versions become dependencies of the immutable calculation. Existing freshness
+checks continue to control use of a result after a dependency changes.
+
+A nil assessment cannot accompany declared reciprocal balances, elimination
+entries or an unrealised-profit elimination. Even a declared zero-value pair
+is a population, not an empty population. Missing assessment remains
+INTERCOMPANY_POPULATION_UNCONFIRMED; missing transactions never imply nil.
+
+The output retains the complete assessment in intercompany_population with
+status EXPLICIT_RETAINED_NIL_ASSESSMENT. This resolves only the missing-population
+issue. Group validation remains draft: comparative translation, group equity
+rollforward, acquisition work, disclosures, cash eliminations and professional
+review retain their separate requirements. Approved records are retained
+assessments; the software does not authenticate an absence of transactions.
+
+Verification includes the real PostgreSQL reporting workflow: both member
+packages and separate evidence records are approved, the nil result retains
+their dependencies, incomplete member evidence and mismatched periods fail,
+and existing translation, NCI and non-nil eliminations remain unchanged.

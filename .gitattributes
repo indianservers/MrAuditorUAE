@@ -241,3 +241,4 @@ docs/phase-12/pypdf-*.json -text whitespace=cr-at-eol
 docs/phase-12/pypdf-*.xml -text whitespace=cr-at-eol
 docs/country-workflows/authority-references/uae-ct-audit-2025/*.pdf -text
 docs/phase-12/ct-audit-*.xml -text whitespace=cr-at-eol
+docs/phase-12/consolidation-nil-*.xml -text whitespace=cr-at-eol

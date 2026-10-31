@@ -970,7 +970,7 @@ async def consolidate(db, ctx, eid, rid):
         intercompany, issues = reconcile(data)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from None
-    if not data.intercompany:
+    if not data.intercompany and data.intercompany_nil_assessment is None:
         issues.append(
             {
                 "code": "INTERCOMPANY_POPULATION_UNCONFIRMED",
@@ -1161,6 +1161,34 @@ async def consolidate(db, ctx, eid, rid):
         raise HTTPException(
             422, "Different reporting dates require approved date-alignment packages"
         )
+    nil_assessment = data.intercompany_nil_assessment
+    if nil_assessment is not None:
+        if (nil_assessment.period_start.isoformat(), nil_assessment.period_end.isoformat()) != next(
+            iter(periods)
+        ):
+            raise HTTPException(
+                422, "Nil intercompany assessment must cover the member reporting period"
+            )
+        evidenced_members = set()
+        for identifier in nil_assessment.source_record_ids:
+            source = await db.scalar(
+                select(AuditRecord).where(
+                    AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.id == identifier
+                )
+            )
+            if (
+                not source
+                or source.engagement_id not in {m.engagement_id for m in data.members}
+                or source.status not in APPROVED
+            ):
+                raise HTTPException(422, "Approved member-scoped nil assessment evidence required")
+            await audit.engagement(db, ctx, source.engagement_id, "ifrs.read")
+            evidenced_members.add(source.engagement_id)
+            deps.append(dependency(source))
+        if evidenced_members != {member.engagement_id for member in data.members}:
+            raise HTTPException(
+                422, "Nil intercompany evidence is required from every group member"
+            )
     if len({elimination.reference for elimination in data.eliminations}) != len(data.eliminations):
         raise HTTPException(422, "Duplicate elimination reference")
     eliminated: dict[str, Decimal] = {}
@@ -1274,6 +1302,17 @@ async def consolidate(db, ctx, eid, rid):
         "lines": list(lines.values()),
         "members": members,
         "intercompany_reconciliation": intercompany,
+        "intercompany_population": {
+            "status": "EXPLICIT_RETAINED_NIL_ASSESSMENT"
+            if nil_assessment is not None
+            else "DECLARED_RECIPROCAL_BALANCES"
+            if data.intercompany
+            else "UNCONFIRMED",
+            "nil_assessment": nil_assessment.model_dump(mode="json")
+            if nil_assessment is not None
+            else None,
+            "scope": "Retained approved member assessments; absence of transactions is not independently established by this calculation",
+        },
         "issues": issues,
         "cash_flow": group_cash,
         "comparative": None,
