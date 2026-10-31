@@ -1,0 +1,65 @@
+UAE corporate-tax audited financial statement duty
+==================================================
+
+The country workflow screen offers a dated MD84 of 2025 duty assessment for
+one completed, explicitly assessed tax period within the engagement period.
+The endpoint is uae-ct-audit-duty under the scoped intelligence engagement
+API. Contract: uae-ct-audited-statements-md84-2025/1.
+
+This workflow reuses the evidence store, immutable country-workflow results,
+source freshness, separate-reviewer restrictions and full XLSX exports. It
+checks preparation/maintenance duty under the adopted decision. It does not
+issue an audit opinion, perform an audit, authenticate eligibility or file.
+
+Adopted original
+----------------
+Retain the exact original MD84 PDF from the Ministry of Finance, SHA-256
+1121cdca7e0386dcf93a68a3919ba3f5c42e2521cdaf3c7020c41670dd0afedb.
+The unchanged original and source-assessment metadata are in
+authority-references/uae-ct-audit-2025. Both complete original pages were
+visually inspected. A recreated summary or altered copy is rejected.
+
+Tax periods must commence from 1 January 2025. Earlier periods require their
+separate MD82 source rather than automatic application of this profile.
+Assessment is after the decision's issuance and after the declared period
+end. Retain an independently adopted operative window covering the period
+and assessment. Unresolved operative changes keep the current duty unresolved.
+These date checks do not establish legal tax-period validity or source adoption.
+
+Assessed facts and separate branches
+-----------------------------------
+The preparer declares taxable-person, Tax Group and QFZP status explicitly,
+with resident/non-resident scope and a complete-period exact AED amount or
+explicit unknown. Unknown is never zero. The non-group revenue test uses
+strictly more than AED50,000,000; exactly AED50,000,000 does not cross it.
+A non-resident's threshold requires the separately assessed UAE PE/nexus
+revenue basis; worldwide revenue cannot be substituted. No FX is inferred.
+
+Assessed Tax Groups require audited special-purpose statements independently
+of the revenue threshold. Assessed QFZPs have a separate audited-statement
+branch. Taxable-person, group and QFZP eligibility are inputs requiring their
+own professional evidence; this workflow does not determine them. Conflicting
+classifications, material unknowns or unresolved operative changes stay visible.
+Designated-zone distribution can require separately prescribed procedures.
+
+Retain a separate clean original company-fact document and its SHA-256. Rule
+and fact versions must be distinct, current and byte-verified. Cloning the
+original rule cannot establish company facts. All document preparers remain
+contributors, so they cannot independently approve their own derived result.
+
+Outputs and boundaries
+---------------------
+The result keeps the dated-source branch and current assessed requirement,
+statement type, threshold/basis, exact amount, unresolved issues and separate
+procedure flags. The general entity-audit-exemption flag is always false:
+a negative MD84 duty does not waive company-law, free-zone, authority,
+contractual or other audit obligations. Full group form, aggregation, audit
+and submission procedures require separate sources; this profile invents
+no filing deadline. Publication, statutory signoff and government filing are
+not executed. Replacement of retained rule or fact evidence makes the
+historical result stale without changing its body or original review history.
+
+Testing uses explicitly synthetic entity facts and thresholds with the
+unchanged public rule original. These fixtures do not constitute independent
+professional or real-client qualification. Browser acceptance is source-pinned
+to its own hosted result; local tests do not substitute for browser evidence.

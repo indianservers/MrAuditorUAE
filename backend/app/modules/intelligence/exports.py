@@ -97,6 +97,7 @@ def render(event, format):
             "blocked",
             "contract",
             "salary_crosswalk_document_binding",
+            "ct_audit_document_binding",
             "tan",
             "financial_year",
             "salary_employee_count",

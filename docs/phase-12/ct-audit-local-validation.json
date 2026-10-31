@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-31",
+  "scope": "Dated UAE MD84 corporate-tax audited-statement duty over retained assessed entity facts",
+  "backend": {
+    "tests": 4770,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "passed": 4766,
+    "seconds": 155.85,
+    "coverage": "Complete backend unit suite plus six new duty HTTP cases",
+    "pypdf_runtime": "6.21.4 isolated overlay, including inherited document subprocess environment"
+  },
+  "new_duty_cases": {
+    "unit": 43,
+    "http": 6
+  },
+  "frontend": {
+    "passed": 499,
+    "test_files": 87,
+    "seconds": 46.81
+  },
+  "checks": {
+    "ruff": "PASS, 830 files formatted",
+    "mypy": "PASS, 431 source files",
+    "contracts": "CURRENT",
+    "frontend_types_lint": "PASS, existing unrelated unused-variable warning retained",
+    "production_build": "PASS"
+  },
+  "original_report": {
+    "file": "docs/phase-12/ct-audit-duty-validation.xml",
+    "bytes": 751542,
+    "sha256": "5643d47203d191bca38b5de65152b7b439e7c00d46f97734230a7b94485b9da5"
+  },
+  "browser": "Two MD84 revenue boundary cases, second-user review, original PDF scan, export and fact-replacement staleness added to the existing AE browser flow; pending hosted execution",
+  "limits": [
+    "Entity classifications, complete tax period, operative source adoption and revenue scope are independently assessed inputs, not authenticated facts",
+    "No overall company-law/free-zone audit exemption, full Tax Group procedure, audit opinion, certificate, deadline or filing is established",
+    "Synthetic tests do not establish real-client, professional or production qualification",
+    "Full global roadmap remains active"
+  ]
+}

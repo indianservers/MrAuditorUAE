@@ -30,6 +30,7 @@ from app.modules.country_workflows.salary_annual_comparison import SalaryAnnualC
 from app.modules.country_workflows.savings_reported_source import SavingsReportedInput
 from app.modules.country_workflows.turnover_composition import TurnoverCompositionInput
 from app.modules.country_workflows.turnover_ledger import TurnoverLedgerInput
+from app.modules.country_workflows.uae_ct_audit_duty import CTAuditDutyInput
 from app.modules.country_workflows.vat_composition import VATCompositionInput
 from app.modules.country_workflows.withholding_obligations import WithholdingObligationInput
 from app.modules.intelligence import jobs, service
@@ -212,6 +213,16 @@ async def salary_annual_comparison(
     eid: uuid.UUID, data: SalaryAnnualComparisonInput, db: DB, ctx: Actor, request: Request
 ):
     from app.modules.country_workflows.salary_annual_comparison import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/uae-ct-audit-duty", status_code=201)
+async def uae_ct_audit_duty(
+    eid: uuid.UUID, data: CTAuditDutyInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.uae_ct_audit_duty import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))

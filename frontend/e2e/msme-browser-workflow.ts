@@ -43,11 +43,13 @@ export function makeWorkflowHarness(page: Page, eid: string, tenant: string) {
         multipart: {
           file: {
             name,
-            mimeType: name.endsWith(".csv")
-              ? "text/csv"
-              : name.endsWith(".xml")
-                ? "application/xml"
-                : "text/plain",
+            mimeType: name.endsWith(".pdf")
+              ? "application/pdf"
+              : name.endsWith(".csv")
+                ? "text/csv"
+                : name.endsWith(".xml")
+                  ? "application/xml"
+                  : "text/plain",
             buffer,
           },
         },

@@ -1,0 +1,19 @@
+{
+  "country": "AE",
+  "source_url": "https://www.mof.gov.ae/wp-content/uploads/2025/04/Ministerial-Decision-No.-84-of-2025-on-Audited-Financial-Statements.pdf",
+  "original_file": "md84-2025-original.pdf",
+  "retrieved_on": "2026-10-31",
+  "bytes": 124998,
+  "sha256": "1121cdca7e0386dcf93a68a3919ba3f5c42e2521cdaf3c7020c41670dd0afedb",
+  "pages": 2,
+  "visual_review": "Both complete original pages inspected after rendering with bundled Poppler. English rule text, effective-period provision and issuance date are legible; missing optional display-font warnings were reported.",
+  "software_scope": "Dated preparation/maintenance duty over retained assessed entity facts and explicit operative window; not automatic legal source adoption or a full audit/reporting/filing pack",
+  "separate_source_research": {
+    "candidate": "https://tax.gov.ae/Datafolder/Files/Legislation/2025/FTA-Decision-No-7-of-2025-for-publishing.pdf",
+    "status": "NOT_ARCHIVED_OR_ADOPTED",
+    "observation": "The web PDF reader exposed a six-page unofficial English translation. Direct ordinary retrieval did not produce validated PDF bytes, so no local original or hash is claimed.",
+    "scope_limit": "Tax Group aggregation, forms, audit framework and submission procedures remain separate; no deadline or complete group procedure is inferred from MD84 alone."
+  },
+  "professional_qualification": "NOT_ESTABLISHED",
+  "client_qualification": "NO_REAL_CLIENT_FILES_OR_EXPECTED_SCHEDULES_SUPPLIED"
+}

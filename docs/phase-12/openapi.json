@@ -27379,6 +27379,142 @@
         }
       }
     },
+    "/api/v1/intelligence/engagements/{eid}/uae-ct-audit-duty": {
+      "post": {
+        "tags": [
+          "Accounting intelligence"
+        ],
+        "summary": "Uae Ct Audit Duty",
+        "operationId": "uae_ct_audit_duty_api_v1_intelligence_engagements__eid__uae_ct_audit_duty_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Eid"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CTAuditDutyInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
       "post": {
         "tags": [
@@ -59822,6 +59958,188 @@
           "tenant_name"
         ],
         "title": "Bootstrap"
+      },
+      "CTAuditDutyInput": {
+        "properties": {
+          "profile": {
+            "type": "string",
+            "const": "uae-ct-audited-statements-md84-2025/1",
+            "title": "Profile"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Label"
+          },
+          "registration_reference": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Registration Reference"
+          },
+          "tax_period_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Tax Period Start"
+          },
+          "tax_period_end": {
+            "type": "string",
+            "format": "date",
+            "title": "Tax Period End"
+          },
+          "assessed_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Assessed On"
+          },
+          "adopted_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Adopted From"
+          },
+          "adopted_through": {
+            "type": "string",
+            "format": "date",
+            "title": "Adopted Through"
+          },
+          "other_rule_changes": {
+            "type": "string",
+            "enum": [
+              "assessed_none",
+              "unresolved"
+            ],
+            "title": "Other Rule Changes"
+          },
+          "rule_adoption_assessment": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Rule Adoption Assessment"
+          },
+          "taxable_person": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Taxable Person"
+          },
+          "tax_group": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Tax Group"
+          },
+          "qualifying_free_zone_person": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Qualifying Free Zone Person"
+          },
+          "residency": {
+            "type": "string",
+            "enum": [
+              "resident",
+              "non_resident",
+              "unassessed"
+            ],
+            "title": "Residency"
+          },
+          "revenue_basis": {
+            "type": "string",
+            "enum": [
+              "whole_person",
+              "uae_pe_and_nexus",
+              "unassessed"
+            ],
+            "title": "Revenue Basis"
+          },
+          "revenue_aed": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revenue Aed"
+          },
+          "currency": {
+            "type": "string",
+            "const": "AED",
+            "title": "Currency"
+          },
+          "designated_zone_distribution": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Designated Zone Distribution"
+          },
+          "fact_assessment": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Fact Assessment"
+          },
+          "rule_evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Rule Evidence Version Id"
+          },
+          "fact_evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fact Evidence Version Id"
+          },
+          "fact_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Fact Sha256"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "profile",
+          "label",
+          "registration_reference",
+          "tax_period_start",
+          "tax_period_end",
+          "assessed_on",
+          "adopted_from",
+          "adopted_through",
+          "other_rule_changes",
+          "rule_adoption_assessment",
+          "taxable_person",
+          "tax_group",
+          "qualifying_free_zone_person",
+          "residency",
+          "revenue_basis",
+          "revenue_aed",
+          "currency",
+          "designated_zone_distribution",
+          "fact_assessment",
+          "rule_evidence_version_id",
+          "fact_evidence_version_id",
+          "fact_sha256"
+        ],
+        "title": "CTAuditDutyInput"
       },
       "CarryforwardInput": {
         "properties": {

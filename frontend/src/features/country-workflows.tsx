@@ -97,6 +97,7 @@ import {
   SalaryAnnualLinks,
 } from "./salary-annual-comparison";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
+import { UAECTAuditDuty } from "./uae-ct-audit-duty";
 import { draftCurrency, reportingCurrency } from "./workflow-currency";
 import { TurnoverBooksComposition } from "./turnover-books-composition";
 import {
@@ -2521,6 +2522,14 @@ export function CountryWorkflows({
           eid={eid}
           sources={results.data?.items || []}
           layouts={config.data?.vat201_layouts}
+          onCreated={setSelected}
+        />
+      )}
+      {mode === "country-workflow" && config.data?.country === "AE" && (
+        <UAECTAuditDuty
+          key={`ct-audit:${eid}`}
+          eid={eid}
+          evidence={inputs.data?.evidence || []}
           onCreated={setSelected}
         />
       )}

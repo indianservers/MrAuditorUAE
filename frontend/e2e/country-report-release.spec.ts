@@ -16,6 +16,7 @@ import {
 import { readFileSync, mkdirSync } from "node:fs";
 import { runMSMEBrowserWorkflow } from "./msme-browser-workflow";
 import { runUAEBankBrowserWorkflow } from "./bank-browser-workflow";
+import { runCTAuditDutyBrowserWorkflow } from "./uae-ct-audit-duty-browser-workflow";
 
 const identities = JSON.parse(
   readFileSync("../.local-runtime/release-smoke/identities.json", "utf8"),
@@ -948,6 +949,14 @@ for (const code of ["AE", "IN"] as const) {
       screenshots,
       entity.name,
     );
+    if (code === "AE")
+      await runCTAuditDutyBrowserWorkflow(
+        page,
+        reviewer,
+        engagement.id,
+        identities.tenant_id,
+        screenshots,
+      );
     if (code === "AE")
       await runSavingsBrowserWorkflow(
         page,

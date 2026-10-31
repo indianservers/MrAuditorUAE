@@ -2836,6 +2836,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intelligence/engagements/{eid}/uae-ct-audit-duty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Uae Ct Audit Duty */
+        post: operations["uae_ct_audit_duty_api_v1_intelligence_engagements__eid__uae_ct_audit_duty_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
         parameters: {
             query?: never;
@@ -6889,6 +6906,101 @@ export interface components {
             password: string;
             /** Tenant Name */
             tenant_name: string;
+        };
+        /** CTAuditDutyInput */
+        CTAuditDutyInput: {
+            /**
+             * Profile
+             * @constant
+             */
+            profile: "uae-ct-audited-statements-md84-2025/1";
+            /** Label */
+            label: string;
+            /** Registration Reference */
+            registration_reference: string;
+            /**
+             * Tax Period Start
+             * Format: date
+             */
+            tax_period_start: string;
+            /**
+             * Tax Period End
+             * Format: date
+             */
+            tax_period_end: string;
+            /**
+             * Assessed On
+             * Format: date
+             */
+            assessed_on: string;
+            /**
+             * Adopted From
+             * Format: date
+             */
+            adopted_from: string;
+            /**
+             * Adopted Through
+             * Format: date
+             */
+            adopted_through: string;
+            /**
+             * Other Rule Changes
+             * @enum {string}
+             */
+            other_rule_changes: "assessed_none" | "unresolved";
+            /** Rule Adoption Assessment */
+            rule_adoption_assessment: string;
+            /**
+             * Taxable Person
+             * @enum {string}
+             */
+            taxable_person: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
+             * Tax Group
+             * @enum {string}
+             */
+            tax_group: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
+             * Qualifying Free Zone Person
+             * @enum {string}
+             */
+            qualifying_free_zone_person: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
+             * Residency
+             * @enum {string}
+             */
+            residency: "resident" | "non_resident" | "unassessed";
+            /**
+             * Revenue Basis
+             * @enum {string}
+             */
+            revenue_basis: "whole_person" | "uae_pe_and_nexus" | "unassessed";
+            /** Revenue Aed */
+            revenue_aed: number | string | null;
+            /**
+             * Currency
+             * @constant
+             */
+            currency: "AED";
+            /**
+             * Designated Zone Distribution
+             * @enum {string}
+             */
+            designated_zone_distribution: "assessed_yes" | "assessed_no" | "unassessed";
+            /** Fact Assessment */
+            fact_assessment: string;
+            /**
+             * Rule Evidence Version Id
+             * Format: uuid
+             */
+            rule_evidence_version_id: string;
+            /**
+             * Fact Evidence Version Id
+             * Format: uuid
+             */
+            fact_evidence_version_id: string;
+            /** Fact Sha256 */
+            fact_sha256: string;
         };
         /** CarryforwardInput */
         CarryforwardInput: {
@@ -28616,6 +28728,106 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["SalaryAnnualComparisonInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    uae_ct_audit_duty_api_v1_intelligence_engagements__eid__uae_ct_audit_duty_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "x-tenant-id": string;
+            };
+            path: {
+                eid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CTAuditDutyInput"];
             };
         };
         responses: {
