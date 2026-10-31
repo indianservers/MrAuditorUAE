@@ -14,6 +14,7 @@ export default defineConfig({
     "business-day-deadline-release.spec.ts",
     "dmcc-audit-release.spec.ts",
     "adgm-accounts-release.spec.ts",
+    "group-comparatives-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",

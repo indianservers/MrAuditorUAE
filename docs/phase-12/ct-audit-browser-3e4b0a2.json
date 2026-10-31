@@ -1,0 +1,49 @@
+{
+  "source_commit": "3e4b0a2dc0cf22b1d5e1155ff160aaed95e4eb15",
+  "run_id": 41147809464,
+  "job_id": 124376904623,
+  "conclusion": "success",
+  "suite": {
+    "passed": 14,
+    "duration": "9.7m",
+    "compound_uae_country_report_case_duration": "1.7m"
+  },
+  "artifact": {
+    "id": 13022465906,
+    "bytes": 21538863,
+    "sha256": "edefd44d5d98ce5e1be429392dc8883e57e98d4ff9f34ca3a8605778c01331a0"
+  },
+  "images": [
+    {
+      "file": "AE-CT-MD84-at-limit-reviewed-3e4b0a2.png",
+      "bytes": 86235,
+      "sha256": "62f585df6fa00f1627033b4bc79ffff9303f0b7fda1c7d693ace8638630c5fed"
+    },
+    {
+      "file": "AE-CT-MD84-above-limit-reviewed-3e4b0a2.png",
+      "bytes": 87050,
+      "sha256": "7efffe92333cd0992ee91920578b3e79e60b0b372ac1baf3e6a0ad160cb8199b"
+    },
+    {
+      "file": "AE-CT-MD84-facts-replaced-stale-3e4b0a2.png",
+      "bytes": 87826,
+      "sha256": "384296a31c1d0ba8b2c5117668c8df3342ebf0663796ddbc9906aeb4e853223b"
+    }
+  ],
+  "visual_review": [
+    "Original at-limit screenshot displays AED50000000, reviewed/current status, zero exceptions and NO_MD84_AUDIT_DUTY_ON_ASSESSED_FACTS.",
+    "Original above-limit screenshot displays AED50000000.01, reviewed/current status, zero exceptions and AUDITED_FINANCIAL_STATEMENTS.",
+    "After replacing the fact document, freshness is visibly STALE, the original reviewed amount and statement type remain, and independent approval is disabled.",
+    "All three original PNGs were visually inspected. The wide schedule clips right-hand columns; these captures do not visibly prove every output field.",
+    "Visible limitations distinguish the assessed corporate-tax duty from company-law/free-zone audit duties, tax-period validity and complete group reporting."
+  ],
+  "automated_scope": [
+    "Original retained MD84 upload, distinct synthetic fact document, exact boundary UI submission, separate-user review and forbidden self-review",
+    "Draft XLSX download and source-replacement freshness with immutable historical result"
+  ],
+  "limits": [
+    "The source-specific full backend job was still running when this browser evidence was retained; not an all-jobs-success receipt",
+    "Synthetic duty assessment only; no real-client, professional, legal, audit-opinion, filing or production qualification",
+    "This source predates the later shared group nil-assessment and prior-reported-comparative features"
+  ]
+}
