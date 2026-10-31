@@ -146,6 +146,7 @@ export function IndiaCompanyScope({
       <label>
         India statement scope
         <select
+          aria-label="India statement scope"
           value={values.statement_scope}
           onChange={(e) => change("statement_scope", e.target.value)}
         >
@@ -159,6 +160,7 @@ export function IndiaCompanyScope({
         <label key={key}>
           {label}
           <select
+            aria-label={label}
             value={values[key] || ""}
             onChange={(e) => change(key, e.target.value)}
           >
@@ -182,6 +184,7 @@ export function IndiaCompanyScope({
       <label>
         India operative source chain
         <select
+          aria-label="India operative source chain"
           value={values.source_chain_status}
           onChange={(e) => change("source_chain_status", e.target.value)}
         >
@@ -194,6 +197,7 @@ export function IndiaCompanyScope({
       <label>
         India other operative changes
         <select
+          aria-label="India other operative changes"
           value={values.other_operative_changes}
           onChange={(e) => change("other_operative_changes", e.target.value)}
         >
@@ -220,6 +224,7 @@ export function IndiaCompanyScope({
         <label key={role}>
           {label}
           <select
+            aria-label={label}
             value={sources[role] || ""}
             onChange={(e) =>
               setSources((previous) => ({

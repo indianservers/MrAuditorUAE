@@ -280,3 +280,5 @@ docs/country-workflows/authority-references/india-company-reporting-2026-10-31/*
 docs/phase-12/india-company-scope-core.xml -text whitespace=cr-at-eol
 docs/phase-12/india-company-scope-*.xml -text whitespace=cr-at-eol
 docs/phase-12/india-statement-*.xml -text whitespace=cr-at-eol
+docs/phase-12/company-scope-pack-*.xml -text whitespace=cr-at-eol
+docs/phase-12/screenshots/c0bdbac-failures/*.png -text

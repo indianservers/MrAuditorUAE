@@ -32,6 +32,7 @@ def implementation_hash():
         "form26_index.py",
         "form26_fields.py",
         "workpaper_report_scope.py",
+        "company_scope_pack.py",
     ):
         digest.update(name.encode() + b"\0" + hashlib.sha256((root / name).read_bytes()).digest())
     return digest.hexdigest()
@@ -146,12 +147,15 @@ async def require_ready(db, ctx, eng, config):
     if pack and (await resolved(db, ctx, eng))[0].country != pack["country"]:
         raise HTTPException(422, "Report preset is unavailable for this engagement country")
     vat_pack = pack and pack["kind"] == "vat201-comparison"
-    period = await db.get(FinancialPeriod, eng.period_id) if vat_pack else None
-    if (
-        vat_pack
-        and len({block.source_id for block in config.blocks if block.requirement_keys}) != 1
-    ):
-        raise HTTPException(409, "All VAT201 preset boxes must reference one reviewed comparison")
+    company_pack = pack and pack["kind"] == "india-company-scope-summary"
+    period = await db.get(FinancialPeriod, eng.period_id) if vat_pack or company_pack else None
+    if (vat_pack or company_pack) and len(
+        {block.source_id for block in config.blocks if block.requirement_keys}
+    ) != 1:
+        raise HTTPException(
+            409,
+            "All preset items must reference one current reviewed comparison or scope workpaper",
+        )
 
     result = coverage(config)
     if not result["complete"]:
@@ -169,6 +173,18 @@ async def require_ready(db, ctx, eng, config):
             source = await intelligence.event(db, ctx, eng.id, block.source_id, True)
             if source.body.get("review_status") != "REVIEWED":
                 raise HTTPException(409, "Required report sources need current independent review")
+            if company_pack and block.requirement_keys:
+                from datetime import date
+
+                validate_source(pack, source.body, block.requirement_keys)
+                row = source.body["rows"][0]
+                if not period or (
+                    date.fromisoformat(row["period_start"]),
+                    date.fromisoformat(row["period_end"]),
+                ) != (period.start_date, period.end_date):
+                    raise HTTPException(
+                        409, "Company-scope summary requires the exact engagement financial period"
+                    )
             if vat_pack and block.requirement_keys:
                 validate_source(pack, source.body, block.requirement_keys)
                 from datetime import date
@@ -185,6 +201,10 @@ async def require_ready(db, ctx, eng, config):
                         "VAT201 report period must be covered by the engagement financial period",
                     )
         elif block.source_kind == "record":
+            if company_pack and block.requirement_keys:
+                raise HTTPException(
+                    409, "Company-scope summary items require the reviewed scope workpaper result"
+                )
             if vat_pack and block.requirement_keys:
                 raise HTTPException(
                     409, "VAT201 preset coverage requires the reviewed comparison result"

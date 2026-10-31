@@ -287,7 +287,9 @@ function ReportBuilderForm() {
                         setKind(
                           preset.kind === "form26-index"
                             ? "working_paper_reference"
-                            : "reconciliation",
+                            : preset.kind === "india-company-scope-summary"
+                              ? "regulatory_checklist"
+                              : "reconciliation",
                         );
                         setSourceKind(
                           preset.kind === "form26-index"

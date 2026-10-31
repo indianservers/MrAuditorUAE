@@ -146,8 +146,11 @@ async def test_uae_preset_is_not_available_for_india(environment):
     assert response.status_code == 200 and response.json()["country"] == "IN"
     assert {pack["id"] for pack in response.json()["items"]} == {
         f"india-form26-index:{part}/{version}" for part in ("A", "B") for version in ("1", "2")
+    } | {f"india-company-scope:{scope}/1" for scope in ("standalone", "consolidated")}
+    assert {p["category"] for p in response.json()["items"]} == {
+        "india-tax-audit",
+        "india-statutory",
     }
-    assert all(p["category"] == "india-tax-audit" for p in response.json()["items"])
     from app.modules.regulatory.report_packs import manifest
 
     pack = manifest("uae-vat201-review:aggregate-14/1")

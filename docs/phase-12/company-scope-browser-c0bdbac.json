@@ -1,0 +1,32 @@
+{
+  "source_commit": "c0bdbac876d37c6b9bfc3a9a0b3cd01fdf47c3a4",
+  "run": 41175316958,
+  "browser_job": 124461541434,
+  "outcome": {
+    "passed": 15,
+    "failed": 2
+  },
+  "artifact": {
+    "id": 13033131870,
+    "bytes": 23273880,
+    "sha256": "266e56b070a67d3c0f20e58ac2745136575b4bc91132da0cd24620449dec6d65"
+  },
+  "original_screenshots": [
+    {
+      "path": "docs/phase-12/screenshots/c0bdbac-failures/india-report-test-failed-1.png",
+      "bytes": 262086,
+      "sha256": "f53fd1745184d06fbc7896bf0076bd6b885300c78778a0f6ccbf734b224cd952"
+    },
+    {
+      "path": "docs/phase-12/screenshots/c0bdbac-failures/india-report-test-failed-2.png",
+      "bytes": 533701,
+      "sha256": "c56b334fb08795c850f4599d59e6ef5ab25f2fd45697d72361a2177f5ab80302"
+    },
+    {
+      "path": "docs/phase-12/screenshots/c0bdbac-failures/india-scope.png",
+      "bytes": 114680,
+      "sha256": "c3ec65cf578d2bc9f8e9c80ed948d4f5ea73dd4aadbeb33ef90e0ee5c53a0a4f"
+    }
+  ],
+  "inspection": "Three original PNGs visually inspected; scope form visible with unresolved adoption; MSE totals readable but prior principal release source row below viewport. These are failure evidence, not passing screenshots."
+}

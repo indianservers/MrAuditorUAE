@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-31",
+  "base_commit": "7502806909efc12871a39b7599632b663889c84c",
+  "scope": "India standalone/consolidated company applicability summary presets and fixes for two hosted browser failures",
+  "validation": {
+    "final_backend_unit": {"passed": 5037, "skipped": 4, "failed": 0, "report": "company-scope-pack-all-unit-final.xml"},
+    "focused_pack_unit": {"passed": 28, "failed": 0, "report": "company-scope-pack-unit.xml"},
+    "final_http": {"passed": 20, "failed": 0, "report": "company-scope-pack-http-final.xml"},
+    "frontend": {"passed": 537, "files": 96, "failed": 0, "report": "company-scope-pack-frontend.xml"},
+    "mypy": "439 application source files passed",
+    "ruff": "changed backend files passed",
+    "frontend_types_scoped_eslint_and_production_build": "passed",
+    "runtime_api_snapshot_and_frontend_api_types": "passed; contract unchanged",
+    "browser_discovery": "17 tests in 15 files",
+    "browser_fix_execution": "PENDING_HOSTED_RUN"
+  },
+  "integration_coverage": [
+    "Generate summary from independently reviewed India company-scope result; retain true audit duty and false CARO applicability separately",
+    "Six exact required decisions cannot be omitted or replaced by narrative/no-source/not-applicable overrides",
+    "One current resolved scope result required for the matching statement scope and exact financial period",
+    "XLSX includes all six requirement keys; DOCX and PDF exports succeed",
+    "Replacing original company facts recursively stales the retained generated report without mutating its body",
+    "Generic/legacy/unbound/blocked/unknown/multirow/wrong-scope results rejected by preset source validator"
+  ],
+  "retained_failure_evidence": [
+    {"report": "company-scope-pack-http.xml", "reason": "Old catalogue assertion omitted the two newly added India presets; assertion updated and final HTTP run passed"},
+    {"report": "company-scope-pack-export-http.xml", "reason": "New preset lacked source metadata required by the exporter, causing 503; metadata added and all final HTTP export checks passed"},
+    {"report": "company-scope-browser-c0bdbac.json", "reason": "Hosted source c0bdbac had 15 passing and 2 failing browser cases; original failure PNGs inspected and retained"}
+  ],
+  "browser_changes": [
+    "India scope select controls now have explicit accessible labels so exact label selection does not depend on option text",
+    "MSE capture still asserts heading, net and prior release totals in view; separately scrolls prior source-release row into view, asserts it, and captures the schedule"
+  ],
+  "limitations": [
+    "Presets summarize applicability only; they do not supply complete audit/CARO clauses or an opinion.",
+    "Complete original-byte legal-chain qualification, AS/Ind AS measurement/disclosure completeness and professional issuance remain separate requirements.",
+    "No real client files or independently approved real-client outcomes are supplied.",
+    "New passing browser screenshots and terminal hosted full-backend checks are not claimed."
+  ]
+}

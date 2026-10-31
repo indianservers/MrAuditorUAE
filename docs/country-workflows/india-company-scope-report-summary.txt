@@ -1,0 +1,31 @@
+India company applicability summaries
+
+The report designer offers india-company-scope:standalone/1 and
+india-company-scope:consolidated/1 under the India statutory category. These
+presets summarize the reviewed company-scope workpaper. They are not complete
+statutory audit reports, full CARO clause reports or opinions.
+
+Every preset retains six decisions: small-company status, section 139 company
+audit, CARO applicability, standalone CARO matters, consolidated paragraph
+3(xxi), and section 143(3)(i) IFC reporting. All six requirements need source
+evidence, including false decisions. Not-applicable or narrative overrides
+cannot replace these decisions, and no preset item may be omitted.
+
+Prepare and independently review the India company-scope workpaper first. In
+the designer, select the matching standalone/consolidated preset, assess each
+requirement, and map the requirements to that same reviewed intelligence result.
+The default content type is Regulatory checklist. All mapped blocks must refer
+to one current resolved scope workpaper for the exact engagement financial
+period. A generic checklist or approved audit record cannot substitute for it.
+
+Before template approval and generation, the server rechecks the source contract,
+original-byte binding, review, resolved flags, statement scope and exact period.
+The generated draft retains the actual decision values and source receipt.
+Replacing linked original evidence recursively makes the saved source, template
+and generated summary stale while preserving their historical bodies. Independent
+preparer restrictions and the existing controlled report export workflow apply.
+
+Preset source metadata names the application's operational contract, not a
+purported statutory text. Complete legal-source qualification, applicable audit
+clauses, measurement/disclosure completeness and authorized issuance remain
+separate requirements. Synthetic test outcomes are not real-client validation.

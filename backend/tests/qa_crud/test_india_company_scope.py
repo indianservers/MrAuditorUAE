@@ -80,6 +80,73 @@ async def test_scope_review_export_and_every_original_stales(
     response = await decision(c, reviewer[0], eid, result)
     assert response.status_code == 201, response.text
     reviewed = response.json()
+    report = None
+    if changed_role == "company_facts":
+        from app.modules.regulatory.report_packs import manifest
+
+        preset = manifest("india-company-scope:standalone/1")
+        template = await c.post(
+            f"/api/v1/regulatory/engagements/{eid}/report-templates",
+            headers=h,
+            json={
+                "title": "SYNTHETIC retained India company applicability summary",
+                "category": "india-statutory",
+                "requirements_pack": preset["id"],
+                "requirements": [{**r, "disposition": "REQUIRED"} for r in preset["requirements"]],
+                "requirements_assessed": True,
+                "requirements_basis": "SYNTHETIC six explicit decisions from one current reviewed workpaper",
+                "blocks": [
+                    {
+                        "key": "scope",
+                        "title": "Retained company decisions",
+                        "kind": "regulatory_checklist",
+                        "source_kind": "intelligence",
+                        "source_id": reviewed["id"],
+                        "requirement_keys": [r["key"] for r in preset["requirements"]],
+                    }
+                ],
+                "rationale": "SYNTHETIC applicability summary, not a full statutory report",
+            },
+        )
+        assert template.status_code == 201, template.text
+        approved_template = await decision(c, reviewer[0], eid, template.json())
+        assert approved_template.status_code == 201, approved_template.text
+        generated = await c.post(
+            f"/api/v1/regulatory/engagements/{eid}/reports",
+            headers=h,
+            json={
+                "template_id": approved_template.json()["id"],
+                "rationale": "SYNTHETIC exact reviewed scope and preserved false duty decisions",
+            },
+        )
+        assert generated.status_code == 201, generated.text
+        report = generated.json()
+        assert (
+            report["body"]["blocks"][0]["data"]["rows"][0]["companies_act_section139_audit"] is True
+        )
+        assert report["body"]["blocks"][0]["data"]["rows"][0]["caro2020_applies"] is False
+        assert report["body"]["requirements_coverage"]["complete"] is True
+        assert report["body"]["requirements_coverage"]["statutory_completeness_qualified"] is False
+        exported = await c.get(
+            prefix + "/events/" + report["id"] + "/export?format=xlsx", headers=h
+        )
+        assert exported.status_code == 200, exported.text
+        exported_book = load_workbook(io.BytesIO(exported.content), read_only=True)
+        cells = {
+            str(cell)
+            for sheet in exported_book.worksheets
+            for row in sheet.values
+            for cell in row
+            if cell is not None
+        }
+        assert all(requirement["key"] in cells for requirement in preset["requirements"])
+        exported_book.close()
+        for export_format in ("docx", "pdf"):
+            rendered = await c.get(
+                prefix + "/events/" + report["id"] + "/export?format=" + export_format, headers=h
+            )
+            assert rendered.status_code == 200, rendered.text[:300]
+            assert len(rendered.content) > 500
     path = prefix + "/events/" + reviewed["id"]
     export = await c.get(path + "/export?format=xlsx", headers=h)
     assert export.status_code == 200, export.text
@@ -97,6 +164,10 @@ async def test_scope_review_export_and_every_original_stales(
     assert stale.json()["freshness"] == "STALE"
     assert stale.json()["body"] == reviewed["body"]
     assert (await decision(c, reviewer[0], eid, reviewed)).status_code == 409
+    if report:
+        retained_report = await c.get(prefix + "/events/" + report["id"], headers=h)
+        assert retained_report.json()["freshness"] == "STALE"
+        assert retained_report.json()["body"] == report["body"]
 
 
 @pytest.mark.parametrize(

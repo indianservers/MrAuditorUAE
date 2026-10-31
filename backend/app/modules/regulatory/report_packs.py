@@ -13,22 +13,27 @@ PREFIX = "uae-vat201-review:"
 
 def catalogue(country):
     if country == "IN":
+        from app.modules.regulatory.company_scope_pack import PREFIX as COMPANY_PREFIX
         from app.modules.regulatory.form26_index import PREFIX as INDIA_PREFIX
 
         return [
             manifest(INDIA_PREFIX + part + "/" + version)
             for version in ("1", "2")
             for part in ("A", "B")
-        ]
+        ] + [manifest(COMPANY_PREFIX + scope + "/1") for scope in ("standalone", "consolidated")]
     if country != "AE":
         return []
     return [manifest(PREFIX + layout + "/1") for layout in LAYOUTS]
 
 
 def manifest(identifier):
+    from app.modules.regulatory.company_scope_pack import PREFIX as COMPANY_PREFIX
+    from app.modules.regulatory.company_scope_pack import manifest as company_manifest
     from app.modules.regulatory.form26_index import PREFIX as INDIA_PREFIX
     from app.modules.regulatory.form26_index import manifest as india_manifest
 
+    if identifier.startswith(COMPANY_PREFIX):
+        return company_manifest(identifier)
     if identifier.startswith(INDIA_PREFIX):
         return india_manifest(identifier)
     if not identifier.startswith(PREFIX) or not identifier.endswith("/1"):
@@ -99,6 +104,10 @@ def validate_config(config):
 
 
 def validate_source(pack, body, requirement_keys):
+    if pack["kind"] == "india-company-scope-summary":
+        from app.modules.regulatory.company_scope_pack import validate_source as validate_company
+
+        return validate_company(pack, body, requirement_keys)
     if body.get("workflow") != "uae-vat-return" or body.get("vat201_layout") != pack["layout"]:
         raise HTTPException(
             409, "VAT201 preset requires a reviewed comparison using its exact layout"

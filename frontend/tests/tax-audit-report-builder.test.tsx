@@ -350,6 +350,49 @@ it("offers the India index only for tax audit and retains evidence for not-appli
   ).not.toBeInTheDocument();
 });
 
+it("selects the India company applicability preset as a retained regulatory result", () => {
+  state.presets = {
+    country: "IN",
+    items: [
+      {
+        id: "india-company-scope:standalone/1",
+        title: "India standalone company applicability summary",
+        category: "india-statutory",
+        kind: "india-company-scope-summary",
+        allow_not_applicable: false,
+        not_applicable_keys: [],
+        requirements: [
+          {
+            key: "company.scope.small_company",
+            title: "Small-company classification",
+            disposition: "UNASSESSED",
+            source_required: true,
+            basis: "Retain current reviewed applicability support",
+          },
+        ],
+        limitations: ["Applicability summary only; not a statutory opinion"],
+      },
+    ],
+  };
+  render(<StatutoryReportBuilder />);
+  fireEvent.change(screen.getByLabelText("Engagement"), {
+    target: { value: "one" },
+  });
+  fireEvent.change(screen.getByLabelText("Report category"), {
+    target: { value: "india-statutory" },
+  });
+  fireEvent.change(screen.getByLabelText("Operational report preset"), {
+    target: { value: "india-company-scope:standalone/1" },
+  });
+  expect(screen.getByLabelText("Content type")).toHaveValue(
+    "regulatory_checklist",
+  );
+  expect(screen.getByLabelText("Source type")).toHaveValue("intelligence");
+  expect(
+    screen.getByText("Applicability summary only; not a statutory opinion"),
+  ).toBeInTheDocument();
+});
+
 it("saves every expanded field after searching and editing the last field", async () => {
   state.mutate.mockReset().mockResolvedValue({ id: "saved" });
   const requirements = Array.from({ length: 877 }, (_, i) => ({

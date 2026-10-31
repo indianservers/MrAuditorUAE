@@ -232,16 +232,20 @@ export async function runMSMETaxBrowserWorkflow(
           .getByRole("row")
           .filter({ hasText: "Release of earlier disallowance" }),
       ).toBeInViewport();
-      await expect(
-        reviewer
-          .getByRole("table", { name: /^Source-linked schedule/ })
-          .getByRole("row")
-          .filter({ hasText: "SYN-PRIOR" })
-          .filter({ hasText: "PRIOR_PRINCIPAL_RELEASE" }),
-      ).toBeInViewport();
       await reviewer.screenshot({
         path: `${screenshots}/${name}.png`,
         fullPage: true,
+      });
+      const priorRelease = reviewer
+        .getByRole("table", { name: /^Source-linked schedule/ })
+        .getByRole("row")
+        .filter({ hasText: "SYN-PRIOR" })
+        .filter({ hasText: "PRIOR_PRINCIPAL_RELEASE" });
+      await priorRelease.scrollIntoViewIfNeeded();
+      await expect(priorRelease).toBeInViewport();
+      await reviewer.screenshot({
+        path: `${screenshots}/${name}-source-schedule.png`,
+        fullPage: false,
       });
     } finally {
       if (viewport) await reviewer.setViewportSize(viewport);
