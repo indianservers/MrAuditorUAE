@@ -1,0 +1,47 @@
+{
+  "source_commit": "2964ef1220b33cf1905fcc15fd652e307c275ba5",
+  "run_id": 41146562952,
+  "job_id": 124372926084,
+  "conclusion": "success",
+  "suite": {
+    "passed": 14,
+    "duration": "10.0m"
+  },
+  "artifact": {
+    "id": 13021568662,
+    "bytes": 21266977,
+    "sha256": "fcd03d70768893cad0487ab626af911224dd8861b0425bfc135accf8c5fc794a"
+  },
+  "images": [
+    {
+      "file": "IN-24Q-all-quarter-reviewed-links-2964ef1.png",
+      "bytes": 61479,
+      "sha256": "f6c4eb6b5bd2e77a1d36d0f735c31ffc06421c989c323fff86f0477c2458b44c"
+    },
+    {
+      "file": "IN-24Q-all-quarter-comparison-reviewed-2964ef1.png",
+      "bytes": 151398,
+      "sha256": "725deeb2dfcce9751c21821bb84c5b3058e16847e192275173dba9ae629215aa"
+    },
+    {
+      "file": "IN-24Q-all-quarter-crosswalk-stale-2964ef1.png",
+      "bytes": 152253,
+      "sha256": "7b99c671a9f11440a1e1b724345b225d02b6a4c37f682b03f013c678dcac0541"
+    }
+  ],
+  "visual_review": [
+    "The full quarter-link capture shows Q1, Q2, Q3 and Q4 assigned to one explicitly assessed annual employee under the same TAN and financial year.",
+    "Quarterly recorded tax amounts 10000, 500, 500 and 1000 total INR12000 and agree with annual SD field36 current-employer tax; the reviewed result shows zero exceptions.",
+    "Replacing the annual identity crosswalk changes freshness to STALE while retaining the original reviewed result and all four links; independent approval is disabled.",
+    "All three original screenshots were visually inspected. These synthetic identity assessments do not establish actual employee identity."
+  ],
+  "automated_scope": [
+    "Nine native regular profiles, all-quarter annual salary comparison and separate missing-PAN review in the compound browser case",
+    "UI submission, separate-user approval, prohibited self-review, complete four-quarter XLSX linkage export and crosswalk replacement preserving the original result"
+  ],
+  "limits": [
+    "This is source-specific browser evidence, not an all-jobs-success receipt.",
+    "Historical reported current-employer amounts are compared; statutory salary tax, other-employer credits, FVU/CSI and government filing are not qualified.",
+    "Synthetic browser evidence does not establish real-client, professional, legal or production qualification."
+  ]
+}
