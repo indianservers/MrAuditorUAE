@@ -1,0 +1,67 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_commit": "9f6c1eb9b4af1a460d9bb2f084abb67ef91800bd",
+  "run_id": 41191029405,
+  "job_id": 124507684620,
+  "job": "browser-smoke",
+  "conclusion": "SUCCESS",
+  "executed_cases": 21,
+  "elapsed": "10.1m",
+  "icfr_case_elapsed": "20.7s",
+  "countries": [
+    "AE",
+    "IN"
+  ],
+  "artifact": {
+    "id": 13038928639,
+    "bytes": 26250047,
+    "sha256": "4706751e4f556b69516a00533ebb1d422e17743bb6954842119d87fe6ba075ae",
+    "validation": "Exact ZIP length and advertised digest verified before selected PNG extraction"
+  },
+  "executed_checks": [
+    "Actual service scanner/worker and retained scope authority/facts originals",
+    "Independent source review and denied result self-approval",
+    "Separate management assessment and assessed auditor exemption",
+    "Complete reviewed XLSX three-row content with separate duties and assessment-document UUID",
+    "Missing auditor decision blocks approval with MISSING_SCOPE_DECISION",
+    "Replacing underlying assessment original marks retained reviewed result stale without changing its body and disables approval"
+  ],
+  "visual_review": "All six original PNGs inspected. Both countries show reviewed/current separate 404a SUPPORTED and 404b NOT-APPLICABLE rows; missing auditor scope displays its own missing row and disabled approval; original reviewed rows persist after STALE notice with approval disabled. No clipped duty/state cells; reviewed notification is below the data rows.",
+  "screenshots": [
+    {
+      "path": "docs/phase-12/screenshots/9f6c1eb-icfr-reviewed/AE-icfr-reviewed.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "77746c4b3baaadde65452ad6744440b13fb31ef486b0b4f0e2ea4b0fef4d9ef1"
+    },
+    {
+      "path": "docs/phase-12/screenshots/9f6c1eb-icfr-reviewed/AE-icfr-pending-scope.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "8ff043b8e9671700a09098d13b45cea6f58b0fb515eb551c5f44a86e18183b1b"
+    },
+    {
+      "path": "docs/phase-12/screenshots/9f6c1eb-icfr-reviewed/AE-icfr-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "35385dd50346bc74f1b616677874b47281caf8229a8df4448c074aefa0053dd0"
+    },
+    {
+      "path": "docs/phase-12/screenshots/9f6c1eb-icfr-reviewed/IN-icfr-reviewed.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "c929bd97234d0f803f2aed36f63874e57f429488838613fcddb5f9e883359d10"
+    },
+    {
+      "path": "docs/phase-12/screenshots/9f6c1eb-icfr-reviewed/IN-icfr-pending-scope.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "13342ed9bfdebf10759bb23aeb45114116eb3526c20becaa3b8ae478fa9433a2"
+    },
+    {
+      "path": "docs/phase-12/screenshots/9f6c1eb-icfr-reviewed/IN-icfr-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "235af28c1c0a554f63b07ea0fc582f80ec86ed8f7bdcb7fda596601c9eecd380"
+    }
+  ],
+  "limits": [
+    "Synthetic declared scope only, not a legal determination, controls effectiveness opinion or client qualification",
+    "This browser source predates the later ten-case catalogue and exporter changes; those have separate local test receipts",
+    "Full source backend verify job 124507684596 remains in progress at this observation"
+  ]
+}
