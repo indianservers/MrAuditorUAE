@@ -1,17 +1,79 @@
 """Owned purchased-stock costing. Count assurance remains in country_workflows.
 
-No production allocations, specific identification, returns or implicit FX.
+Specific identification covers separately tracked individual units only.
+No production allocations, pooled project lots, returns or implicit FX.
 Every revision is an immutable IFRS run over a separately approved input record.
 """
 
 from collections import defaultdict
+from datetime import date
 from decimal import Decimal
+
+
+def validate_identified_units(data):
+    """No inferred allocations: one physical unit per item/location schedule."""
+    specific = data.method == "specific_identification"
+    identities: dict[tuple[str, str], tuple[tuple[str, str], Decimal]] = {}
+    timelines: dict[tuple[str, str], list[tuple[date, int, int, Decimal]]] = defaultdict(list)
+    openings: dict[tuple[str, str], Decimal] = defaultdict(Decimal)
+    population = sum(1 + len(i.receipts) + len(i.issues) for i in data.items)
+    if specific and population > 20000:
+        raise ValueError("Specific-identification population exceeds 20000 rows")
+    for item in data.items:
+        declared = (
+            item.identification_reference,
+            item.identification_assessment,
+            item.opening_cost_evidence,
+        )
+        if not specific:
+            if any(declared):
+                raise ValueError("Identified-unit evidence requires specific identification")
+            continue
+        if (
+            not item.sku.strip()
+            or not item.identification_reference.strip()
+            or len(item.identification_assessment.strip()) < 10
+        ):
+            raise ValueError("Specific identification requires SKU, unit identity and assessment")
+        if item.opening_quantity not in (0, 1):
+            raise ValueError("Specific identification requires one individually tracked unit")
+        if item.opening_quantity and not item.opening_cost_evidence.strip():
+            raise ValueError("Opening identified-unit cost requires evidence")
+        if not item.opening_quantity and item.opening_unit_cost:
+            raise ValueError("Zero opening units require zero opening cost")
+        if any(m.quantity != 1 for m in [*item.receipts, *item.issues]):
+            raise ValueError("Identified-unit movements must each contain exactly one unit")
+        if any(not m.evidence.strip() for m in [*item.receipts, *item.issues]):
+            raise ValueError("Identified-unit movements require explicit evidence")
+        key = (item.sku.strip(), item.identification_reference.strip())
+        basis = (item.uom, item.ownership)
+        original = item.opening_quantity + sum(
+            (r.quantity for r in item.receipts if r.transaction_type == "purchase"),
+            Decimal(0),
+        )
+        prior_basis, prior_original = identities.get(key, (basis, Decimal(0)))
+        if prior_basis != basis or prior_original + original > 1:
+            raise ValueError("Identified unit is duplicated or changes ownership/UOM")
+        identities[key] = (basis, prior_original + original)
+        openings[key] += item.opening_quantity
+        for sign, movements in ((1, item.receipts), (-1, item.issues)):
+            timelines[key].extend((m.date, m.sequence, sign, m.quantity) for m in movements)
+    for key, (_, original) in identities.items():
+        if original != 1:
+            raise ValueError("Identified unit requires exactly one original acquisition")
+        held = openings[key]
+        for _, _, sign, quantity in sorted(timelines[key]):
+            held += sign * quantity
+            if held not in (0, 1):
+                raise ValueError("Identified unit has overlapping or missing custody movements")
 
 
 def inventory(data):
     from app.modules.ifrs.calculations import q
 
     zero = Decimal(0)
+    validate_identified_units(data)
+    specific = data.method == "specific_identification"
     if data.period_end < data.period_start:
         raise ValueError("Inventory period is reversed")
     if len({item.reference for item in data.items}) != len(data.items):
@@ -41,6 +103,8 @@ def inventory(data):
             if kind == "receipt":
                 amount = movement.quantity * movement.unit_cost + movement.landed_cost
                 quantity += movement.quantity
+                if specific and quantity > 1:
+                    raise ValueError("An identified unit cannot be held twice at one location")
                 value += amount
                 receipts_value += amount
                 layers.append([movement.quantity, amount / movement.quantity])
@@ -77,6 +141,11 @@ def inventory(data):
                         "sku": item.sku,
                         "uom": item.uom,
                         "ownership": item.ownership,
+                        **(
+                            {"identification_reference": item.identification_reference.strip()}
+                            if specific
+                            else {}
+                        ),
                         "location": item.location,
                         "date": when,
                         "sequence": movement.sequence,
@@ -100,6 +169,11 @@ def inventory(data):
                     "closing_quantity": quantity,
                     "closing_cost": q(value),
                     "evidence": movement.evidence,
+                    **(
+                        {"identification_reference": item.identification_reference.strip()}
+                        if specific
+                        else {}
+                    ),
                 }
             )
         if quantity != item.expected_closing_quantity:
@@ -139,6 +213,16 @@ def inventory(data):
                     opening_value + receipts_value - issued_value - value
                 ),
                 "nrv_evidence": item.nrv_evidence,
+                **(
+                    {
+                        "sku": item.sku,
+                        "identification_reference": item.identification_reference.strip(),
+                        "identification_assessment": item.identification_assessment,
+                        "opening_cost_evidence": item.opening_cost_evidence,
+                    }
+                    if specific
+                    else {}
+                ),
             }
         )
     transfer_rows = []
@@ -155,6 +239,10 @@ def inventory(data):
                     source[key] == target[key] for key in ["sku", "uom", "ownership", "quantity"]
                 )
                 and q(source["cost"]) == q(target["cost"])
+                and (
+                    not specific
+                    or source["identification_reference"] == target["identification_reference"]
+                )
                 and (source["date"], source["sequence"]) <= (target["date"], target["sequence"])
             )
         transfer_rows.append(
@@ -178,7 +266,8 @@ def inventory(data):
         "write_down_movement": sum((r["recognised_expense_or_reversal"] for r in rows), zero),
         "method": data.method,
         "limitations": [
-            "Purchased stock and matched location transfers only; production, returns and specific identification require specialist schedules",
+            "Purchased stock and matched location transfers only; production, returns and pooled project-lot costing require specialist schedules",
+            "Specific identification requires one non-interchangeable physical unit per item/location, explicit identity and independently assessed eligibility; no automatic India tax valuation or physical-count assurance",
             "Prior write-down is the approved allocation to remaining units; custody-only goods are excluded from accounting assets",
             "Ageing does not determine NRV; supplied comparable price and completion/selling costs require review",
         ],

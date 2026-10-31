@@ -1,0 +1,67 @@
+{
+  "recorded_at": "2026-10-31T04:49:15.930057+00:00",
+  "base_commit": "fe11d0e08234ac8775cbb8df797616f762413559",
+  "scope": "Specific identification of individual purchased units; existing approved IFRS input and retained calculation lifecycle",
+  "backend": {
+    "path": "docs/phase-12/identified-unit-backend.xml",
+    "sha256": "7174a08c5328b4957e8ac5699c35c8cc458f80fe07561496a5a659f08fa904eb",
+    "tests": 4946,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4
+  },
+  "frontend": {
+    "path": "docs/phase-12/identified-unit-frontend.xml",
+    "sha256": "34c61207f150f1289321033e7095d6af099cb24700831ba72b082be061cbddd8",
+    "tests": 531,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": {
+    "ruff": "PASS",
+    "mypy_435_files": "PASS",
+    "typescript": "PASS",
+    "targeted_eslint": "PASS",
+    "production_build": "PASS",
+    "api_types_check": "PASS",
+    "browser_discovery": "1 existing combined test; new specific-identification assertions discovered, execution pending hosted CI"
+  },
+  "countries_executed": [
+    "AE/AED",
+    "IN/INR"
+  ],
+  "implementation_files": [
+    {
+      "path": "backend/app/modules/ifrs/inventory.py",
+      "normalization": "LF",
+      "sha256": "f6f2d1ee36cb39751b289fa714b368a66e41d65bae3e547d939e5eb9582e56ae"
+    },
+    {
+      "path": "backend/app/modules/ifrs/schemas.py",
+      "normalization": "LF",
+      "sha256": "a2436e36490255706b00cc357defedaeeb8e27c0108ecb3022852f20e4de7db3"
+    },
+    {
+      "path": "backend/tests/unit/test_inventory_identified_units.py",
+      "normalization": "LF",
+      "sha256": "5d9eddd20b716d07e5211928031313aadc1839b38dd30429d484960392b53825"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_inventory_identified_units.py",
+      "normalization": "LF",
+      "sha256": "e3863f8677c1d63d53fbb4a5d28bc3b3c3b8b9d8c327ab12ff7f50992b380cd1"
+    },
+    {
+      "path": "frontend/e2e/group-comparatives-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "7462160ed67004b7bdd8d6ddeae0c934809c16d441f03e2b2bb9511358bc7eaf"
+    }
+  ],
+  "limitations": [
+    "Synthetic arithmetic and HTTP data only; no real client pilot files supplied",
+    "Not project-lot, production or returns costing; no India tax/ICDS determination",
+    "Narrative cost references do not verify original source files",
+    "Local scanner and import dispatch boundaries are doubles; real ClamAV belongs to hosted CI"
+  ]
+}

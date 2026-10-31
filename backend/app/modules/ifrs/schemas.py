@@ -501,6 +501,9 @@ class InventoryItem(Strict):
     ownership: Literal["owned", "custody_only"]
     opening_quantity: Nonnegative
     opening_unit_cost: Nonnegative
+    identification_reference: str = Field(default="", max_length=200)
+    identification_assessment: str = Field(default="", max_length=4000)
+    opening_cost_evidence: str = Field(default="", max_length=1000)
     receipts: list[StockReceipt] = Field(default_factory=list, max_length=10000)
     issues: list[StockIssue] = Field(default_factory=list, max_length=10000)
     expected_closing_quantity: Nonnegative
@@ -515,7 +518,7 @@ class Inventory(Body):
     profile_id: uuid.UUID
     period_start: date
     period_end: date
-    method: Literal["fifo", "weighted_average"]
+    method: Literal["fifo", "weighted_average", "specific_identification"]
     policy_version: str = Field(min_length=1, max_length=200)
     items: list[InventoryItem] = Field(min_length=1, max_length=10000)
 

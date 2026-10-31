@@ -708,6 +708,87 @@ test("prior reported group comparatives retain separate review, original FX, com
       expect(exported.released).toBe(false);
       expect(exported.results).toEqual(schedule.results);
     }
+    const identified = await current.ready("inventory", {
+      profile_id: current.profile.id,
+      period_start: "2026-01-01",
+      period_end: "2026-12-31",
+      method: "specific_identification",
+      policy_version: "SYNTHETIC-individual-machines/1",
+      items: [100, 300].map((cost, index) => ({
+        reference: `SYNTHETIC-machine-${index}`,
+        sku: "SYNTHETIC-non-interchangeable-machine",
+        uom: "each",
+        location: "SYNTHETIC-Dubai",
+        ownership: "owned",
+        identification_reference: `SYNTHETIC-serial-${index}`,
+        identification_assessment:
+          "SYNTHETIC individually tracked non-interchangeable machine; professional eligibility remains unqualified",
+        opening_cost_evidence: `SYNTHETIC-invoice-${index}`,
+        opening_quantity: "1",
+        opening_unit_cost: String(cost),
+        issues:
+          index === 1
+            ? [
+                {
+                  reference: "SYNTHETIC-selected-dispatch",
+                  date: "2026-03-01",
+                  quantity: "1",
+                  evidence: "SYNTHETIC serial-1 dispatch acknowledgement",
+                },
+              ]
+            : [],
+        expected_closing_quantity: index === 1 ? "0" : "1",
+        selling_price: "500",
+        nrv_evidence: "SYNTHETIC individual-unit sale quotation",
+      })),
+    });
+    await page.goto(`/ifrs/${current.eid}/inventory`);
+    const identifiedRegion = page.getByRole("region", {
+      name: "Reporting calculations",
+      exact: true,
+    });
+    await identifiedRegion
+      .getByRole("combobox", { name: "Approved assumptions", exact: true })
+      .selectOption(identified.id);
+    const identifiedPending = page.waitForResponse(
+      (r) =>
+        r
+          .url()
+          .endsWith(
+            `/ifrs/engagements/${current.eid}/calculate/${identified.id}`,
+          ) && r.request().method() === "POST",
+    );
+    await identifiedRegion
+      .getByRole("button", { name: "Calculate approved inputs", exact: true })
+      .click();
+    const identifiedResponse = await identifiedPending;
+    expect(identifiedResponse.status(), await identifiedResponse.text()).toBe(
+      201,
+    );
+    const identifiedRun = await identifiedResponse.json();
+    expect(identifiedRun.results.closing_carrying).toBe("100.00000000");
+    expect(identifiedRun.results.schedule[1].issue_cost).toBe("300.00000000");
+    const identifiedResults = identifiedRegion.getByRole("region", {
+      name: "Inventory costing results",
+      exact: true,
+    });
+    const identifiedTable = identifiedResults.getByRole("table", {
+      name: "Inventory item costing",
+      exact: true,
+    });
+    await expect(identifiedTable.getByRole("row")).toHaveCount(3);
+    await identifiedTable
+      .getByRole("cell", { name: "SYNTHETIC-serial-1", exact: true })
+      .scrollIntoViewIfNeeded();
+    await expect(
+      identifiedTable.getByRole("cell", {
+        name: "SYNTHETIC-serial-1",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await identifiedResults.screenshot({
+      path: `${screenshots}/AE-inventory-specific-identification.png`,
+    });
     expect(errors).toEqual([]);
   } finally {
     await Promise.all(contexts.map((context) => context.close()));

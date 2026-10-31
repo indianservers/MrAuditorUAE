@@ -1,0 +1,45 @@
+{
+  "source_commit": "fe11d0e08234ac8775cbb8df797616f762413559",
+  "run_id": 41168017366,
+  "browser_job_id": 124439689128,
+  "result": "16 passed, 9.0 minutes; combined company-accounts and Tax Group browser case passed in 16.8 seconds",
+  "artifact": {
+    "id": 13029743739,
+    "bytes": 22938700,
+    "sha256": "92937c3ee297a5603e31cea36ab4d06953d3b6ebac064f1f99258275be942967"
+  },
+  "screenshots": [
+    {
+      "path": "docs/phase-12/screenshots/tax-group-fe11d0e/AE-tax-group-workpaper-last-source-page.png",
+      "sha256": "c4b1ccebe3381bc91086ab61acc5ba60925179deafbf0e1772980af6aec7db75",
+      "bytes": 36729
+    },
+    {
+      "path": "docs/phase-12/screenshots/tax-group-fe11d0e/AE-tax-group-workpaper-mapping-stale.png",
+      "sha256": "c853051fea5e054e4db6594bcab1228ad12805da13ad50767b94d94c9acfe7cc",
+      "bytes": 210681
+    },
+    {
+      "path": "docs/phase-12/screenshots/tax-group-fe11d0e/AE-tax-group-workpaper-position.png",
+      "sha256": "0cafb4f5a94a2501df4e0f253e7786d99c7710d323e505a878246f9eda6f8508",
+      "bytes": 27452
+    },
+    {
+      "path": "docs/phase-12/screenshots/tax-group-fe11d0e/AE-tax-group-workpaper-totals.png",
+      "sha256": "f7ab25f8dd8253e096e816cbfc88e353ae89d2f60e7d9ead9c02c75a56054daa",
+      "bytes": 21928
+    }
+  ],
+  "inspection": [
+    "Original PNG bytes preserved and SHA-256 verified against downloaded ZIP",
+    "Totals show assets/equity 220, opening equity 150 and profit 70",
+    "Position shows gross member investment 50, cash 170 and equity -220",
+    "Last source page shows records 126-131 of 131 and disabled next-page control",
+    "Mapping replacement screenshot shows REVIEWED and STALE; tall full-region image has substantial blank space and is not evidence of polished layout across every section"
+  ],
+  "limitations": [
+    "Synthetic member statement exports, mapping and adoption assessment; actual public authority PDFs",
+    "Source-specific full backend hosted verification still running when this receipt was recorded",
+    "These browser results predate the new individual-unit costing implementation"
+  ]
+}

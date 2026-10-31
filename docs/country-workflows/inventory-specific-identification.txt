@@ -1,0 +1,30 @@
+Specific identification: individual purchased units
+
+Shared financial-accounting costing is available through the existing approved
+IFRS inventory input and calculation workflow for UAE and India. Select method
+specific_identification. Each item/location must represent one separately
+identified, non-interchangeable physical unit. Supply SKU, identification_reference,
+identification_assessment and opening_cost_evidence where opening quantity is one.
+Opening quantity is zero or one; each receipt or issue is exactly one unit.
+Zero opening quantity requires zero opening unit cost. Distinct unit costs are
+never averaged together. Per-unit NRV and custody exclusions remain in force.
+
+The combined population is bounded to 20,000 item/movement rows. Across locations,
+an identity requires exactly one original acquisition, consistent ownership/UOM
+and a non-overlapping dated custody sequence. Existing explicit same-day sequence
+rules apply. Transfers preserve identity, quantity and actual cost; unmatched
+transfers produce blocking reconciliation issues without fabricated adjustments.
+Schedule and movement rows retain identity and the approved cost evidence.
+
+This does not establish method eligibility, physical existence, legal title,
+independent source-document verification or India tax/ICDS valuation. Evidence
+references are approved input narratives, not automatic proof of original files.
+Professional assessment remains necessary. Pooled project lots, production cost
+allocations and returns remain separate unimplemented costing extensions.
+
+Accounting basis: IAS 2 paragraphs 23–24 and Ind AS 2 paragraphs 23–24.
+https://www.ifrs.org/issued-standards/list-of-standards/ias-2-inventories/
+https://www.mca.gov.in/Ministry/pdf/IndAS2_2020_10112020.pdf
+
+All added arithmetic and custody fixtures are synthetic; no client qualification
+or statutory assurance is inferred from passing them.
