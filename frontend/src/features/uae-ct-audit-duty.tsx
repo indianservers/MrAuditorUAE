@@ -13,6 +13,7 @@ type Evidence = {
 const FLAGS = [
   "taxable_person",
   "tax_group",
+  "tax_group_member",
   "qualifying_free_zone_person",
   "designated_zone_distribution",
 ] as const;
@@ -35,6 +36,7 @@ export function UAECTAuditDuty({
   const [values, setValues] = useState<Record<string, string>>({
     taxable_person: "unassessed",
     tax_group: "unassessed",
+    tax_group_member: "unassessed",
     qualifying_free_zone_person: "unassessed",
     designated_zone_distribution: "unassessed",
     residency: "unassessed",
@@ -42,6 +44,7 @@ export function UAECTAuditDuty({
     other_rule_changes: "unresolved",
   });
   const [rule, setRule] = useState("");
+  const [clarification, setClarification] = useState("");
   const [facts, setFacts] = useState("");
   const action = useAction<{ id: string }>();
   const change = (key: string, value: string) =>
@@ -52,11 +55,19 @@ export function UAECTAuditDuty({
     <details className="main-panel" style={{ padding: 20, marginBottom: 16 }}>
       <summary>Assess UAE corporate-tax audited statement duty</summary>
       <p>
-        Use the original MD84 of 2025 and separate retained entity facts for a
-        completed tax period commencing from 1 January 2025. Earlier periods
+        Use original MD84 of 2025, CTP007 and separate retained entity facts for
+        a completed tax period commencing from 1 January 2025. Earlier periods
         need their separate MD82 source. This checks corporate-tax preparation
         and maintenance duty; company-law and free-zone audit duties remain
         separate.
+      </p>
+      <p>
+        Assess the Tax Group itself separately from a standalone member. Member
+        status requires approved membership for the entire assessed tax period;
+        leave it unassessed for joining, leaving or unresolved membership.
+        CTP007 distinguishes standalone member audits from the group audit, even
+        above AED50 million. Membership eligibility and other entity audit
+        duties need their own assessment.
       </p>
       <ErrorState error={action.error} />
       {[
@@ -89,7 +100,11 @@ export function UAECTAuditDuty({
       ))}
       {FLAGS.map((key) => (
         <label key={key}>
-          CT {key.replaceAll("_", " ")}
+          {key === "tax_group"
+            ? "CT Tax Group itself"
+            : key === "tax_group_member"
+              ? "CT standalone member for entire tax period"
+              : `CT ${key.replaceAll("_", " ")}`}
           <select
             value={values[key]}
             onChange={(e) => change(key, e.target.value)}
@@ -144,11 +159,27 @@ export function UAECTAuditDuty({
         </select>
       </label>
       <label>
+        Original CTP007 clarification PDF
+        <select
+          value={clarification}
+          onChange={(e) => setClarification(e.target.value)}
+        >
+          <option value="">Select clean original clarification</option>
+          {clean
+            .filter((e) => e.id !== rule)
+            .map((e) => (
+              <option key={e.id} value={e.id}>
+                {e.label}
+              </option>
+            ))}
+        </select>
+      </label>
+      <label>
         Separate CT period and classification facts
         <select value={facts} onChange={(e) => setFacts(e.target.value)}>
           <option value="">Select separate clean fact evidence</option>
           {clean
-            .filter((e) => e.id !== rule)
+            .filter((e) => e.id !== rule && e.id !== clarification)
             .map((e) => (
               <option key={e.id} value={e.id}>
                 {e.label}
@@ -172,6 +203,10 @@ export function UAECTAuditDuty({
         disabled={
           action.isPending ||
           !rule ||
+          !clarification ||
+          rule === clarification ||
+          facts === rule ||
+          facts === clarification ||
           !fact ||
           !values.label ||
           !values.registration_reference ||
@@ -185,10 +220,11 @@ export function UAECTAuditDuty({
               path: `intelligence/engagements/${eid}/uae-ct-audit-duty`,
               body: {
                 ...values,
-                profile: "uae-ct-audited-statements-md84-2025/1",
+                profile: "uae-ct-audited-statements-md84-2025/2",
                 currency: "AED",
                 revenue_aed: values.revenue_aed?.trim() || null,
                 rule_evidence_version_id: rule,
+                clarification_evidence_version_id: clarification,
                 fact_evidence_version_id: facts,
                 fact_sha256: fact!.sha256,
               },

@@ -4,7 +4,7 @@ UAE corporate-tax audited financial statement duty
 The country workflow screen offers a dated MD84 of 2025 duty assessment for
 one completed, explicitly assessed tax period within the engagement period.
 The endpoint is uae-ct-audit-duty under the scoped intelligence engagement
-API. Contract: uae-ct-audited-statements-md84-2025/1.
+API. Contract: uae-ct-audited-statements-md84-2025/2.
 
 This workflow reuses the evidence store, immutable country-workflow results,
 source freshness, separate-reviewer restrictions and full XLSX exports. It
@@ -19,6 +19,13 @@ The unchanged original and source-assessment metadata are in
 authority-references/uae-ct-audit-2025. Both complete original pages were
 visually inspected. A recreated summary or altered copy is rejected.
 
+Version 2 also requires the exact original bilingual CTP007 PDF, SHA-256
+5b8d235dfd5af78789cc8cb96d5f55dbb57fb1df5e2ba5224fc82d6696147dbf,
+retained in authority-references/uae-tax-group-afs-2026-10-31. Page 12
+expressly distinguishes standalone member audits from the Tax Group audit.
+A recreated, altered or missing clarification is rejected. Both sources
+need independent operative-version adoption, including any later changes.
+
 Tax periods must commence from 1 January 2025. Earlier periods require their
 separate MD82 source rather than automatic application of this profile.
 Assessment is after the decision's issuance and after the declared period
@@ -28,10 +35,20 @@ These date checks do not establish legal tax-period validity or source adoption.
 
 Assessed facts and separate branches
 -----------------------------------
-The preparer declares taxable-person, Tax Group and QFZP status explicitly,
+The preparer declares taxable-person, Tax Group itself, whole-period standalone
+member and QFZP status explicitly,
 with resident/non-resident scope and a complete-period exact AED amount or
 explicit unknown. Unknown is never zero. The non-group revenue test uses
 strictly more than AED50,000,000; exactly AED50,000,000 does not cross it.
+An explicitly assessed standalone approved member for the entire tax period
+has no standalone corporate-tax audit duty under CTP007, even above the
+threshold. The group's own audit and other entity audit duties remain separate.
+Approved whole-period membership is a retained fact, not inferred eligibility.
+Partial-period joining/leaving and uncertain membership stay unassessed. Unknown
+membership cannot be replaced by a revenue-only audit conclusion. Group-itself
+and standalone-member assessments cannot both be true for the same scope;
+member status also conflicts with QFZP, non-taxable or non-resident declarations.
+Missing material member classifications leave the member branch unresolved.
 A non-resident's threshold requires the separately assessed UAE PE/nexus
 revenue basis; worldwide revenue cannot be substituted. No FX is inferred.
 
@@ -42,7 +59,7 @@ own professional evidence; this workflow does not determine them. Conflicting
 classifications, material unknowns or unresolved operative changes stay visible.
 Designated-zone distribution can require separately prescribed procedures.
 
-Retain a separate clean original company-fact document and its SHA-256. Rule
+Retain a separate clean original company-fact document and its SHA-256. MD84, CTP007
 and fact versions must be distinct, current and byte-verified. Cloning the
 original rule cannot establish company facts. All document preparers remain
 contributors, so they cannot independently approve their own derived result.
@@ -63,10 +80,19 @@ a negative MD84 duty does not waive company-law, free-zone, authority,
 contractual or other audit obligations. Full group form, aggregation, audit
 and submission procedures require separate sources; this profile invents
 no filing deadline. Publication, statutory signoff and government filing are
-not executed. Replacement of retained rule or fact evidence makes the
+not executed. Replacement of either retained authority source or fact evidence makes the
 historical result stale without changing its body or original review history.
 
 Testing uses explicitly synthetic entity facts and thresholds with the
 unchanged public rule original. These fixtures do not constitute independent
 professional or real-client qualification. Browser acceptance is source-pinned
 to its own hosted result; local tests do not substitute for browser evidence.
+
+Version compatibility
+---------------------
+Version 1 results are retained unchanged as historical evidence, but are stale
+under version 2 and cannot be independently approved as current. Regenerate
+with explicit membership scope and all three retained documents; no automatic
+migration supplies membership facts. Old v1 API requests are rejected by the
+current typed contract. The original v1 source-specific test receipts remain
+historical and do not prove this correction.

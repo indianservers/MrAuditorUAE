@@ -19,6 +19,11 @@ ORIGINAL = (
     / "docs/country-workflows/authority-references/uae-ct-audit-2025/md84-2025-original.pdf"
 )
 
+CLARIFICATION = (
+    Path(__file__).resolve().parents[3]
+    / "docs/country-workflows/authority-references/uae-tax-group-afs-2026-10-31/ctp007-tax-group-financial-statements-bilingual.pdf"
+)
+
 
 async def upload(c, h, base, name, content, media):
     record = await create(
@@ -31,17 +36,21 @@ async def upload(c, h, base, name, content, media):
     return record, response.json()
 
 
-@pytest.mark.parametrize("group", [False, True])
+@pytest.mark.parametrize("changed_role", ["facts", "rule", "clarification"])
+@pytest.mark.parametrize("group,member", [(False, False), (True, False), (False, True)])
 async def test_dated_duty_review_export_and_original_fact_replacement(
-    environment, monkeypatch, group
+    environment, monkeypatch, group, member, changed_role
 ):
     c = environment
     double_boundaries(monkeypatch)
     h, _, eid, base = await setup(c)
     reviewer = await actor(h, "Firm Administrator", "ct-audit-duty-reviewer")
     await grant(c, h, base, reviewer)
-    _, rule = await upload(
+    rule_record, rule = await upload(
         c, h, base, "original-md84.pdf", ORIGINAL.read_bytes(), "application/pdf"
+    )
+    clarification_record, clarification = await upload(
+        c, h, base, "original-ctp007.pdf", CLARIFICATION.read_bytes(), "application/pdf"
     )
     record, facts = await upload(
         c,
@@ -53,10 +62,12 @@ async def test_dated_duty_review_export_and_original_fact_replacement(
     )
     data = sample(
         rule_evidence_version_id=rule["id"],
+        clarification_evidence_version_id=clarification["id"],
         fact_evidence_version_id=facts["id"],
         fact_sha256=facts["sha256"],
         tax_group="assessed_yes" if group else "assessed_no",
-        revenue_aed=None if group else "50000000",
+        tax_group_member="assessed_yes" if member else "assessed_no",
+        revenue_aed=None if group else "50000000.01" if member else "50000000",
     )
     prefix = f"/api/v1/intelligence/engagements/{eid}"
     response = await c.post(prefix + "/uae-ct-audit-duty", headers=h, json=data)
@@ -64,6 +75,7 @@ async def test_dated_duty_review_export_and_original_fact_replacement(
     result = response.json()
     row = result["body"]["rows"][0]
     assert row["audited_financial_statements_required"] is group
+    assert row["tax_group_member"] is member
     assert row["entity_audit_exemption_established"] is False
     assert (await decision(c, h, eid, result)).status_code == 403
     response = await decision(c, reviewer[0], eid, result)
@@ -78,8 +90,11 @@ async def test_dated_duty_review_export_and_original_fact_replacement(
     assert exemption is False or isinstance(exemption, str) and exemption in {"False", "false"}
     assert "audited_financial_statements_required" in schedule[0]
     workbook.close()
+    changed_record = {"facts": record, "rule": rule_record, "clarification": clarification_record}[
+        changed_role
+    ]
     changed = await c.post(
-        base + "/evidence-files/" + record["id"],
+        base + "/evidence-files/" + changed_record["id"],
         headers=h,
         files={
             "file": (
@@ -96,7 +111,14 @@ async def test_dated_duty_review_export_and_original_fact_replacement(
 
 
 @pytest.mark.parametrize(
-    "failure", ["wrong-original", "quarantined-facts", "cloned-rule-facts", "other-country"]
+    "failure",
+    [
+        "wrong-original",
+        "wrong-clarification",
+        "quarantined-facts",
+        "cloned-rule-facts",
+        "other-country",
+    ],
 )
 async def test_source_and_country_boundaries_fail_closed(environment, monkeypatch, failure):
     c = environment
@@ -114,6 +136,14 @@ async def test_source_and_country_boundaries_fail_closed(environment, monkeypatc
         raw,
         "application/pdf",
     )
+    _, clarification = await upload(
+        c,
+        h,
+        base,
+        "original-ctp007.pdf",
+        CLARIFICATION.read_bytes() + (b"\n" if failure == "wrong-clarification" else b""),
+        "application/pdf",
+    )
     if failure == "quarantined-facts":
         double_boundaries(monkeypatch, scan="QUARANTINED")
     _, facts = await upload(
@@ -126,6 +156,7 @@ async def test_source_and_country_boundaries_fail_closed(environment, monkeypatc
     )
     data = sample(
         rule_evidence_version_id=rule["id"],
+        clarification_evidence_version_id=clarification["id"],
         fact_evidence_version_id=rule["id"] if failure == "cloned-rule-facts" else facts["id"],
         fact_sha256=rule["sha256"] if failure == "cloned-rule-facts" else facts["sha256"],
     )
@@ -135,8 +166,48 @@ async def test_source_and_country_boundaries_fail_closed(environment, monkeypatc
     assert response.status_code in {409, 422}, response.text
     expected = {
         "wrong-original": "exact original",
+        "wrong-clarification": "exact original adopted ctp007",
         "quarantined-facts": "quarantined",
         "cloned-rule-facts": "validation failed",
         "other-country": "uae engagement",
     }[failure]
     assert expected in response.text.lower()
+
+
+async def test_clarification_preparer_is_also_barred_from_self_approval(environment, monkeypatch):
+    c = environment
+    double_boundaries(monkeypatch)
+    h, _, eid, base = await setup(c)
+    preparer = await actor(h, "Firm Administrator", "ctp007-original-preparer")
+    reviewer = await actor(h, "Firm Administrator", "ctp007-independent-reviewer")
+    await grant(c, h, base, preparer)
+    await grant(c, h, base, reviewer)
+    _, rule = await upload(c, h, base, "md84.pdf", ORIGINAL.read_bytes(), "application/pdf")
+    _, clarification = await upload(
+        c, preparer[0], base, "ctp007.pdf", CLARIFICATION.read_bytes(), "application/pdf"
+    )
+    _, facts = await upload(
+        c,
+        h,
+        base,
+        "SYNTHETIC-member.txt",
+        b"SYNTHETIC independently assessed approved whole-period resident membership and no QFZP",
+        "text/plain",
+    )
+    data = sample(
+        tax_group_member="assessed_yes",
+        revenue_aed="90000000",
+        rule_evidence_version_id=rule["id"],
+        clarification_evidence_version_id=clarification["id"],
+        fact_evidence_version_id=facts["id"],
+        fact_sha256=facts["sha256"],
+    )
+    response = await c.post(
+        f"/api/v1/intelligence/engagements/{eid}/uae-ct-audit-duty", headers=h, json=data
+    )
+    assert response.status_code == 201, response.text
+    result = response.json()
+    assert result["body"]["rows"][0]["audited_financial_statements_required"] is False
+    assert (await decision(c, preparer[0], eid, result)).status_code == 403
+    approved = await decision(c, reviewer[0], eid, result)
+    assert approved.status_code == 201, approved.text

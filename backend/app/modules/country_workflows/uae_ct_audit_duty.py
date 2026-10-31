@@ -11,14 +11,16 @@ from pydantic import Field, model_validator
 from app.modules.grc.deadlines import CalendarDate
 from app.modules.jurisdictions.profiles import Strict
 
-CONTRACT = "uae-ct-audited-statements-md84-2025/1"
+CONTRACT = "uae-ct-audited-statements-md84-2025/2"
+CLARIFICATION_SHA256 = "5b8d235dfd5af78789cc8cb96d5f55dbb57fb1df5e2ba5224fc82d6696147dbf"
+CLARIFICATION_URL = "https://tax.gov.ae/Datafolder/Files/Pdf/2025/CTP007-Aggregate-Financial-Statements-and-Audit-Requirement-for-Tax-Groups-27-082025-final-for-publishing.pdf"
 SOURCE_SHA256 = "1121cdca7e0386dcf93a68a3919ba3f5c42e2521cdaf3c7020c41670dd0afedb"
 SOURCE_URL = "https://www.mof.gov.ae/wp-content/uploads/2025/04/Ministerial-Decision-No.-84-of-2025-on-Audited-Financial-Statements.pdf"
 Answer = Literal["assessed_yes", "assessed_no", "unassessed"]
 
 
 class CTAuditDutyInput(Strict):
-    profile: Literal["uae-ct-audited-statements-md84-2025/1"]
+    profile: Literal["uae-ct-audited-statements-md84-2025/2"]
     label: str = Field(min_length=1, max_length=200)
     registration_reference: str = Field(min_length=1, max_length=120)
     tax_period_start: CalendarDate
@@ -30,6 +32,7 @@ class CTAuditDutyInput(Strict):
     rule_adoption_assessment: str = Field(min_length=10, max_length=2000)
     taxable_person: Answer
     tax_group: Answer
+    tax_group_member: Answer
     qualifying_free_zone_person: Answer
     residency: Literal["resident", "non_resident", "unassessed"]
     revenue_basis: Literal["whole_person", "uae_pe_and_nexus", "unassessed"]
@@ -40,6 +43,7 @@ class CTAuditDutyInput(Strict):
     designated_zone_distribution: Answer
     fact_assessment: str = Field(min_length=10, max_length=2000)
     rule_evidence_version_id: UUID
+    clarification_evidence_version_id: UUID
     fact_evidence_version_id: UUID
     fact_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
 
@@ -72,11 +76,14 @@ class CTAuditDutyInput(Strict):
             raise ValueError(
                 "Retain an adopted rule window covering the period and assessment after issuance"
             )
-        if (
-            self.rule_evidence_version_id == self.fact_evidence_version_id
-            or self.fact_sha256 == SOURCE_SHA256
-        ):
-            raise ValueError("Company facts must be separate from original MD84 rule evidence")
+        if len(
+            {
+                self.rule_evidence_version_id,
+                self.clarification_evidence_version_id,
+                self.fact_evidence_version_id,
+            }
+        ) != 3 or self.fact_sha256 in {SOURCE_SHA256, CLARIFICATION_SHA256}:
+            raise ValueError("Retain separate MD84, CTP007 and company fact evidence")
         if (
             any(len(v.strip()) < 10 for v in (self.fact_assessment, self.rule_adoption_assessment))
             or not self.registration_reference.strip()
@@ -89,15 +96,25 @@ def assess(data):
     def truth(answer):
         return {"assessed_yes": True, "assessed_no": False}.get(answer)
 
-    taxable, group, qfzp = map(
-        truth, (data.taxable_person, data.tax_group, data.qualifying_free_zone_person)
+    taxable, group, member, qfzp = map(
+        truth,
+        (
+            data.taxable_person,
+            data.tax_group,
+            data.tax_group_member,
+            data.qualifying_free_zone_person,
+        ),
     )
     required = None
     kind = "UNRESOLVED"
     issues = []
     threshold = None
     threshold_basis = "NOT_NEEDED_FOR_SELECTED_BRANCH"
-    if taxable is False and (group is True or qfzp is True):
+    if member is True and (
+        group is True or qfzp is True or taxable is False or data.residency == "non_resident"
+    ):
+        issues.append("TAX_GROUP_MEMBER_CLASSIFICATION_CONFLICT")
+    elif taxable is False and (group is True or qfzp is True):
         issues.append("TAXABLE_PERSON_CLASSIFICATION_CONFLICT")
     elif taxable is False:
         required, kind = False, "OUTSIDE_ASSESSED_TAXABLE_PERSON_SCOPE"
@@ -108,6 +125,13 @@ def assess(data):
         if qfzp is True:
             kind = "TAX_GROUP_AND_QFZP_CLASSIFICATIONS_REQUIRE_REVIEW"
             issues.append("SEPARATE_TAX_GROUP_AND_QFZP_ELIGIBILITY_REVIEW_REQUIRED")
+    elif member is True:
+        if group is None or qfzp is None or data.residency == "unassessed":
+            issues.append("TAX_GROUP_MEMBER_SCOPE_UNASSESSED")
+        else:
+            required, kind = False, "NO_STANDALONE_CT_AUDIT_DUTY_FOR_ASSESSED_GROUP_MEMBER"
+    elif member is None:
+        issues.append("TAX_GROUP_MEMBERSHIP_UNASSESSED")
     else:
         if group is None:
             issues.append("TAX_GROUP_STATUS_UNASSESSED")
@@ -158,13 +182,14 @@ def assess(data):
         "audited_financial_statements_required": required,
         "dated_source_requirement": base_required,
         "statement_type": kind,
+        "tax_group_member": member,
         "threshold_aed": "50000000",
         "revenue_aed": str(data.revenue_aed) if data.revenue_aed is not None else None,
         "threshold_basis": threshold_basis,
         "revenue_exceeds_threshold": threshold,
         "additional_qfzp_procedures": qfzp_procedures,
         "tax_group_procedures": "SEPARATE_FTA_FORM_FRAMEWORK_AND_SUBMISSION_REQUIREMENTS"
-        if group
+        if group or member
         else "NOT_DETERMINED",
         "entity_audit_exemption_established": False,
         "state": "SUPPORTED" if required is not None and not issues else "EXCEPTION",
@@ -185,10 +210,14 @@ def assess(data):
         "review_status": "UNVERIFIED",
         "source_sha256": SOURCE_SHA256,
         "source_url": SOURCE_URL,
+        "clarification_sha256": CLARIFICATION_SHA256,
+        "clarification_url": CLARIFICATION_URL,
         "limitations": [
             "Tax-period validity and completeness are assessed facts; calendar-date validation does not establish a legally valid tax period",
             "Dated MD84 preparation/maintenance duty only, not a company-law or free-zone audit exemption or a complete reporting pack",
             "Taxable-person, Tax Group, QFZP, residency and revenue classifications are independently assessed inputs, not eligibility determinations",
+            "Group-member status means approved membership for the entire assessed tax period; partial-period membership or joining/leaving requires a separate assessment",
+            "CTP007 page 12 distinguishes the Tax Group audit from standalone member audits regardless of member revenue; other entity audit duties remain separate",
             "Tax Group special-purpose forms, aggregation framework, audit and submission procedures require their separate authority sources; no deadline is inferred here",
             "Designated-zone distribution may require additional prescribed procedures; their applicability and completion are outside this duty assessment",
             "No audit work, opinion, certificate, statutory issuance or government filing is executed or established",
@@ -218,6 +247,12 @@ async def prepare(db, ctx, eng, data, request_id):
         raise HTTPException(
             422, "Retain the exact original adopted MD84 PDF, not a recreated rule summary"
         )
+    clarification, _ = await service.evidence(db, ctx, eng, data.clarification_evidence_version_id)
+    if (
+        clarification.media_type != "application/pdf"
+        or clarification.sha256 != CLARIFICATION_SHA256
+    ):
+        raise HTTPException(422, "Retain the exact original adopted CTP007 PDF")
     contributors = {str(ctx.user_id)}
     dependencies = await payroll_rule_documents(
         db,
@@ -227,6 +262,10 @@ async def prepare(db, ctx, eng, data, request_id):
             {
                 "source_evidence_version_id": str(data.rule_evidence_version_id),
                 "source_sha256": SOURCE_SHA256,
+            },
+            {
+                "source_evidence_version_id": str(data.clarification_evidence_version_id),
+                "source_sha256": CLARIFICATION_SHA256,
             },
             {
                 "source_evidence_version_id": str(data.fact_evidence_version_id),

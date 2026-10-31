@@ -6930,7 +6930,7 @@ export interface components {
              * Profile
              * @constant
              */
-            profile: "uae-ct-audited-statements-md84-2025/1";
+            profile: "uae-ct-audited-statements-md84-2025/2";
             /** Label */
             label: string;
             /** Registration Reference */
@@ -6978,6 +6978,11 @@ export interface components {
              */
             tax_group: "assessed_yes" | "assessed_no" | "unassessed";
             /**
+             * Tax Group Member
+             * @enum {string}
+             */
+            tax_group_member: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
              * Qualifying Free Zone Person
              * @enum {string}
              */
@@ -7011,6 +7016,11 @@ export interface components {
              * Format: uuid
              */
             rule_evidence_version_id: string;
+            /**
+             * Clarification Evidence Version Id
+             * Format: uuid
+             */
+            clarification_evidence_version_id: string;
             /**
              * Fact Evidence Version Id
              * Format: uuid

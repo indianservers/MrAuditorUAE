@@ -1,4 +1,10 @@
 const ISSUES: Record<string, string> = {
+  TAX_GROUP_MEMBERSHIP_UNASSESSED:
+    "Whole-period Tax Group membership has not been assessed; a standalone audit duty cannot be determined from revenue alone.",
+  TAX_GROUP_MEMBER_SCOPE_UNASSESSED:
+    "The standalone member assessment needs explicit group, free-zone and residency classifications.",
+  TAX_GROUP_MEMBER_CLASSIFICATION_CONFLICT:
+    "Standalone member status conflicts with the group, free-zone, taxable-person or residency classification.",
   TAXABLE_PERSON_CLASSIFICATION_CONFLICT:
     "Taxable-person and group/free-zone classifications conflict.",
   TAXABLE_PERSON_UNASSESSED: "Taxable-person status has not been assessed.",
@@ -18,6 +24,8 @@ const ISSUES: Record<string, string> = {
 };
 
 const STATEMENTS: Record<string, string> = {
+  NO_STANDALONE_CT_AUDIT_DUTY_FOR_ASSESSED_GROUP_MEMBER:
+    "No standalone corporate-tax audit duty for the assessed whole-period Tax Group member; the Tax Group audit remains separate",
   AUDITED_SPECIAL_PURPOSE_FINANCIAL_STATEMENTS:
     "Audited special-purpose financial statements for the Tax Group",
   AUDITED_FINANCIAL_STATEMENTS: "Audited financial statements",

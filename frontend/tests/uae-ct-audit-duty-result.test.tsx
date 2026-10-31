@@ -96,3 +96,29 @@ it("keeps explicitly reported zero distinct from absent revenue", () => {
     within(result).queryByText("Not established", { exact: true }),
   ).not.toBeInTheDocument();
 });
+
+it("distinguishes a high-revenue standalone member from the separate group audit", () => {
+  render(
+    <UAECTAuditDutyResult
+      row={{
+        ...sample,
+        revenue_aed: "50000000.01",
+        revenue_exceeds_threshold: null,
+        statement_type: "NO_STANDALONE_CT_AUDIT_DUTY_FOR_ASSESSED_GROUP_MEMBER",
+        tax_group_procedures:
+          "SEPARATE_FTA_FORM_FRAMEWORK_AND_SUBMISSION_REQUIREMENTS",
+      }}
+    />,
+  );
+  const result = screen.getByRole("region", {
+    name: "UAE corporate-tax audit duty summary",
+  });
+  expect(result).toHaveTextContent(
+    "No standalone corporate-tax audit duty for the assessed whole-period Tax Group member",
+  );
+  expect(result).toHaveTextContent("the Tax Group audit remains separate");
+  expect(result).toHaveTextContent("AED 50000000.01");
+  expect(result).toHaveTextContent(
+    "Company-law and free-zone audit exemptions are not established",
+  );
+});

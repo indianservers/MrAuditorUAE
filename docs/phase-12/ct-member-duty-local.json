@@ -1,0 +1,51 @@
+{
+  "scope": "SYNTHETIC_LOCAL_IMPLEMENTATION_VERIFICATION",
+  "contract": "uae-ct-audited-statements-md84-2025/2",
+  "base_commit": "2ba835837e6a9b16ce8c31669851c2fac5a0f6a3",
+  "reports": [
+    {
+      "path": "docs/phase-12/ct-member-backend.xml",
+      "bytes": 766485,
+      "sha256": "a898c5037c23465f9387e734c374b732146269ec231a6b2fd52b7c3e7d24623b",
+      "passed": 4861,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/ct-member-frontend.xml",
+      "bytes": 124100,
+      "sha256": "a0c3134feb759b5779e63fa16c80677c985d298e740bc71e844d1f1ed5427de8",
+      "passed": 526,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "implementation_sha256_lf": {
+    "backend/app/modules/country_workflows/uae_ct_audit_duty.py": "7db7b1d8aed8576a51af1754c0db39b0a7389943c13bdfb2ac5954146e9b66c7",
+    "backend/app/modules/intelligence/service.py": "481d60d1e2cafe0751204fa9a3a401f7000ce8659ddfbe6ced1c3c2005d0f772",
+    "frontend/src/features/uae-ct-audit-duty.tsx": "2691d2df35f1fa15cbbb0e3c2ab6dce988293526a52fbfa20557ac0ac7f1b6bc",
+    "frontend/src/features/uae-ct-audit-duty-result.tsx": "4a1e5f66a9f59a65f1e60e67208b95c7fac1e3395a1f785dd973f762747344c3",
+    "frontend/e2e/uae-ct-audit-duty-browser-workflow.ts": "8c09bfca2980410c961e0d1f41e0852218285c7e64ad2ea9826566828e206f1a"
+  },
+  "md84_unit_cases": 64,
+  "md84_http_cases": 15,
+  "company_law_http_regressions": 11,
+  "checks": [
+    "Ruff check and format for changed Python files passed",
+    "Mypy app passed for 433 source files",
+    "Frontend type checking and targeted ESLint passed",
+    "API snapshots and generated TypeScript contracts match runtime",
+    "Frontend production build passed"
+  ],
+  "skip_reason": "Four connector-operation real DB tests require the separate connector_operations_run.py harness; they were not executed by this local suite.",
+  "browser_status": "Updated three-scenario browser regression authored; current corrected source has not yet run on hosted CI. Local Playwright discovery requires hosted disposable identities and did not run.",
+  "scanner_scope": "Local HTTP evidence scanning is doubled; real scanner qualification remains source-specific hosted evidence.",
+  "boundaries": [
+    "Whole-period approved membership is independently declared in retained fact evidence; no eligibility authentication",
+    "No partial-period joining/leaving assessment is inferred",
+    "No complete Tax Group special-purpose aggregation/reporting pack, audit opinion or filing",
+    "No real client files, independently approved client expected results or professional qualification established"
+  ]
+}

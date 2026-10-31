@@ -9,8 +9,8 @@ from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, grant, setup
 from tests.qa_crud.test_country_workflows import decision, double_boundaries
 from tests.qa_crud.test_india_ecr_source import india_context
+from tests.qa_crud.test_uae_ct_audit_duty import CLARIFICATION, upload
 from tests.qa_crud.test_uae_ct_audit_duty import ORIGINAL as MD84
-from tests.qa_crud.test_uae_ct_audit_duty import upload
 from tests.unit.test_uae_company_accounts import sample
 from tests.unit.test_uae_ct_audit_duty import sample as ct_sample
 
@@ -129,11 +129,15 @@ async def test_company_law_review_exports_and_every_document_role_stales_history
         _, ct_original = await upload(
             c, h, base, "original-md84.pdf", MD84.read_bytes(), "application/pdf"
         )
+        _, ct_clarification = await upload(
+            c, h, base, "original-ctp007.pdf", CLARIFICATION.read_bytes(), "application/pdf"
+        )
         ct = ct_sample(
             tax_period_start="2025-01-01",
             tax_period_end="2025-12-31",
             revenue_aed="0",
             rule_evidence_version_id=ct_original["id"],
+            clarification_evidence_version_id=ct_clarification["id"],
             fact_evidence_version_id=files["facts"][1]["id"],
             fact_sha256=files["facts"][1]["sha256"],
         )

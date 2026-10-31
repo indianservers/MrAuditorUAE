@@ -60099,7 +60099,7 @@
         "properties": {
           "profile": {
             "type": "string",
-            "const": "uae-ct-audited-statements-md84-2025/1",
+            "const": "uae-ct-audited-statements-md84-2025/2",
             "title": "Profile"
           },
           "label": {
@@ -60171,6 +60171,15 @@
             ],
             "title": "Tax Group"
           },
+          "tax_group_member": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Tax Group Member"
+          },
           "qualifying_free_zone_person": {
             "type": "string",
             "enum": [
@@ -60238,6 +60247,11 @@
             "format": "uuid",
             "title": "Rule Evidence Version Id"
           },
+          "clarification_evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Clarification Evidence Version Id"
+          },
           "fact_evidence_version_id": {
             "type": "string",
             "format": "uuid",
@@ -60264,6 +60278,7 @@
           "rule_adoption_assessment",
           "taxable_person",
           "tax_group",
+          "tax_group_member",
           "qualifying_free_zone_person",
           "residency",
           "revenue_basis",
@@ -60272,6 +60287,7 @@
           "designated_zone_distribution",
           "fact_assessment",
           "rule_evidence_version_id",
+          "clarification_evidence_version_id",
           "fact_evidence_version_id",
           "fact_sha256"
         ],

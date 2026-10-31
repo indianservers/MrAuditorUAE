@@ -19,6 +19,7 @@ def sample(**changes):
         "rule_adoption_assessment": "SYNTHETIC independently adopted dated source and declared completed tax period",
         "taxable_person": "assessed_yes",
         "tax_group": "assessed_no",
+        "tax_group_member": "assessed_no",
         "qualifying_free_zone_person": "assessed_no",
         "residency": "resident",
         "revenue_basis": "whole_person",
@@ -27,6 +28,7 @@ def sample(**changes):
         "designated_zone_distribution": "assessed_no",
         "fact_assessment": "SYNTHETIC independent classifications and complete period revenue",
         "rule_evidence_version_id": str(uuid4()),
+        "clarification_evidence_version_id": str(uuid4()),
         "fact_evidence_version_id": str(uuid4()),
         "fact_sha256": "a" * 64,
         **changes,
@@ -193,3 +195,110 @@ def test_retained_source_bytes_match_adopted_original():
         / "docs/country-workflows/authority-references/uae-ct-audit-2025/md84-2025-original.pdf"
     )
     assert hashlib.sha256(original.read_bytes()).hexdigest() == SOURCE_SHA256
+
+
+@pytest.mark.parametrize(
+    "amount", [None, "0", "50000000", "50000000.01", "99999999999999999999.99"]
+)
+def test_ctp007_whole_period_member_has_no_standalone_ct_audit_regardless_of_revenue(amount):
+    result = row(tax_group_member="assessed_yes", revenue_aed=amount)
+    assert result["audited_financial_statements_required"] is False
+    assert result["statement_type"] == "NO_STANDALONE_CT_AUDIT_DUTY_FOR_ASSESSED_GROUP_MEMBER"
+    assert result["tax_group_member"] is True
+    assert result["entity_audit_exemption_established"] is False
+    assert result["revenue_exceeds_threshold"] is None
+    assert (
+        result["tax_group_procedures"] == "SEPARATE_FTA_FORM_FRAMEWORK_AND_SUBMISSION_REQUIREMENTS"
+    )
+    assert result["state"] == "SUPPORTED"
+
+
+@pytest.mark.parametrize("amount", [None, "0", "50000000.01"])
+def test_unknown_membership_does_not_imply_standalone_audit_or_exemption(amount):
+    result = row(tax_group_member="unassessed", revenue_aed=amount)
+    assert result["audited_financial_statements_required"] is None
+    assert result["issues"] == ["TAX_GROUP_MEMBERSHIP_UNASSESSED"]
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"tax_group": "assessed_yes"},
+        {"qualifying_free_zone_person": "assessed_yes"},
+        {"taxable_person": "assessed_no"},
+        {"residency": "non_resident"},
+    ],
+)
+def test_member_conflicts_never_issue_false_exemption(changes):
+    result = row(tax_group_member="assessed_yes", **changes)
+    assert result["audited_financial_statements_required"] is None
+    assert result["dated_source_requirement"] is None
+    assert "TAX_GROUP_MEMBER_CLASSIFICATION_CONFLICT" in result["issues"]
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"tax_group": "unassessed"},
+        {"qualifying_free_zone_person": "unassessed"},
+        {"residency": "unassessed"},
+    ],
+)
+def test_member_scope_needs_explicit_consistent_classifications(changes):
+    result = row(tax_group_member="assessed_yes", **changes)
+    assert result["audited_financial_statements_required"] is None
+    assert "TAX_GROUP_MEMBER_SCOPE_UNASSESSED" in result["issues"]
+
+
+def test_group_audit_is_not_conditional_on_standalone_member_status():
+    result = row(tax_group="assessed_yes", tax_group_member="unassessed", revenue_aed=None)
+    assert result["audited_financial_statements_required"] is True
+    assert result["statement_type"] == "AUDITED_SPECIAL_PURPOSE_FINANCIAL_STATEMENTS"
+
+
+@pytest.mark.parametrize("role", ["rule_evidence_version_id", "fact_evidence_version_id"])
+def test_clarification_must_have_its_own_document_version(role):
+    data = sample()
+    data["clarification_evidence_version_id"] = data[role]
+    with pytest.raises(ValueError, match="separate"):
+        CTAuditDutyInput.model_validate(data)
+
+
+def test_fact_hash_cannot_be_original_clarification():
+    from app.modules.country_workflows.uae_ct_audit_duty import CLARIFICATION_SHA256
+
+    with pytest.raises(ValueError, match="separate"):
+        CTAuditDutyInput.model_validate(sample(fact_sha256=CLARIFICATION_SHA256))
+
+
+async def test_old_contract_cannot_remain_current_or_be_approved():
+    from types import SimpleNamespace
+
+    from app.modules.country_workflows.review import approval_error
+    from app.modules.intelligence.service import current
+
+    body = {
+        "workflow": "uae-ct-audit-duty",
+        "contract": "uae-ct-audited-statements-md84-2025/1",
+        "ct_audit_document_binding": "RETAINED_DOCUMENT_BYTES_VERIFIED",
+    }
+    assert "Regenerate" in approval_error(body)
+    tenant = uuid4()
+    assert not await current(
+        None,
+        SimpleNamespace(tenant_id=tenant),
+        SimpleNamespace(tenant_id=tenant, kind="country-workflow", body=body),
+    )
+
+
+def test_original_ctp007_hash_matches_bound_source():
+    import hashlib
+    from pathlib import Path
+
+    from app.modules.country_workflows.uae_ct_audit_duty import CLARIFICATION_SHA256
+
+    original = (
+        Path(__file__).resolve().parents[3]
+        / "docs/country-workflows/authority-references/uae-tax-group-afs-2026-10-31/ctp007-tax-group-financial-statements-bilingual.pdf"
+    )
+    assert hashlib.sha256(original.read_bytes()).hexdigest() == CLARIFICATION_SHA256

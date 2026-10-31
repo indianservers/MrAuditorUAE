@@ -196,6 +196,14 @@ async def current(db, ctx, obj, visited=None):
         return False
     if (
         getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "uae-ct-audit-duty"
+    ):
+        from app.modules.country_workflows.uae_ct_audit_duty import CONTRACT
+
+        if obj.body.get("contract") != CONTRACT:
+            return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
         and obj.body.get("workflow") == "tax-turnover-bridge"
     ):
         from app.modules.country_workflows.gst_annual_scope import saved_current

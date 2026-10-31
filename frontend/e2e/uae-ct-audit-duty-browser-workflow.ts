@@ -20,16 +20,23 @@ export async function runCTAuditDutyBrowserWorkflow(
       "../docs/country-workflows/authority-references/uae-ct-audit-2025/md84-2025-original.pdf",
     ),
   );
+  const clarification = await evidence(
+    "original-ctp007.pdf",
+    readFileSync(
+      "../docs/country-workflows/authority-references/uae-tax-group-afs-2026-10-31/ctp007-tax-group-financial-statements-bilingual.pdf",
+    ),
+  );
   const facts = await evidence(
     "SYNTHETIC-md84-facts.txt",
     Buffer.from(
-      "SYNTHETIC independent boundary scenarios for a declared completed tax period 2026-01-01 to 2026-09-30; resident taxable person, not Tax Group or QFZP; AED revenues exactly 50000000 and 50000000.01; no client or legal period-validity qualification",
+      "SYNTHETIC independent boundary scenarios for a declared completed tax period 2026-01-01 to 2026-09-30; resident taxable person, separate non-member and approved whole-period standalone member scenarios, not Tax Group itself or QFZP; AED revenues exactly 50000000 and 50000000.01; no client or legal period-validity qualification",
     ),
   );
   let retained: { id: string; body: Record<string, unknown> } | undefined;
-  for (const [amount, required] of [
-    ["50000000", false],
-    ["50000000.01", true],
+  for (const [amount, required, member, scenario] of [
+    ["50000000", false, "assessed_no", "at-limit"],
+    ["50000000.01", false, "assessed_yes", "member-above-limit"],
+    ["50000000.01", true, "assessed_no", "above-limit"],
   ] as const) {
     await page.goto(`/intelligence/${eid}/country-workflow`);
     await page
@@ -37,7 +44,7 @@ export async function runCTAuditDutyBrowserWorkflow(
         exact: true,
       })
       .click();
-    const title = `SYNTHETIC MD84 boundary ${amount}`;
+    const title = `SYNTHETIC MD84 boundary ${amount} ${scenario}`;
     for (const [name, value] of [
       ["CT audit duty title", title],
       ["CT registration reference", "SYNTHETIC-CT-BOUNDARY"],
@@ -59,13 +66,15 @@ export async function runCTAuditDutyBrowserWorkflow(
       await page.getByLabel(name, { exact: true }).fill(value);
     for (const [name, value] of [
       ["CT taxable person", "assessed_yes"],
-      ["CT tax group", "assessed_no"],
+      ["CT Tax Group itself", "assessed_no"],
+      ["CT standalone member for entire tax period", member],
       ["CT qualifying free zone person", "assessed_no"],
       ["CT designated zone distribution", "assessed_no"],
       ["CT residency", "resident"],
       ["CT revenue basis", "whole_person"],
       ["CT other rule changes", "assessed_none"],
       ["Original MD84 rule PDF", rule.version.id],
+      ["Original CTP007 clarification PDF", clarification.version.id],
       ["Separate CT period and classification facts", facts.version.id],
     ])
       await page
@@ -90,6 +99,10 @@ export async function runCTAuditDutyBrowserWorkflow(
     );
     expect(result.body.rows[0].entity_audit_exemption_established).toBe(false);
     expect(result.body.exception_count).toBe(0);
+    expect(result.body.contract).toBe("uae-ct-audited-statements-md84-2025/2");
+    expect(result.body.rows[0].tax_group_member).toBe(
+      member === "assessed_yes",
+    );
     const self = await page.request.post(
       `/api/backend/${prefix}/events/${result.id}/review`,
       {
@@ -125,17 +138,21 @@ export async function runCTAuditDutyBrowserWorkflow(
         ? "MD84 preparation and maintenance duty: Required"
         : "MD84 preparation and maintenance duty: Not required under the selected MD84 assessment",
     );
+    if (member === "assessed_yes")
+      await expect(summary).toContainText(
+        "No standalone corporate-tax audit duty for the assessed whole-period Tax Group member",
+      );
     await expect(
       summary.getByText(`AED ${amount}`, { exact: true }),
     ).toBeVisible();
     await summary.screenshot({
-      path: `${screenshots}/AE-CT-MD84-${required ? "above-limit" : "at-limit"}-summary.png`,
+      path: `${screenshots}/AE-CT-MD84-${scenario}-summary.png`,
     });
     await reviewer
       .getByRole("heading", { name: title, exact: true })
       .locator("..")
       .screenshot({
-        path: `${screenshots}/AE-CT-MD84-${required ? "above-limit" : "at-limit"}-reviewed.png`,
+        path: `${screenshots}/AE-CT-MD84-${scenario}-reviewed.png`,
       });
     const downloading = reviewer.waitForEvent("download");
     await reviewer
@@ -167,7 +184,7 @@ export async function runCTAuditDutyBrowserWorkflow(
   ).toBeDisabled();
   await reviewer
     .getByRole("heading", {
-      name: "SYNTHETIC MD84 boundary 50000000.01",
+      name: "SYNTHETIC MD84 boundary 50000000.01 above-limit",
       exact: true,
     })
     .locator("..")
