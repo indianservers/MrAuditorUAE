@@ -15,6 +15,7 @@ export default defineConfig({
     "dmcc-audit-release.spec.ts",
     "adgm-accounts-release.spec.ts",
     "group-comparatives-release.spec.ts",
+    "company-accounts-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",

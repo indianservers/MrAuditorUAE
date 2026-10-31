@@ -27515,6 +27515,142 @@
         }
       }
     },
+    "/api/v1/intelligence/engagements/{eid}/uae-company-accounts-duty": {
+      "post": {
+        "tags": [
+          "Accounting intelligence"
+        ],
+        "summary": "Uae Company Accounts Duty",
+        "operationId": "uae_company_accounts_duty_api_v1_intelligence_engagements__eid__uae_company_accounts_duty_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Eid"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyAccountsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
       "post": {
         "tags": [
@@ -60818,6 +60954,306 @@
           "idempotency_key"
         ],
         "title": "Command"
+      },
+      "CompanyAccountsInput": {
+        "properties": {
+          "profile": {
+            "type": "string",
+            "const": "uae-ccl-accounts-articles26-27/1",
+            "title": "Profile"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Label"
+          },
+          "registration_reference": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Registration Reference"
+          },
+          "fiscal_year_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Fiscal Year Start"
+          },
+          "fiscal_year_end": {
+            "type": "string",
+            "format": "date",
+            "title": "Fiscal Year End"
+          },
+          "assessed_on": {
+            "type": "string",
+            "format": "date",
+            "title": "Assessed On"
+          },
+          "adopted_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Adopted From"
+          },
+          "adopted_through": {
+            "type": "string",
+            "format": "date",
+            "title": "Adopted Through"
+          },
+          "amendment_publication_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amendment Publication Date"
+          },
+          "rule_chain_status": {
+            "type": "string",
+            "enum": [
+              "assessed_adopted",
+              "unresolved"
+            ],
+            "title": "Rule Chain Status"
+          },
+          "other_rule_changes": {
+            "type": "string",
+            "enum": [
+              "assessed_none",
+              "unresolved"
+            ],
+            "title": "Other Rule Changes"
+          },
+          "rule_adoption_assessment": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Rule Adoption Assessment"
+          },
+          "law_scope": {
+            "type": "string",
+            "enum": [
+              "assessed_applies",
+              "assessed_excluded",
+              "unresolved"
+            ],
+            "title": "Law Scope"
+          },
+          "scope_assessment": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Scope Assessment"
+          },
+          "fiscal_year_validity": {
+            "type": "string",
+            "enum": [
+              "assessed_valid",
+              "unassessed"
+            ],
+            "title": "Fiscal Year Validity"
+          },
+          "legal_form": {
+            "type": "string",
+            "enum": [
+              "limited_liability",
+              "public_joint_stock",
+              "private_joint_stock",
+              "general_partnership",
+              "limited_partnership",
+              "unassessed"
+            ],
+            "title": "Legal Form"
+          },
+          "holding_company": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Holding Company"
+          },
+          "request_population": {
+            "type": "string",
+            "enum": [
+              "assessed_none",
+              "written_request",
+              "unassessed"
+            ],
+            "title": "Request Population"
+          },
+          "requester_eligibility": {
+            "type": "string",
+            "enum": [
+              "assessed_partner_or_shareholder",
+              "assessed_other",
+              "unassessed"
+            ],
+            "title": "Requester Eligibility"
+          },
+          "request_received_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Request Received On"
+          },
+          "selected_year_is_last_audited": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Selected Year Is Last Audited"
+          },
+          "response_counting": {
+            "type": "string",
+            "enum": [
+              "assessed_calendar_days_excluding_receipt",
+              "unassessed"
+            ],
+            "title": "Response Counting"
+          },
+          "counting_assessment": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Counting Assessment"
+          },
+          "response_status": {
+            "type": "string",
+            "enum": [
+              "assessed_responded",
+              "assessed_not_responded",
+              "unassessed"
+            ],
+            "title": "Response Status"
+          },
+          "responded_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Responded On"
+          },
+          "accounts_copy_delivered": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Accounts Copy Delivered"
+          },
+          "auditor_report_copy_delivered": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Auditor Report Copy Delivered"
+          },
+          "group_accounts_copy_delivered": {
+            "type": "string",
+            "enum": [
+              "assessed_yes",
+              "assessed_no",
+              "unassessed"
+            ],
+            "title": "Group Accounts Copy Delivered"
+          },
+          "fact_assessment": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Fact Assessment"
+          },
+          "law_evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Law Evidence Version Id"
+          },
+          "amendment_evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Amendment Evidence Version Id"
+          },
+          "adoption_evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Adoption Evidence Version Id"
+          },
+          "adoption_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Adoption Sha256"
+          },
+          "fact_evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Fact Evidence Version Id"
+          },
+          "fact_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Fact Sha256"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "profile",
+          "label",
+          "registration_reference",
+          "fiscal_year_start",
+          "fiscal_year_end",
+          "assessed_on",
+          "adopted_from",
+          "adopted_through",
+          "amendment_publication_date",
+          "rule_chain_status",
+          "other_rule_changes",
+          "rule_adoption_assessment",
+          "law_scope",
+          "scope_assessment",
+          "fiscal_year_validity",
+          "legal_form",
+          "holding_company",
+          "request_population",
+          "requester_eligibility",
+          "request_received_on",
+          "selected_year_is_last_audited",
+          "response_counting",
+          "counting_assessment",
+          "response_status",
+          "responded_on",
+          "accounts_copy_delivered",
+          "auditor_report_copy_delivered",
+          "group_accounts_copy_delivered",
+          "fact_assessment",
+          "law_evidence_version_id",
+          "amendment_evidence_version_id",
+          "adoption_evidence_version_id",
+          "adoption_sha256",
+          "fact_evidence_version_id",
+          "fact_sha256"
+        ],
+        "title": "CompanyAccountsInput"
       },
       "Confirmation": {
         "properties": {

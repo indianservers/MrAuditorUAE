@@ -28,8 +28,15 @@
   "next_required_work": [
     "Verify the operative source chain, publication/effectiveness and any later changes",
     "Assess company-specific applicability, exclusions and legal form with separate retained facts",
-    "Implement and independently verify company-law accounts/audit procedures separately from corporate-tax MD84 and free-zone procedures"
+    "Complete actual accounts/audit/reporting procedures and obtain independent professional and client validation; the conditional duty assessment does not complete those procedures"
   ],
   "professional_qualification": "NOT_ESTABLISHED",
-  "automatic_rule_enabled": false
+  "automatic_rule_enabled": false,
+  "software_profile": {
+    "contract": "uae-ccl-accounts-articles26-27/1",
+    "scope": "Conditional duty/request assessment over four retained document roles and independently declared source adoption and company facts",
+    "automatic_legal_adoption": false,
+    "actual_gazette_publication_date_established": false,
+    "professional_qualification": false
+  }
 }

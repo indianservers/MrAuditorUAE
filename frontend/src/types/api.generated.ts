@@ -2853,6 +2853,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intelligence/engagements/{eid}/uae-company-accounts-duty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Uae Company Accounts Duty */
+        post: operations["uae_company_accounts_duty_api_v1_intelligence_engagements__eid__uae_company_accounts_duty_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
         parameters: {
             query?: never;
@@ -7252,6 +7269,151 @@ export interface components {
             inputs?: components["schemas"]["ToolInput"];
             /** Template Id */
             template_id?: string | null;
+        };
+        /** CompanyAccountsInput */
+        CompanyAccountsInput: {
+            /**
+             * Profile
+             * @constant
+             */
+            profile: "uae-ccl-accounts-articles26-27/1";
+            /** Label */
+            label: string;
+            /** Registration Reference */
+            registration_reference: string;
+            /**
+             * Fiscal Year Start
+             * Format: date
+             */
+            fiscal_year_start: string;
+            /**
+             * Fiscal Year End
+             * Format: date
+             */
+            fiscal_year_end: string;
+            /**
+             * Assessed On
+             * Format: date
+             */
+            assessed_on: string;
+            /**
+             * Adopted From
+             * Format: date
+             */
+            adopted_from: string;
+            /**
+             * Adopted Through
+             * Format: date
+             */
+            adopted_through: string;
+            /** Amendment Publication Date */
+            amendment_publication_date: string | null;
+            /**
+             * Rule Chain Status
+             * @enum {string}
+             */
+            rule_chain_status: "assessed_adopted" | "unresolved";
+            /**
+             * Other Rule Changes
+             * @enum {string}
+             */
+            other_rule_changes: "assessed_none" | "unresolved";
+            /** Rule Adoption Assessment */
+            rule_adoption_assessment: string;
+            /**
+             * Law Scope
+             * @enum {string}
+             */
+            law_scope: "assessed_applies" | "assessed_excluded" | "unresolved";
+            /** Scope Assessment */
+            scope_assessment: string;
+            /**
+             * Fiscal Year Validity
+             * @enum {string}
+             */
+            fiscal_year_validity: "assessed_valid" | "unassessed";
+            /**
+             * Legal Form
+             * @enum {string}
+             */
+            legal_form: "limited_liability" | "public_joint_stock" | "private_joint_stock" | "general_partnership" | "limited_partnership" | "unassessed";
+            /**
+             * Holding Company
+             * @enum {string}
+             */
+            holding_company: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
+             * Request Population
+             * @enum {string}
+             */
+            request_population: "assessed_none" | "written_request" | "unassessed";
+            /**
+             * Requester Eligibility
+             * @enum {string}
+             */
+            requester_eligibility: "assessed_partner_or_shareholder" | "assessed_other" | "unassessed";
+            /** Request Received On */
+            request_received_on: string | null;
+            /**
+             * Selected Year Is Last Audited
+             * @enum {string}
+             */
+            selected_year_is_last_audited: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
+             * Response Counting
+             * @enum {string}
+             */
+            response_counting: "assessed_calendar_days_excluding_receipt" | "unassessed";
+            /** Counting Assessment */
+            counting_assessment: string;
+            /**
+             * Response Status
+             * @enum {string}
+             */
+            response_status: "assessed_responded" | "assessed_not_responded" | "unassessed";
+            /** Responded On */
+            responded_on: string | null;
+            /**
+             * Accounts Copy Delivered
+             * @enum {string}
+             */
+            accounts_copy_delivered: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
+             * Auditor Report Copy Delivered
+             * @enum {string}
+             */
+            auditor_report_copy_delivered: "assessed_yes" | "assessed_no" | "unassessed";
+            /**
+             * Group Accounts Copy Delivered
+             * @enum {string}
+             */
+            group_accounts_copy_delivered: "assessed_yes" | "assessed_no" | "unassessed";
+            /** Fact Assessment */
+            fact_assessment: string;
+            /**
+             * Law Evidence Version Id
+             * Format: uuid
+             */
+            law_evidence_version_id: string;
+            /**
+             * Amendment Evidence Version Id
+             * Format: uuid
+             */
+            amendment_evidence_version_id: string;
+            /**
+             * Adoption Evidence Version Id
+             * Format: uuid
+             */
+            adoption_evidence_version_id: string;
+            /** Adoption Sha256 */
+            adoption_sha256: string;
+            /**
+             * Fact Evidence Version Id
+             * Format: uuid
+             */
+            fact_evidence_version_id: string;
+            /** Fact Sha256 */
+            fact_sha256: string;
         };
         /** Confirmation */
         Confirmation: {
@@ -28828,6 +28990,106 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["CTAuditDutyInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    uae_company_accounts_duty_api_v1_intelligence_engagements__eid__uae_company_accounts_duty_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "x-tenant-id": string;
+            };
+            path: {
+                eid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CompanyAccountsInput"];
             };
         };
         responses: {

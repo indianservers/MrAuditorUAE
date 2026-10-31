@@ -98,6 +98,7 @@ def render(event, format):
             "contract",
             "salary_crosswalk_document_binding",
             "ct_audit_document_binding",
+            "company_accounts_document_binding",
             "tan",
             "financial_year",
             "salary_employee_count",

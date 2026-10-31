@@ -12,6 +12,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 from app.core.config import settings
 from app.modules.audit_execution.evidence import scan
+from app.modules.country_workflows import uae_company_accounts
 from app.modules.grc import adgm_accounts, dmcc_audit
 
 
@@ -35,6 +36,14 @@ def main():
         (
             "dmcc-audit-2026-10-30/dmcc-afs-guidelines-2025-04-29.pdf",
             dmcc_audit.GUIDELINE_SHA256,
+        ),
+        (
+            "uae-company-law-2026-10-31/moet-hosted-companies-law32-2021-english.pdf",
+            uae_company_accounts.LAW_SHA256,
+        ),
+        (
+            "uae-company-law-2026-10-31/fdl20-2025-arabic-original.pdf",
+            uae_company_accounts.AMENDMENT_SHA256,
         ),
     ]
     rows = []

@@ -1,0 +1,60 @@
+{
+  "scope": "UAE company-law accounts and written-request duties; conditional engagement-specific source adoption, not full accounts/audit preparation or automatic legal qualification",
+  "reports": [
+    {
+      "file": "company-accounts-focused.xml",
+      "bytes": 7150,
+      "sha256": "3c36280a293c21bcb41cbb796739b76c4b1a3bef9735fda032de25b022b0a60c",
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "company-accounts-validation.xml",
+      "bytes": 761004,
+      "sha256": "75d506186372dced57046096e3aa1fd82c2c3025bdb2e3cd0b7d654bf573796a",
+      "tests": 4829,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "file": "company-accounts-frontend.xml",
+      "bytes": 119867,
+      "sha256": "d5d73b61adc7a5d497a6deadb09bf5f95c2dcfddb2a6672b9534b91238d2f5cc",
+      "tests": 508,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "runtime": "Existing isolated PostgreSQL/Redis; patched pypdf6.21.4 overlay inherited by child processes; shared primary environment unchanged",
+  "focused_scope": "32 new units and 11 new HTTP cases. Focused checks overlap with the broader backend run and are not additive unique coverage.",
+  "checks": {
+    "ruff": "PASS",
+    "ruff_format": "PASS",
+    "mypy_app_files": 433,
+    "mypy": "PASS",
+    "api_snapshot": "CURRENT",
+    "generated_frontend_types": "CURRENT",
+    "frontend_typecheck": "PASS",
+    "frontend_lint": "PASS",
+    "frontend_production_build": "PASS",
+    "browser_spec_discovery": "PASS"
+  },
+  "verified": [
+    "Explicit applicability and legal form; unresolved source chain/publication remains unresolved",
+    "Distinct original law/amendment/adoption/facts roles with exact hashes and original byte verification",
+    "Known response date, response copy completeness and holding-company copies remain separate",
+    "10-day boundary only under separately adopted counting interpretation",
+    "Independent review excludes all source preparers; full XLSX fields retained",
+    "Changing legal adoption stales this assessment while separate MD84 result stays current; changing shared facts stales both"
+  ],
+  "limits": [
+    "Only synthetic fixtures and locally doubled scanner boundary; no real client or independent professional qualification",
+    "Synthetic publication date is not the real Gazette date; actual primary-source publication date not established",
+    "New hosted browser/scanner scenario authored but not executed locally; source-specific CI remains pending",
+    "No local server started; no government filing or audit opinion produced"
+  ]
+}

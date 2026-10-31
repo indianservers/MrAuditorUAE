@@ -1,4 +1,12 @@
 def approval_error(body):
+    if body.get("workflow") == "uae-company-accounts-duty":
+        from app.modules.country_workflows.uae_company_accounts import CONTRACT
+
+        if (
+            body.get("contract") != CONTRACT
+            or body.get("company_accounts_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"
+        ):
+            return "Regenerate the UAE company-law assessment with retained originals, legal adoption and company facts"
     if body.get("workflow") == "uae-ct-audit-duty":
         from app.modules.country_workflows.uae_ct_audit_duty import CONTRACT
 
