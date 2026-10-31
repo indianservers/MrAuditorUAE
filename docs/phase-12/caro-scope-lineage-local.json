@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-31",
+  "production_source_commit": "9c7775d7a4c0b663b74938c58b518cff7144e4de",
+  "production_code_changed": false,
+  "validation": {"passed": 4, "failed": 0, "skipped": 0, "report": "caro-scope-lineage-http.xml", "ruff": "passed"},
+  "cases": [
+    "standalone / clause evidence replacement",
+    "standalone / company-scope original fact replacement",
+    "consolidated / clause evidence replacement",
+    "consolidated / company-scope original fact replacement"
+  ],
+  "checked": [
+    "Correct standalone/consolidated duty from the separately reviewed scope result",
+    "All 50 standalone or 3 consolidated requirements covered by distinct reviewed workpaper sections",
+    "Protected approved evidence, manager/partner workpaper approval, independent template review and controlled generation",
+    "All selected requirement keys retained in actual XLSX exports",
+    "Report remains immutable and becomes stale after either dependency changes",
+    "Clause-only changes leave the scope event current; scope-fact changes stale it",
+    "Independent approval and generation from the stale template return 409"
+  ],
+  "limits": [
+    "Synthetic source and procedure fixtures do not establish substantive legal or client audit sufficiency.",
+    "No new CARO browser execution, source qualification or authorized professional issuance is claimed.",
+    "Unchanged production code retains the prior local unit/frontend/build receipts; this turn reruns the changed HTTP cases only."
+  ]
+}

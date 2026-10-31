@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "9ef46adfb353913735dfb931915c7bf9cc26fe34",
+  "run": 41176869485,
+  "browser_job": 124466130097,
+  "browser_result": {
+    "status": "completed",
+    "conclusion": "success",
+    "passed": 17,
+    "failed": 0,
+    "duration": "11.7 minutes",
+    "india_scope_case": "passed in 21.5 seconds"
+  },
+  "artifact": {
+    "id": 13034015267,
+    "bytes": 24387432,
+    "sha256": "8ace1c4af0a360d3cb8263f9c04e1ba631d7d4c9ff62f56e7817ad4fb78af53d"
+  },
+  "original_screenshots": [
+    {
+      "path": "docs/phase-12/screenshots/9ef46ad-reviewed/IN-company-scope-unresolved.png",
+      "bytes": 32791,
+      "sha256": "c60af5bba3a18f10e1f1e6efcfd3c341a492b2a96b8cd5f13f2e4f07a5c3ef53"
+    },
+    {
+      "path": "docs/phase-12/screenshots/9ef46ad-reviewed/IN-msme-annual-tax-reviewed-source-schedule.png",
+      "bytes": 511909,
+      "sha256": "53779f17d0e9e9c74dc47e6bf178a730a567dbee08701d1d6c7b07460c8bcb99"
+    },
+    {
+      "path": "docs/phase-12/screenshots/9ef46ad-reviewed/IN-msme-annual-tax-support-replaced-stale-source-schedule.png",
+      "bytes": 507070,
+      "sha256": "91b62427b8f5e31ad55f9d6c01f8c069a7347b0cbb3456cdf38ed13ea16f5c9a"
+    }
+  ],
+  "inspection": [
+    "India summary shows all six decisions unresolved and explicitly disclaims statutory issuance; hosted assertions also verify blocked independent approval.",
+    "Reviewed MSE source schedule shows all six rows, including prior principal release 150 expected/150 reported. Totals show prior release150, interest15 and current disallowance100; a notification is below the table and does not obscure those values.",
+    "Stale MSE capture retains the same original values, displays stale warnings and disables independent approval after source replacement."
+  ],
+  "limits": [
+    "Passing source is 9ef46ad, preceding the CARO inventory addition; this is not browser verification of the new CARO designer.",
+    "Full backend verify job124466130356 was still in progress at the last observation; no complete hosted release is claimed.",
+    "Screenshots are original hosted PNGs, not edited or synthesized; synthetic cases are not real-client qualification."
+  ]
+}

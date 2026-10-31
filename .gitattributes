@@ -284,3 +284,5 @@ docs/phase-12/company-scope-pack-*.xml -text whitespace=cr-at-eol
 docs/phase-12/company-scope-pack-http.xml -text whitespace=cr-at-eol,-blank-at-eol
 docs/phase-12/screenshots/c0bdbac-failures/*.png -text
 docs/phase-12/caro-index-*.xml -text whitespace=cr-at-eol
+docs/phase-12/caro-scope-lineage-http.xml -text whitespace=cr-at-eol
+docs/phase-12/screenshots/9ef46ad-reviewed/*.png -text

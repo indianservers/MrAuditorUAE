@@ -15,8 +15,10 @@ from tests.qa_crud.test_uae_ct_audit_duty import upload
 pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Owned DB required")
 
 
+@pytest.mark.parametrize("statement_scope", ["standalone", "consolidated"])
+@pytest.mark.parametrize("changed_source", ["clause-evidence", "company-facts"])
 async def test_all_caro_matters_bound_to_reviewed_clause_sections_and_stale_evidence(
-    environment, monkeypatch
+    environment, monkeypatch, statement_scope, changed_source
 ):
     c = environment
     double_boundaries(monkeypatch)
@@ -26,17 +28,24 @@ async def test_all_caro_matters_bound_to_reviewed_clause_sections_and_stale_evid
     partner = await actor(h, "Audit Partner", "caro-partner")
     for person in (reviewer, manager, partner):
         await grant(c, h, base, person)
-    _, data = await documents(c, h, base)
+    sources, data = await documents(c, h, base)
     data["facts"].update(
-        small_paid_up_capital="100000001", preceding_financial_year_turnover="1000000001"
+        small_paid_up_capital="100000001",
+        preceding_financial_year_turnover="1000000001",
+        statement_scope=statement_scope,
     )
     prefix = f"/api/v1/intelligence/engagements/{eid}"
     scoped = await c.post(prefix + "/india-company-reporting-scope", headers=h, json=data)
     assert scoped.status_code == 201, scoped.text
     checked = await decision(c, reviewer[0], eid, scoped.json())
     assert checked.status_code == 201, checked.text
-    assert checked.json()["body"]["rows"][0]["caro_full_standalone_matters"] is True
-    pack = manifest("india-caro-index:standalone/1")
+    duty = (
+        "caro_full_standalone_matters"
+        if statement_scope == "standalone"
+        else "caro_consolidated_paragraph3_xxi"
+    )
+    assert checked.json()["body"]["rows"][0][duty] is True
+    pack = manifest("india-caro-index:" + statement_scope + "/1")
     evidence, _ = await upload(
         c,
         h,
@@ -54,7 +63,7 @@ async def test_all_caro_matters_bound_to_reviewed_clause_sections_and_stale_evid
     evidence = (await c.get(base + "/records/" + evidence["id"], headers=h)).json()
     evidence = await approve(c, h, reviewer[0], base, evidence)
     blocks = []
-    for start in (0, 25):
+    for start in range(0, len(pack["requirements"]), 25):
         items = pack["requirements"][start : start + 25]
         paper = await create(
             c,
@@ -134,7 +143,9 @@ async def test_all_caro_matters_bound_to_reviewed_clause_sections_and_stale_evid
     )
     assert generated.status_code == 201, generated.text
     report = generated.json()
-    assert len(report["body"]["requirements_coverage"]["items"]) == 50
+    assert len(report["body"]["requirements_coverage"]["items"]) == (
+        50 if statement_scope == "standalone" else 3
+    )
     assert report["body"]["company_reporting_scope_id"] == checked.json()["id"]
     exported = await c.get(prefix + "/events/" + report["id"] + "/export?format=xlsx", headers=h)
     assert exported.status_code == 200, exported.text
@@ -144,9 +155,13 @@ async def test_all_caro_matters_bound_to_reviewed_clause_sections_and_stale_evid
     }
     assert all(r["key"] in cells for r in pack["requirements"])
     book.close()
-    evidence = await action(c, partner[0], base, evidence, "reopen")
+    if changed_source == "clause-evidence":
+        evidence = await action(c, partner[0], base, evidence, "reopen")
+        changed_record = evidence["id"]
+    else:
+        changed_record = sources["company_facts"][0]["id"]
     replacement = await c.post(
-        base + "/evidence-files/" + evidence["id"],
+        base + "/evidence-files/" + changed_record,
         headers=h,
         files={
             "file": (
@@ -160,3 +175,17 @@ async def test_all_caro_matters_bound_to_reviewed_clause_sections_and_stale_evid
     retained = await c.get(prefix + "/events/" + report["id"], headers=h)
     assert retained.json()["freshness"] == "STALE"
     assert retained.json()["body"] == report["body"]
+    retained_scope = await c.get(prefix + "/events/" + checked.json()["id"], headers=h)
+    assert retained_scope.json()["freshness"] == (
+        "STALE" if changed_source == "company-facts" else "CURRENT"
+    )
+    assert (await decision(c, reviewer[0], eid, report)).status_code == 409
+    regenerated = await c.post(
+        report_prefix + "/reports",
+        headers=h,
+        json={
+            "template_id": reviewed.json()["id"],
+            "rationale": "SYNTHETIC stale dependencies must block new report generation",
+        },
+    )
+    assert regenerated.status_code == 409, regenerated.text

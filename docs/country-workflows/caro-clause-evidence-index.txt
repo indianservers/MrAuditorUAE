@@ -46,3 +46,11 @@ audit opinions and authorized signature/filing remain professional requirements.
 Adding this operational index changes the existing report implementation
 fingerprint. Preserved older report templates need source revalidation and
 regeneration before new use; historical saved bodies are not rewritten.
+
+Additional integration verification covers both standalone and consolidated
+reports, with separate changes to clause evidence and company-scope fact
+documents. All four cases retain complete XLSX keys and immutable report
+bodies. Changing only clause evidence leaves the company-scope event current;
+changing its original facts makes that event stale. Both paths invalidate the
+generated report and block independent approval and new generation from the
+old template. These remain synthetic evidence-graph tests, not client audits.
