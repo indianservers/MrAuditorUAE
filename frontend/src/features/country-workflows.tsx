@@ -1,5 +1,7 @@
 "use client";
 
+import { WorkflowScenarios } from "./workflow-scenarios";
+
 import {
   BenefitServiceControls,
   BenefitServiceCalendarDetails,
@@ -2521,26 +2523,14 @@ export function CountryWorkflows({
       {mode === "country-workflow" && workflow === "tax-close" && (
         <TaxCloseExposures eid={eid} />
       )}
-      <details style={{ margin: "16px 0" }}>
-        <summary>
-          {config.data?.scenarios.length || 0} synthetic reference scenarios
-          across country workflows
-        </summary>
-        <p>
-          These scenarios test source comparisons and evidence controls. They do
-          not establish complete statutory coverage or live registry
-          integrations.
-        </p>
-        <ul>
-          {config.data?.scenarios
-            .filter((s) => s.workflow === workflow)
-            .map((s) => (
-              <li key={s.id}>
-                {s.id} · {s.title}
-              </li>
-            ))}
-        </ul>
-      </details>
+      <WorkflowScenarios
+        scenarios={config.data?.scenarios || []}
+        country={config.data?.country || ""}
+        workflow={workflow}
+        workflowTitles={Object.fromEntries(
+          (config.data?.items || []).map((item) => [item.id, item.title]),
+        )}
+      />
       {mode === "country-workflow" && (
         <InventoryPerformance
           key={`inventory-performance:${eid}`}

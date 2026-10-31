@@ -1,0 +1,56 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "61b1d1e65ddf7a7448360751286d8c139ae71236",
+  "change": "Country-labelled searchable synthetic reference catalogue inside existing country workflows UI",
+  "behavior": [
+    "Default to engagement country and selected workflow",
+    "Explicit all-country and all-workflow browsing without changing engagement or calculation rules",
+    "Search case ID, title, country and workflow title; retain expected outcomes",
+    "No matching examples is not treated as a nil business population"
+  ],
+  "checks": {
+    "focused_tests_passed": 164,
+    "full_frontend_tests_passed": 552,
+    "frontend_files": 97,
+    "production_build": "PASS",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "playwright_discovery": {
+      "tests": 21,
+      "files": 18,
+      "local_browser_execution": false
+    }
+  },
+  "hosted_browser_definition": "Existing UAE then India ICFR case extended to check country default, all-workflow/country browsing, search RW-160, expected outcome visibility and unchanged selected workflow; new hosted execution pending",
+  "files": [
+    {
+      "path": "frontend/src/features/workflow-scenarios.tsx",
+      "normalization": "LF",
+      "sha256": "2990889012a33d753e85fb7179890d963fb551c77a2cbe255737ca5817d5c724"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "normalization": "LF",
+      "sha256": "3d0ae6ca3fd33ccd3a168a3b61e8c2ba5ac28fd6dac6c0cb2c5a62c10f095a83"
+    },
+    {
+      "path": "frontend/tests/workflow-scenarios.test.tsx",
+      "normalization": "LF",
+      "sha256": "b3010d5522bc00f14cc535e5d611df09cc134d34ee8961587b7d6b2d55405c81"
+    },
+    {
+      "path": "frontend/e2e/icfr-duty-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "1d022d356960151d605f6dc0b6d013c63fdc6ede14f07cae9d36a72cd7db88e6"
+    }
+  ],
+  "original_report": {
+    "path": "docs/phase-12/workflow-scenarios-frontend.xml",
+    "normalization": "ORIGINAL_BYTES",
+    "sha256": "9676397db470b7d427ae765fe31fd1d215d2a422d28897560e85614faf9d9b66"
+  },
+  "limits": [
+    "164 cases are authored synthetic engine fixtures, not real client pilots or full country legal coverage",
+    "Previous 21-case hosted browser pass on 9f6c1eb predates this UI change; it is not claimed as verification of these filters"
+  ]
+}

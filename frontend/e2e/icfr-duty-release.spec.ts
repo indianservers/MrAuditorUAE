@@ -166,6 +166,43 @@ test("UAE then India assessed ICFR duties retain separate scope, originals, revi
       await page
         .getByRole("combobox", { name: "Workflow", exact: true })
         .selectOption("icfr-duty-coverage");
+      await page
+        .getByText(/\d+ synthetic reference scenarios across country workflows/)
+        .click();
+      const references = page.getByRole("list", {
+        name: "Reference scenarios",
+        exact: true,
+      });
+      await expect(references.getByRole("listitem")).toHaveCount(5);
+      await expect(
+        references.getByText(
+          new RegExp(`^RW-.*SYNTHETIC ${country === "AE" ? "IN" : "AE"} `),
+        ),
+      ).toHaveCount(0);
+      await page
+        .getByLabel("Reference scenario countries", { exact: true })
+        .selectOption("all");
+      await page
+        .getByLabel("Reference scenario workflows", { exact: true })
+        .selectOption("all");
+      await page
+        .getByLabel("Search reference scenarios", { exact: true })
+        .fill("RW-160");
+      await expect(references.getByRole("listitem")).toHaveCount(1);
+      await expect(
+        references.getByText(/^RW-160 · SYNTHETIC IN /),
+      ).toBeVisible();
+      await expect(references.getByText(/^India · /)).toBeVisible();
+      await references
+        .getByText("Expected synthetic outcome for RW-160", { exact: true })
+        .click();
+      await expect(references.locator("pre")).toContainText('"blocked": false');
+      await expect(
+        page.getByRole("combobox", { name: "Workflow", exact: true }),
+      ).toHaveValue("icfr-duty-coverage");
+      await page
+        .getByText(/\d+ synthetic reference scenarios across country workflows/)
+        .click();
       for (const [role, source] of Object.entries(sources))
         await page
           .getByLabel(`${role} source`, { exact: true })
