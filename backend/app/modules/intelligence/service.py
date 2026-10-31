@@ -75,10 +75,11 @@ async def restricted_permission(db, ctx, eid, body):
         DILIGENCE_WORKFLOWS,
     )
     from app.modules.country_workflows.employment_payroll import ROW_TYPES as EMPLOYMENT_TYPES
+    from app.modules.country_workflows.icfr_scope import ROW_TYPES as ICFR_TYPES
 
-    if body.get("table_type") in {*DILIGENCE_ROW_TYPES, *EMPLOYMENT_TYPES} or body.get(
+    if body.get("table_type") in {*DILIGENCE_ROW_TYPES, *EMPLOYMENT_TYPES, *ICFR_TYPES} or body.get(
         "workflow"
-    ) in {*DILIGENCE_WORKFLOWS, "employment-payroll-review"}:
+    ) in {*DILIGENCE_WORKFLOWS, "employment-payroll-review", "icfr-duty-coverage"}:
         await engagement_permissions(db, ctx, eid, "audit.evidence.review")
 
 

@@ -344,6 +344,7 @@
               "india-document-series",
               "payroll-ledger-rollforward",
               "employment-payroll-review",
+              "icfr-duty-coverage",
               "obligation-bank-allocations",
               "bank-subsequent-clearance",
               "india-withholding-liability",
@@ -4391,6 +4392,7 @@
               "gst-summary-metrics",
               "payroll-account-balances",
               "payroll-ledger-lines",
+              "icfr-duty-scopes",
               "employment-payroll-episodes",
               "employment-payroll-controls",
               "employment-payroll-register",
@@ -8781,6 +8783,151 @@
         "value"
       ],
       "title": "GSTSummaryMetric",
+      "type": "object"
+    },
+    "icfr-duty-scopes": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "subject": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        },
+        "engagement_country": {
+          "enum": [
+            "AE",
+            "IN"
+          ],
+          "title": "Engagement Country",
+          "type": "string"
+        },
+        "reporting_issuer": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reporting Issuer",
+          "type": "string"
+        },
+        "relationship": {
+          "enum": [
+            "issuer",
+            "component"
+          ],
+          "title": "Relationship",
+          "type": "string"
+        },
+        "duty": {
+          "enum": [
+            "404a",
+            "404b"
+          ],
+          "title": "Duty",
+          "type": "string"
+        },
+        "applicability": {
+          "enum": [
+            "required",
+            "not-required",
+            "unresolved"
+          ],
+          "title": "Applicability",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "adoption_status": {
+          "enum": [
+            "reviewed-for-period",
+            "pending"
+          ],
+          "title": "Adoption Status",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "authority_version": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Authority Version",
+          "type": "string"
+        },
+        "authority_url": {
+          "maxLength": 1000,
+          "pattern": "^https://[^\\s]+$",
+          "title": "Authority Url",
+          "type": "string"
+        },
+        "authority_evidence_version_id": {
+          "format": "uuid",
+          "title": "Authority Evidence Version Id",
+          "type": "string"
+        },
+        "authority_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Authority Sha256",
+          "type": "string"
+        },
+        "assessment_evidence_version_id": {
+          "format": "uuid",
+          "title": "Assessment Evidence Version Id",
+          "type": "string"
+        },
+        "assessment_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Assessment Sha256",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 20,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "subject",
+        "engagement_country",
+        "reporting_issuer",
+        "relationship",
+        "duty",
+        "applicability",
+        "period_start",
+        "period_end",
+        "adoption_status",
+        "effective_from",
+        "effective_to",
+        "authority_version",
+        "authority_url",
+        "authority_evidence_version_id",
+        "authority_sha256",
+        "assessment_evidence_version_id",
+        "assessment_sha256",
+        "assessment"
+      ],
+      "title": "ICFRScope",
       "type": "object"
     },
     "import-vat-lines": {

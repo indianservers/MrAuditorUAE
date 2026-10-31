@@ -36,6 +36,7 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { TaxCloseExposures } from "./tax-close-exposures";
 import { PageHeader } from "./shared";
 import { IntelligenceExports } from "./intelligence-exports";
+import { ICFRDutyEvidence } from "./icfr-duty-evidence";
 import { NativeSalaryAnnualDetails } from "./native-salary-annual";
 import { WithholdingPANReview } from "./withholding-pan-review";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
@@ -379,6 +380,8 @@ type Result = {
     matches?: BankProposal[];
     retained_grant_documents?: GrantDocument[];
     retained_media_documents?: GrantDocument[];
+    retained_icfr_documents?: GrantDocument[];
+    icfr_scope_document_binding?: string;
     media_scope?: MediaScope;
     currency_scope?: string[];
     review_window?: { from: string; through: string };
@@ -580,6 +583,10 @@ type Result = {
 };
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
+const icfrCoverageColumns = [
+  "kind", "subject", "duty", "duty_title", "reporting_issuer",
+  "relationship", "assessed_applicability", "requirement", "state",
+];
 const moneyTables = [
   "merchant-activity",
   "merchant-settlements",
@@ -1711,7 +1718,9 @@ export function CountryWorkflows({
                                 ].filter((key) => allColumns.includes(key))
                               : baseColumns;
   const columns =
-    body?.workflow === "employment-payroll-review" &&
+    body?.workflow === "icfr-duty-coverage" && !showRuleProvenance
+      ? icfrCoverageColumns.filter((key) => allColumns.includes(key))
+      : body?.workflow === "employment-payroll-review" &&
     !showRuleProvenance &&
     employmentView !== "all"
       ? (employmentView === "history"
@@ -2345,6 +2354,7 @@ export function CountryWorkflows({
             "asset-register-review",
             "payroll-ledger-rollforward",
             "employment-payroll-review",
+            "icfr-duty-coverage",
             "merchant-reserve-rollforward",
           ].includes(workflow)
             ? { period_start: periodStart }
@@ -4994,6 +5004,7 @@ export function CountryWorkflows({
                 "asset-register-review",
                 "payroll-ledger-rollforward",
                 "employment-payroll-review",
+                "icfr-duty-coverage",
                 "merchant-reserve-rollforward",
               ].includes(workflow) && (
                 <label>
@@ -5115,6 +5126,7 @@ export function CountryWorkflows({
                             "india-establishment-charges",
                             "payroll-ledger-rollforward",
                             "employment-payroll-review",
+                            "icfr-duty-coverage",
                             "india-esic-population",
                             "india-document-series",
                             "india-gstr1-documents",
@@ -5548,6 +5560,16 @@ export function CountryWorkflows({
                   employer/month context.
                 </p>
               )}
+              {workflow === "icfr-duty-coverage" && (
+                <p>
+                  Declare both 404(a) and 404(b) scope decisions per subject.
+                  Plan identifiers use 404a:&lt;point&gt; and 404b:&lt;point&gt;.
+                  Separately reviewed authority and company/group assessments
+                  support applicability; the engagement country alone establishes
+                  no US reporting duty. Required duties without a declared plan
+                  remain unresolved.
+                </p>
+              )}
               {workflow === "employment-payroll-review" && (
                 <p>
                   Compare independently reviewed employment episodes, employee-month
@@ -5808,6 +5830,7 @@ export function CountryWorkflows({
               )}
               {[
                 "controls",
+                "icfr-duty-coverage",
                 "vendor-diligence",
                 "nonprofit-diligence",
                 "tax-close",
@@ -5820,6 +5843,7 @@ export function CountryWorkflows({
                       onChange={(e) => setRequiredChecks(e.target.value)}
                     />
                   </label>
+                  {workflow !== "icfr-duty-coverage" && (
                   <Button
                     onClick={() =>
                       setRequiredChecks(
@@ -5831,6 +5855,7 @@ export function CountryWorkflows({
                   >
                     Use country starter checks
                   </Button>
+                  )}
                   <label>
                     Subject population, comma separated
                     <input
@@ -7108,6 +7133,13 @@ export function CountryWorkflows({
               ))}
             </dl>
           )}
+          {(body.workflow === "icfr-duty-coverage" || body.table_type === "icfr-duty-scopes") && (
+            <ICFRDutyEvidence
+              eid={eid} tenant={tenant}
+              documents={body.retained_icfr_documents || []}
+              binding={body.icfr_scope_document_binding}
+            />
+          )}
           {body.workflow === "employment-payroll-review" && (
             <section aria-label="Employment payroll observations">
               <label>
@@ -7983,6 +8015,7 @@ export function CountryWorkflows({
               body.workflow === "bank-account-evidence" ||
               body.workflow === "payroll-ledger-rollforward" ||
               body.workflow === "employment-payroll-review" ||
+              body.workflow === "icfr-duty-coverage" ||
               body.workflow === "inventory-valuation-control" ||
               body.workflow === "inventory-fifo-cost" ||
               body.workflow === "inventory-performance" ||
@@ -8058,6 +8091,7 @@ export function CountryWorkflows({
                               "inventory-custody-confirmations",
                               "ownership-lookthrough",
                               "employment-payroll-review",
+                              "icfr-duty-coverage",
                             ].includes(body.workflow || "")
                               ? { maxWidth: 200, overflowWrap: "anywhere" }
                               : undefined

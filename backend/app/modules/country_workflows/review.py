@@ -1,4 +1,14 @@
 def approval_error(body):
+    if body.get("workflow") == "icfr-duty-coverage":
+        from app.modules.country_workflows.icfr_scope import BINDING, CONTRACT
+
+        if (
+            body.get("icfr_scope_contract") != CONTRACT
+            or body.get("icfr_scope_document_binding") != BINDING
+            or body.get("effectiveness_conclusion") != "NOT_DETERMINED"
+        ):
+            return "Regenerate ICFR duty coverage with current retained authority and independent company/group scope assessment"
+
     if body.get("workflow") == "india-company-reporting-scope":
         from app.modules.country_workflows.india_company_scope import BINDING, CONTRACT
 

@@ -1233,6 +1233,10 @@ def calculate(
             from app.modules.country_workflows.payroll_ledger import reconcile
 
             result = reconcile(data, tables, country)
+        elif data.workflow == "icfr-duty-coverage":
+            from app.modules.country_workflows.icfr_scope import compare as icfr_coverage
+
+            result = icfr_coverage(data, tables, country)
         elif data.workflow == "employment-payroll-review":
             from app.modules.country_workflows.employment_payroll import (
                 reconcile as employment_review,

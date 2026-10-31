@@ -1,0 +1,2 @@
+id,subject,requirement,state,evidence_reference,expires_on,rationale
+C-A,SYN-COMPONENT,404a:CTRL,supported,SYN-CONTROL-EVIDENCE,2026-12-31,SYNTHETIC independent test-result assessment

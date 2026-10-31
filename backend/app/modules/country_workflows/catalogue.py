@@ -33,6 +33,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "icfr-duty-coverage": (
+        "Separately assessed ICFR management / auditor duty and declared-plan coverage",
+        ["AE", "IN"],
+        {"scopes": "icfr-duty-scopes", "checks": "checks"},
+    ),
     "employment-payroll-review": (
         "Assessed employment periods / employee-month controls / corrected payroll register",
         ["AE", "IN"],

@@ -312,6 +312,7 @@ vi.mock("@/hooks/use-api", () => ({
                 available: state.country === "IN",
                 roles: { books: "tax-documents", invoices: "tax-documents" },
               },
+              { id: "icfr-duty-coverage", title: "Separately assessed ICFR duties", available: true, roles: { scopes: "icfr-duty-scopes", checks: "checks" } },
               { id: "employment-payroll-review", title: "Employment payroll review", available: true,
                 roles: { employment: "employment-payroll-episodes", controls: "employment-payroll-controls", register: "employment-payroll-register" } },
               {
@@ -668,6 +669,8 @@ vi.mock("@/hooks/use-api", () => ({
                       ...["documents", "recognitions", "postings"].map(role => ({id:"cutoff-"+role,label:"Reviewed cutoff "+role,kind:"workflow-source",table_type:role === "documents" ? "cutoff-documents" : role === "recognitions" ? "cutoff-recognition-lines" : "cutoff-posting-lines",freshness:"CURRENT",version:1,review_status:"REVIEWED"})),
                       ...["REVIEWED", "UNVERIFIED"].map(status => ({id: "coverage-" + status, label: "Coverage " + status, kind: "workflow-source", table_type: "confirmation-item-coverage", freshness: "CURRENT", version: 1, review_status: status})),
                       { id: "party-unreviewed", label: "Unreviewed party responses", kind: "workflow-source", table_type: "party-confirmations", freshness: "CURRENT", version: 1, review_status: "UNVERIFIED" },
+                      ...["scopes", "checks"].map(role => ({id:"icfr-"+role, label:"Reviewed ICFR "+role, kind:"workflow-source", table_type:role === "scopes" ? "icfr-duty-scopes" : "checks", freshness:"CURRENT", review_status:"REVIEWED", version:1})),
+                      {id:"icfr-unreviewed", label:"Unreviewed ICFR scope", kind:"workflow-source", table_type:"icfr-duty-scopes", freshness:"CURRENT", review_status:"UNVERIFIED", version:1},
                       ...["episodes", "controls", "register"].map((role) => ({
                         id: "employment-" + role, label: "Reviewed employment " + role,
                         kind: "workflow-source", table_type: "employment-payroll-" + role,
@@ -3939,4 +3942,34 @@ it("keeps missing employee-month controls visible in the default assessment view
   expect(within(row).getByRole("cell", {name:"2026-07"})).toBeVisible();
   expect(within(row).getByRole("cell", {name:"—"})).toBeVisible();
   expect(within(row).queryByRole("cell", {name:"0"})).not.toBeInTheDocument();
+});
+
+
+it.each(["AE", "IN"])("queues separate ICFR duty scope and declared points for %s", async (country) => {
+  state.country = country;
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {target:{value:"icfr-duty-coverage"}});
+  expect(screen.getByText(/Declare both 404/)).toBeVisible();
+  expect(screen.getByLabelText("scopes source")).not.toHaveTextContent("Unreviewed ICFR scope");
+  expect(screen.queryByRole("button", {name:"Use country starter checks"})).not.toBeInTheDocument();
+  for (const [label, value] of [["Schedule title", "Synthetic ICFR duties"], ["Reporting period start", "2026-06-01"], ["Reconciliation date", "2026-06-30"], ["Required check identifiers, comma separated", "404a:CTRL,404b:CTRL"], ["Subject population, comma separated", "SYN-COMPONENT"], ["scopes source", "icfr-scopes"], ["checks source", "icfr-checks"], ["Scope and source rationale", "Independent issuer and component duty assessment with separate authority evidence"]]) fireEvent.change(screen.getByLabelText(label), {target:{value}});
+  fireEvent.click(screen.getByRole("button", {name:"Queue calculation"}));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({workflow:"icfr-duty-coverage", period_start:"2026-06-01", as_of:"2026-06-30", required_checks:["404a:CTRL","404b:CTRL"], subjects:["SYN-COMPONENT"], source_ids:{scopes:"icfr-scopes",checks:"icfr-checks"}});
+});
+
+
+it("shows separate ICFR duties with retained originals and no effectiveness opinion", () => {
+  state.result = {id:"result", kind:"country-workflow", version:2, freshness:"CURRENT", body:{workflow:"icfr-duty-coverage", title:"Synthetic ICFR scope", review_status:"REVIEWED", icfr_scope_document_binding:"RETAINED_DOCUMENT_BYTES_VERIFIED", effectiveness_conclusion:"NOT_DETERMINED", retained_icfr_documents:[{id:"original-authority", record_id:"authority-record", sha256:"a".repeat(64)}], rows:[{id:"A", kind:"scope-decision", subject:"SYN-COMPONENT", duty:"404a", duty_title:"Management assessment", assessed_applicability:"required", state:"SUPPORTED"},{id:"B", kind:"scope-decision", subject:"SYN-COMPONENT", duty:"404b", duty_title:"Auditor attestation", assessed_applicability:"not-required", state:"NOT-APPLICABLE"}]}};
+  const original = JSON.stringify(state.result);
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {target:{value:"result"}});
+  const region = screen.getByRole("region", {name:"ICFR duty scope and evidence"});
+  expect(within(region).getByText(/files were checked against retained originals/)).toBeVisible();
+  expect(within(region).getByText(/control effectiveness/)).toBeVisible();
+  expect(screen.getByRole("cell", {name:"Management assessment"})).toBeVisible();
+  expect(screen.getByRole("cell", {name:"Auditor attestation"})).toBeVisible();
+  fireEvent.click(within(region).getByText("Retained ICFR authority and scope assessments (1)"));
+  expect(within(region).getByRole("button", {name:"Download ICFR supporting evidence 1"})).toBeEnabled();
+  expect(JSON.stringify(state.result)).toBe(original);
 });

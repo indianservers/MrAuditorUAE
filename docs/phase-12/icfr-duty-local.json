@@ -1,0 +1,119 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "e15170f0d2ddddfd6e4f0880663e51a92f983492",
+  "workflow": "icfr-duty-coverage",
+  "contract": "assessed-icfr-duty-coverage/1",
+  "countries": [
+    "AE",
+    "IN"
+  ],
+  "scope": "Separately assessed management 404a / auditor 404b duty and declared-plan evidence coverage; no legal filer classification or effectiveness opinion",
+  "local_checks": {
+    "backend_unit": {
+      "passed": 5120,
+      "skipped": 4
+    },
+    "new_icfr_unit_cases": 32,
+    "http_regressions": {
+      "passed": 6,
+      "scope": "AE/IN ICFR original-source/hash validation, independent document contributor review, full exports, access denial, wrong review-country and source replacement; plus prior employment payroll regressions"
+    },
+    "frontend_tests": 549,
+    "frontend_files": 96,
+    "mypy_application_files": 442,
+    "ruff": "PASS",
+    "scoped_eslint": "PASS",
+    "typescript": "PASS",
+    "production_build": "PASS",
+    "api_snapshots": "PASS",
+    "api_types": "PASS",
+    "playwright_discovery": {
+      "tests": 21,
+      "files": 18,
+      "local_browser_execution": false
+    }
+  },
+  "implementation": [
+    "Both duty decisions required per declared subject; no duty inferred from country",
+    "Review-country column is engagement context, not issuer or component domicile",
+    "Adopted windows must cover exact selected period; pending adoption, missing decisions/plans and unplanned evidence block approval",
+    "Authority and company/group scope originals bound by UUID and exact SHA at import and computation with current clean versions and contributor history",
+    "Independent source/result review; authors of supporting scope evidence cannot approve their own inputs or derived result",
+    "Declared check namespaces cannot clear each other; failed controls remain exceptions and effectiveness stays NOT_DETERMINED",
+    "Authorized retained document downloads and complete XLSX reuse existing evidence, events, export and review services"
+  ],
+  "browser_definition": "New UAE then India case covers real scanner/worker, separate duties, independent UI approval, complete export, missing auditor scope and raw scope-document replacement; hosted execution pending",
+  "samples": "Two fictional country bundles with original text fixtures, exact hashes and placeholder UUIDs to replace after upload; outside the unchanged 154-case catalogue",
+  "prior_payroll_browser": {
+    "source": "e15170f0d2ddddfd6e4f0880663e51a92f983492",
+    "run_id": 41186128630,
+    "job_id": 124493306504,
+    "conclusion": "SUCCESS",
+    "limit": "Detailed logs/captures not yet archived on this source; does not verify new ICFR workflow"
+  },
+  "limits": [
+    "No automatic EGC/filer/public-float/revenue/transition determination or complete SOX/AS2201 method",
+    "Check CSV is retained and hash-verified; its supporting references are declared, not authenticated external responses",
+    "No controls effectiveness, signed opinion, actual client, live vendor or statutory/professional qualification",
+    "Complete current-source hosted backend and the new 21-case browser suite require separate observation"
+  ],
+  "references": [
+    "https://www.sec.gov/about/divisions-offices/division-corporation-finance/financial-reporting-manual/frm-topic-4",
+    "https://www.sec.gov/about/divisions-offices/division-corporation-finance/financial-reporting-manual/frm-topic-10",
+    "https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201"
+  ],
+  "files": [
+    {
+      "path": "backend/app/modules/country_workflows/icfr_scope.py",
+      "normalization": "LF",
+      "sha256": "069cd54caeff13a6880799cada091fd4e17ad572db34f57fbef486d80095d56c"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "normalization": "LF",
+      "sha256": "c6c9bc9e13d5d84b05012379a5d079eeb57a5286684df96e84e44aca5f2503ab"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "normalization": "LF",
+      "sha256": "e49fff998ff5d39c688d932582e6c0d770fdb310b67a0e65e09bb928d2c731b4"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "normalization": "LF",
+      "sha256": "5a5f39d8701deadecd2687baf2446607a9ab107abbbd792d02a6ed17be091d00"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "normalization": "LF",
+      "sha256": "75245da0b53214a4d5c117d21f72c3801166eb9f6e6c90d064ffa1f7b417cdee"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "normalization": "LF",
+      "sha256": "24dca4de703f2168043946b68d39025f9f9fb660c7df70a544645a300ccc382c"
+    },
+    {
+      "path": "frontend/src/features/icfr-duty-evidence.tsx",
+      "normalization": "LF",
+      "sha256": "23d883737bda883b5fbad554f67934dc6d41af6f37ba6a40d4e75d1e5f2848b3"
+    },
+    {
+      "path": "frontend/e2e/icfr-duty-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "fbdee4cf4334b8eef96fec142aa39f2f33d9dce53652c2aea93fe944b29ffeb9"
+    }
+  ],
+  "original_reports": [
+    {
+      "path": "docs/phase-12/icfr-units.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "74d6a8f1b0781cfa0d7b2f5b178517708638d172e9b26bd09635e66af3c2dd63"
+    },
+    {
+      "path": "docs/phase-12/icfr-http.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "7d39c1469be13a0d4fd90c4e209a1a34d4bf67afab30928afdaf0af4d1722323"
+    }
+  ]
+}

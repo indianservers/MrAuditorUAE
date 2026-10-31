@@ -89,13 +89,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         DILIGENCE_WORKFLOWS,
     )
     from app.modules.country_workflows.employment_payroll import ROW_TYPES as EMPLOYMENT_TYPES
+    from app.modules.country_workflows.icfr_scope import ROW_TYPES as ICFR_TYPES
 
     if (
         operation == "workflow-source"
-        and data.table_type in {*DILIGENCE_ROW_TYPES, *EMPLOYMENT_TYPES}
+        and data.table_type in {*DILIGENCE_ROW_TYPES, *EMPLOYMENT_TYPES, *ICFR_TYPES}
     ) or (
         operation == "country-workflow"
-        and data.workflow in {*DILIGENCE_WORKFLOWS, "employment-payroll-review"}
+        and data.workflow
+        in {*DILIGENCE_WORKFLOWS, "employment-payroll-review", "icfr-duty-coverage"}
     ):
         await engagement_permissions(db, ctx, eng.id, "audit.evidence.review")
     if operation == "workflow-ledger":
@@ -684,6 +686,39 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     label="FIFO cost/policy documents",
                 )
             )
+        if data.table_type == "icfr-duty-scopes":
+            from app.modules.country_workflows.icfr_scope import (
+                BINDING,
+            )
+            from app.modules.country_workflows.icfr_scope import (
+                documents as icfr_source_documents,
+            )
+
+            if any(row["engagement_country"] != package.country for row in result["rows"]):
+                raise HTTPException(422, "ICFR source review-country must match its engagement")
+            copies = icfr_source_documents(result["rows"])
+            if any(
+                item["source_evidence_version_id"] == str(evidence.id)
+                or item["source_sha256"] == evidence.sha256
+                for item in copies
+            ):
+                raise HTTPException(
+                    422, "Retain ICFR authority and assessment separately from the scope table"
+                )
+            receipts = await payroll_rule_documents(
+                db,
+                ctx,
+                eng,
+                copies,
+                contributors=supporting_contributors,
+                label="ICFR authority and scope assessment",
+                max_documents=400,
+            )
+            dependencies.extend(receipts)
+            result["retained_icfr_documents"] = receipts
+            result["icfr_scope_document_binding"] = (
+                BINDING if receipts else "NO_SCOPE_FACTS_CLAIMED"
+            )
         if data.table_type == "inventory-valuations":
             from app.modules.country_workflows.inventory_valuation import documents
 
@@ -862,10 +897,17 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         )
     if data.tax_year_start and data.tax_year_start > data.as_of:
         raise HTTPException(422, "Tax year cannot start after the reconciliation date")
-    if data.workflow in {"payroll-ledger-rollforward", "employment-payroll-review"}:
+    if data.workflow in {
+        "payroll-ledger-rollforward",
+        "employment-payroll-review",
+        "icfr-duty-coverage",
+    }:
         if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
             raise HTTPException(
-                422, "Payroll accounting window must be within the engagement period"
+                422,
+                "ICFR review window must be within the engagement period"
+                if data.workflow == "icfr-duty-coverage"
+                else "Payroll accounting window must be within the engagement period",
             )
     elif data.workflow in {"merchant-settlement-bridge", "merchant-reserve-rollforward"}:
         if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
@@ -1097,6 +1139,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(
                 409,
                 "Independently review emirate allocation and filed VAT201 sources before comparison",
+            )
+        if data.workflow == "icfr-duty-coverage" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(
+                409, "Independently review ICFR scope and check sources before coverage review"
             )
         if (
             data.workflow in {"payroll-ledger-rollforward", "employment-payroll-review"}
@@ -1485,6 +1531,31 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 else "Inventory custody documents",
             )
         )
+    icfr_documents_receipts = None
+    if data.workflow == "icfr-duty-coverage":
+        from app.modules.country_workflows.icfr_scope import documents as icfr_documents
+
+        bindings = icfr_documents(sources["scopes"]["rows"])
+        origins = {source.get("evidence_version_id") for source in sources.values()}
+        hashes = {source.get("evidence_sha256") for source in sources.values()}
+        if any(
+            item["source_evidence_version_id"] in origins or item["source_sha256"] in hashes
+            for item in bindings
+        ):
+            raise HTTPException(
+                422,
+                "Retain ICFR authority and company/group assessment separately from source tables",
+            )
+        icfr_documents_receipts = await payroll_rule_documents(
+            db,
+            ctx,
+            eng,
+            bindings,
+            contributors=contributors,
+            label="ICFR authority and scope assessment",
+            max_documents=400,
+        )
+        dependencies.extend(icfr_documents_receipts)
     if data.workflow == "inventory-fifo-cost":
         from app.modules.country_workflows.inventory_fifo import documents as fifo_documents
 
@@ -1577,6 +1648,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         import_nil_receipt=import_nil_receipt,
         esic_population_review=esic_population_review,
     )
+    if icfr_documents_receipts is not None:
+        from app.modules.country_workflows.icfr_scope import BINDING
+
+        result["icfr_scope_document_binding"] = (
+            BINDING if icfr_documents_receipts else "NO_SCOPE_FACTS_CLAIMED"
+        )
+        result["retained_icfr_documents"] = icfr_documents_receipts
     if media_documents_receipts is not None:
         result["media_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
         result["retained_media_documents"] = media_documents_receipts

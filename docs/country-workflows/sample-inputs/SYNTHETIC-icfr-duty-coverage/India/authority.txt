@@ -1,0 +1,1 @@
+SYNTHETIC authority fixture only. This is not an actual SEC, PCAOB or other legal source.

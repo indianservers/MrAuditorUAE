@@ -24,6 +24,7 @@ from app.modules.country_workflows.gst_annual_scope import AnnualGSTScope
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
+from app.modules.country_workflows.icfr_scope import ROW_TYPES as ICFR_ROW_TYPES
 from app.modules.country_workflows.import_nil_schemas import ImportNilScope
 from app.modules.country_workflows.india_form138_native import Form138Controls
 from app.modules.country_workflows.india_form143_native import Form143Controls
@@ -361,6 +362,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **CHARGE_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **EMPLOYMENT_ROW_TYPES,
+    **ICFR_ROW_TYPES,
     **PENSION_ROW_TYPES,
     **AUDIT_ROW_TYPES,
     **DILIGENCE_ROW_TYPES,
@@ -519,6 +521,7 @@ class SourceInput(Strict):
         "gst-summary-metrics",
         "payroll-account-balances",
         "payroll-ledger-lines",
+        "icfr-duty-scopes",
         "employment-payroll-episodes",
         "employment-payroll-controls",
         "employment-payroll-register",
@@ -1165,6 +1168,7 @@ class WorkflowInput(Strict):
         "india-document-series",
         "payroll-ledger-rollforward",
         "employment-payroll-review",
+        "icfr-duty-coverage",
         "obligation-bank-allocations",
         "bank-subsequent-clearance",
         "india-withholding-liability",
@@ -1424,6 +1428,10 @@ class WorkflowInput(Strict):
                 raise ValueError(
                     "A selected VAT201 layout requires all its explicit boxes without selected-box exclusion"
                 )
+        if self.workflow == "icfr-duty-coverage" and (
+            not self.subjects or self.period_start is None or self.period_start > self.as_of
+        ):
+            raise ValueError("Declare ICFR subjects and an exact ordered review period")
         if self.workflow in {"payroll-ledger-rollforward", "employment-payroll-review"} and (
             self.period_start is None
             or self.period_start <= date.min

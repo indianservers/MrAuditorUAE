@@ -1,0 +1,64 @@
+Assessed ICFR duty and declared-plan coverage (UAE and India)
+
+Workflow: icfr-duty-coverage
+Contract: assessed-icfr-duty-coverage/1
+Sources: icfr-duty-scopes and checks, both independently reviewed.
+
+The original controls case requires separate management 404(a) and auditor
+404(b) applicability. Generic check labels alone did not preserve that distinction.
+This workflow requires an explicit decision for each duty and each declared
+subject, with a consistent reporting issuer and issuer/component relationship.
+An exemption for one duty never clears the other. Entity country does not select
+US reporting obligations. The engagement_country column is the review context,
+not the issuer/component domicile or a US legal applicability test. Local India
+IFC and UAE duties remain separate.
+
+Applicability is an independently assessed input, not a legal calculation.
+Each scope row binds an original authority file and a distinct company/group
+assessment by evidence-version UUID and exact SHA256. Import and computation
+verify actual bytes, clean status, authorization and latest versions; document
+authors are retained as contributors for independent review. Replacement stales
+the source and dependent result without rewriting saved values.
+
+Declared adoption windows must cover the complete selected review period.
+Pending adoption, unresolved applicability, missing duty decisions and required
+duties with no plan remain blocked. Plan identifiers use 404a:<point> or
+404b:<point>. Evidence for one namespace does not clear the other. Check expiry,
+evidence references and meaningful assessments are checked. Duplicate scope or
+test observations, different issuers between duties, wrong country/period and
+unplanned evidence cannot silently combine or disappear.
+
+Failed control observations remain exceptions. Review can document a failure;
+it never changes that failure into a successful test or an effectiveness opinion.
+All outputs retain NOT_DETERMINED effectiveness/professional conclusions and
+statutory_calculation_qualified=false. The plan covers only declared subjects and
+points; complete design/operating-effectiveness methods, sampling, actual
+transactions, filer classification, exemptions, professional attestation and
+filing are not established by supported labels or clean document hashes.
+The check CSV itself is retained and hash-verified. Its evidence_reference values
+remain declared pointers, not authenticated external responses or proof that a
+control was performed.
+
+The software does not encode current EGC/public-float/revenue classifications or
+infer legal status from location. The independently adopted authority and period
+must be assessed from current requirements, including transitions/amendments.
+Reference pages below explain the distinction, not a complete adopted rule pack:
+https://www.sec.gov/about/divisions-offices/division-corporation-finance/financial-reporting-manual/frm-topic-4
+https://www.sec.gov/about/divisions-offices/division-corporation-finance/financial-reporting-manual/frm-topic-10
+https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201
+These were read on 31 October 2026. The SEC manual includes dated sections and
+must not be used to hard-code stale numeric thresholds. The PCAOB page separately
+identifies amendments effective 15 December 2026; a future version is not adopted
+by this software automatically.
+
+Synthetic starter bundles:
+docs/country-workflows/sample-inputs/SYNTHETIC-icfr-duty-coverage/{UAE,India}/
+Upload authority.txt and assessment.txt as distinct clean evidence. Replace the
+two placeholder evidence UUIDs in scopes.csv with the returned actual version
+UUIDs; hashes already match these exact fictional file bytes. Import scopes.csv
+as icfr-duty-scopes (2 rows, no money totals) and checks.csv as checks (1 row,
+no money totals). Independently review both sources. Select the workflow for
+1-30 June 2026, subject SYN-COMPONENT and plan 404a:CTRL. The fictional assessed
+404(b) exemption is separate from the supported 404(a) point. This is a mechanics
+example, not a real client, authority text or independently qualified conclusion.
+These bundles do not increase the existing 154-case catalogue count.
