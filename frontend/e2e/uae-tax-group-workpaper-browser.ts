@@ -280,7 +280,14 @@ export async function runTaxGroupWorkpaperBrowser(
     .screenshot({
       path: `${screenshots}/AE-tax-group-workpaper-mapping-stale.png`,
     });
-  await expect(reviewer.getByRole("alert")).toContainText(
+  await expect(
+    reviewer
+      .getByRole("region", {
+        name: "Retained result status and exports",
+        exact: true,
+      })
+      .getByRole("alert"),
+  ).toContainText(
     "any previous review does not approve the current evidence or rules",
   );
   await reviewer
