@@ -13,6 +13,7 @@ PREFIX = "uae-vat201-review:"
 
 def catalogue(country):
     if country == "IN":
+        from app.modules.regulatory.caro_index import PREFIX as CARO_PREFIX
         from app.modules.regulatory.company_scope_pack import PREFIX as COMPANY_PREFIX
         from app.modules.regulatory.form26_index import PREFIX as INDIA_PREFIX
 
@@ -20,18 +21,26 @@ def catalogue(country):
             manifest(INDIA_PREFIX + part + "/" + version)
             for version in ("1", "2")
             for part in ("A", "B")
-        ] + [manifest(COMPANY_PREFIX + scope + "/1") for scope in ("standalone", "consolidated")]
+        ] + [
+            manifest(prefix + scope + "/1")
+            for prefix in (COMPANY_PREFIX, CARO_PREFIX)
+            for scope in ("standalone", "consolidated")
+        ]
     if country != "AE":
         return []
     return [manifest(PREFIX + layout + "/1") for layout in LAYOUTS]
 
 
 def manifest(identifier):
+    from app.modules.regulatory.caro_index import PREFIX as CARO_PREFIX
+    from app.modules.regulatory.caro_index import manifest as caro_manifest
     from app.modules.regulatory.company_scope_pack import PREFIX as COMPANY_PREFIX
     from app.modules.regulatory.company_scope_pack import manifest as company_manifest
     from app.modules.regulatory.form26_index import PREFIX as INDIA_PREFIX
     from app.modules.regulatory.form26_index import manifest as india_manifest
 
+    if identifier.startswith(CARO_PREFIX):
+        return caro_manifest(identifier)
     if identifier.startswith(COMPANY_PREFIX):
         return company_manifest(identifier)
     if identifier.startswith(INDIA_PREFIX):
@@ -80,6 +89,13 @@ def manifest(identifier):
 
 
 def validate_config(config):
+    is_caro = bool(
+        config.requirements_pack and config.requirements_pack.startswith("india-caro-index:")
+    )
+    if is_caro != (config.company_reporting_scope_id is not None):
+        raise ValueError(
+            "CARO inventory presets require their reviewed company-reporting scope; other presets must not supply one"
+        )
     if config.requirements_pack is None:
         return
     pack = manifest(config.requirements_pack)

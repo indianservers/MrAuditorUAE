@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from pydantic import Field, ValidationError, model_validator
 
 from app.modules.jurisdictions.profiles import Strict
-from app.modules.regulatory.form26_index import manifest
+from app.modules.regulatory.report_packs import manifest
 from app.modules.regulatory.tax_forms import INDIA_TRANSITION
 
 
@@ -34,12 +34,15 @@ class WorkpaperReportScope(Strict):
     @model_validator(mode="after")
     def declared(self):
         pack = manifest(self.preset_id)
+        if pack["kind"] not in {"form26-index", "caro-index"}:
+            raise ValueError("Select a supported workpaper evidence inventory")
+        caro = pack["kind"] == "caro-index"
         closing_year = self.period_start.year + (self.period_start.month >= 4)
         if (
-            self.period_start < INDIA_TRANSITION
+            self.period_start < (date(2021, 4, 1) if caro else INDIA_TRANSITION)
             or self.period_end < self.period_start
             or closing_year > 9999
-            or self.period_end > date(closing_year, 3, 31)
+            or (not caro and self.period_end > date(closing_year, 3, 31))
         ):
             raise ValueError(
                 "Form 26 workpaper scope requires one ordered modern Indian tax period"
@@ -76,7 +79,7 @@ def validate_bindings(scope, sections, sources):
             )
 
 
-def require_mapping(config, block, body):
+def require_mapping(config, block, body, *, period=None):
     from app.modules.audit_execution.schemas import Section, Source
 
     try:
@@ -92,7 +95,8 @@ def require_mapping(config, block, body):
             "Declare item coverage in the workpaper and independently review its section/source mappings",
         ) from None
     tax_scope = config.tax_audit_scope
-    if (
+    caro = manifest(scope.preset_id)["kind"] == "caro-index"
+    if not caro and (
         scope.preset_id != config.requirements_pack
         or not tax_scope
         or (scope.period_start, scope.period_end)
@@ -101,6 +105,12 @@ def require_mapping(config, block, body):
         raise HTTPException(
             409, "Workpaper report preset and tax period must match this exact report scope"
         )
+    if caro and (
+        scope.preset_id != config.requirements_pack
+        or period is None
+        or (scope.period_start, scope.period_end) != (period.start_date, period.end_date)
+    ):
+        raise HTTPException(409, "Workpaper CARO scope must match this report inventory")
     mappings = {item.key: item for item in scope.items}
     requirements = {item.key: item for item in config.requirements}
     for key in block.requirement_keys:

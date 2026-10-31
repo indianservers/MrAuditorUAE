@@ -45,7 +45,7 @@ def test_manifest_drafts_are_complete_but_unassessed_and_country_specific(layout
         coverage(config)["requirements_pack"]["sha256"]
         == manifest(config.requirements_pack)["sha256"]
     )
-    assert len(catalogue("IN")) == 6 and all(p["country"] == "IN" for p in catalogue("IN"))
+    assert len(catalogue("IN")) == 8 and all(p["country"] == "IN" for p in catalogue("IN"))
     assert catalogue("GB") == [] and len(catalogue("AE")) == 3
     assert not coverage(config)["statutory_completeness_qualified"]
     rows = detailed_rows() if layout == "emirate-20" else full_filed_boxes()

@@ -59,7 +59,7 @@ export function WorkpaperReportScopeEditor({
     `${base}/linkable-sources`,
   );
   const available = (presets.data?.items || []).filter(
-    (p) => p.kind === "form26-index",
+    (p) => p.kind === "form26-index" || p.kind === "caro-index",
   );
   const preset = available.find((p) => p.id === saved?.preset_id);
   const protectedLinks = list(sources) as Link[];
@@ -105,7 +105,7 @@ export function WorkpaperReportScopeEditor({
       </p>
       <ErrorState error={presets.error || labels.error} />
       <label>
-        Declare Form 26 item coverage
+        Declare report inventory coverage
         <select
           value={saved ? "yes" : "no"}
           onChange={(e) => {
@@ -147,9 +147,9 @@ export function WorkpaperReportScopeEditor({
             </select>
           </label>
           <p>
-            Changing preset clears item mappings. Match the exact tax period of
-            the intended report; statutory applicability and legal sufficiency
-            are separately assessed.
+            Changing preset clears item mappings. Match the exact covered period
+            of the intended report; statutory applicability and legal
+            sufficiency are separately assessed.
           </p>
           <label>
             Workpaper report period start

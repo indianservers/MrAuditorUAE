@@ -760,7 +760,7 @@ for (const code of ["AE", "IN"] as const) {
         .selectOption(supporting.id);
       await page
         .getByRole("combobox", {
-          name: "Declare Form 26 item coverage",
+          name: "Declare report inventory coverage",
           exact: true,
         })
         .selectOption("yes");

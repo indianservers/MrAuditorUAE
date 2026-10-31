@@ -43,6 +43,7 @@ type Result = {
     requirements_assessed?: boolean;
     requirements_basis?: string;
     requirements_pack?: string | null;
+    company_reporting_scope_id?: string | null;
     requirements_coverage?: {
       complete: boolean;
       source_validation: string;
@@ -77,6 +78,7 @@ function ReportBuilderForm() {
   const [eid, setEid] = useState("");
   const [requirements, setRequirements] = useState<ReportRequirement[]>([]);
   const [requirementsPack, setRequirementsPack] = useState<string | null>(null);
+  const [companyScopeId, setCompanyScopeId] = useState("");
   const [requirementsAssessed, setRequirementsAssessed] = useState(false);
   const [requirementsBasis, setRequirementsBasis] = useState("");
   const [requirementKeys, setRequirementKeys] = useState<string[]>([]);
@@ -155,6 +157,7 @@ function ReportBuilderForm() {
               setSelected("");
               setRequirements([]);
               setRequirementsPack(null);
+              setCompanyScopeId("");
               setRequirementsAssessed(false);
               setRequirementsBasis("");
               setRequirementKeys([]);
@@ -274,6 +277,8 @@ function ReportBuilderForm() {
                         (p) => p.id === e.target.value,
                       );
                       setRequirementsPack(preset?.id || null);
+                      setCompanyScopeId("");
+                      setSourceId("");
                       setRequirements(
                         preset?.requirements.map((r) => ({ ...r })) || [],
                       );
@@ -285,14 +290,14 @@ function ReportBuilderForm() {
                       );
                       if (preset) {
                         setKind(
-                          preset.kind === "form26-index"
+                          ["form26-index", "caro-index"].includes(preset.kind)
                             ? "working_paper_reference"
                             : preset.kind === "india-company-scope-summary"
                               ? "regulatory_checklist"
                               : "reconciliation",
                         );
                         setSourceKind(
-                          preset.kind === "form26-index"
+                          ["form26-index", "caro-index"].includes(preset.kind)
                             ? "record"
                             : "intelligence",
                         );
@@ -320,6 +325,31 @@ function ReportBuilderForm() {
                   </ul>
                 )}
               </>
+            )}
+            {selectedPreset?.kind === "caro-index" && (
+              <label>
+                Reviewed CARO company-scope result
+                <select
+                  aria-label="Reviewed CARO company-scope result"
+                  value={companyScopeId}
+                  onChange={(e) => setCompanyScopeId(e.target.value)}
+                >
+                  <option value="">
+                    Select the current reviewed company-scope result
+                  </option>
+                  {sources.data?.items
+                    .filter(
+                      (s) =>
+                        s.kind === "country-workflow" &&
+                        s.review_status === "REVIEWED",
+                    )
+                    .map((s) => (
+                      <option key={s.id} value={s.id}>
+                        {s.label}
+                      </option>
+                    ))}
+                </select>
+              </label>
             )}
             <ReportRequirementsEditor
               locked={!!requirementsPack}
@@ -512,6 +542,9 @@ function ReportBuilderForm() {
                       requirements_assessed: requirementsAssessed,
                       requirements_basis: requirementsBasis,
                       requirements_pack: requirementsPack,
+                      ...(selectedPreset?.kind === "caro-index"
+                        ? { company_reporting_scope_id: companyScopeId || null }
+                        : {}),
                       ...(assessedScope
                         ? { tax_audit_scope: assessedScope }
                         : {}),
@@ -630,6 +663,9 @@ function ReportBuilderForm() {
                     );
                     setRequirementsAssessed(
                       detail.data!.body.requirements_assessed || false,
+                    );
+                    setCompanyScopeId(
+                      detail.data!.body.company_reporting_scope_id || "",
                     );
                     setRequirementsBasis(
                       detail.data!.body.requirements_basis || "",

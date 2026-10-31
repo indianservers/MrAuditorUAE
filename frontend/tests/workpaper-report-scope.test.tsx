@@ -66,9 +66,12 @@ describe("Workpaper report item declarations", () => {
   it("requires deliberate preset, section, protected support and assessment before adding an item", () => {
     data.available = true;
     render(<Editor />);
-    fireEvent.change(screen.getByLabelText("Declare Form 26 item coverage"), {
-      target: { value: "yes" },
-    });
+    fireEvent.change(
+      screen.getByLabelText("Declare report inventory coverage"),
+      {
+        target: { value: "yes" },
+      },
+    );
     expect(screen.getByLabelText("Workpaper report preset")).toHaveValue("");
     const add = screen.getByRole("button", {
       name: "Add declared item mappings",
@@ -121,16 +124,19 @@ describe("Workpaper report item declarations", () => {
     expect(
       JSON.parse(screen.getByTestId("saved").textContent!).items,
     ).toHaveLength(0);
-    fireEvent.change(screen.getByLabelText("Declare Form 26 item coverage"), {
-      target: { value: "no" },
-    });
+    fireEvent.change(
+      screen.getByLabelText("Declare report inventory coverage"),
+      {
+        target: { value: "no" },
+      },
+    );
     expect(screen.getByTestId("saved")).toHaveTextContent("null");
   });
   it("hides the optional declaration when the country has no compatible preset", () => {
     data.available = false;
     render(<Editor />);
     expect(
-      screen.queryByText("Declare Form 26 item coverage"),
+      screen.queryByText("Declare report inventory coverage"),
     ).not.toBeInTheDocument();
   });
 });
@@ -139,7 +145,7 @@ it("searches a large inventory while retaining selected fields across searches",
   data.available = true;
   data.count = 877;
   render(<Editor />);
-  fireEvent.change(screen.getByLabelText("Declare Form 26 item coverage"), {
+  fireEvent.change(screen.getByLabelText("Declare report inventory coverage"), {
     target: { value: "yes" },
   });
   fireEvent.change(screen.getByLabelText("Workpaper report preset"), {

@@ -67245,6 +67245,18 @@
               }
             ]
           },
+          "company_reporting_scope_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Company Reporting Scope Id"
+          },
           "requirements": {
             "items": {
               "$ref": "#/components/schemas/ReportRequirement"

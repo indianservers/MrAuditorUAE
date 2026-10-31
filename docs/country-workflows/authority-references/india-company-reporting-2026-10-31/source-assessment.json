@@ -8,7 +8,9 @@
       "kind": "gazette_original",
       "sha256": "44faa58ca500e7581e6612dc64baa586474adaf292734a7134c6c857d330a031",
       "bytes": 578621,
-      "reviewed_pages": [2],
+      "reviewed_pages": [
+        2
+      ],
       "note": "G.S.R. 880(E), 1 December 2025; current small-company definition. Earlier definition source chain remains outside the candidate core."
     },
     {
@@ -17,7 +19,9 @@
       "kind": "gazette_original",
       "sha256": "c057dfd5503ad88049dc0b3ba22818a66721c04237b91550193a159446d8e219",
       "bytes": 1438392,
-      "reviewed_pages": [2],
+      "reviewed_pages": [
+        2
+      ],
       "note": "S.O. 4588(E), 17 December 2020; final CARO 2020 commencement is financial years commencing on or after 1 April 2021."
     },
     {
@@ -26,7 +30,10 @@
       "kind": "gazette_original_requiring_corrigendum",
       "sha256": "0863084c4880e5f418e5ca52e0a608e65523674ff8f8e54f6fb602dff269ea2a",
       "bytes": 1541676,
-      "reviewed_pages": [4, 5],
+      "reviewed_pages": [
+        4,
+        5
+      ],
       "note": "Original English IFC financial test prints OR. Do not apply without S.O. 2218(E), 13 July 2017, which corrects it to AND. Page 5 adds the filing-default condition."
     },
     {
@@ -35,19 +42,37 @@
       "kind": "professional_body_guidance_with_reproduced_order",
       "sha256": "eed5ceefde2e91b51478b14521a88ecd2aea01c1a22df43b6c3d23f166f7d1c2",
       "bytes": 2378370,
-      "reviewed_pages": [234, 235],
-      "note": "Appendix I reproduces CARO 2020; this file is not the Gazette original. Its historical commencement statements are superseded by the retained December 2020 amendment. No statutory adoption is inferred from this guidance."
+      "reviewed_pages": [
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243
+      ],
+      "note": "Appendix I reproduces CARO 2020; this file is not the Gazette original. Its historical commencement statements are superseded by the retained December 2020 amendment. No statutory adoption is inferred from this guidance.",
+      "numbered_matter_review": "48 standalone paragraph 3 leaves, consolidated paragraph 3(xxi), and two paragraph 4 reason duties enumerated; PDF pages 234-243 text reviewed and rendered pages visually inspected. Reproduction and historical commencement limitations remain."
     }
   ],
   "primary_sources_read_without_retained_original_bytes": [
     {
       "url": "https://www.indiacode.nic.in/bitstream/123456789/2114/5/A2013-18.pdf",
-      "provisions": ["2(85)", "139", "143(3)(i)"],
+      "provisions": [
+        "2(85)",
+        "139",
+        "143(3)(i)"
+      ],
       "status": "Primary web text reviewed; local original-byte retrieval unavailable."
     },
     {
       "url": "https://upload.indiacode.nic.in/showfile?actid=AC_CEN_22_29_00008_201318_1517807327856&filename=Exemption+to+Private+Company%28corrigendum%29.pdf&type=notification",
-      "provisions": ["S.O. 2218(E), 13 July 2017, published 14 July 2017"],
+      "provisions": [
+        "S.O. 2218(E), 13 July 2017, published 14 July 2017"
+      ],
       "status": "Primary web text reviewed: statement or corrected to statement and. Local original-byte retrieval unavailable."
     }
   ],

@@ -1,0 +1,48 @@
+CARO 2020 numbered-matter evidence inventories
+
+India report presets now include india-caro-index:standalone/1 and
+india-caro-index:consolidated/1. The standalone inventory contains 48 separately
+numbered paragraph 3 leaves from (i) through (xx), plus both paragraph 4 reason
+assessments. The consolidated inventory contains paragraph 3(xxi) plus both
+paragraph 4 assessments. Counts describe operational matter coverage, not all
+facts, statutory tables, calculations or professional judgment within a matter.
+
+The inventory was checked against retained ICAI 2020 guidance Appendix I,
+PDF pages 234-243. Rendered pages were visually inspected, including lettered
+and capital-letter leaves. This is a professional-body reproduction, not a
+qualified Gazette-original legal chain. Its historical commencement text does
+not override the separately retained December 2020 commencement amendment.
+The source file's original bytes and SHA256 remain unchanged.
+
+Prepare and independently review the India company-scope workpaper first.
+The report template must retain company_reporting_scope_id. The source must
+currently establish the appropriate CARO standalone or consolidated duty for
+the exact engagement period from 1 April 2021 onward. Exempt, unresolved,
+unreviewed, wrong-period and wrong-statement-scope results cannot authorize
+the indexed report. This duty source is separately retained as a dependency.
+
+Use the working-paper report-inventory editor to declare each matter's exact
+period, substantive section, protected supporting links and assessment. Every
+indexed matter requires this explicit assessment, including a concluded nil
+or inapplicable matter; removing a requirement or replacing coverage with
+unlinked narrative is not permitted. Requirement REQUIRED means the matter
+must be assessed; it does not assert that its underlying provision applies.
+Paragraph 4 reasons likewise require an explicit assessed conclusion.
+
+The report designer defaults these inventories to reviewed working-paper
+references. Before independent template approval and generation, the server
+checks the protected workpaper mappings against the selected inventory,
+period and requirement dispositions. A generic checklist/intelligence result
+cannot replace clause workpapers. Existing manager/partner review, contributor
+restrictions, exact source receipts, exports and recursive staleness apply.
+
+Tests use 50 distinct synthetic clause sections across two reviewed workpapers,
+an approved synthetic evidence file and a separately reviewed company-scope
+result. They prove the evidence graph and coverage controls, not actual audit
+work, independently qualified legal content or real-client outcomes. Semantic
+sufficiency, full statutory disclosures and measurements, adverse conclusions,
+audit opinions and authorized signature/filing remain professional requirements.
+
+Adding this operational index changes the existing report implementation
+fingerprint. Preserved older report templates need source revalidation and
+regeneration before new use; historical saved bodies are not rewritten.

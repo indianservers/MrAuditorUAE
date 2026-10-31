@@ -33,6 +33,7 @@ def implementation_hash():
         "form26_fields.py",
         "workpaper_report_scope.py",
         "company_scope_pack.py",
+        "caro_index.py",
     ):
         digest.update(name.encode() + b"\0" + hashlib.sha256((root / name).read_bytes()).digest())
     return digest.hexdigest()
@@ -136,6 +137,9 @@ def parse_template(body):
 
 
 async def require_ready(db, ctx, eng, config):
+    from app.modules.regulatory.caro_index import scope_receipt
+
+    await scope_receipt(db, ctx, eng, config)
     from app.db.models.platform import FinancialPeriod
     from app.modules.audit_execution import service as audit
     from app.modules.intelligence import service as intelligence
@@ -148,7 +152,11 @@ async def require_ready(db, ctx, eng, config):
         raise HTTPException(422, "Report preset is unavailable for this engagement country")
     vat_pack = pack and pack["kind"] == "vat201-comparison"
     company_pack = pack and pack["kind"] == "india-company-scope-summary"
-    period = await db.get(FinancialPeriod, eng.period_id) if vat_pack or company_pack else None
+    period = (
+        await db.get(FinancialPeriod, eng.period_id)
+        if vat_pack or company_pack or (pack and pack["kind"] == "caro-index")
+        else None
+    )
     if (vat_pack or company_pack) and len(
         {block.source_id for block in config.blocks if block.requirement_keys}
     ) != 1:
@@ -165,10 +173,10 @@ async def require_ready(db, ctx, eng, config):
         )
     for block in config.blocks:
         if block.source_kind == "intelligence":
-            if pack and pack["kind"] == "form26-index" and block.requirement_keys:
+            if pack and pack["kind"] in {"form26-index", "caro-index"} and block.requirement_keys:
                 raise HTTPException(
                     409,
-                    "Form 26 index items require current reviewed workpapers, not generic intelligence/checklist output",
+                    "Indexed report matters require current reviewed workpapers, not generic intelligence/checklist output",
                 )
             source = await intelligence.event(db, ctx, eng.id, block.source_id, True)
             if source.body.get("review_status") != "REVIEWED":
@@ -212,12 +220,12 @@ async def require_ready(db, ctx, eng, config):
             source = await audit.get_record(db, ctx, eng.id, block.source_id, lock=False)
             if (
                 pack
-                and pack["kind"] == "form26-index"
+                and pack["kind"] in {"form26-index", "caro-index"}
                 and block.requirement_keys
                 and source.kind != "working-papers"
             ):
                 raise HTTPException(
-                    409, "Form 26 index coverage requires reviewed workpaper records"
+                    409, "Indexed report coverage requires reviewed workpaper records"
                 )
             allowed = {"APPROVED", "LOCKED", "RESOLVED", "CLOSED"}
             if source.kind == "findings":
@@ -225,8 +233,8 @@ async def require_ready(db, ctx, eng, config):
             if source.status not in allowed:
                 raise HTTPException(409, "Required report source records need professional review")
             await require_current(db, ctx, source)
-            if pack and pack["kind"] == "form26-index" and block.requirement_keys:
+            if pack and pack["kind"] in {"form26-index", "caro-index"} and block.requirement_keys:
                 from app.modules.regulatory.workpaper_report_scope import require_mapping
 
-                require_mapping(config, block, source.body)
+                require_mapping(config, block, source.body, period=period)
     return {**result, "source_validation": "CURRENT_REVIEWED_SOURCES_RECHECKED"}

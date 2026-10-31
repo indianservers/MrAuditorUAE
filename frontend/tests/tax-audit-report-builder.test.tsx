@@ -44,6 +44,13 @@ vi.mock("@/hooks/use-event-history", () => ({
     data: {
       items: [
         {
+          id: "company-scope",
+          label: "Reviewed company scope",
+          kind: "country-workflow",
+          review_status: "REVIEWED",
+          freshness: "CURRENT",
+        },
+        {
           id: "template",
           label: "Retained template",
           kind: "report-template",
@@ -391,6 +398,54 @@ it("selects the India company applicability preset as a retained regulatory resu
   expect(
     screen.getByText("Applicability summary only; not a statutory opinion"),
   ).toBeInTheDocument();
+});
+
+it("retains a CARO inventory's reviewed company scope and defaults to linked workpapers", async () => {
+  state.mutate.mockReset().mockResolvedValue({ id: "saved" });
+  state.presets = {
+    country: "IN",
+    items: [
+      {
+        id: "india-caro-index:consolidated/1",
+        title: "CARO consolidated inventory",
+        category: "caro",
+        kind: "caro-index",
+        allow_not_applicable: false,
+        not_applicable_keys: [],
+        limitations: ["Numbered matters only; no opinion qualification"],
+        requirements: ["3.xxi", "4.1", "4.2"].map((ref) => ({
+          key: "caro." + ref,
+          title: ref,
+          disposition: "UNASSESSED",
+          source_required: true,
+          basis: "Retain assessed source workpaper coverage",
+        })),
+      },
+    ],
+  };
+  render(<StatutoryReportBuilder />);
+  const change = (label: string, value: string) =>
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  change("Engagement", "one");
+  change("Report title", "SYNTHETIC CARO draft");
+  change("Report category", "caro");
+  change("Operational report preset", "india-caro-index:consolidated/1");
+  expect(screen.getByLabelText("Content type")).toHaveValue(
+    "working_paper_reference",
+  );
+  expect(screen.getByLabelText("Source type")).toHaveValue("record");
+  change("Reviewed CARO company-scope result", "company-scope");
+  change("Content type", "narrative");
+  change("Block title", "SYNTHETIC unassessed draft");
+  fireEvent.click(screen.getByRole("button", { name: "Add content block" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Save template version" }),
+  );
+  await waitFor(() => expect(state.mutate).toHaveBeenCalledOnce());
+  expect(state.mutate.mock.calls[0][0].body.company_reporting_scope_id).toBe(
+    "company-scope",
+  );
+  expect(state.mutate.mock.calls[0][0].body.requirements).toHaveLength(3);
 });
 
 it("saves every expanded field after searching and editing the last field", async () => {

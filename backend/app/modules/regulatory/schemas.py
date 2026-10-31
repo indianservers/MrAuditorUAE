@@ -304,6 +304,7 @@ class ReportTemplate(Strict):
     blocks: list[ReportBlock] = Field(min_length=1, max_length=50)
     rationale: str = Field(min_length=10, max_length=4000)
     tax_audit_scope: IndiaTaxAuditScope | None = None
+    company_reporting_scope_id: uuid.UUID | None = None
     requirements: list[ReportRequirement] = Field(default_factory=list, max_length=2000)
     requirements_assessed: bool = Field(default=False, strict=True)
     requirements_basis: str = Field(default="", max_length=4000)

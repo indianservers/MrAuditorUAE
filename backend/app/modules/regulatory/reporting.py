@@ -22,8 +22,11 @@ from app.modules.regulatory.tax_forms import SCOPE_CONTRACT, require_assessed_ta
 
 
 async def tax_scope_receipt(db, ctx, eng, config, contributors=None):
+    from app.modules.regulatory.caro_index import scope_receipt
+
+    company_dependencies = await scope_receipt(db, ctx, eng, config, contributors)
     if config.tax_audit_scope is None:
-        return []
+        return company_dependencies
     period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
     if period is None or not config.tax_audit_scope.covered_by(period.start_date, period.end_date):
         raise HTTPException(
@@ -214,6 +217,9 @@ async def generate(db, ctx, eng, data, request_id):
             "requirements": [item.model_dump(mode="json") for item in config.requirements],
             "requirements_assessed": config.requirements_assessed,
             "requirements_basis": config.requirements_basis,
+            "company_reporting_scope_id": str(config.company_reporting_scope_id)
+            if config.company_reporting_scope_id
+            else None,
             "requirements_coverage": requirements_coverage,
             "report_requirements_contract": CONTRACT,
             "report_requirements_implementation": implementation_hash(),

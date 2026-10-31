@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-31",
+  "base_commit": "9ef46adfb353913735dfb931915c7bf9cc26fe34",
+  "stage": "CONNECTED_NUMBERED_MATTER_EVIDENCE_INVENTORY_NOT_QUALIFIED_OPINION",
+  "inventory": {"standalone_paragraph3_leaves": 48, "paragraph4_assessments": 2, "standalone_total": 50, "consolidated_total": 3},
+  "validation": {
+    "backend_unit": {"passed": 5048, "skipped": 4, "failed": 0, "report": "caro-index-all-unit.xml"},
+    "focused_inventory_and_existing_mapping_unit": {"passed": 39, "failed": 0, "report": "caro-index-focused.xml"},
+    "caro_and_existing_preset_http": {"passed": 5, "failed": 0, "report": "caro-index-http-final.xml"},
+    "existing_form26_and_company_scope_http": {"passed": 21, "failed": 0, "report": "caro-index-existing-scope-http.xml"},
+    "frontend": {"passed": 538, "files": 96, "failed": 0, "report": "caro-index-frontend-final.xml"},
+    "final_editor_focused_checks": "11 passed after final text and preset-source reset changes",
+    "mypy": "440 application source files passed",
+    "ruff_and_scoped_frontend_eslint": "passed",
+    "frontend_types_and_final_production_build": "passed",
+    "api_snapshots": "regenerated and current runtime check passed; frontend types regenerated and checked",
+    "browser_discovery": "17 existing tests in 15 files; selector renamed to report inventory coverage",
+    "new_caro_browser_execution": "NOT_YET_EXECUTED"
+  },
+  "integration_evidence": [
+    "Actual private uploads and independently reviewed company scope establish nonexempt standalone CARO duty",
+    "50 separate synthetic clause sections across two manager/partner-reviewed workpapers with protected approved evidence",
+    "Template review and controlled draft generation retain exact clause coverage, scope dependency and values",
+    "All 50 requirement keys preserved in actual XLSX export",
+    "Authorized evidence reopening and replacement recursively stale saved report without changing its body"
+  ],
+  "retained_initial_failure": {"report": "caro-index-http.xml", "reason": "Test attempted replacement of approved evidence and correctly received 409; corrected to use authorized reopen, then replacement and stale-history verification"},
+  "source_review": {
+    "path": "docs/country-workflows/authority-references/india-company-reporting-2026-10-31/caro2020-icai-guidance-2020.pdf",
+    "sha256": "eed5ceefde2e91b51478b14521a88ecd2aea01c1a22df43b6c3d23f166f7d1c2",
+    "pdf_pages_reviewed": [234,235,236,237,238,239,240,241,242,243],
+    "kind": "ICAI guidance Appendix I reproduction; not Gazette-original legal qualification",
+    "commencement": "Historical reproduced commencement is superseded; separate retained commencement/adoption chain required"
+  },
+  "hosted_observation": {"source": "9ef46ad", "run": 41176869485, "browser_job": 124466130097, "browser": "in_progress", "verify_job": 124466130356, "verify": "in_progress", "frontend": "success", "containers": "success", "ml": "success", "security": "success"},
+  "remaining": [
+    "Semantic sufficiency of procedures, original legal source-chain qualification, all within-clause tables/calculations and professional judgments are not inferred from indexed coverage.",
+    "Actual CARO browser screenshots remain pending; prior hosted jobs are observations for their own source commits.",
+    "No real-client files or independently approved client outcomes have been supplied; full roadmap remains unfinished."
+  ]
+}

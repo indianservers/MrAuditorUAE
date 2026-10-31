@@ -9454,6 +9454,8 @@ export interface components {
             /** Rationale */
             rationale: string;
             tax_audit_scope?: components["schemas"]["IndiaTaxAuditScope"] | null;
+            /** Company Reporting Scope Id */
+            company_reporting_scope_id?: string | null;
             /** Requirements */
             requirements?: components["schemas"]["ReportRequirement"][];
             /**
