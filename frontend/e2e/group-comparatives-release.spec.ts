@@ -671,6 +671,11 @@ test("prior reported group comparatives retain separate review, original FX, com
         await itemTable
           .getByRole("cell", { name: "176.00000000", exact: true })
           .scrollIntoViewIfNeeded();
+        const costBounds = await itemTable
+          .getByRole("cell", { name: "176.00000000", exact: true })
+          .boundingBox();
+        expect(costBounds).not.toBeNull();
+        expect(costBounds!.width).toBeGreaterThanOrEqual(239);
       } else {
         const obligation = scheduleResults.getByRole("region", {
           name: "Benefit obligation rollforward",

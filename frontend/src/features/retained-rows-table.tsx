@@ -30,6 +30,8 @@ export function RetainedRowsTable({
   );
   const invalid = original.length - records.length;
   const columns = [...new Set(records.flatMap((row) => Object.keys(row)))];
+  const columnWidth = (key: string) =>
+    key === "rate_source" || key.endsWith("evidence") ? 320 : 240;
   const limit = 25;
   const start = Math.min(
     offset,
@@ -53,7 +55,20 @@ export function RetainedRowsTable({
         <p>No structured records retained.</p>
       ) : (
         <div className="group-source-scroll">
-          <table aria-label={title}>
+          <table
+            aria-label={title}
+            style={{
+              minWidth: Math.max(
+                1080,
+                columns.reduce((width, key) => width + columnWidth(key), 0),
+              ),
+            }}
+          >
+            <colgroup>
+              {columns.map((key) => (
+                <col key={key} style={{ width: columnWidth(key) }} />
+              ))}
+            </colgroup>
             <thead>
               <tr>
                 {columns.map((key) => (

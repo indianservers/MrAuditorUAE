@@ -71,3 +71,12 @@ Complete retained calculation and provenance. These are read-only views over
 the original immutable result. New structured-layout browser assertions and
 screenshots require their own hosted execution; earlier JSON-paragraph
 screenshots prove the calculation workflow, not this later presentation.
+
+Hosted source ec84cba passed all16 browser cases, including the structured
+stock/benefit views, older-input paging, original values and complete immutable
+exports. Original screenshots and their hash receipt are retained. Visual
+inspection identified dense wrapping when many inventory columns shared the
+available width. The subsequent table layout assigns explicit minimum column
+widths and scrolls excess columns horizontally. The later minimum-width
+browser assertion must pass on its own source before that refinement is
+treated as hosted visual proof.

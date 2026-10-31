@@ -1,0 +1,25 @@
+{
+  "scope": "Explicit minimum column widths for full retained group/inventory tables after visually observed dense wrapping in ec84cba",
+  "report": {
+    "file": "schedule-column-width-focused.xml",
+    "tests": 6,
+    "bytes": 1797,
+    "sha256": "1a163a139f9d70d3498ac3ed58562fbf69c2a1d489efab89dd5c16d1487ead4e"
+  },
+  "checks": {
+    "frontend_typecheck": "PASS",
+    "targeted_eslint": "PASS",
+    "frontend_production_build": "PASS",
+    "scanner_script_ruff": "PASS",
+    "scanner_script_format": "PASS",
+    "scanner_cli_help_in_existing_isolated_environment": "PASS",
+    "new_original_pdf_size_hash_and_page_count": "PASS"
+  },
+  "change": "Fixed-layout tables now have explicit colgroup widths and a minimum total width computed from every retained field. Long evidence columns have320px and others240px; excess columns use the existing horizontal scroll.",
+  "limits": [
+    "Hosted cost-cell width assertion is authored but still needs source-specific execution.",
+    "No backend calculation, legal rule, approval or source values changed.",
+    "Eight-original real ClamAV preflight is configured, not executed locally. Its CI step budget is14 minutes for up to eight90-second checks plus overhead; production scanner settings remain unchanged.",
+    "The525-test frontend suite is retained separately for earlier ec84cba; focused6 checks and build validate this limited layout change."
+  ]
+}

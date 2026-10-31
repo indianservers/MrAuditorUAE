@@ -45,6 +45,14 @@ def main():
             "uae-company-law-2026-10-31/fdl20-2025-arabic-original.pdf",
             uae_company_accounts.AMENDMENT_SHA256,
         ),
+        (
+            "uae-tax-group-afs-2026-10-31/fta-decision7-2025-unofficial-english.pdf",
+            "f3eebe866669ad14f6f2e0789631f3feaf492295ab51243126711d9296be2119",
+        ),
+        (
+            "uae-tax-group-afs-2026-10-31/ctp007-tax-group-financial-statements-bilingual.pdf",
+            "5b8d235dfd5af78789cc8cb96d5f55dbb57fb1df5e2ba5224fc82d6696147dbf",
+        ),
     ]
     rows = []
     for relative, digest in sources:

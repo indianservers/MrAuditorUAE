@@ -1,0 +1,112 @@
+{
+  "status": "ORIGINALS_RETAINED_RESEARCH_NOT_AUTOMATICALLY_ADOPTED",
+  "sources": [
+    {
+      "file": "fta-decision7-2025-unofficial-english.pdf",
+      "url": "https://tax.gov.ae/Datafolder/Files/Legislation/2025/FTA-Decision-No-7-of-2025-for-publishing.pdf",
+      "retrieved_utc": "2026-10-31T02:18:15.114544+00:00",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 209099,
+      "sha256": "f3eebe866669ad14f6f2e0789631f3feaf492295ab51243126711d9296be2119",
+      "pages": 6
+    },
+    {
+      "file": "ctp007-tax-group-financial-statements-bilingual.pdf",
+      "url": "https://tax.gov.ae/Datafolder/Files/Pdf/2025/CTP007-Aggregate-Financial-Statements-and-Audit-Requirement-for-Tax-Groups-27-082025-final-for-publishing.pdf",
+      "retrieved_utc": "2026-10-31T02:18:15.125548+00:00",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "bytes": 834103,
+      "sha256": "5b8d235dfd5af78789cc8cb96d5f55dbb57fb1df5e2ba5224fc82d6696147dbf",
+      "pages": 32
+    }
+  ],
+  "observations": [
+    "Both URLs previously returned maintenance HTML; this retrieval returned original PDF bytes, verified by signature, parsed page count and SHA256. No recreated or cached-text PDF substituted.",
+    "The six-page English FTA Decision7 PDF is explicitly marked unofficial translation. All six complete pages were text-extracted; all six rendered pages were visually inspected.",
+    "The32-page CTP007 original is bilingual, with English on the left and Arabic on the right. Complete English-column text of all32 pages, including footnotes and Annex A, was read. Rendered pages1,11,12,13 and27-32 were visually inspected. Other rendered pages and a complete independent Arabic legal comparison remain outstanding.",
+    "The group special-purpose framework must not be equated with existing IFRS10 consolidation or MD84 applicability observation."
+  ],
+  "automatic_rule_enabled": false,
+  "professional_qualification": "NOT_ESTABLISHED",
+  "next_required_work": [
+    "Retain the exact original sources in real-scanner proof and complete remaining visual/Arabic legal review.",
+    "Verify operative source chain and any later changes, including Arabic legislation where required, and independently adopt applicable versions.",
+    "Correct the existing MD84 assessment to distinguish a standalone approved Tax Group member from the Tax Group itself, with a required retained CTP007 source, explicit membership scope, null/conflict handling, prior-version invalidation and complete unit/HTTP/browser regressions. CTP007 page12 expressly treats standalone member audits separately; the current MD84 input has no member classification.",
+    "Implement distinct group membership/standalone aggregation, prescribed adjustments and exceptions, all primary statements/disclosures, comparative and leaving-member treatment with source-specific tests.",
+    "Obtain representative client expected results, independent professional review and authorized reporting/submission procedures."
+  ],
+  "review_scope": {
+    "fta_decision7_text_pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "fta_decision7_visual_pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "ctp007_english_text_pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "ctp007_visual_pages": [
+      1,
+      11,
+      12,
+      13,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "complete_arabic_professional_review": false,
+    "real_clamav_status": "PENDING_SOURCE_SPECIFIC_HOSTED_EXECUTION",
+    "local_checks": [
+      "Exact original PDF size and SHA256 checks passed",
+      "Parsed6 and32 PDF pages without rewriting originals",
+      "Scanner-script Ruff and format checks passed",
+      "Scanner CLI help loaded in existing isolated runtime; no local scan claimed"
+    ]
+  }
+}

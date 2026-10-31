@@ -214,7 +214,7 @@ jobs:
       - run: npm ci && npm run build && npx playwright install --with-deps chromium
         working-directory: frontend
       - name: Verify exact authority originals with the real scanner
-        timeout-minutes: 10
+        timeout-minutes: 14
         run: backend/.venv/bin/python scripts/verify_authority_scans.py --output .local-runtime/release-smoke/authority-scans.json
       - name: Start isolated local test services
         shell: bash

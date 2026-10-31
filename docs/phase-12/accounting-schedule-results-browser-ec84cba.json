@@ -1,0 +1,47 @@
+{
+  "source_commit": "ec84cbaadbab79201296d453754699f41a107673",
+  "run_id": 41158824933,
+  "job_id": 124411536953,
+  "conclusion": "success",
+  "suite": {
+    "passed": 16,
+    "duration": "6.4m",
+    "group_paging_and_schedule_case_seconds": 21.4
+  },
+  "artifact": {
+    "id": 13026646337,
+    "bytes": 22552227,
+    "sha256": "cd6c2d112fb2a22ae454a470742da0ef5317e90e731a666e2eca6d250dddadee"
+  },
+  "images": [
+    {
+      "file": "AE-employee-benefits-approved-calculation-ec84cba.png",
+      "bytes": 75894,
+      "sha256": "974bbddc9168cea5e3c7397ead095b9564155e0283a552bc09d4f3d025a483ad"
+    },
+    {
+      "file": "AE-inventory-approved-calculation-ec84cba.png",
+      "bytes": 91154,
+      "sha256": "392cc848c2fbc25d5101eb008336ab78a729cc0e913afd23c520bf898d1b2eb0"
+    }
+  ],
+  "visual_review": [
+    "Both original PNGs inspected without modification.",
+    "Inventory has readable top-level carrying160 and write-down16, followed by a complete retained item table and separate movement/transfer sections.",
+    "Benefit obligation and payroll bridge have separate field lists; closing120 and160 are readable with source scope and no-payment state.",
+    "The inventory table squeezes18 fields into the available width; long evidence and decimal strings wrap densely. This led to the subsequent explicit column-width/horizontal-scroll correction.",
+    "Complete original provenance remains available on deliberate expansion."
+  ],
+  "automated_scope": [
+    "Approved stock and benefit records selected behind55 newer drafts, then retained when returning to first page",
+    "Actual UI calculations and complete immutable JSON exports",
+    "Inventory table has one retained item; original closing cost176 cell is reachable",
+    "Distinct obligation and payroll regions retain expected values",
+    "Original group controls, source lineage, metadata containment, export and recursive staleness remain green"
+  ],
+  "limits": [
+    "Source-specific synthetic browser evidence only; not a full-backend completion receipt.",
+    "The later minimum column-width assertion and8-original scanner expansion are not exercised by this source.",
+    "No real-client, professional, legal or production qualification."
+  ]
+}

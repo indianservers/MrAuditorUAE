@@ -260,3 +260,5 @@ docs/phase-12/reporting-review-*.xml -text whitespace=cr-at-eol
 docs/phase-12/3e4b0a2-hosted-full.xml -text whitespace=cr-at-eol
 docs/phase-12/3e4b0a2-hosted-coverage.json -text
 docs/phase-12/accounting-schedule-results-*.xml -text whitespace=cr-at-eol
+docs/country-workflows/authority-references/uae-tax-group-afs-2026-10-31/*.pdf -text
+docs/phase-12/schedule-column-width-focused.xml -text whitespace=cr-at-eol
