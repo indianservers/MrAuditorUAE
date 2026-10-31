@@ -255,3 +255,4 @@ docs/phase-12/b7be0b3-hosted-coverage.json -text
 docs/phase-12/group-metadata-wrap-frontend.xml -text whitespace=cr-at-eol
 docs/phase-12/ifrs-navigation-*.xml -text whitespace=cr-at-eol
 docs/phase-12/company-accounts-authority-scans-*.json -text
+docs/phase-12/reporting-selector-*.xml -text whitespace=cr-at-eol

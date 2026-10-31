@@ -585,14 +585,42 @@ test("prior reported group comparatives retain separate review, original FX, com
     ];
     for (const [kind, body] of schedules) {
       const approved = await current.ready(kind, body);
+      // Put the approved input beyond the first 50-record page.
+      for (let i = 0; i < 55; i++)
+        await post(
+          page.request,
+          `engagements/${current.eid}/audit/ifrs-${kind}`,
+          {
+            reference: `SYNTHETIC-unapproved-${kind}-${i}-${Date.now()}`,
+            title: `SYNTHETIC unapproved ${kind} pagination record ${i}`,
+            body,
+          },
+        );
       await page.goto(`/ifrs/${current.eid}/${kind}`);
       const reporting = page.getByRole("region", {
         name: "Reporting calculations",
         exact: true,
       });
+      const choice = reporting.getByRole("combobox", {
+        name: "Approved assumptions",
+        exact: true,
+      });
+      await expect(
+        choice.locator(`option[value="${approved.id}"]`),
+      ).toHaveCount(0);
+      await reporting
+        .getByRole("button", { name: "Next approved assumptions", exact: true })
+        .click();
       await reporting
         .getByRole("combobox", { name: "Approved assumptions", exact: true })
         .selectOption(approved.id);
+      await reporting
+        .getByRole("button", {
+          name: "Previous approved assumptions",
+          exact: true,
+        })
+        .click();
+      await expect(choice).toHaveValue(approved.id);
       const pending = page.waitForResponse(
         (r) =>
           r

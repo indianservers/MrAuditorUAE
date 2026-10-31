@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { beforeEach, expect, it, vi } from "vitest";
 
 const mock = vi.hoisted(() => ({ useAPI: vi.fn(), calculate: vi.fn() }));
@@ -21,11 +27,13 @@ vi.mock("@/components/grids/financial-data-grid", () => ({
 }));
 
 import { IFRSStudio } from "@/features/ifrs-studio";
+import { useScope } from "@/stores/workspace";
 
 beforeEach(() => {
+  useScope.setState({ tenant: "tenant-a" });
   mock.calculate.mockReset().mockResolvedValue({ id: "SYN-RUN" });
   mock.useAPI.mockImplementation((path: string) => {
-    const recordKind = path.match(/\/records\/([^/]+)$/)?.[1];
+    const recordKind = path.split("?")[0].match(/\/records\/([^/]+)$/)?.[1];
     return {
       data: recordKind
         ? {
@@ -44,6 +52,21 @@ beforeEach(() => {
       error: null,
     };
   });
+});
+
+it("clears retained record selections when the active tenant changes", () => {
+  render(<IFRSStudio id="E" area="inventory" />);
+  fireEvent.change(screen.getByLabelText("Approved assumptions"), {
+    target: { value: "SYN-inventory" },
+  });
+  expect(
+    screen.getByRole("button", { name: "Calculate approved inputs" }),
+  ).toBeEnabled();
+  act(() => useScope.setState({ tenant: "tenant-b" }));
+  expect(screen.getByLabelText("Approved assumptions")).toHaveValue("");
+  expect(
+    screen.getByRole("button", { name: "Calculate approved inputs" }),
+  ).toBeDisabled();
 });
 
 it.each([

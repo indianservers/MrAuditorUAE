@@ -30,3 +30,19 @@ separately reviewed stock and benefit assumptions, calculates each through
 the UI, checks retained values and NOT_POSTED status, and compares complete
 downloaded immutable JSON. That later hosted source must pass separately;
 authoring the browser case alone is not execution evidence.
+
+Reporting profile, approved-assumption and immutable-version selectors have
+independent 50-record pages and display the server's total. A selection remains
+available when moving to another page; it is not replaced with that page's
+first row. A newly generated run can remain selected before its list page
+refreshes. Unavailable/loading pages remain explicit. Changing the active
+tenant also clears the calculation controls and retained record labels.
+The backend continues to enforce current permissions and approved input state
+when any selected record is used. Paging itself does not approve a record.
+
+Tests reach all 151 entries in each selector, exercise independent paging and
+outside-page selection, and verify unavailable/loading states. Hosted coverage
+places each selected approved stock/benefit input behind 55 newer unapproved
+drafts, navigates to it, returns to the first page and calculates the retained
+selection. Source-specific hosted execution is required before claiming this
+later browser case has passed.

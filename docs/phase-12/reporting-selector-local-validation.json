@@ -1,0 +1,36 @@
+{
+  "scope": "Complete paged reporting profile, assumption and immutable-run selection over existing backend APIs",
+  "reports": [
+    {
+      "file": "reporting-selector-focused.xml",
+      "tests": 12,
+      "bytes": 2923,
+      "sha256": "a8ae842291fe6a87cb814e5fbb6f51801ca4ce21d05fb95b2f562f4c694677a7"
+    },
+    {
+      "file": "reporting-selector-frontend.xml",
+      "tests": 520,
+      "bytes": 122663,
+      "sha256": "e86d9c5a63c0549f96566e8b9b7decbf8ddff2b57df71a311355b39dc21ca49d"
+    }
+  ],
+  "checks": {
+    "typecheck": "PASS",
+    "lint": "PASS_WITH_EXISTING_UNRELATED_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS",
+    "updated_browser_spec_discovery": "PASS"
+  },
+  "verified": [
+    "Three independent selectors reach all151 synthetic records, including records beyond100",
+    "Selected record remains selected and labelled outside its current page; no inferred replacement record",
+    "Generated run outside the loaded page is retained by exact ID",
+    "Loading/unavailable pages remain explicit and cannot advance without data",
+    "Tenant changes remount calculation controls and clear retained IDs; prior engagement/subtype/workspace reset controls still pass"
+  ],
+  "limits": [
+    "Focused12 checks overlap full520 tests; no additive unique coverage claim.",
+    "520-test suite preceded only a zero-length page range text correction; focused12 checks reran on final source.",
+    "Hosted older approved input case is authored:55 newer drafts per input type, page2 selection, return to page1, calculation and immutable export. That source must execute separately.",
+    "No backend approval, ledger, calculation, legal or national rule behavior changed."
+  ]
+}

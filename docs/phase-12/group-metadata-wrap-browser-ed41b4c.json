@@ -1,0 +1,36 @@
+{
+  "source_commit": "ed41b4c82824157ceb4fb0616c25114181418269",
+  "run_id": 41156065287,
+  "job_id": 124403008421,
+  "conclusion": "success",
+  "suite": {
+    "passed": 16,
+    "duration": "10.3m",
+    "group_comparative_case_seconds": 26.7
+  },
+  "artifact": {
+    "id": 13025127940,
+    "bytes": 22382460,
+    "sha256": "d17a7a1e96ccb3e94fa641343bb656ecb1f966273d8a0d73fb2e8c36faf81336"
+  },
+  "original_image": {
+    "file": "AE-group-comparative-source-ed41b4c.png",
+    "bytes": 42594,
+    "sha256": "e2fd67020704233ea484e79f6bb57e87187ad8984d0de97627ef717532dd5a15"
+  },
+  "visual_review": [
+    "Original PNG inspected without modification.",
+    "Complete prior basis, scope, source-run ID, SHA, totals, dates, engagement ID, issue list and draft validation fit the panel and are readable.",
+    "Prior validation ready:false and ifrs_compliance_certified:false remain explicit; no current retranslation or audited comparative claim is introduced."
+  ],
+  "automated_scope": [
+    "Every metadata value fits within the source region and has no internal horizontal overflow.",
+    "Full current/prior source tables and final paging controls fit their panel.",
+    "Existing independent input approvals, comparative amounts, immutable XLSX and recursive staleness checks pass."
+  ],
+  "limits": [
+    "Source-specific browser evidence only; separate full backend job remained live at retention.",
+    "Newer stock/benefit action and complete selector pagination changes require their own hosted proof.",
+    "Synthetic workflow only; no real-client, professional or production qualification."
+  ]
+}

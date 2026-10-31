@@ -4,6 +4,7 @@ import Link from "next/link";
 import { AuditStudio } from "./audit-studio";
 import { FinancialReview } from "./financial-review";
 import { GroupSourceLineage } from "./group-source-lineage";
+import { ReportingRecordSelect } from "./reporting-record-select";
 import { AccountingExecutionNotice } from "./accounting-execution-notice";
 import { money } from "@/lib/formatting/money";
 import { PageHeader } from "./shared";
@@ -55,6 +56,7 @@ export function IFRSStudio({
   id?: string;
   area?: string;
 }) {
+  const tenant = useScope((s) => s.tenant);
   const engagements = useAPI<Page<Engagement>>("engagements?limit=100", !id);
   const selected = ifrsAreas.find((a) => a[0] === area);
   const [subkind, setSubkind] = useState<{
@@ -116,7 +118,7 @@ export function IFRSStudio({
           </Link>
         ))}
       </nav>
-      <ReportingRuns key={`${id}:${area}:${kind}`} id={id} area={area} kind={kind} />
+      <ReportingRuns key={`${tenant}:${id}:${area}:${kind}`} id={id} area={area} kind={kind} />
       {area === "impairment" && (
         <div className="toolbar">
           <label>
@@ -199,8 +201,6 @@ function ReportingRuns({
   kind: string;
 }) {
   const base = `ifrs/engagements/${id}`;
-  const profiles = useAPI<Page<RecordRow>>(base + "/records/profile");
-  const records = useAPI<Page<RecordRow>>(base + "/records/" + kind);
   const runs = useAPI<Page<RecordRow>>(base + "/runs");
   const [profile, setProfile] = useState("");
   const [record, setRecord] = useState("");
@@ -254,21 +254,12 @@ function ReportingRuns({
       aria-label="Reporting calculations"
     >
       <div className="toolbar">
-        <label>
-          Reporting profile{" "}
-          <select
-            aria-label="Reporting profile"
-            value={profile}
-            onChange={(e) => setProfile(e.target.value)}
-          >
-            <option value="">Choose approved profile</option>
-            {profiles.data?.items.map((p) => (
-              <option key={p.id} value={p.id}>
-                {String(p.reference)} · {String(p.status)}
-              </option>
-            ))}
-          </select>
-        </label>
+        <ReportingRecordSelect
+          path={`${base}/records/profile`}
+          label="Reporting profile"
+          value={profile}
+          onChange={setProfile}
+        />
         <Button
           disabled={!profile || action.isPending}
           onClick={async () => {
@@ -280,21 +271,12 @@ function ReportingRuns({
         >
           Generate statements
         </Button>
-        <label>
-          Approved assumptions{" "}
-          <select
-            aria-label="Approved assumptions"
-            value={record}
-            onChange={(e) => setRecord(e.target.value)}
-          >
-            <option value="">Choose record</option>
-            {records.data?.items.map((p) => (
-              <option key={p.id} value={p.id}>
-                {String(p.reference)} · {String(p.status)}
-              </option>
-            ))}
-          </select>
-        </label>
+        <ReportingRecordSelect
+          path={`${base}/records/${kind}`}
+          label="Approved assumptions"
+          value={record}
+          onChange={setRecord}
+        />
         <Button
           disabled={
             !record ||
@@ -322,24 +304,16 @@ function ReportingRuns({
         >
           Calculate approved inputs
         </Button>
-        <label>
-          Immutable version{" "}
-          <select
-            aria-label="Immutable version"
+        <ReportingRecordSelect
+            path={`${base}/runs`}
+            label="Immutable version"
             value={rid}
-            onChange={(e) => {
-              setRid(e.target.value);
+            onChange={(id) => {
+              setRid(id);
               setLine(null);
             }}
-          >
-            <option value="">Choose run</option>
-            {runs.data?.items.map((r) => (
-              <option key={r.id} value={r.id}>
-                {String(r.kind)} · {r.id.slice(0, 8)}
-              </option>
-            ))}
-          </select>
-        </label>
+            runs
+        />
       </div>
       {action.error && <ErrorState error={action.error} />}
       {result.error && <ErrorState error={result.error} />}

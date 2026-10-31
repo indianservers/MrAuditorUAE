@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="12" failures="0" errors="0" time="0.6618682">
+    <testsuite name="tests/ifrs-calculation-navigation.test.tsx" timestamp="2026-10-31T01:51:09.661Z" hostname="DESKTOP-B3SR465" tests="8" failures="0" errors="0" skipped="0" time="0.3416025">
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="clears retained record selections when the active tenant changes" time="0.1424615">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE inventory assumptions through the existing numeric engine" time="0.0214087">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN inventory assumptions through the existing numeric engine" time="0.0193884">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE employee-benefits assumptions through the existing numeric engine" time="0.0288121">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN employee-benefits assumptions through the existing numeric engine" time="0.017756">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="clears selected assumptions and immutable runs when switching calculation subtype" time="0.0537813">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="does not carry instrument mode or a selected record into an inventory workspace" time="0.0432757">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="keeps workflows without a standalone numeric engine disabled" time="0.011887">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/reporting-record-select.test.tsx" timestamp="2026-10-31T01:51:09.662Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.3202657">
+        <testcase classname="tests/reporting-record-select.test.tsx" name="reaches all 151 profiles, assumptions and immutable versions with independent paging and retained selection" time="0.2784758">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="preserves a newly generated selected run outside the current page without choosing another run" time="0.0270292">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="keeps an unavailable page visible as an error and never clears the retained ID" time="0.0084145">
+        </testcase>
+        <testcase classname="tests/reporting-record-select.test.tsx" name="does not advance while a page is loading or infer a selected record" time="0.0041697">
+        </testcase>
+    </testsuite>
+</testsuites>
