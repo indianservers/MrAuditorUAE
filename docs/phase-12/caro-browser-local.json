@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-31",
+  "base_commit": "c36304601364b9e96b87bd923a318f1b23858def",
+  "backend_changed": false,
+  "frontend_change": "Saved report preview links its retained company_reporting_scope_id; old reports without this field do not gain an invented scope link",
+  "validation": {
+    "frontend": {"passed": 539, "failed": 0, "files": 96, "report": "caro-browser-frontend.xml"},
+    "focused_preview": {"passed": 5, "failed": 0},
+    "types": "passed",
+    "scoped_eslint": "passed",
+    "production_build": "passed",
+    "frontend_api_types": "passed",
+    "playwright_discovery": "19 tests in 16 files",
+    "new_caro_browser_execution": "PENDING_HOSTED_RUN"
+  },
+  "new_browser_scenarios": [
+    "CARO standalone UI revision, separate review, complete export and stale evidence",
+    "CARO consolidated UI revision, separate review, complete export and stale evidence"
+  ],
+  "intended_browser_assertions": [
+    "Real clean uploads, eight retained scope document roles and separately reviewed source result",
+    "Distinct manager/partner workpaper approvals and actual protected clause source mappings",
+    "Load saved template into UI revision; preserve selected company scope and all workpaper blocks while editing final reason assessment",
+    "Independent template approval and generation through visible UI controls",
+    "Saved preview links the exact retained company scope and displays final numbered matter",
+    "Real downloaded XLSX contains 50 standalone or 3 consolidated coverage entries",
+    "Authorized source reopening and replacement stale the saved report and disable independent approval",
+    "Saved historical body remains unchanged and no browser page errors occur"
+  ],
+  "limitations": [
+    "Assertions above describe authored scenarios, not completed hosted browser execution.",
+    "Unpinned legal PDFs are explicitly synthetic controls using guidance copies; they do not qualify a legal source chain.",
+    "Only isolated synthetic identities and disposable seeded test databases are intended; these are not real client audits.",
+    "No complete statutory report, professional opinion, signature or filing is authorized by the workflow."
+  ]
+}

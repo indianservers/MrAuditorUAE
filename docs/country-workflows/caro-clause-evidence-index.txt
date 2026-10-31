@@ -54,3 +54,10 @@ bodies. Changing only clause evidence leaves the company-scope event current;
 changing its original facts makes that event stale. Both paths invalidate the
 generated report and block independent approval and new generation from the
 old template. These remain synthetic evidence-graph tests, not client audits.
+
+The hosted smoke suite now includes standalone and consolidated CARO browser
+scenarios for retained template revision, scope selection, final-matter editing,
+independent review, controlled generation, actual XLSX downloads and source
+replacement staleness. The saved report preview links the retained company-
+scope event. Browser execution and screenshots must be checked from the actual
+hosted run; scenario discovery or local DOM tests do not prove browser success.

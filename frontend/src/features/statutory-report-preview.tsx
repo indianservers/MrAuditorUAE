@@ -89,6 +89,19 @@ export function StatutoryReportPreview({
           <dt>Scope assessment</dt>
           <dd>{text(body.requirements_basis)}</dd>
         </div>
+        {typeof body.company_reporting_scope_id === "string" &&
+          body.company_reporting_scope_id && (
+            <div>
+              <dt>Reviewed company reporting scope</dt>
+              <dd>
+                <Link
+                  href={`/intelligence/${eid}/country-workflow?event=${encodeURIComponent(body.company_reporting_scope_id)}`}
+                >
+                  Open retained company reporting scope
+                </Link>
+              </dd>
+            </div>
+          )}
       </dl>
       {!!Object.keys(scope).length && (
         <section aria-label="Saved tax audit scope">

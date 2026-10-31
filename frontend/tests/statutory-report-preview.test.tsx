@@ -74,6 +74,33 @@ function fixture(count = 877) {
   };
 }
 
+it("links the retained company reporting scope without inventing it for older reports", () => {
+  const body = {
+    ...fixture(3),
+    category: "caro",
+    company_reporting_scope_id: "00000000-0000-4000-8000-000000000001",
+  };
+  const original = JSON.stringify(body);
+  const rendered = render(
+    <StatutoryReportPreview body={body} freshness="CURRENT" eid="E" />,
+  );
+  expect(
+    screen.getByRole("link", { name: "Open retained company reporting scope" }),
+  ).toHaveAttribute(
+    "href",
+    "/intelligence/E/country-workflow?event=00000000-0000-4000-8000-000000000001",
+  );
+  expect(JSON.stringify(body)).toBe(original);
+  rendered.rerender(
+    <StatutoryReportPreview body={fixture(3)} freshness="STALE" eid="E" />,
+  );
+  expect(
+    screen.queryByRole("link", {
+      name: "Open retained company reporting scope",
+    }),
+  ).not.toBeInTheDocument();
+});
+
 describe("retained statutory report preview", () => {
   it("pages all fields and source blocks independently while preserving the full saved body", () => {
     const body = fixture();
