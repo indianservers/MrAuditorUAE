@@ -229,13 +229,28 @@ test("UAE then India employment payroll: corrections, separate approval, exact e
       );
       const approved: WorkflowEvent = await reviewedResponse.json();
       expect(approved.body.review_status).toBe("REVIEWED");
+      // Approval selects a new immutable event and remounts the export scope.
+      // Wait for that selection before starting a download of the reviewed event.
+      await expect(
+        reviewer.getByLabel("Saved source or result", { exact: true }),
+      ).toHaveValue(approved.id);
       await expect(
         reviewer.getByRole("heading", { name: title, exact: true }),
       ).toBeVisible();
       const downloadEvent = reviewer.waitForEvent("download");
+      const exportResponse = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${approved.id}/export?format=xlsx`) &&
+          r.request().method() === "GET",
+      );
       await reviewer
         .getByRole("button", { name: "Export XLSX", exact: true })
         .click();
+      const exported = await exportResponse;
+      expect(
+        exported.status(),
+        exported.ok() ? "Reviewed XLSX response" : await exported.text(),
+      ).toBe(200);
       const download = await (await downloadEvent).path();
       expect(download).not.toBeNull();
       execFileSync(

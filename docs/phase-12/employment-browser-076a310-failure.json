@@ -1,0 +1,47 @@
+{
+  "recorded_date": "2026-10-31",
+  "hosted_source": "076a310891822fc7f2877c68f04ad68bf6156c17",
+  "run_id": 41182297603,
+  "browser_job_id": 124482002637,
+  "result": {
+    "passed": 19,
+    "failed": 1,
+    "duration": "13.0 minutes"
+  },
+  "failure": "Payroll browser case timed out after 20 seconds waiting for XLSX download after independent approval",
+  "observed": [
+    "UAE payroll calculation and independent approval reached successfully before failure",
+    "Original reviewer capture shows v2 CURRENT, REVIEWED, zero exceptions and normal export controls without an export error",
+    "The test awaited the review HTTP response but did not await the newly approved event selection",
+    "CountryWorkflows selects the new event after the mutation; IntelligenceExports intentionally aborts downloads when its event scope unmounts"
+  ],
+  "interpretation": "A selection/remount race is consistent with code and capture; not a verified server export failure or a confirmed fixed browser pass",
+  "correction": [
+    "Await Saved source or result value equal to the approved event ID before export",
+    "Assert the GET export response is 200 for that exact approved event; avoid decoding successful binary export as text",
+    "Preserve export-component abort-on-scope-change behavior"
+  ],
+  "local_checks": {
+    "scoped_eslint": "PASS",
+    "typescript": "PASS",
+    "existing_export_component_tests": 10
+  },
+  "rerun": "PENDING_NEW_SOURCE_PUSH",
+  "limits": [
+    "The failed run did not reach India, missing-July, withdrawal or successful export assertions",
+    "Two original failure captures inspected; no successful payroll browser screenshot claimed",
+    "Complete backend verify job remains live"
+  ],
+  "files": [
+    {
+      "path": "docs/phase-12/screenshots/076a310-employment-failure/test-failed-1.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "33d550d4c0d50ff23a0a11895986fced181d5e3ab79ecf6037f192a7b82a8e5f"
+    },
+    {
+      "path": "docs/phase-12/screenshots/076a310-employment-failure/test-failed-2.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "1164fae836e79e036b07661cd61907565c20a40b0fce04df61e1e9ed0bd78cb2"
+    }
+  ]
+}
