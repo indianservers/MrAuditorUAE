@@ -1,0 +1,46 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "076a310891822fc7f2877c68f04ad68bf6156c17",
+  "change": "Enforce expanded payroll observation limit only when a row is emitted; already-covered months may be traversed at the exact limit",
+  "checks": {
+    "full_backend_unit": {
+      "passed": 5088,
+      "skipped": 4
+    },
+    "employment_unit_cases": 32,
+    "owned_http_payroll": {
+      "passed": 6,
+      "scope": "AE/IN employment and existing payroll-ledger regressions"
+    },
+    "mypy": {
+      "status": "PASS",
+      "application_files": 441
+    },
+    "ruff": "PASS",
+    "api_snapshots": "PASS"
+  },
+  "new_regressions": [
+    "Exact emitted-row limit succeeds when a subsequent declared month already has a control",
+    "One emitted row beyond limit is rejected",
+    "Conflicting episode dates across components rejected",
+    "Duplicate independent payroll entry controls rejected",
+    "Cancelled register history outside review months rejected"
+  ],
+  "limits": [
+    "Test-sized monkeypatch exercises the same configured production limit branch; production remains 20000 observations",
+    "No new client or statutory qualification",
+    "Hosted browser and complete backend remain in progress for prior sources; new source requires its own CI"
+  ],
+  "files": [
+    {
+      "path": "backend/app/modules/country_workflows/employment_payroll.py",
+      "normalization": "LF",
+      "sha256": "5e8ffd5703882ad0d1907091aebed0c34f54823c5684f2ef9bb2668ed1455a6a"
+    },
+    {
+      "path": "backend/tests/unit/test_employment_payroll.py",
+      "normalization": "LF",
+      "sha256": "f80e1c01cc54e34fdca60d077e3982de3af32e64c036090e8c9d7a83210a656c"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8, allow_inf_nan=
 Component = Literal["BASIC", "ALLOWANCE", "GROSS", "DEDUCTION", "BONUS", "OTHER_ASSESSED"]
 Kind = Literal["regular", "arrears", "settlement", "assessed_adjustment"]
 CONTRACT = "employment-payroll-period-controls/1"
+MAX_OBSERVATIONS = 20000
 ROLES = {
     "employment": "employment-payroll-episodes",
     "controls": "employment-payroll-controls",
@@ -294,10 +295,12 @@ def reconcile(data, tables):
         cursor = max(start, date.fromisoformat(episode["started_on"])).replace(day=1)
         last = min(end, date.fromisoformat(episode["ended_on"]) if episode["ended_on"] else end)
         while cursor <= last:
-            if len(rows) + len(history) >= 20000:
-                raise ValueError("Employment/month expansion exceeds the 20,000-observation bound")
             month = cursor.strftime("%Y-%m")
             if key + (month,) not in coverage:
+                if len(rows) + len(history) >= MAX_OBSERVATIONS:
+                    raise ValueError(
+                        "Employment/month expansion exceeds the 20,000-observation bound"
+                    )
                 rows.append(
                     {
                         "id": "monthly-coverage:" + episode["id"] + ":" + month,
@@ -319,7 +322,7 @@ def reconcile(data, tables):
             )
             if cursor == date.max:
                 break
-    if len(rows) + len(history) > 20000:
+    if len(rows) + len(history) > MAX_OBSERVATIONS:
         raise ValueError("Employment/month expansion exceeds the 20,000-observation bound")
     return {
         **result(

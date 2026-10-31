@@ -203,3 +203,52 @@ def test_decimal_differences_preserve_low_units_on_large_salary():
     p["register"][0]["amount"] = "99999999999999999999.00000002"
     result = run(p, tolerance="0")
     assert result["rows"][0]["difference"] == "1E-8" and result["blocked"]
+
+
+@pytest.mark.parametrize("limit,accepted", [(3, True), (2, False)])
+def test_observation_bound_counts_only_emitted_rows(monkeypatch, limit, accepted):
+    from app.modules.country_workflows import employment_payroll
+
+    monkeypatch.setattr(employment_payroll, "MAX_OBSERVATIONS", limit)
+    p = population()
+    for role in ("controls", "register"):
+        p[role][0].update(payroll_month="2026-07", earning_month="2026-07")
+    p["controls"][0].update(service_from="2026-07-01", service_through="2026-07-31")
+    if accepted:
+        result = run(p, as_of="2026-07-31")
+        assert len(result["rows"]) == 3
+        assert sum(r["state"] == "MISSING_EMPLOYEE_MONTH_CONTROL" for r in result["rows"]) == 1
+    else:
+        with pytest.raises(ValueError, match="observation bound"):
+            run(p, as_of="2026-07-31")
+
+
+def test_conflicting_episode_dates_across_components_are_rejected():
+    p = population()
+    p["employment"].append(
+        dict(p["employment"][0], id="E2", component="BASIC", started_on="2026-06-16")
+    )
+    with pytest.raises(ValueError, match="dates conflict"):
+        run(p)
+
+
+def test_duplicate_expected_entries_are_rejected_before_amount_comparison():
+    p = population()
+    p["controls"].append(dict(p["controls"][0], id="C2"))
+    with pytest.raises(ValueError, match="duplicate independently assessed"):
+        run(p)
+
+
+def test_register_revisions_outside_the_review_window_are_rejected():
+    p = population()
+    p["register"].append(
+        dict(
+            p["register"][0],
+            id="R0",
+            payroll_month="2026-05",
+            earning_month="2026-05",
+            record_status="cancelled",
+        )
+    )
+    with pytest.raises(ValueError, match="revisions must lie within"):
+        run(p)
