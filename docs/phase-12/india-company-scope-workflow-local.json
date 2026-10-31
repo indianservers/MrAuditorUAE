@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-31",
+  "stage": "CONNECTED_RETAINED_WORKPAPER_NOT_STATUTORY_ISSUANCE",
+  "workflow": "india-company-reporting-scope",
+  "validation": {
+    "backend_unit": {"passed": 5002, "skipped": 4, "failed": 0, "report": "india-company-scope-all-unit.xml"},
+    "focused_core_and_http": {"passed": 56, "failed": 0, "report": "india-company-scope-workflow.xml"},
+    "final_http_after_blocked_flag": {"passed": 16, "failed": 0, "report": "india-company-scope-workflow-final.xml"},
+    "frontend": {"passed": 535, "files": 95, "report": "india-company-scope-frontend.xml"},
+    "backend_mypy": "438 source files passed",
+    "ruff": "changed backend files passed",
+    "frontend_types": "passed",
+    "frontend_scoped_eslint": "passed",
+    "frontend_production_build": "passed",
+    "runtime_api_snapshot_check": "passed",
+    "frontend_api_type_check": "passed",
+    "playwright_discovery": "17 tests in 15 files; includes new India unresolved-scope browser test",
+    "new_browser_execution": "PENDING_HOSTED_RUN"
+  },
+  "behaviors_checked": [
+    "All eight retained source roles separately invalidate immutable history when replaced",
+    "Exact country and financial period binding, distinct documents, pinned originals and actual private-object hash verification",
+    "Contributor self-review forbidden and independent review retained",
+    "Complete XLSX row export preserves distinct company-audit duty",
+    "Unresolved adoption or company scope blocks approval",
+    "Frontend retains unknown flags and blank monetary values as null, exact INR text and eight distinct evidence roles"
+  ],
+  "qualification_limits": [
+    "Three Gazette originals are pinned; remaining legal source identities need independent assessment and no complete original-byte legal-chain qualification is claimed.",
+    "New HTTP tests use explicitly synthetic unpinned legal evidence, not authority qualification.",
+    "New browser case deliberately retains unqualified guidance copies with unresolved adoption and must remain blocked.",
+    "No real client files or independently approved real-client results are supplied.",
+    "AS/Ind AS, Schedule III, complete CARO clauses, special regimes and professional issuance remain separate unfinished requirements."
+  ]
+}

@@ -101,6 +101,7 @@ import { UAECTAuditDuty } from "./uae-ct-audit-duty";
 import { UAECTAuditDutyResult } from "./uae-ct-audit-duty-result";
 import { UAETaxGroupWorkpaper, UAETaxGroupResult } from "./uae-tax-group-workpaper";
 import { UAECompanyAccounts, UAECompanyAccountsResult } from "./uae-company-accounts";
+import { IndiaCompanyScope, IndiaCompanyScopeResult } from "./india-company-scope";
 import { draftCurrency, reportingCurrency } from "./workflow-currency";
 import { TurnoverBooksComposition } from "./turnover-books-composition";
 import {
@@ -2542,6 +2543,9 @@ export function CountryWorkflows({
       )}
       {mode === "country-workflow" && config.data?.country === "AE" && (
         <UAECompanyAccounts key={`company-accounts:${eid}`} eid={eid} evidence={inputs.data?.evidence || []} onCreated={setSelected} />
+      )}
+      {mode === "country-workflow" && config.data?.country === "IN" && (
+        <IndiaCompanyScope key={`india-company:${eid}`} eid={eid} evidence={inputs.data?.evidence || []} onCreated={setSelected} />
       )}
       {["workflow-source", "country-workflow"].includes(mode) &&
         config.data?.country === "IN" && (
@@ -7379,6 +7383,9 @@ export function CountryWorkflows({
           )}
           {body.workflow === "uae-company-accounts-duty" && (
             <UAECompanyAccountsResult row={rows[0]} />
+          )}
+          {body.workflow === "india-company-reporting-scope" && (
+            <IndiaCompanyScopeResult row={rows[0]} />
           )}
           {body.inventory_quantity_controls && (
             <InventoryEvidenceTable

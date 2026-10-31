@@ -1,4 +1,13 @@
 def approval_error(body):
+    if body.get("workflow") == "india-company-reporting-scope":
+        from app.modules.country_workflows.india_company_scope import BINDING, CONTRACT
+
+        if (
+            body.get("contract") != CONTRACT
+            or body.get("company_scope_document_binding") != BINDING
+            or body.get("exception_count") != 0
+        ):
+            return "Regenerate India reporting scope with current originals and resolved adoption and applicability facts"
     if body.get("workflow") == "uae-tax-group-statements":
         from app.modules.country_workflows.uae_tax_group_workpaper import (
             BINDING,

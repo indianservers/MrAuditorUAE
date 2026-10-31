@@ -23,6 +23,7 @@ from app.modules.country_workflows.benefit_settlement_source import BenefitSettl
 from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.contribution_source import ContributionSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
+from app.modules.country_workflows.india_company_scope import IndiaCompanyScopeInput
 from app.modules.country_workflows.inventory_performance import InventoryPerformanceInput
 from app.modules.country_workflows.payroll_proration_source import ProratedBasisInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
@@ -362,6 +363,16 @@ async def uae_company_accounts_duty(
     eid: uuid.UUID, data: CompanyAccountsInput, db: DB, ctx: Actor, request: Request
 ):
     from app.modules.country_workflows.uae_company_accounts import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/india-company-reporting-scope", status_code=201)
+async def india_company_reporting_scope(
+    eid: uuid.UUID, data: IndiaCompanyScopeInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.india_company_scope import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))

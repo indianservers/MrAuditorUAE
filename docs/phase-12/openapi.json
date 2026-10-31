@@ -28301,6 +28301,142 @@
         }
       }
     },
+    "/api/v1/intelligence/engagements/{eid}/india-company-reporting-scope": {
+      "post": {
+        "tags": [
+          "Accounting intelligence"
+        ],
+        "summary": "India Company Reporting Scope",
+        "operationId": "india_company_reporting_scope_api_v1_intelligence_engagements__eid__india_company_reporting_scope_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Eid"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IndiaCompanyScopeInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
       "post": {
         "tags": [
@@ -61921,6 +62057,341 @@
         ],
         "title": "CompanyAccountsInput"
       },
+      "CompanyFacts": {
+        "properties": {
+          "country": {
+            "type": "string",
+            "const": "IN",
+            "title": "Country"
+          },
+          "entity_reference": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Entity Reference"
+          },
+          "financial_period_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Financial Period Start"
+          },
+          "financial_period_end": {
+            "type": "string",
+            "format": "date",
+            "title": "Financial Period End"
+          },
+          "report_date": {
+            "type": "string",
+            "format": "date",
+            "title": "Report Date"
+          },
+          "is_indian_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Indian Company"
+          },
+          "is_foreign_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Foreign Company"
+          },
+          "is_private_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Private Company"
+          },
+          "is_public_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Public Company"
+          },
+          "banking_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Banking Company"
+          },
+          "insurance_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Insurance Company"
+          },
+          "section8_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section8 Company"
+          },
+          "one_person_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "One Person Company"
+          },
+          "holding_or_subsidiary": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Holding Or Subsidiary"
+          },
+          "holding_or_subsidiary_of_public_company": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Holding Or Subsidiary Of Public Company"
+          },
+          "governed_by_special_act": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Governed By Special Act"
+          },
+          "other_special_exemption_claimed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Special Exemption Claimed"
+          },
+          "small_paid_up_capital": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Small Paid Up Capital"
+          },
+          "preceding_financial_year_turnover": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preceding Financial Year Turnover"
+          },
+          "caro_capital_reserves_and_surplus": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caro Capital Reserves And Surplus"
+          },
+          "caro_max_bank_fi_borrowings": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caro Max Bank Fi Borrowings"
+          },
+          "caro_current_year_total_revenue": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caro Current Year Total Revenue"
+          },
+          "latest_audited_turnover": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Audited Turnover"
+          },
+          "max_bank_fi_body_corporate_borrowings": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Bank Fi Body Corporate Borrowings"
+          },
+          "financial_statements_filing_default": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Financial Statements Filing Default"
+          },
+          "annual_return_filing_default": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Annual Return Filing Default"
+          },
+          "statement_scope": {
+            "type": "string",
+            "enum": [
+              "standalone",
+              "consolidated"
+            ],
+            "title": "Statement Scope"
+          },
+          "facts_assessment": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Facts Assessment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "country",
+          "entity_reference",
+          "financial_period_start",
+          "financial_period_end",
+          "report_date",
+          "is_indian_company",
+          "is_foreign_company",
+          "is_private_company",
+          "is_public_company",
+          "banking_company",
+          "insurance_company",
+          "section8_company",
+          "one_person_company",
+          "holding_or_subsidiary",
+          "holding_or_subsidiary_of_public_company",
+          "governed_by_special_act",
+          "other_special_exemption_claimed",
+          "small_paid_up_capital",
+          "preceding_financial_year_turnover",
+          "caro_capital_reserves_and_surplus",
+          "caro_max_bank_fi_borrowings",
+          "caro_current_year_total_revenue",
+          "latest_audited_turnover",
+          "max_bank_fi_body_corporate_borrowings",
+          "financial_statements_filing_default",
+          "annual_return_filing_default",
+          "statement_scope",
+          "facts_assessment"
+        ],
+        "title": "CompanyFacts"
+      },
       "Confirmation": {
         "properties": {
           "code": {
@@ -64070,6 +64541,79 @@
           "assessment"
         ],
         "title": "ImportVATSourceInput"
+      },
+      "IndiaCompanyScopeInput": {
+        "properties": {
+          "profile": {
+            "type": "string",
+            "const": "india-company-reporting-scope/1",
+            "title": "Profile"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Label"
+          },
+          "facts": {
+            "$ref": "#/components/schemas/CompanyFacts"
+          },
+          "adopted_from": {
+            "type": "string",
+            "format": "date",
+            "title": "Adopted From"
+          },
+          "adopted_through": {
+            "type": "string",
+            "format": "date",
+            "title": "Adopted Through"
+          },
+          "source_chain_status": {
+            "type": "string",
+            "enum": [
+              "unresolved",
+              "independently_assessed"
+            ],
+            "title": "Source Chain Status"
+          },
+          "other_operative_changes": {
+            "type": "string",
+            "enum": [
+              "unresolved",
+              "assessed_none"
+            ],
+            "title": "Other Operative Changes"
+          },
+          "legal_adoption_assessment": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Legal Adoption Assessment"
+          },
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/ScopeDocument"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 8,
+            "title": "Documents"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "profile",
+          "label",
+          "facts",
+          "adopted_from",
+          "adopted_through",
+          "source_chain_status",
+          "other_operative_changes",
+          "legal_adoption_assessment",
+          "documents"
+        ],
+        "title": "IndiaCompanyScopeInput"
       },
       "IndiaStatements": {
         "properties": {
@@ -67873,6 +68417,42 @@
           "active"
         ],
         "title": "ScheduleState"
+      },
+      "ScopeDocument": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "companies_act",
+              "small_company_amendment",
+              "caro_order",
+              "caro_commencement",
+              "ifc_notification",
+              "ifc_corrigendum",
+              "legal_adoption",
+              "company_facts"
+            ],
+            "title": "Role"
+          },
+          "evidence_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Evidence Version Id"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$",
+            "title": "Sha256"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "role",
+          "evidence_version_id",
+          "sha256"
+        ],
+        "title": "ScopeDocument"
       },
       "ScopeInput": {
         "properties": {

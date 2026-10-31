@@ -1,0 +1,42 @@
+India company reporting scope workpaper
+
+Open an India engagement for the exact financial period, then use Assess India
+company audit, CARO and IFC reporting scope in Country workflows. The API is
+POST /api/v1/intelligence/engagements/{eid}/india-company-reporting-scope.
+
+The workpaper keeps small-company classification, Companies Act section 139
+audit, CARO standalone matters, consolidated paragraph 3(xxi), and section
+143(3)(i) IFC reporting separate. CARO/IFC exemptions do not remove the separate
+company-audit candidate. Unknown flags and blank INR amounts remain unknown.
+Current-year revenue, immediately preceding-year turnover, latest audited
+turnover and the two borrowing populations are separate inputs.
+
+Retain eight distinct latest clean evidence versions: Companies Act, small-
+company amendment, CARO original order, CARO commencement amendment, IFC
+notification, IFC corrigendum, separate period-specific legal adoption, and
+separate company facts. Their evidence version IDs and SHA256 values are saved.
+Original bytes are verified in the private object store. Three Gazette files
+are pinned to the retained source-assessment.json. The Act, CARO order and IFC
+corrigendum identities are independently assessed; no automatic authenticity
+or complete legal-chain qualification is claimed. The ICAI guidance reproduction
+does not replace these original legal documents.
+
+The adoption window must cover the exact engagement period and assessment
+date. Unresolved adoption, other operative changes or any unresolved candidate
+blocks independent approval, both in the UI and API. Uploaders and the workpaper
+preparer cannot independently approve their own contribution. Replacing any
+source version makes old results stale without rewriting the retained result.
+Existing complete row XLSX/JSON exports and event review apply.
+
+The core covers CARO 2020 periods commencing from 1 April 2021. It uses the
+small-company definition effective 1 December 2025 only for eligible balance
+sheet dates; earlier definitions remain pending. Financial IFC thresholds are
+strict and joined with AND pursuant to the 2017 corrigendum. Filing-default
+facts affect private-company IFC exemption separately. Special regimes and
+foreign-company audit/IFC scope remain pending where not established.
+
+Workflow review is not a statutory opinion, audit completion or authenticated
+legal adoption. AS/Ind AS selection, Schedule III division and complete reporting
+clauses remain separate work. Synthetic tests, including the browser case that
+deliberately retains unqualified guidance copies and leaves adoption unresolved,
+are not real client qualification. Real UAE/India pilots belong under pilot-data.

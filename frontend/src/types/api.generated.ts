@@ -2938,6 +2938,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intelligence/engagements/{eid}/india-company-reporting-scope": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** India Company Reporting Scope */
+        post: operations["india_company_reporting_scope_api_v1_intelligence_engagements__eid__india_company_reporting_scope_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/intelligence/engagements/{eid}/contribution-obligation-source": {
         parameters: {
             query?: never;
@@ -7493,6 +7510,80 @@ export interface components {
             /** Fact Sha256 */
             fact_sha256: string;
         };
+        /** CompanyFacts */
+        CompanyFacts: {
+            /**
+             * Country
+             * @constant
+             */
+            country: "IN";
+            /** Entity Reference */
+            entity_reference: string;
+            /**
+             * Financial Period Start
+             * Format: date
+             */
+            financial_period_start: string;
+            /**
+             * Financial Period End
+             * Format: date
+             */
+            financial_period_end: string;
+            /**
+             * Report Date
+             * Format: date
+             */
+            report_date: string;
+            /** Is Indian Company */
+            is_indian_company: boolean | null;
+            /** Is Foreign Company */
+            is_foreign_company: boolean | null;
+            /** Is Private Company */
+            is_private_company: boolean | null;
+            /** Is Public Company */
+            is_public_company: boolean | null;
+            /** Banking Company */
+            banking_company: boolean | null;
+            /** Insurance Company */
+            insurance_company: boolean | null;
+            /** Section8 Company */
+            section8_company: boolean | null;
+            /** One Person Company */
+            one_person_company: boolean | null;
+            /** Holding Or Subsidiary */
+            holding_or_subsidiary: boolean | null;
+            /** Holding Or Subsidiary Of Public Company */
+            holding_or_subsidiary_of_public_company: boolean | null;
+            /** Governed By Special Act */
+            governed_by_special_act: boolean | null;
+            /** Other Special Exemption Claimed */
+            other_special_exemption_claimed: boolean | null;
+            /** Small Paid Up Capital */
+            small_paid_up_capital: number | string | null;
+            /** Preceding Financial Year Turnover */
+            preceding_financial_year_turnover: number | string | null;
+            /** Caro Capital Reserves And Surplus */
+            caro_capital_reserves_and_surplus: number | string | null;
+            /** Caro Max Bank Fi Borrowings */
+            caro_max_bank_fi_borrowings: number | string | null;
+            /** Caro Current Year Total Revenue */
+            caro_current_year_total_revenue: number | string | null;
+            /** Latest Audited Turnover */
+            latest_audited_turnover: number | string | null;
+            /** Max Bank Fi Body Corporate Borrowings */
+            max_bank_fi_body_corporate_borrowings: number | string | null;
+            /** Financial Statements Filing Default */
+            financial_statements_filing_default: boolean | null;
+            /** Annual Return Filing Default */
+            annual_return_filing_default: boolean | null;
+            /**
+             * Statement Scope
+             * @enum {string}
+             */
+            statement_scope: "standalone" | "consolidated";
+            /** Facts Assessment */
+            facts_assessment: string;
+        };
         /** Confirmation */
         Confirmation: {
             /** Code */
@@ -8343,6 +8434,41 @@ export interface components {
             label: string;
             /** Assessment */
             assessment: string;
+        };
+        /** IndiaCompanyScopeInput */
+        IndiaCompanyScopeInput: {
+            /**
+             * Profile
+             * @constant
+             */
+            profile: "india-company-reporting-scope/1";
+            /** Label */
+            label: string;
+            facts: components["schemas"]["CompanyFacts"];
+            /**
+             * Adopted From
+             * Format: date
+             */
+            adopted_from: string;
+            /**
+             * Adopted Through
+             * Format: date
+             */
+            adopted_through: string;
+            /**
+             * Source Chain Status
+             * @enum {string}
+             */
+            source_chain_status: "unresolved" | "independently_assessed";
+            /**
+             * Other Operative Changes
+             * @enum {string}
+             */
+            other_operative_changes: "unresolved" | "assessed_none";
+            /** Legal Adoption Assessment */
+            legal_adoption_assessment: string;
+            /** Documents */
+            documents: components["schemas"]["ScopeDocument"][];
         };
         /** IndiaStatements */
         IndiaStatements: {
@@ -9688,6 +9814,21 @@ export interface components {
             version: number;
             /** Active */
             active: boolean;
+        };
+        /** ScopeDocument */
+        ScopeDocument: {
+            /**
+             * Role
+             * @enum {string}
+             */
+            role: "companies_act" | "small_company_amendment" | "caro_order" | "caro_commencement" | "ifc_notification" | "ifc_corrigendum" | "legal_adoption" | "company_facts";
+            /**
+             * Evidence Version Id
+             * Format: uuid
+             */
+            evidence_version_id: string;
+            /** Sha256 */
+            sha256: string;
         };
         /** ScopeInput */
         ScopeInput: {
@@ -29624,6 +29765,106 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["CompanyAccountsInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    india_company_reporting_scope_api_v1_intelligence_engagements__eid__india_company_reporting_scope_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "x-tenant-id": string;
+            };
+            path: {
+                eid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IndiaCompanyScopeInput"];
             };
         };
         responses: {

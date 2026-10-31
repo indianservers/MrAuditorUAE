@@ -16,6 +16,7 @@ export default defineConfig({
     "adgm-accounts-release.spec.ts",
     "group-comparatives-release.spec.ts",
     "company-accounts-release.spec.ts",
+    "india-company-scope-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",
