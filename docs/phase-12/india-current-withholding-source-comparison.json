@@ -1,0 +1,53 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "134a26db028a868398f1a3a718bdc7eb2ce140ec",
+  "official_index": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+  "method": "Downloaded all four currently linked official XLSX files with normal TLS validation, bounded each file to 5 MiB, and compared exact bytes with the retained authority originals",
+  "results": [
+    {
+      "form": "138",
+      "current_index_label": "Version 1.2",
+      "retained_original": "docs/country-workflows/authority-references/form138-2026-07-22/protean-form138-22072026.xlsx",
+      "normalization": "ORIGINAL_BYTES",
+      "bytes": 34844,
+      "sha256": "d58fd86b69932c6a7a4f518990c17d2112f55c65042d9c3bf2799ed201cbaf6c",
+      "comparison": "EXACT_BYTES_IDENTICAL"
+    },
+    {
+      "form": "140",
+      "current_index_label": "Version 1.2",
+      "retained_original": "docs/country-workflows/authority-references/form140-2026-07-22/protean-form140-22072026.xlsx",
+      "normalization": "ORIGINAL_BYTES",
+      "bytes": 53035,
+      "sha256": "ec5d8a1138ac84fd5ed59f62aabb5b097479007d501cca98a27ba9c400a05f40",
+      "comparison": "EXACT_BYTES_IDENTICAL"
+    },
+    {
+      "form": "143",
+      "current_index_label": "Version 1.2",
+      "retained_original": "docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-22072026.xlsx",
+      "normalization": "ORIGINAL_BYTES",
+      "bytes": 37837,
+      "sha256": "c487ddd78125433aefc4063ccb93ebe820156c42e1d2a58986ae110c50fc51a7",
+      "comparison": "EXACT_BYTES_IDENTICAL"
+    },
+    {
+      "form": "144",
+      "current_index_label": "Version 1.2",
+      "retained_original": "docs/country-workflows/authority-references/form144-2026-07-22/protean-form144-22072026.xlsx",
+      "normalization": "ORIGINAL_BYTES",
+      "bytes": 53316,
+      "sha256": "5e78534c065133936a4bb594f310c10a44e25a0825fe9f7ff023b342730fd5da",
+      "comparison": "EXACT_BYTES_IDENTICAL"
+    }
+  ],
+  "decision": "NO_NEW_LAYOUT_PROFILE_CREATED",
+  "reason": "Current page labels changed or differ from dated workbook identity; current links still resolve to the retained July 22 originals. A page label does not establish a different layout or runtime/FVU qualification.",
+  "form138_q4": "Official regular-format and sample entries are still described as forthcoming; no downloadable Q4 source was found on this index. Existing unsupported-Q4 handling retained.",
+  "workbook_operations": "READ_ONLY_BYTE_COMPARISON; no cell edits, formulas or workbook authoring",
+  "remaining": [
+    "Actual pilot inputs, independent expected results and review records absent in both country folders",
+    "Live provider/ledger qualification needs authorized access and independent source controls",
+    "Complete statutory calculation, field-mapping and professional qualification remain unestablished by current structural inventories"
+  ]
+}
