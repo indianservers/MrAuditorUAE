@@ -950,6 +950,22 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("shows contradictory government salary beside employer salary and blocks pension approval", () => {
+    state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT",
+      body: { workflow: "uae-pension-review", title: "SYNTHETIC contradictory salary", review_status: "UNVERIFIED",
+        blocked: true, expected_total_complete: false, currency: "AED", expected_total: "700", reported_total: "2500",
+        rows: [{ id: "employer-1", subject: "SYNTHETIC-EMPLOYEE", period: "2026-06", component: "PENSION:EMPLOYER",
+          assessed_base: "19999.99", government_assessed_base: "20000", expected_amount: null, reported_amount: "1800",
+          difference: null, state: "GOVERNMENT_SUPPORT_SALARY_BASIS_MISMATCH" }] } };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+    expect(screen.getByRole("columnheader", { name: "government assessed base" })).toBeVisible();
+    expect(screen.getByRole("cell", { name: "19999.99" })).toBeVisible();
+    expect(screen.getByRole("cell", { name: "20000" })).toBeVisible();
+    expect(screen.getByText("GOVERNMENT_SUPPORT_SALARY_BASIS_MISMATCH")).toBeVisible();
+    expect(screen.getByText(/Resolve contradictory salary bases/)).toBeVisible();
+    expect(screen.getByRole("button", { name: "Independent approval" })).toBeDisabled();
+  });
   it("shows an explicit salary eligibility exclusion alongside zero pension contributions", () => {
     state.result = {id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT",
       body: {workflow: "uae-pension-review", title: "SYNTHETIC salary ceiling", review_status: "UNVERIFIED",

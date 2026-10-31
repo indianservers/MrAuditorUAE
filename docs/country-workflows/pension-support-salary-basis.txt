@@ -1,0 +1,40 @@
+UAE pension: salary consistency before government-support netting
+
+The employer-minus-government calculation previously resolved support for the
+same employee, registration, month and pension scope without comparing the two
+declared contribution-account salaries. Contradictory salaries could therefore
+produce a matched net employer amount, including an incorrectly resolved zero
+support amount after crossing an eligibility threshold.
+
+Salary-dependent support now requires exact numeric equality of the employer
+and government assessed salaries before applying caps. Support is salary-dependent
+when its formula uses a rate, has a positive minimum basis, or has an exclusive
+salary eligibility ceiling. Equal capped values do not resolve different raw
+salaries. Equivalent decimal strings do not create a false mismatch.
+
+GOVERNMENT_SUPPORT_SALARY_BASIS_MISMATCH leaves the expected net employer amount
+and difference unresolved, marks the total partial and blocks independent result
+approval. It retains the government source ID, assessed base, salary reference
+and whether a matching salary was required. The compact results table shows the
+government base beside the employer base. Full XLSX retains the conflict and
+its source details. No salary or support amount is silently substituted.
+
+An explicitly fixed support amount with no salary-based minimum, cap or
+eligibility ceiling remains independently assessed; an irrelevant zero salary
+does not change that fixed amount. Independent membership, eligibility and
+salary-definition assessments remain required. No authority, cohort, statutory
+rate, threshold, entitlement or rounding method is newly supplied by this fix.
+
+The new arithmetic examples use deliberately fictional contribution rates.
+One regression first reproduced the false unblocked result. Final unit cases
+cover threshold-driven zero support, different raw salaries hidden by a cap,
+equivalent decimal representations and genuinely salary-independent fixed
+support. Connected published-profile APIs verify the otherwise-equal aggregate
+reported total remains blocked, approval returns 409, the mismatch is exported,
+and prior source-withdrawal staleness still works. Local scanner/dispatch
+boundaries remain explicit doubles.
+
+Browser assertions added to the existing UAE release case use real hosted
+scanner/worker/source reviews, then check both visible salaries and disabled
+approval. Their execution and original screenshot inspection remain pending.
+No real client or statutory qualification is claimed by these synthetic checks.

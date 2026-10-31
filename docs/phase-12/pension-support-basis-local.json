@@ -1,0 +1,77 @@
+{
+  "recorded_at": "2026-10-31T05:25:43.123518+00:00",
+  "base_commit": "ead36530394531931db5254874e02367f7e97aae",
+  "scope": "Reject contradictory uncapped salary bases before salary-dependent government pension support is netted against employer contributions",
+  "reports": [
+    {
+      "path": "docs/phase-12/pension-support-basis-backend.xml",
+      "sha256": "5a76c43f0c0b5772c9ca9a22627602ae3dc0349c20c5791d0756b393ef957bf7",
+      "tests": 4972,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/pension-support-basis-frontend.xml",
+      "sha256": "4e1537eb71f7ba49648cc44d27b537fa2a81ddc57f8446b88516d3cfc8c7f04c",
+      "tests": 533,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "implementation_files": [
+    {
+      "path": "backend/app/modules/country_workflows/pension_calculations.py",
+      "normalization": "LF",
+      "sha256": "56b0f041042a8799be2fbddc5833eb22809be9d5ace179c427395165c65a5edf"
+    },
+    {
+      "path": "backend/tests/unit/test_pension_eligibility_ceiling.py",
+      "normalization": "LF",
+      "sha256": "498e81b205797a8f48d16d5cab709f2d0110c26ef7ae2180d84fb4672d81064a"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_pension_eligibility_ceiling.py",
+      "normalization": "LF",
+      "sha256": "aab8fd5a7f25869bf53493d741b18ab65c571430b483689d1e7c46547f9fff7c"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "normalization": "LF",
+      "sha256": "bf5caa500099956700dabb9870a0500dc5b98eadd49300539e0e9950127913cb"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "normalization": "LF",
+      "sha256": "6a1dab662822e6ea16a6ee39239713e99b16d1e910cbd36ee1176c0f47c17900"
+    },
+    {
+      "path": "frontend/e2e/pension-support-basis-browser-workflow.ts",
+      "normalization": "LF",
+      "sha256": "32d24fa28c5235898511334c3f1020bfc696a15dd42e5a9330d7b0fdf923cd76"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "a36755c477b865d9171f85fb5e64badc6ebe80216fafabfaa3b885ef1e9ebc62"
+    }
+  ],
+  "checks": {
+    "ruff_and_format": "PASS",
+    "mypy_436_app_files": "PASS",
+    "typescript": "PASS",
+    "targeted_eslint": "PASS",
+    "production_build": "PASS",
+    "api_contracts_and_generated_types": "PASS",
+    "browser_discovery": "2 combined country report cases discovered; local discovery-only identity metadata contains no credentials; browser execution pending hosted CI"
+  },
+  "regression": "Before the fix, contradictory support salary returned blocked=false; final tests require unresolved expected employer amount and blocked independent approval, including unchanged overall reported total",
+  "limitations": [
+    "All contribution rates, inputs and expected schedules in these checks are synthetic",
+    "No new statutory pension rule or default authority/cohort is adopted",
+    "Original new browser screenshots have not yet been executed or inspected",
+    "Local scanner and dispatch remain explicit doubles; four existing unit skips remain separately gated",
+    "Production, live-provider and real-client qualification remain open"
+  ]
+}

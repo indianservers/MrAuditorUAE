@@ -39,7 +39,8 @@ def pension(data, tables):
             if end > data.as_of or row["currency"] != "AED":
                 raise ValueError("Pension wage month must be closed and use AED")
             target[key] = row
-    selected, expected, problems, details = {}, {}, {}, {}
+    selected, expected, problems = {}, {}, {}
+    details: dict[tuple, dict[str, Any]] = {}
     grouped = defaultdict(list)
     for rule in tables["rules"]:
         grouped[tuple(rule[field] for field in (*SCOPE, "component"))].append(rule)
@@ -119,6 +120,24 @@ def pension(data, tables):
         support_key = identity({**basis, "component": "PENSION:GOVERNMENT"})
         if support_key not in expected:
             problems[key] = "GOVERNMENT_SUPPORT_UNRESOLVED"
+            continue
+        support_basis = bases[support_key]
+        support_rule = selected[support_key]
+        salary_dependent = (
+            support_rule["formula"] != "fixed"
+            or Decimal(support_rule["minimum_basis"]) > 0
+            or support_rule.get("exclusive_eligibility_ceiling") is not None
+        )
+        details[key].update(
+            {
+                "government_basis_source_id": support_basis["id"],
+                "government_assessed_base": support_basis["amount"],
+                "government_salary_basis_reference": support_basis["salary_basis_reference"],
+                "government_salary_basis_required": salary_dependent,
+            }
+        )
+        if salary_dependent and Decimal(support_basis["amount"]) != Decimal(basis["amount"]):
+            problems[key] = "GOVERNMENT_SUPPORT_SALARY_BASIS_MISMATCH"
             continue
         support = expected[support_key]
         gross = Decimal(details[key]["rounded_gross_contribution"])
@@ -209,6 +228,7 @@ def pension(data, tables):
             "No statutory rates, ceilings, government support eligibility or rounding methods are supplied by default",
             "Rules must cover the whole wage month; missing or overlapping rules block approval",
             "Employer-minus-government deducts only separately resolved support for the exact employee, registration, month and pension scope; no missing support is treated as zero",
+            "Salary-dependent government support and net employer contributions must use the same assessed contribution-account salary before caps; contradictory salary bases block netting, including threshold-driven zero-support claims",
             "Totals add employee, net employer and separately assessed government components; they are not solely the employer bank payment",
             "Filing, payment, arrears, penalties, gratuity and pension entitlements are not established by contribution comparison",
         ],

@@ -81,6 +81,57 @@ def test_zero_support_requires_an_actual_resolved_government_basis():
     assert employer["expected_amount"] is None
 
 
+def test_mismatched_salary_cannot_manufacture_zero_support_and_a_matched_net_employer():
+    bases, rules, reported = pension_fixture()
+    # The same member/month is given contradictory contribution-account salaries.
+    # The larger government basis crosses its support ceiling, but the employer's
+    # actual declared basis remains below that ceiling.
+    bases[2]["amount"] = "20000"
+    for rule in rules:
+        rule["exclusive_eligibility_ceiling"] = None
+    rules[2]["exclusive_eligibility_ceiling"] = "20000"
+    reported[1]["amount"] = "1800.00"
+    reported[2]["amount"] = "0"
+    result = run(bases, rules, reported)
+    employer = next(row for row in result["rows"] if row["component"] == "PENSION:EMPLOYER")
+    assert result["blocked"] and not result["expected_total_complete"]
+    assert employer["state"] == "GOVERNMENT_SUPPORT_SALARY_BASIS_MISMATCH"
+    assert employer["expected_amount"] is None and employer["difference"] is None
+    assert employer["government_assessed_base"] == "20000"
+    assert employer["government_basis_source_id"] == "B-GOVERNMENT"
+
+
+def test_equal_capped_values_do_not_hide_different_original_salaries():
+    bases, rules, reported = pension_fixture()
+    bases[2]["amount"] = "10000.02"
+    result = run(bases, rules, reported)
+    employer = next(row for row in result["rows"] if row["component"] == "PENSION:EMPLOYER")
+    assert result["blocked"]
+    assert employer["state"] == "GOVERNMENT_SUPPORT_SALARY_BASIS_MISMATCH"
+    assert employer["government_salary_basis_required"] is True
+
+
+def test_numeric_salary_equality_is_not_textual_equality():
+    bases, rules, reported = pension_fixture()
+    bases[2]["amount"] = "10000.0100"
+    assert not run(bases, rules, reported)["blocked"]
+
+
+def test_explicit_salary_independent_fixed_support_retains_its_separate_basis():
+    bases, rules, reported = pension_fixture()
+    bases[2]["amount"] = "0"
+    rules[2].update(
+        formula="fixed", rate=None, fixed_amount="300", salary_cap=None, minimum_basis="0"
+    )
+    for rule in rules:
+        rule.setdefault("fixed_amount", None)
+    result = run(bases, rules, reported)
+    assert not result["blocked"]
+    employer = next(row for row in result["rows"] if row["component"] == "PENSION:EMPLOYER")
+    assert employer["expected_amount"] == "1500.00"
+    assert employer["government_salary_basis_required"] is False
+
+
 @pytest.mark.parametrize("ceiling", ["0", "-1", "1000", "999.99"])
 def test_invalid_or_empty_eligibility_intervals_are_rejected(ceiling):
     params = threshold_profile().pension_parameters.model_dump(mode="json")

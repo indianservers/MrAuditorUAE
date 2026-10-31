@@ -1261,6 +1261,7 @@ export function CountryWorkflows({
                                 "membership_cohort",
                                 "currency",
                                 "assessed_base",
+                                "government_assessed_base",
                                 "eligibility_outcome",
                                 "esic_payroll_wages",
                                 "esic_reported_wages",
@@ -6598,6 +6599,13 @@ export function CountryWorkflows({
                 {body.currency} {body.reported_total}. Payment is not verified
                 by this comparison.
               </p>
+              {body.workflow === "uae-pension-review" && (
+                <p>
+                  Salary-dependent government support must use the employer's
+                  assessed contribution-account salary before caps. Resolve
+                  contradictory salary bases even when reported totals agree.
+                </p>
+              )}
               <label>
                 <input
                   type="checkbox"

@@ -1,4 +1,5 @@
 import { runMerchantBrowserWorkflow } from "./merchant-browser-workflow";
+import { runPensionSupportBasisBrowserWorkflow } from "./pension-support-basis-browser-workflow";
 import { runPayrollProrationBrowserWorkflow } from "./payroll-proration-browser-workflow";
 import { runWithholdingBoundaryBrowserWorkflow } from "./withholding-boundary-browser-workflow";
 import { runSavingsBrowserWorkflow } from "./savings-browser-workflow";
@@ -1009,6 +1010,14 @@ for (const code of ["AE", "IN"] as const) {
       );
     if (code === "IN")
       await runWithholdingBoundaryBrowserWorkflow(
+        page,
+        reviewer,
+        engagement.id,
+        identities.tenant_id,
+        screenshots,
+      );
+    if (code === "AE")
+      await runPensionSupportBasisBrowserWorkflow(
         page,
         reviewer,
         engagement.id,
