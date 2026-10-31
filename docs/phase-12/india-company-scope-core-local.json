@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-31",
+  "stage": "INTERNAL_CORE_NOT_EXPOSED_AS_WORKFLOW",
+  "scope": "India Companies Act audit, CARO and IFC candidate applicability kept separate; unknown facts remain pending.",
+  "validation": {
+    "focused_pytest": {"passed": 40, "failed": 0, "skipped": 0, "report": "india-company-scope-core.xml"},
+    "ruff": "passed for new core and tests",
+    "mypy": "passed for new core",
+    "frontend_changed": false,
+    "browser_execution_for_this_core": false
+  },
+  "existing_hosted_checks_observed": [
+    {"run": 41173165511, "source": "31aee3c", "frontend": "success", "ml": "success", "browser_smoke": "success", "containers": "success", "security": "success", "verify": "in_progress"},
+    {"run": 41172569896, "source": "ae6d90f", "frontend": "success", "ml": "success", "browser_smoke": "success", "containers": "success", "security": "success", "verify": "in_progress"}
+  ],
+  "limitations": [
+    "The new core has no API/UI integration or retained-source/adoption adapter yet.",
+    "Four source PDFs are retained with hashes and provenance in the India company-reporting source-assessment.json; the complete original-byte legal chain is not qualified.",
+    "Pilot folder structure and 154 synthetic examples exist; zero real client pilots or independently approved client results are claimed.",
+    "Earlier hosted checks are observations for their named source commits, not verification of this core."
+  ]
+}
