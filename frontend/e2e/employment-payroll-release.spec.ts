@@ -238,7 +238,7 @@ test("UAE then India employment payroll: corrections, separate approval, exact e
         reviewer.getByRole("heading", { name: title, exact: true }),
       ).toBeVisible();
       await reviewer
-        .getByLabel("Employment payroll view", { exact: true })
+        .getByRole("combobox", { name: "Employment payroll view", exact: true })
         .selectOption("history");
       await expect(
         reviewer.getByRole("cell", { name: "1500", exact: true }),
@@ -293,7 +293,7 @@ test("UAE then India employment payroll: corrections, separate approval, exact e
         { input: readFileSync(download!), timeout: 15000 },
       );
       await reviewer
-        .getByLabel("Employment payroll view", { exact: true })
+        .getByRole("combobox", { name: "Employment payroll view", exact: true })
         .selectOption("assessment");
       await expect(
         reviewer.getByRole("columnheader", {

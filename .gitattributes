@@ -298,3 +298,4 @@ docs/phase-12/9ef46ad-hosted-full.xml -text whitespace=cr-at-eol
 docs/phase-12/9ef46ad-hosted-coverage.json -text
 docs/phase-12/connector-current-isolated.xml -text whitespace=cr-at-eol
 docs/phase-12/windows-assignment-current.xml -text whitespace=cr-at-eol
+docs/phase-12/screenshots/dec7e6b-view-label-failure/*.png -text

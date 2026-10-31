@@ -1,0 +1,49 @@
+{
+  "recorded_date": "2026-10-31",
+  "failed_source": "dec7e6bec77b44b6b65db14ae7a12b76aa9ef209",
+  "run_id": 41184629028,
+  "browser_job_id": 124488905506,
+  "browser_result": {
+    "passed": 19,
+    "failed": 1,
+    "duration": "10.4 minutes"
+  },
+  "failure": "Exact getByLabel Employment payroll view timed out at selectOption(history) after independent approval",
+  "artifact": {
+    "id": 13036182767,
+    "bytes": 25232864,
+    "sha256": "39fc698f322db4ed7487b24338ea73e25b5b801e0adea106e2b7214de7ebe57f"
+  },
+  "visual_review": [
+    "Two original failure PNGs inspected",
+    "Author page shows comparisons/missing-months selector and exact 1000 expected/reported with zero difference; reviewer page retains v2 CURRENT/REVIEWED with zero exceptions",
+    "Narrow author viewport squeezes identity and state text; table now has minimum width within the existing horizontal scroll container"
+  ],
+  "correction": [
+    "Explicit aria-label gives the select a stable Employment payroll view accessible name",
+    "Component and browser lookups use the exact combobox name",
+    "No source, amount, review or server-filter behavior changes"
+  ],
+  "local_checks": {
+    "country_workflows_tests": 158,
+    "typescript": "PASS",
+    "scoped_eslint": "PASS"
+  },
+  "limits": [
+    "Current named-control and minimum-width corrections require a hosted browser rerun",
+    "Earlier 071dc57 passed all 20 browser cases, but predates these new views",
+    "Six HTTP view regressions and 546-test frontend baseline remain separately recorded; no new full-suite execution claimed here"
+  ],
+  "files": [
+    {
+      "path": "docs/phase-12/screenshots/dec7e6b-view-label-failure/test-failed-1.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "a2182ffc60f69b86b5bd72eafc99b4bf4a9e89ed34e8ec61d5851a71dda5e0b0"
+    },
+    {
+      "path": "docs/phase-12/screenshots/dec7e6b-view-label-failure/test-failed-2.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "1164fae836e79e036b07661cd61907565c20a40b0fce04df61e1e9ed0bd78cb2"
+    }
+  ]
+}

@@ -7113,6 +7113,7 @@ export function CountryWorkflows({
               <label>
                 Employment payroll view
                 <select
+                  aria-label="Employment payroll view"
                   value={employmentView}
                   onChange={(event) => {
                     setEmploymentView(event.target.value);
@@ -8018,7 +8019,11 @@ export function CountryWorkflows({
             )}
             {(body.workflow !== "bank-account-evidence" ||
               showRuleProvenance) && (
-              <table>
+              <table
+                style={body.workflow === "employment-payroll-review"
+                  ? { minWidth: 1500 }
+                  : undefined}
+              >
                 <caption>
                   {rows.length
                     ? `Source-linked schedule · rows ${offset + 1}–${offset + rows.length}; XLSX contains the full result`
