@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-31",
+  "base_commit": "c0bdbac876d37c6b9bfc3a9a0b3cd01fdf47c3a4",
+  "contract": "india-source-statements/2",
+  "validation": {
+    "backend_unit": {"passed": 5023, "skipped": 4, "failed": 0, "report": "india-statement-scope-all-unit.xml"},
+    "focused_scope_and_provenance": {"passed": 21, "failed": 0, "report": "india-statement-scope-focused.xml"},
+    "reporting_and_company_scope_http": {"passed": 17, "failed": 0, "report": "india-statement-scope-http.xml"},
+    "expanded_reporting_comparative_http": {"passed": 1, "failed": 0, "report": "india-statement-comparatives-http.xml"},
+    "frontend": {"passed": 536, "files": 96, "failed": 0, "report": "india-statement-scope-frontend.xml"},
+    "mypy": "438 application source files passed",
+    "ruff": "changed backend files passed",
+    "frontend_types_and_scoped_eslint": "passed",
+    "frontend_production_build": "passed",
+    "runtime_api_snapshots_and_frontend_api_types": "passed; API contract unchanged"
+  },
+  "coverage": [
+    "Conflicting/missing division and NBFC facts rejected; no string or integer substitutes for assessed boolean NBFC status",
+    "Unbalanced or wrong-currency comparative rejected before result persistence",
+    "Comparative-only accounts preserved, mapped and attributed to their actual prior snapshot",
+    "Unrecognized classifications, blank mapping groups and unassessed comparative classification changes rejected",
+    "Independent current and comparative totals and statement-equation checks",
+    "Real HTTP imports for both financial periods, review, report composition and complete exports",
+    "Legacy India statement contract fails freshness without overwriting its retained body",
+    "UI displays separate source references, absence states and comparative totals"
+  ],
+  "hosted_observation": {
+    "source": "c0bdbac",
+    "run": 41175316958,
+    "frontend": "success",
+    "containers": "success",
+    "ml": "success",
+    "security": "success",
+    "browser_smoke": "in_progress",
+    "verify": "in_progress",
+    "note": "Earlier source observation, not verification of these changes"
+  },
+  "limitations": [
+    "Synthetic tests are not real-client qualification or independent legal-source adoption.",
+    "No hosted browser screenshot for these statement UI changes has been inspected yet.",
+    "Full statement content, prescribed disclosure completeness, framework eligibility and professional issuance remain separate unfinished requirements."
+  ]
+}

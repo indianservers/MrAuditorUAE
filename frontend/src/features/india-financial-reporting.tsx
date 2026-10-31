@@ -17,6 +17,8 @@ type Statements = {
     division: string;
     totals: Record<string, string>;
     period_profit: string;
+    comparative_totals?: Record<string, string> | null;
+    comparative_period_profit?: string | null;
     balance_sheet_difference_including_unappropriated_profit: string;
     rows: {
       account_code: string;
@@ -26,6 +28,10 @@ type Statements = {
       source_closing_debit_positive: string;
       presented_amount: string;
       comparative_amount: string | null;
+      source_snapshot_id?: string | null;
+      comparative_source_snapshot_id?: string | null;
+      current_account_in_source?: boolean;
+      comparative_account_in_source?: boolean;
     }[];
     limitations: string[];
   };
@@ -93,6 +99,8 @@ export function IndiaFinancialReporting() {
               setEid(e.target.value);
               setSnapshot("");
               setMapping("");
+              setApplicability("");
+              setComparative("");
               setSelected("");
             }}
           >
@@ -273,6 +281,25 @@ export function IndiaFinancialReporting() {
                   )}
                 </div>
                 <p>Period profit: {detail.data.body.period_profit}</p>
+                {detail.data.body.comparative_totals && (
+                  <section aria-label="Retained comparative statement totals">
+                    <h3>Comparative totals</h3>
+                    <dl>
+                      {Object.entries(detail.data.body.comparative_totals).map(
+                        ([label, amount]) => (
+                          <div key={label}>
+                            <dt>{label}</dt>
+                            <dd>{amount}</dd>
+                          </div>
+                        ),
+                      )}
+                    </dl>
+                    <p>
+                      Comparative period profit:{" "}
+                      {detail.data.body.comparative_period_profit}
+                    </p>
+                  </section>
+                )}
                 <p>
                   Statement equation difference:{" "}
                   {
@@ -291,6 +318,8 @@ export function IndiaFinancialReporting() {
                           "Source balance",
                           "Presented amount",
                           "Comparative",
+                          "Current source snapshot",
+                          "Comparative source snapshot",
                         ].map((h) => (
                           <th key={h}>{h}</th>
                         ))}
@@ -302,9 +331,30 @@ export function IndiaFinancialReporting() {
                           <td>{r.account_code}</td>
                           <td>{r.name}</td>
                           <td>{r.statement_group}</td>
-                          <td>{r.source_closing_debit_positive}</td>
+                          <td>
+                            {r.current_account_in_source === false
+                              ? "Not in current source"
+                              : r.source_closing_debit_positive}
+                          </td>
                           <td>{r.presented_amount}</td>
-                          <td>{r.comparative_amount ?? "Not supplied"}</td>
+                          <td>
+                            {r.comparative_amount ??
+                              (r.comparative_account_in_source === false
+                                ? "Not in comparative source"
+                                : "Not supplied")}
+                          </td>
+                          <td>
+                            {r.source_snapshot_id ??
+                              (r.current_account_in_source === false
+                                ? "No current source account"
+                                : "Not recorded")}
+                          </td>
+                          <td>
+                            {r.comparative_source_snapshot_id ??
+                              (r.comparative_account_in_source === false
+                                ? "No comparative source account"
+                                : "Not recorded")}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

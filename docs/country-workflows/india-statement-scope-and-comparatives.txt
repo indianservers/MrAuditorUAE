@@ -1,0 +1,37 @@
+India source statement draft controls
+
+The existing Schedule III source-reconciliation workflow now requires one
+consistent declared division across the independently reviewed disclosure
+checklist. For Ind AS it also requires explicit, consistent boolean NBFC facts:
+Division II for assessed non-NBFCs and Division III for assessed NBFCs. A matching
+division on one row cannot hide a contradictory division or NBFC fact elsewhere.
+AS remains paired with Division I. This consistency check does not establish
+framework eligibility or replace the independently adopted statutory source chain.
+
+Current and comparative trial balances must each balance. Their presented
+statement equations must independently reconcile. Every source account needs
+an approved group and recognized consistent classification. Comparative-only
+accounts remain in the population and require mapping; their zero current
+presentation is explicitly marked as absence from the current source. Missing
+comparative accounts retain null comparative values rather than fabricated
+prior zero balances. Unassessed restatements and FX conversions are not performed.
+
+Rows now retain separate source_snapshot_id and comparative_source_snapshot_id
+plus explicit current/comparative account membership. The UI exposes these
+references and absence states, together with retained comparative totals and
+profit. It never attributes a prior-only account to the current snapshot.
+
+The india-source-statements/2 contract and normalized implementation fingerprint
+participate in freshness. Older drafts are retained but stale, including for
+downstream report composition; they need regeneration under the new controls.
+
+These are source-reconciled statement drafts. Cash flow, changes in equity,
+complete notes, AS/Ind AS measurement, all prescribed disclosures, special
+regimes, audit opinions and authorized issuance remain separate requirements.
+
+Source context checked 31 October 2026: MCA Schedule III amendment
+https://www.mca.gov.in/Ministry/pdf/NotificationScheduleIII_12102018.pdf
+(primary search text available, direct retrieval returned 403), and ICAI's
+Division III NBFC Ind AS guidance publication
+https://publication.icai.org/publication/1070 . These links are contextual
+references, not retained-original source qualification for an engagement.

@@ -5,7 +5,7 @@ import os
 import pytest
 
 from tests.integration.test_platform import environment as environment
-from tests.phase2.test_pipeline import committed
+from tests.phase2.test_pipeline import CSV, committed
 from tests.phase4.test_workflows import actor, setup
 from tests.qa_crud.regulatory_validation_fixtures import cases as validation_cases
 from tests.qa_crud.report_requirement_fixtures import declared_requirements
@@ -147,6 +147,45 @@ async def test_india_reviewed_mapping_reporting_template_and_historical_sources(
     assert output["body"]["totals"]["Assets"] == "-90.10000000"
     assert output["body"]["period_profit"] == "-100.20000000"
     assert output["body"]["checks"]["statement_equation_balanced"]
+    previous_period = await c.post(
+        "/api/v1/financial-periods",
+        headers=h,
+        json={
+            "entity_id": options["entity_id"],
+            "start_date": "2025-01-01",
+            "end_date": "2025-12-31",
+        },
+    )
+    assert previous_period.status_code == 201, previous_period.text
+    _, previous_snapshot = await committed(
+        c,
+        h,
+        {**options, "period_id": previous_period.json()["id"]},
+        CSV.replace(b"2026-", b"2025-"),
+    )
+    comparative = await c.post(
+        prefix + "/india-statements",
+        headers=h,
+        json={
+            "snapshot_id": snapshot,
+            "comparative_snapshot_id": previous_snapshot,
+            "mapping_profile_id": mapping.json()["id"],
+            "applicability_id": case_review.json()["id"],
+            "division": "II",
+            "rationale": "SYNTHETIC independently reconciled prior and current populations",
+        },
+    )
+    assert comparative.status_code == 201, comparative.text
+    comparative_body = comparative.json()["body"]
+    assert comparative_body["comparative_totals"]["Assets"] == "-90.10000000"
+    assert comparative_body["comparative_period_profit"] == "-100.20000000"
+    assert comparative_body["comparative_checks"]["source_tb_balanced"] is True
+    assert comparative_body["comparative_checks"]["statement_equation_balanced"] is True
+    assert all(
+        row["source_snapshot_id"] == snapshot
+        and row["comparative_source_snapshot_id"] == previous_snapshot
+        for row in comparative_body["rows"]
+    )
     approved_statement = await c.post(
         f"/api/v1/intelligence/engagements/{eid}/events/{output['id']}/review",
         headers=reviewer[0],

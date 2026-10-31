@@ -194,6 +194,14 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if getattr(obj, "kind", None) == "india-financial-statements":
+        from app.modules.regulatory.india_reporting import CONTRACT, implementation_hash
+
+        if (
+            obj.body.get("contract") != CONTRACT
+            or obj.body.get("implementation_sha256") != implementation_hash()
+        ):
+            return False
     if (
         getattr(obj, "kind", None) == "country-workflow"
         and obj.body.get("workflow") == "uae-tax-group-statements"
