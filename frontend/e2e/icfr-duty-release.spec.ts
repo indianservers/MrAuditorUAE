@@ -174,6 +174,12 @@ test("UAE then India assessed ICFR duties retain separate scope, originals, revi
         exact: true,
       });
       await expect(references.getByRole("listitem")).toHaveCount(5);
+      const referencePanel = page
+        .getByText(/\d+ synthetic reference scenarios across country workflows/)
+        .locator("..");
+      await referencePanel.screenshot({
+        path: `test-results/country-reports/${country}-scenario-engagement-default.png`,
+      });
       await expect(
         references.getByText(
           new RegExp(`^RW-.*SYNTHETIC ${country === "AE" ? "IN" : "AE"} `),
@@ -197,6 +203,9 @@ test("UAE then India assessed ICFR duties retain separate scope, originals, revi
         .getByText("Expected synthetic outcome for RW-160", { exact: true })
         .click();
       await expect(references.locator("pre")).toContainText('"blocked": false');
+      await referencePanel.screenshot({
+        path: `test-results/country-reports/${country}-scenario-cross-country.png`,
+      });
       await expect(
         page.getByRole("combobox", { name: "Workflow", exact: true }),
       ).toHaveValue("icfr-duty-coverage");
