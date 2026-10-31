@@ -1,0 +1,22 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_commit": "40d1e6662f62c35af8e496eb7f3bcfbcc2b99e6c",
+  "execution": "Local complete backend tests/unit on Windows using owned patched dependency overlay",
+  "passed": 5134,
+  "skipped": 4,
+  "failures": 0,
+  "errors": 0,
+  "elapsed_seconds": 117.99,
+  "warnings": 2,
+  "scope": "Includes 164 operational engine fixtures and ICFR, pilot source preservation and existing backend unit regressions",
+  "original_report": {
+    "path": "docs/phase-12/icfr-catalogue-full-units.xml",
+    "normalization": "ORIGINAL_BYTES",
+    "sha256": "e17b13cf17b0b629f9549156f7a6bce6aba360292efb46868ce8cbe4cb1e3545"
+  },
+  "limits": [
+    "Unit suite only; not a full HTTP, hosted backend or real-client execution",
+    "Hosted source 9f6c1eb browser suite separately passed 21 cases; hosted full backend job 124507684596 remains pending",
+    "Actual client inputs, independent expected results and review records remain absent from both local pilot folders"
+  ]
+}
