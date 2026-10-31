@@ -51,6 +51,7 @@ test("UAE then India assessed ICFR duties retain separate scope, originals, revi
     actor.on("pageerror", (error) => errors.push(error.message));
   }
   mkdirSync("test-results/country-reports", { recursive: true });
+  await page.setViewportSize({ width: 2200, height: 1800 });
   try {
     await login(page, process.env.AUDITOS_SMOKE_EMAIL);
     await login(reviewer, process.env.AUDITOS_SMOKE_REVIEWER_EMAIL);

@@ -1,0 +1,46 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_commit": "da95c9593f53ec265e5720fa5ee729149229ddd5",
+  "run_id": 41193719314,
+  "job_id": 124515553813,
+  "conclusion": "SUCCESS",
+  "executed_cases": 21,
+  "elapsed": "12.2m",
+  "icfr_case_elapsed": "24.1s",
+  "artifact": {
+    "id": 13039269551,
+    "bytes": 26501077,
+    "sha256": "a4aaabd8a67592e8dc39c80b00c1f96e42867832638a3f4b5d42bd1eba4b1223",
+    "verified": "Exact length and digest before selected PNG extraction"
+  },
+  "visual_review": "All four original captures inspected. Defaults show only five engagement-country ICFR examples with country labels. All-country/all-workflow search shows RW-160 labelled India and expected outcome text. Both cross-country images clip the final part of the expanded JSON at the author page viewport; they are partial screenshots, not proof of the complete visible outcome.",
+  "screenshots": [
+    {
+      "path": "docs/phase-12/screenshots/da95c959-scenario-browser/AE-scenario-engagement-default.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "96611ac57729f9be11b0ab4c74a3e68cb817237be2adb78de929c78df62e14a7"
+    },
+    {
+      "path": "docs/phase-12/screenshots/da95c959-scenario-browser/AE-scenario-cross-country.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "336910fd9945a2d851ec4fefac16910b50af3c0c19b6c0348ea5038084e005d5"
+    },
+    {
+      "path": "docs/phase-12/screenshots/da95c959-scenario-browser/IN-scenario-engagement-default.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "9b2ea1117db26e511253e8d0f1eebb06858dcd2e245299bc70a74b914f1a440d"
+    },
+    {
+      "path": "docs/phase-12/screenshots/da95c959-scenario-browser/IN-scenario-cross-country.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "336910fd9945a2d851ec4fefac16910b50af3c0c19b6c0348ea5038084e005d5"
+    }
+  ],
+  "correction": "Author page viewport changed to 2200x1800, matching existing reviewer viewport; replacement hosted capture pending. No product data or original images altered.",
+  "limits": [
+    "Synthetic examples only; no client or full legal qualification",
+    "A passing text assertion does not prove that all expected-outcome lines appear in a screenshot",
+    "This source predates the new API scenario-evidence metadata; its separate HTTP checks are recorded elsewhere",
+    "Full backend verify still pending"
+  ]
+}
