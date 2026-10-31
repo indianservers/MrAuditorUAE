@@ -1,0 +1,49 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e",
+  "case": {
+    "id": "RW-152",
+    "title": "India cancelled document count discrepancy survives a large money tolerance",
+    "workflow": "india-document-series",
+    "country": "IN",
+    "sources": {
+      "books": [
+        {
+          "id": "SYN-books",
+          "registration": "27ABCDE5678G1Z8",
+          "period": "2026-06",
+          "doc_num": 1,
+          "serial_from": "SYN/0001",
+          "serial_to": "SYN/0010",
+          "issued": 10,
+          "cancelled": 2,
+          "net_issued": 8
+        }
+      ],
+      "reported": [
+        {
+          "id": "SYN-reported",
+          "registration": "27ABCDE5678G1Z8",
+          "period": "2026-06",
+          "doc_num": 1,
+          "serial_from": "SYN/0001",
+          "serial_to": "SYN/0010",
+          "issued": 10,
+          "cancelled": 1,
+          "net_issued": 9
+        }
+      ]
+    },
+    "expected": {
+      "exceptions": 1,
+      "blocked": false
+    },
+    "parameters": {
+      "currency": "INR",
+      "tolerance": "1000"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "dc6a225750d0b1418e16e3a9defc7b4baac535c4",
+  "scope": "Add separately assessed ICFR duty scenarios to the executable synthetic engine and preserved pilot catalogue",
+  "scenarios": 164,
+  "country_counts": {
+    "AE": 106,
+    "IN": 58
+  },
+  "new_cases": "RW-155 through RW-164: AE then IN; two required duties, separate assessed exemption, missing auditor scope, missing auditor check, pending authority adoption",
+  "checks": {
+    "focused_pytest_passed": 228,
+    "ruff": "PASS",
+    "api_snapshots": "PASS"
+  },
+  "preservation": "Historical root examples and catalogue unchanged; some historical examples predate explicit currency controls, so the full current export is retained under a separate version directory",
+  "limits": [
+    "Engine and CSV evidence only; no new HTTP or browser execution claimed by this receipt",
+    "Placeholder authority/facts UUIDs and hashes are fictional and are not accepted as uploaded source bindings",
+    "No professional, statutory, real-client or complete controls-effectiveness qualification"
+  ],
+  "files": [
+    {
+      "path": "backend/tests/unit/country_workflow_cases.py",
+      "normalization": "LF",
+      "sha256": "d08a694e0b8d824bd638193c258d1d7c4f69d1eb14b196308b5297943b3d40ff"
+    },
+    {
+      "path": "backend/tests/unit/test_country_workflows.py",
+      "normalization": "LF",
+      "sha256": "4f5b4adf01236542b651085f763069965b6538e0f28777a875d6727030db3a2f"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/scenarios.json",
+      "normalization": "LF",
+      "sha256": "2add9eedb05a89409f2ac3b9b2f0e1fa6ad5299eca8dd1900b305ef6fe02a7ee"
+    },
+    {
+      "path": "docs/country-workflows/scenario-matrix.json",
+      "normalization": "LF",
+      "sha256": "b1a9650c460a0bdcbc202b7b4b7e468b9fdf59d84d18d5494d272295a30d6974"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/versions/icfr-duty-coverage-2026-10-31/catalog.json",
+      "normalization": "LF",
+      "sha256": "ec482564da1a785ca595bb41cbd23048aa363da4c28a36369a957842a2b38343"
+    }
+  ],
+  "original_reports": [
+    {
+      "path": "docs/phase-12/icfr-catalogue.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "942f6780c6b4ab5aaba2c9db8c4421c46b3a0b8eefc1607694c3b1d9958b8c16"
+    }
+  ]
+}

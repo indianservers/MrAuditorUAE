@@ -1431,5 +1431,325 @@
     "expected": {
       "error": "withholding scopes must also agree"
     }
+  },
+  {
+    "id": "RW-155",
+    "title": "SYNTHETIC AE independently assessed ICFR separate-required",
+    "workflow": "icfr-duty-coverage",
+    "country": "AE",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "SUPPORTED"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-156",
+    "title": "SYNTHETIC AE independently assessed ICFR separate-exemption",
+    "workflow": "icfr-duty-coverage",
+    "country": "AE",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "NOT-APPLICABLE"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "NOT-APPLICABLE"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-157",
+    "title": "SYNTHETIC AE independently assessed ICFR missing-scope",
+    "workflow": "icfr-duty-coverage",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "MISSING_SCOPE_DECISION"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "SUPPORTED"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-158",
+    "title": "SYNTHETIC AE independently assessed ICFR missing-check",
+    "workflow": "icfr-duty-coverage",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "MISSING"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-159",
+    "title": "SYNTHETIC AE independently assessed ICFR pending-adoption",
+    "workflow": "icfr-duty-coverage",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "PENDING_AUTHORITY_ADOPTION"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "SUPPORTED"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-160",
+    "title": "SYNTHETIC IN independently assessed ICFR separate-required",
+    "workflow": "icfr-duty-coverage",
+    "country": "IN",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "SUPPORTED"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-161",
+    "title": "SYNTHETIC IN independently assessed ICFR separate-exemption",
+    "workflow": "icfr-duty-coverage",
+    "country": "IN",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "NOT-APPLICABLE"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "NOT-APPLICABLE"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-162",
+    "title": "SYNTHETIC IN independently assessed ICFR missing-scope",
+    "workflow": "icfr-duty-coverage",
+    "country": "IN",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "MISSING_SCOPE_DECISION"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "SUPPORTED"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-163",
+    "title": "SYNTHETIC IN independently assessed ICFR missing-check",
+    "workflow": "icfr-duty-coverage",
+    "country": "IN",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "MISSING"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "RW-164",
+    "title": "SYNTHETIC IN independently assessed ICFR pending-adoption",
+    "workflow": "icfr-duty-coverage",
+    "country": "IN",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "PENDING_AUTHORITY_ADOPTION"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "SUPPORTED"
+        ]
+      ]
+    }
   }
 ]

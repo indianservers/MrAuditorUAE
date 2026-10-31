@@ -1,0 +1,106 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e",
+  "case": {
+    "id": "RW-156",
+    "title": "SYNTHETIC AE independently assessed ICFR separate-exemption",
+    "workflow": "icfr-duty-coverage",
+    "country": "AE",
+    "sources": {
+      "scopes": [
+        {
+          "subject": "SYN-COMPONENT",
+          "engagement_country": "AE",
+          "reporting_issuer": "SYN-ISSUER",
+          "relationship": "component",
+          "period_start": "2026-06-01",
+          "period_end": "2026-06-30",
+          "adoption_status": "reviewed-for-period",
+          "effective_from": "2026-01-01",
+          "effective_to": "2026-12-31",
+          "authority_version": "SYNTHETIC-GROUP-INSTRUCTIONS",
+          "authority_url": "https://synthetic.example/authority",
+          "authority_evidence_version_id": "00000000-0000-4000-8000-000000000001",
+          "authority_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "assessment_evidence_version_id": "00000000-0000-4000-8000-000000000002",
+          "assessment_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+          "assessment": "SYNTHETIC independently assessed issuer/group scope; no legal determination",
+          "id": "S-A",
+          "duty": "404a",
+          "applicability": "required"
+        },
+        {
+          "subject": "SYN-COMPONENT",
+          "engagement_country": "AE",
+          "reporting_issuer": "SYN-ISSUER",
+          "relationship": "component",
+          "period_start": "2026-06-01",
+          "period_end": "2026-06-30",
+          "adoption_status": "reviewed-for-period",
+          "effective_from": "2026-01-01",
+          "effective_to": "2026-12-31",
+          "authority_version": "SYNTHETIC-GROUP-INSTRUCTIONS",
+          "authority_url": "https://synthetic.example/authority",
+          "authority_evidence_version_id": "00000000-0000-4000-8000-000000000001",
+          "authority_sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+          "assessment_evidence_version_id": "00000000-0000-4000-8000-000000000002",
+          "assessment_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+          "assessment": "SYNTHETIC independently assessed issuer/group scope; no legal determination",
+          "id": "S-B",
+          "duty": "404b",
+          "applicability": "not-required"
+        }
+      ],
+      "checks": [
+        {
+          "id": "C-A",
+          "subject": "SYN-COMPONENT",
+          "requirement": "404a:CTRL",
+          "state": "supported",
+          "evidence_reference": "retained-document-1",
+          "expires_on": "2026-12-31",
+          "rationale": "Reviewed source scope"
+        }
+      ]
+    },
+    "expected": {
+      "exceptions": 0,
+      "blocked": false,
+      "icfr_states": [
+        [
+          "scope-decision",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "declared-plan-point",
+          "404a",
+          "SUPPORTED"
+        ],
+        [
+          "scope-decision",
+          "404b",
+          "NOT-APPLICABLE"
+        ],
+        [
+          "declared-plan-point",
+          "404b",
+          "NOT-APPLICABLE"
+        ]
+      ]
+    },
+    "parameters": {
+      "period_start": "2026-06-01",
+      "subjects": [
+        "SYN-COMPONENT"
+      ],
+      "required_checks": [
+        "404a:CTRL",
+        "404b:CTRL"
+      ]
+    }
+  }
+}

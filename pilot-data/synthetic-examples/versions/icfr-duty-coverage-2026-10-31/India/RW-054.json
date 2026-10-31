@@ -1,0 +1,58 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "dea6c89d81f4d64f6af9f064bce8df342f701079edf3ece94904b1e36a3ff40e",
+  "case": {
+    "id": "RW-054",
+    "title": "IN underpayment remains quantified",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "sources": {
+      "expected": [
+        {
+          "id": "expected1",
+          "registration": "EMPLOYER-1",
+          "subject": "EMP-1",
+          "period": "2026-05",
+          "component": "PF:EMPLOYEE",
+          "currency": "AED",
+          "amount": "100",
+          "due_date": "2026-06-05",
+          "payment_date": "2026-06-01"
+        }
+      ],
+      "return": [
+        {
+          "id": "return1",
+          "registration": "EMPLOYER-1",
+          "subject": "EMP-1",
+          "period": "2026-05",
+          "component": "PF:EMPLOYEE",
+          "currency": "AED",
+          "amount": "100",
+          "due_date": "2026-06-05",
+          "payment_date": "2026-06-01"
+        }
+      ],
+      "payment": [
+        {
+          "id": "1",
+          "registration": "EMPLOYER-1",
+          "subject": "EMP-1",
+          "period": "2026-05",
+          "component": "PF:EMPLOYEE",
+          "currency": "AED",
+          "amount": "90",
+          "due_date": "2026-06-05",
+          "payment_date": "2026-06-01"
+        }
+      ]
+    },
+    "expected": {
+      "state": "VARIANCE"
+    },
+    "parameters": {}
+  }
+}

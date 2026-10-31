@@ -88,6 +88,11 @@ def test_real_world_evidence_scenario(case):
         assert result["exception_count"] == expected["exceptions"]
     if "blocked" in expected:
         assert result["blocked"] == expected["blocked"]
+    if "icfr_states" in expected:
+        assert [[r["kind"], r["duty"], r["state"]] for r in result["rows"]] == expected[
+            "icfr_states"
+        ]
+        assert result["effectiveness_conclusion"] == "NOT_DETERMINED"
     if "stale" in expected:
         assert result["rows"][0]["stale"] == expected["stale"]
     assert result == calculate(data, case["country"], sources)
@@ -104,7 +109,7 @@ def test_country_catalogue_is_explicit_and_not_a_legal_certification():
 def test_published_scenario_catalogue_matches_executable_fixtures():
     from app.modules.country_workflows.catalogue import scenarios
 
-    assert len(scenarios()) == 154
+    assert len(scenarios()) == 164
     assert scenarios() == [
         {k: c[k] for k in ["id", "title", "workflow", "country", "expected"]} for c in CASES
     ]

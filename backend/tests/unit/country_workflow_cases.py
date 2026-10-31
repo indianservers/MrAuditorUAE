@@ -807,4 +807,73 @@ add(
     **{**dues_parameters, "obligation_month_end": "2026-05"},
 )
 
-assert len(CASES) == 154
+# Explicit fictional group instructions: country never establishes a US duty.
+for icfr_country in ("AE", "IN"):
+    icfr_common = {
+        "subject": "SYN-COMPONENT",
+        "engagement_country": icfr_country,
+        "reporting_issuer": "SYN-ISSUER",
+        "relationship": "component",
+        "period_start": "2026-06-01",
+        "period_end": "2026-06-30",
+        "adoption_status": "reviewed-for-period",
+        "effective_from": "2026-01-01",
+        "effective_to": "2026-12-31",
+        "authority_version": "SYNTHETIC-GROUP-INSTRUCTIONS",
+        "authority_url": "https://synthetic.example/authority",
+        "authority_evidence_version_id": "00000000-0000-4000-8000-000000000001",
+        "authority_sha256": "1" * 64,
+        "assessment_evidence_version_id": "00000000-0000-4000-8000-000000000002",
+        "assessment_sha256": "2" * 64,
+        "assessment": "SYNTHETIC independently assessed issuer/group scope; no legal determination",
+    }
+    icfr_sources = {
+        "scopes": [
+            dict(icfr_common, id="S-A", duty="404a", applicability="required"),
+            dict(icfr_common, id="S-B", duty="404b", applicability="required"),
+        ],
+        "checks": [
+            check(id="C-A", subject="SYN-COMPONENT", requirement="404a:CTRL"),
+            check(id="C-B", subject="SYN-COMPONENT", requirement="404b:CTRL"),
+        ],
+    }
+    for icfr_variant in (
+        "separate-required",
+        "separate-exemption",
+        "missing-scope",
+        "missing-check",
+        "pending-adoption",
+    ):
+        icfr_population = deepcopy(icfr_sources)
+        icfr_states = [
+            ["scope-decision", "404a", "SUPPORTED"],
+            ["declared-plan-point", "404a", "SUPPORTED"],
+            ["scope-decision", "404b", "SUPPORTED"],
+            ["declared-plan-point", "404b", "SUPPORTED"],
+        ]
+        if icfr_variant == "separate-exemption":
+            icfr_population["scopes"][1]["applicability"] = "not-required"
+            icfr_population["checks"] = icfr_population["checks"][:1]
+            icfr_states[2][2] = icfr_states[3][2] = "NOT-APPLICABLE"
+        elif icfr_variant == "missing-scope":
+            icfr_population["scopes"] = icfr_population["scopes"][:1]
+            icfr_states[2][2] = "MISSING_SCOPE_DECISION"
+        elif icfr_variant == "missing-check":
+            icfr_population["checks"] = icfr_population["checks"][:1]
+            icfr_states[3][2] = "MISSING"
+        elif icfr_variant == "pending-adoption":
+            icfr_population["scopes"][1]["adoption_status"] = "pending"
+            icfr_states[2][2] = "PENDING_AUTHORITY_ADOPTION"
+        icfr_blocked = icfr_variant not in {"separate-required", "separate-exemption"}
+        add(
+            "icfr-duty-coverage",
+            f"SYNTHETIC {icfr_country} independently assessed ICFR {icfr_variant}",
+            icfr_population,
+            {"exceptions": int(icfr_blocked), "blocked": icfr_blocked, "icfr_states": icfr_states},
+            country=icfr_country,
+            period_start="2026-06-01",
+            subjects=["SYN-COMPONENT"],
+            required_checks=["404a:CTRL", "404b:CTRL"],
+        )
+
+assert len(CASES) == 164
