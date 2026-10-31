@@ -1,0 +1,99 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_commit": "7c65ad7b56732f1e72df5ca1a3baa0f5ff9075e9",
+  "run_id": 41185535048,
+  "verify_job_id": 124491595697,
+  "verify_conclusion": "SUCCESS",
+  "all_jobs_success": false,
+  "browser_limit": "This source browser job failed the employment view label lookup; that defect was corrected on e15170f and its separate 20-case passing browser evidence is retained. This receipt does not mark that older browser job passed.",
+  "full_backend": {
+    "tests": 6190,
+    "passed": 6181,
+    "skipped": 9,
+    "failures": 0,
+    "errors": 0,
+    "pytest_seconds": 4816.81,
+    "coverage_percent": 87.45693704979642,
+    "core_coverage_percent": 89.35,
+    "core_covered_statements": 831,
+    "core_statements": 930
+  },
+  "selected_test_groups": {
+    "employment_payroll": {
+      "tests": 34,
+      "failed": 0,
+      "skipped": 0
+    },
+    "tax_close_rollup": {
+      "tests": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    "india_company_scope": {
+      "tests": 66,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "artifact": {
+    "id": 13039170133,
+    "bytes": 271908,
+    "sha256": "ab9d1bbc2e5f6f15356f10042d4f0cba1b4951d3bb9f814df002a25e00935d9b"
+  },
+  "skips": [
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "test": "tests.phase2.test_live_native.test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_document_worker_runtime.test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "originals": [
+    {
+      "path": "docs/phase-12/7c65ad7-hosted-full.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "8396c48137b476658b324e422179555b9c88fdd362200c51bf3dec5a5fe23ca7"
+    },
+    {
+      "path": "docs/phase-12/7c65ad7-hosted-coverage.json",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "0ab207d5b11d7c414ec55fb77adfb23c2dd53439200d3dd0a9d111e33dd70bce"
+    }
+  ],
+  "limits": [
+    "Source precedes ICFR and current pilot export changes; current local units and ICFR browser are separate receipts",
+    "Four live vendor/ledger checks remain unexecuted without authorized access and independent source totals",
+    "Four opt-in isolated DB/Redis checks and one Windows-only assignment case have separate passing receipts; original hosted skip count is unchanged",
+    "No real client, professional or full country-rule qualification is established"
+  ]
+}
