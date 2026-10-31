@@ -1,0 +1,132 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_commit": "993b70fd5d34249e7be4f150d400ce939a96e33d",
+  "run_id": 41195105640,
+  "all_six_jobs": "SUCCESS",
+  "jobs": {
+    "browser-smoke": 124519586502,
+    "frontend": 124519586607,
+    "containers": 124519586640,
+    "ml": 124519586705,
+    "security": 124519586783,
+    "verify": 124519586866
+  },
+  "full_backend": {
+    "tests": 6242,
+    "passed": 6233,
+    "skipped": 9,
+    "failures": 0,
+    "errors": 0,
+    "pytest_seconds": 4707.67,
+    "coverage_percent": 87.48969175563332,
+    "core_coverage_percent": 89.35,
+    "core_covered_statements": 831,
+    "core_statements": 930
+  },
+  "browser": {
+    "passed": 21,
+    "elapsed": "13.0m",
+    "icfr_case_elapsed": "25.9s",
+    "scenario_checks": [
+      "Engagement-country and selected-workflow default",
+      "All-country/all-workflow search RW-160 remains labelled India",
+      "Expected outcome visible and workflow selection unchanged",
+      "Existing ICFR originals, independent review, full export, pending scope and stale-source controls"
+    ]
+  },
+  "artifacts": [
+    {
+      "kind": "verification",
+      "id": 13042327184,
+      "bytes": 273395,
+      "sha256": "7f719543dedfbd8b1b9494745f6b011a7230565e0772199deb20ebcd51069ad1"
+    },
+    {
+      "kind": "browser",
+      "id": 13040557911,
+      "bytes": 26502889,
+      "sha256": "3e7ce889600f712af940deff53100206e1058b45323a62026d7622a273c77c2f"
+    }
+  ],
+  "artifact_validation": "Both ZIP archives verified against advertised exact lengths and digests before extracting selected members",
+  "visual_review": "All four original scenario PNGs inspected. UAE and India defaults each show five correctly labelled cases; cross-country RW-160 shows the complete expected JSON, including the final 404b declared-plan-point SUPPORTED state and closing brackets. No final-outcome clipping remains at the corrected 2200x1800 author viewport. Earlier da95c959 partial originals remain preserved.",
+  "screenshots": [
+    {
+      "path": "docs/phase-12/screenshots/993b70fd-scenario-browser/AE-scenario-engagement-default.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "3d201cdc0d37a3a6d35fc190fed1e3e46980d1fae2e516de69450cefd39ffa43"
+    },
+    {
+      "path": "docs/phase-12/screenshots/993b70fd-scenario-browser/AE-scenario-cross-country.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "51f7acec55ac729fa4f14773fb2eaa5b22454c0217ee7ed13e6ae0864cd0548f"
+    },
+    {
+      "path": "docs/phase-12/screenshots/993b70fd-scenario-browser/IN-scenario-engagement-default.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "b87f937e8374d6153e15677f1ed6335df152dc0b6d59af472856ed42d2771504"
+    },
+    {
+      "path": "docs/phase-12/screenshots/993b70fd-scenario-browser/IN-scenario-cross-country.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "51f7acec55ac729fa4f14773fb2eaa5b22454c0217ee7ed13e6ae0864cd0548f"
+    }
+  ],
+  "original_reports": [
+    {
+      "path": "docs/phase-12/993b70fd-hosted-full.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "532d9defae9e9434b0e9def28ba0c06ea8bacf8085510fbf9992f2d3ab4ad847"
+    },
+    {
+      "path": "docs/phase-12/993b70fd-hosted-coverage.json",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "ab66bef1425ad60d697ff3b6ec4a706fd29788e0691d415e2b4d63553319eb0e"
+    }
+  ],
+  "skips": [
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "test": "tests.phase2.test_live_connectors.test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "test": "tests.phase2.test_live_native.test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_connector_operations_db.test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "test": "tests.unit.test_document_worker_runtime.test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "limits": [
+    "164 authored synthetic fixtures do not establish independently validated client cases or complete legal/country qualification",
+    "Four live provider/ledger checks remain skipped without explicit authorized access and independent source totals",
+    "Four opt-in DB/Redis cases and one Windows-only case have separate prior passing receipts; their original hosted skips remain unchanged",
+    "Both real-pilot country folders remain empty of client inputs, independent expectations and review records",
+    "All six source-pinned jobs passing is software verification, not professional approval or production deployment"
+  ]
+}

@@ -311,3 +311,6 @@ docs/phase-12/7c65ad7-hosted-coverage.json -text
 docs/phase-12/workflow-scenarios-frontend.xml -text whitespace=cr-at-eol
 docs/phase-12/scenario-evidence-*.xml -text whitespace=cr-at-eol
 docs/phase-12/screenshots/da95c959-scenario-browser/*.png -text
+docs/phase-12/993b70fd-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/993b70fd-hosted-coverage.json -text
+docs/phase-12/screenshots/993b70fd-scenario-browser/*.png -text
