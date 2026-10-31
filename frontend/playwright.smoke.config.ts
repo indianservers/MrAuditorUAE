@@ -18,6 +18,7 @@ export default defineConfig({
     "company-accounts-release.spec.ts",
     "india-company-scope-release.spec.ts",
     "caro-release.spec.ts",
+    "employment-payroll-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",

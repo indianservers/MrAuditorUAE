@@ -1,0 +1,50 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "e7a06f51f780b07837d8936bd5bb6164a1f06880",
+  "scope": "Real-service browser regression definition for UAE then India employment payroll evidence",
+  "local_checks": {
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "playwright_discovery": {
+      "tests": 20,
+      "files": 17
+    },
+    "local_browser_execution": "NOT_RUN"
+  },
+  "pending_hosted_assertions": [
+    "Real private CSV upload and clean scanner result",
+    "Independent source review and exclusion of superseded imported event IDs from source selectors",
+    "UI calculation with explicit reporting window",
+    "Only current correction counts; superseded salary remains in history",
+    "Author self-approval denied; independent UI approval succeeds",
+    "Complete XLSX contains exact comparison amounts and both revisions",
+    "Additional declared July employment requires a control despite absent pay on both sides; approval denied",
+    "Withdrawing employment source stales immutable saved result and disables approval",
+    "Four reviewed/stale screenshots for later visual inspection"
+  ],
+  "hosted_prior_source": {
+    "run_id": 41182059791,
+    "status_at_observation": "IN_PROGRESS",
+    "browser_job_id": 124481311558,
+    "browser_status": "IN_PROGRESS",
+    "verify_job_id": 124481311483,
+    "verify_status": "IN_PROGRESS"
+  },
+  "limits": [
+    "Definition and discovery are not a browser pass",
+    "Latest prior source CI is still live; not cancelled or restarted",
+    "Synthetic payroll facts do not qualify real clients or legal completeness"
+  ],
+  "files": [
+    {
+      "path": "frontend/e2e/employment-payroll-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "943017a9b4cbb5de63caa05e6a780ec9cef5f7887f2190f35b9aa1f834e05767"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "normalization": "LF",
+      "sha256": "5545373f50d766cd4986813ba88ded59cbcd64725207c31f6b641392ea60412b"
+    }
+  ]
+}
