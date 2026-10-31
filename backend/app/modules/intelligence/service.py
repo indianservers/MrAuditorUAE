@@ -196,6 +196,22 @@ async def current(db, ctx, obj, visited=None):
         return False
     if (
         getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "uae-tax-group-statements"
+    ):
+        from app.modules.country_workflows.uae_tax_group_workpaper import (
+            BINDING,
+            CONTRACT,
+            ENGINE_CONTRACT,
+        )
+
+        if (
+            obj.body.get("contract") != CONTRACT
+            or obj.body.get("engine_contract") != ENGINE_CONTRACT
+            or obj.body.get("tax_group_document_binding") != BINDING
+        ):
+            return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
         and obj.body.get("workflow") == "uae-ct-audit-duty"
     ):
         from app.modules.country_workflows.uae_ct_audit_duty import CONTRACT

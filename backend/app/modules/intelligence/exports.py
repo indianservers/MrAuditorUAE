@@ -98,6 +98,10 @@ def render(event, format):
             "contract",
             "salary_crosswalk_document_binding",
             "ct_audit_document_binding",
+            "tax_group_document_binding",
+            "engine_contract",
+            "mapping_fingerprint",
+            "tax_group_totals",
             "company_accounts_document_binding",
             "tan",
             "financial_year",
@@ -414,6 +418,18 @@ def render(event, format):
                 for check in body["vat201_arithmetic_checks"]:
                     append(arithmetic, [check.get(field) for field in fields])
             source = workbook.create_sheet("Rows")
+            if body.get("workflow") == "uae-tax-group-statements":
+                from app.modules.country_workflows.uae_tax_group_workpaper import COLLECTIONS
+
+                for name, key in COLLECTIONS.items():
+                    if key == "rows":
+                        continue
+                    retained = body.get(key, [])
+                    sheet = workbook.create_sheet("Tax Group " + name)
+                    fields = list(dict.fromkeys(field for item in retained for field in item))
+                    append(sheet, fields)
+                    for item in retained:
+                        append(sheet, [item.get(field) for field in fields])
             keys = list(dict.fromkeys(key for row in rows for key in row))
             append(source, keys)
             for row in rows:

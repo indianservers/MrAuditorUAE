@@ -1,4 +1,17 @@
 def approval_error(body):
+    if body.get("workflow") == "uae-tax-group-statements":
+        from app.modules.country_workflows.uae_tax_group_workpaper import (
+            BINDING,
+            CONTRACT,
+            ENGINE_CONTRACT,
+        )
+
+        if (
+            body.get("contract") != CONTRACT
+            or body.get("engine_contract") != ENGINE_CONTRACT
+            or body.get("tax_group_document_binding") != BINDING
+        ):
+            return "Regenerate the Tax Group workpaper with current originals and its retained independent mapping"
     if body.get("workflow") == "uae-company-accounts-duty":
         from app.modules.country_workflows.uae_company_accounts import CONTRACT
 

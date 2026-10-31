@@ -1,17 +1,19 @@
 UAE Tax Group four-statement workpaper core
 =========================================
 
-Status: internal calculation layer; not yet an available client workflow.
-Contract: uae-tax-group-four-statement-workpaper/1.
+Status: draft workpaper workflow implemented; hosted acceptance pending.
+Calculation contract: uae-tax-group-four-statement-workpaper/1.
+Retained workflow contract: uae-tax-group-retained-workpaper/1.
 Implementation: backend/app/modules/ifrs/uae_tax_group_statements.py.
 
 This implements part of the distinct FTA7/CTP007 aggregation framework. It
 does not repurpose IFRS10 consolidation or claim a completed reporting pack.
-No endpoint, source-byte verification, independent review or user interface
-is connected to this engine yet. Source binding remains false, statutory
-issuance remains false, professional qualification remains NOT_ESTABLISHED
-and validation.ready is always false. These boundaries also apply when the
-numbers reconcile and no input issue is detected.
+The pure calculation still establishes no source binding. Its retained-source
+wrapper now verifies original bytes, parses the independent mapping and connects
+the typed endpoint, paged workbench, separate workpaper review and full XLSX
+export. Byte binding is distinct from document authenticity or legal meaning.
+Statutory issuance remains false, professional qualification is not established
+and validation.ready is always false, including reviewed arithmetic workpapers.
 
 Inputs and calculation
 ----------------------
@@ -78,7 +80,10 @@ An existing group in its first2025 framework year still requires the preceding
 tax period. Comparative packages have their own member population, source
 lineage, statement rows, adjustments, notes and checks. Prior-only captions
 are retained in the prior statements; prior values are not inferred from
-current values. An unassessed current-framework comparative basis stays an
+current values. Current opening equity must reconcile with preceding closing
+equity after explicit supported adjustments; a difference blocks review pending
+a separately evidenced bridge. No balancing entry is invented. An unassessed
+current-framework comparative basis stays an
 issue. Changed membership is retained explicitly, not rewritten to match the
 current population; professional treatment is not established by this core.
 
@@ -86,28 +91,67 @@ Basis of preparation, policies, estimates/judgments and membership disclosures
 must be supplied separately for each period. Meaningful text is required,
 but the exact prescribed wording and completeness are not authenticated here.
 
-Next integration work
----------------------
-Bind exact FTA7/CTP007 originals, original member financial packages and their
-independent mapping/adjustment evidence to current retained bytes. Reuse the
-existing immutable results, country/engagement authorization, contributor
-restrictions, separate approval, full exports and recursive source freshness.
-Cross-engagement member evidence must enforce each member's access scope;
-tenant membership alone is insufficient. No mapping generated from the
-calculated output may serve as its independent expected result.
+Retained workpaper preparation
+------------------------------
+Use the UAE country-workflow panel, "Prepare UAE Tax Group statement workpaper".
+The endpoint is POST intelligence/engagements/{eid}/uae-tax-group-statements.
+Select the engagement for the exact completed current Tax Group period.
 
-Then connect the typed API and user workbench, exercise actual review/export/
-staleness and inspect hosted screenshots. Complete remaining framework rules,
-full prescribed note wording, leaving-member continuity and clawback treatment,
-Arabic/operative-source adoption and professional review. Actual audit and
-authorized submission remain separate activities. The internal arithmetic
-tests and source-scanner verdicts do not establish these steps or real-client
-qualification.
+Upload the exact FTA7 and CTP007 originals, separate independently assessed
+legal-adoption evidence, member standalone originals and an independent JSON
+mapping through the existing Evidence workspace. Keep all retained copies in
+this group engagement; declared member identities do not authorize another
+engagement's originals. The wrapper rejects cross-engagement references.
+
+The form selects four distinct document roles and the adopted source window;
+it never reenters financial amounts. Member version IDs/hashes come from the
+retained mapping itself. The server verifies every current clean version and
+its actual original bytes, parses that exact bounded JSON, validates its dates,
+identities and schema, then performs the calculation. Mapping, legal adoption
+and authority files cannot also serve as member statement evidence.
+
+All document/record preparers are contributors and cannot independently approve
+the derived workpaper. Unresolved controls, populations, policies, comparisons
+or operative changes block approval. Successful independent workpaper review
+still does not establish a complete statutory reporting pack, audit or filing.
+Replacement or metadata change of any retained source stales the historical
+result. Changes to the trusted calculation implementation also invalidate it.
+
+The four statements have independent server paging. Members, every original
+source contribution, adjustments, checks, notes, pre-join exceptions and
+retained document roles have their own paged collections. The document view
+uses existing authorized original-file downloads. XLSX contains complete
+separate sheets for every collection; preview limits do not truncate exports.
+
+GET intelligence/engagements/{eid}/tax-group-mapping-schema publishes the JSON
+mapping structure. Its saved counterpart is uae-tax-group-mapping.schema.json.
+The separately labelled SYNTHETIC-tax-group-statements/mapping.template.json
+example is under sample-inputs. Replace all placeholder source IDs/hashes and
+assess every fact/line/note independently; it is not a client-approved template
+or the prescribed complete authority wording. Fractional JSON numbers,
+duplicate keys, nonfinite values, excessive nesting and oversized files fail
+closed. Use exact plain decimal strings, explicit zero and explicit nil OCI.
+
+Remaining reporting qualification
+----------------------------------
+Complete full prescribed note wording, leaving-member continuity and clawback
+treatment, independent Arabic/operative-source adoption, representative client
+expected results and professional review. Actual audit and authorized
+submission remain separate activities. No synthetic arithmetic or browser
+case increases the independently qualified real-client population.
 
 Verification
 ------------
-The retained local report contains57 new core cases plus64 existing MD84
+The retained local report contains57 historical core cases plus64 existing MD84
 unit regressions, all passing. Ruff checks/format and Mypy434 source files
 passed. See docs/phase-12/tax-group-statements-core-local.json for source and
 report hashes. The public MD84 v2 workflow has separate hosted browser proof
 at source1258922; that source predates this internal calculation layer.
+
+The retained-source integration has separate source-specific reports. The
+original internal-core receipt remains historical evidence for sourceac19ac1.
+
+The retained-source integration adds a comparative-opening continuity guard
+and an independently reconciled prior150/current220 synthetic fixture. The
+earlier core receipt predates this guard. Current integration verification is
+retained separately; no historical receipt is relabelled as current evidence.

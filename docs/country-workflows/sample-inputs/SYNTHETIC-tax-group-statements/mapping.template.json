@@ -1,0 +1,272 @@
+{
+  "contract": "uae-tax-group-four-statement-workpaper/1",
+  "group_reference": "SYNTHETIC-GROUP",
+  "first_group_period_start": "2025-01-01",
+  "comparative": null,
+  "comparative_basis": "first_group_period",
+  "current": {
+    "period_start": "2025-01-01",
+    "period_end": "2025-12-31",
+    "population": "assessed_complete",
+    "intramember_population": "assessed_complete",
+    "population_assessment": "SYNTHETIC complete independently declared member and transaction population",
+    "members": [
+      {
+        "member": "A",
+        "legal_entity_id": "00000000-0000-4000-8000-000000000001",
+        "role": "parent",
+        "period_start": "2025-01-01",
+        "period_end": "2025-12-31",
+        "membership_from": "2025-01-01",
+        "membership_through": "2025-12-31",
+        "currency": "AED",
+        "basis": "standalone_unconsolidated",
+        "accounting_standard": "IFRS",
+        "uniform_policy": "assessed_aligned",
+        "policy_assessment": "SYNTHETIC explicitly aligned accounting policies",
+        "source_evidence_version_id": "00000000-0000-4000-8000-000000000011",
+        "source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "lines": [
+          {
+            "reference": "cash",
+            "statement": "position",
+            "code": "cash",
+            "label": "cash",
+            "kind": "asset",
+            "amount": "100",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "payable",
+            "statement": "position",
+            "code": "payable",
+            "label": "payable",
+            "kind": "liability",
+            "amount": "0",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "equity",
+            "statement": "position",
+            "code": "equity",
+            "label": "equity",
+            "kind": "equity",
+            "amount": "-150",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "sales",
+            "statement": "profit_loss",
+            "code": "sales",
+            "label": "sales",
+            "kind": "income",
+            "amount": "100",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "expenses",
+            "statement": "profit_loss",
+            "code": "expenses",
+            "label": "expenses",
+            "kind": "expense",
+            "amount": "-60",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "oci",
+            "statement": "oci",
+            "code": "oci",
+            "label": "oci",
+            "kind": "oci",
+            "amount": "0",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "opening-equity",
+            "statement": "changes_equity",
+            "code": "opening-equity",
+            "label": "opening-equity",
+            "kind": "opening_equity",
+            "amount": "110",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "profit-transfer",
+            "statement": "changes_equity",
+            "code": "profit-transfer",
+            "label": "profit-transfer",
+            "kind": "profit",
+            "amount": "40",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "oci-transfer",
+            "statement": "changes_equity",
+            "code": "oci-transfer",
+            "label": "oci-transfer",
+            "kind": "oci",
+            "amount": "0",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "closing-equity",
+            "statement": "changes_equity",
+            "code": "closing-equity",
+            "label": "closing-equity",
+            "kind": "closing_equity",
+            "amount": "150",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "investment",
+            "statement": "position",
+            "code": "investment",
+            "label": "investment",
+            "kind": "asset",
+            "amount": "50",
+            "treatment": "member_investment",
+            "source_reference": "SYNTHETIC independently mapped source row",
+            "counterparty_member": "B",
+            "transaction_reference": "INV-B"
+          }
+        ]
+      },
+      {
+        "member": "B",
+        "legal_entity_id": "00000000-0000-4000-8000-000000000002",
+        "role": "subsidiary",
+        "period_start": "2025-01-01",
+        "period_end": "2025-12-31",
+        "membership_from": "2025-01-01",
+        "membership_through": "2025-12-31",
+        "currency": "AED",
+        "basis": "standalone_unconsolidated",
+        "accounting_standard": "IFRS",
+        "uniform_policy": "assessed_aligned",
+        "policy_assessment": "SYNTHETIC explicitly aligned accounting policies",
+        "source_evidence_version_id": "00000000-0000-4000-8000-000000000012",
+        "source_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "lines": [
+          {
+            "reference": "cash",
+            "statement": "position",
+            "code": "cash",
+            "label": "cash",
+            "kind": "asset",
+            "amount": "70",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "payable",
+            "statement": "position",
+            "code": "payable",
+            "label": "payable",
+            "kind": "liability",
+            "amount": "0",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "equity",
+            "statement": "position",
+            "code": "equity",
+            "label": "equity",
+            "kind": "equity",
+            "amount": "-70",
+            "treatment": "member_equity",
+            "source_reference": "SYNTHETIC independently mapped source row",
+            "counterparty_member": "A",
+            "transaction_reference": "INV-B"
+          },
+          {
+            "reference": "sales",
+            "statement": "profit_loss",
+            "code": "sales",
+            "label": "sales",
+            "kind": "income",
+            "amount": "80",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "expenses",
+            "statement": "profit_loss",
+            "code": "expenses",
+            "label": "expenses",
+            "kind": "expense",
+            "amount": "-50",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "oci",
+            "statement": "oci",
+            "code": "oci",
+            "label": "oci",
+            "kind": "oci",
+            "amount": "0",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "opening-equity",
+            "statement": "changes_equity",
+            "code": "opening-equity",
+            "label": "opening-equity",
+            "kind": "opening_equity",
+            "amount": "40",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "profit-transfer",
+            "statement": "changes_equity",
+            "code": "profit-transfer",
+            "label": "profit-transfer",
+            "kind": "profit",
+            "amount": "30",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "oci-transfer",
+            "statement": "changes_equity",
+            "code": "oci-transfer",
+            "label": "oci-transfer",
+            "kind": "oci",
+            "amount": "0",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          },
+          {
+            "reference": "closing-equity",
+            "statement": "changes_equity",
+            "code": "closing-equity",
+            "label": "closing-equity",
+            "kind": "closing_equity",
+            "amount": "70",
+            "treatment": "ordinary",
+            "source_reference": "SYNTHETIC independently mapped source row"
+          }
+        ]
+      }
+    ],
+    "adjustments": [],
+    "pre_join_losses": [],
+    "basis_of_preparation": "SYNTHETIC basis text awaiting exact authority wording and independent review",
+    "accounting_policies": "SYNTHETIC common policies awaiting source binding",
+    "estimates_and_judgments": "SYNTHETIC estimates and judgments awaiting source binding",
+    "membership_disclosures": "SYNTHETIC parent and subsidiary facts awaiting independent review"
+  }
+}

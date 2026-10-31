@@ -1,0 +1,167 @@
+{
+  "scope": "SYNTHETIC_LOCAL_RETAINED_WORKPAPER_INTEGRATION_VERIFICATION",
+  "contract": "uae-tax-group-retained-workpaper/1",
+  "calculation_contract": "uae-tax-group-four-statement-workpaper/1",
+  "base_commit": "ac19ac127fce49f661b10cf3145b2e6aa7cdf1e7",
+  "reports": [
+    {
+      "path": "docs/phase-12/tax-group-workpaper-backend.xml",
+      "bytes": 782410,
+      "sha256": "bf5e991b67c4ef198cb417fa2f3f752f852c4ea02910a850e22472cb60d9bcbd",
+      "passed": 4960,
+      "skipped": 4,
+      "failed": 0
+    },
+    {
+      "path": "docs/phase-12/tax-group-workpaper-frontend.xml",
+      "bytes": 125432,
+      "sha256": "dab2b05f80e534286cb8da1bbd42b7ab155b2e868ca047fd0eb418c13121980c",
+      "passed": 531,
+      "skipped": 0,
+      "failed": 0
+    },
+    {
+      "path": "docs/phase-12/tax-group-workpaper-focused.xml",
+      "bytes": 16178,
+      "sha256": "5f4e84de124988602bfcde297caf2bae3384316a3a12a776f6bb31a30176e0d7",
+      "passed": 99,
+      "skipped": 0,
+      "failed": 0
+    }
+  ],
+  "retained_wrapper_unit_cases": 25,
+  "retained_workpaper_http_cases": 16,
+  "checks": [
+    "Ruff check/format passed for changed Python files",
+    "Mypy app passed for435 source files",
+    "All531 frontend tests across94 files passed",
+    "Frontend type checking, targeted ESLint and production build passed",
+    "Three API/mapping-schema snapshots match runtime and generated TypeScript API types match",
+    "Four new API paths, zero removed paths, zero changes to pre-existing path contracts",
+    "Hosted smoke case discovery passed for the combined company/Tax Group workpaper scenario"
+  ],
+  "tested_controls": [
+    "Exact FTA7/CTP007 originals plus separate retained adoption/mapping/member files, current versions and actual-byte integrity",
+    "Amounts parsed directly from retained mapping JSON; duplicates, nonfinite/fractional JSON numbers, excessive nesting and oversized data fail closed",
+    "All source preparers barred from independent approval; unresolved source adoption blocks review",
+    "Full131 source contributions and all note/document tables retained in XLSX despite100-row response previews; paged last-source records reachable",
+    "Each original role replacement stales reviewed results without changing retained totals",
+    "Independent preceding-period source population and262 full source contributions; prior source replacement stales the reviewed workpaper",
+    "Current opening equity must reconcile with prior closing equity; no automatic balancing entry or framework-year exemption",
+    "India and other-engagement source boundaries fail closed",
+    "Clean evidence choices use stable paging/hash filtering, preserve selections outside the viewed page, and exclude superseded clean originals when newer versions are quarantined",
+    "Trusted implementation fingerprint includes the Tax Group calculation module",
+    "Authorized original-download controls require the retained record receipt; statement paging is independent across statements/periods"
+  ],
+  "browser_status": "AUTHORED_AND_DISCOVERED_NOT_YET_HOSTED_FOR_THIS_SOURCE",
+  "skip_reason": "Four connector-operation tests require the separate connector_operations_run.py harness. No local execution or pass claim for that harness.",
+  "boundaries": [
+    "Local HTTP malware boundary is doubled; source-specific hosted real-scanner/browser qualification remains pending",
+    "Only a draft aggregation workpaper is prepared/reviewed: validation.ready and statutory_issuance remain false, professional conclusion is not determined",
+    "Full prescribed note wording, independent Arabic/operative source adoption, leaving-member continuity and clawbacks remain separate reporting qualification work",
+    "No actual client files or independently approved client results are supplied; synthetic tests are not additional qualified real-world client cases"
+  ],
+  "calculation_unit_cases": 58,
+  "implementation_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "f3c2627313649608ab136eebf8f01da5f4088c1984fa9fb0b8ab199cf2e4b4bf"
+    },
+    {
+      "path": "backend/app/core/operations_contracts.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "8bcf1042f0772cbbf4837507e942b5a54d2f1e92b053f06c5a9b8b7dda22ada4"
+    },
+    {
+      "path": "backend/app/modules/ifrs/uae_tax_group_statements.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "fc6d50a9eb01f39415c2ee18883c707bbb8eb2b8b9988bb0132da1177d4e0bc0"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/uae_tax_group_workpaper.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "a87f82938566a1f7c8515e457e9e862bc14220aed7e1ab0df8877af35fb0799c"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "4406d8d8fb816e0e3d7e375763df9e81a8e2a19570600ebc3d1a903860aec6c0"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "b6205bd248b1d1da431510860b4e53cf6644ee8f5efff204985736afe4e20a92"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "cea090bfd3571b955dd24a58980417c94e6582df549c171524ab254637ebe6b9"
+    },
+    {
+      "path": "frontend/src/features/uae-tax-group-workpaper.tsx",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "8e4b9b3b72dd9ab8118d842a59d895e7d2555f0bc984b33e976ee6f35c98df0c"
+    },
+    {
+      "path": "frontend/src/features/retained-evidence-select.tsx",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "1cc473521695a7008f51a1c35fd096ab0e3f465dfe2d451df4e28f85393c154a"
+    },
+    {
+      "path": "frontend/src/features/retained-rows-table.tsx",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "4426877bbecfdb89d0535426fb97d222bbaa61ede223b8dde56d8f9e91ff56b1"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "d57efcd5fbe91c23635d86bc4348a080512c985fa222722d6a84b7753fd7cf18"
+    },
+    {
+      "path": "frontend/e2e/uae-tax-group-workpaper-browser.ts",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "7a9ad1e613ee11f421c19ab79b214c0041400041f59085d38b34bc09024bc45d"
+    },
+    {
+      "path": "frontend/e2e/company-accounts-release.spec.ts",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "a855a245ab87bddf57baccdd5a96ceae8517b718f6a407b44cb0ef23627030ec"
+    },
+    {
+      "path": "backend/tests/unit/test_uae_tax_group_statements.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "fd597c273abf493559a458af2d781a511fde8a36ce91f77fb64f21b83e9f85d3"
+    },
+    {
+      "path": "backend/tests/unit/test_uae_tax_group_workpaper.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "e857131a597ae6c9a028f36abbb7029408d0cf13df597499038cda8f3f7c6448"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_uae_tax_group_workpaper.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "ddeebaef3134b8cfc6b577478dbb0ba48e09ff8a0f2e945792578f86ffdf8703"
+    },
+    {
+      "path": "frontend/tests/uae-tax-group-workpaper.test.tsx",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "f6afe61eb6f1de30ed37ae114fc3648500835d7cd27b3cbf9b5c00a59d085b55"
+    },
+    {
+      "path": "docs/country-workflows/uae-tax-group-mapping.schema.json",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "d58819c0950327cbb43ae36bb743019e91d0fc20e04823ec86d0ce5aa1601702"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-tax-group-statements/mapping.template.json",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "ed38fa9a89237ed95886e517485050a430c92ec448d46c3119078ab4e8d5a4d0"
+    },
+    {
+      "path": "scripts/export_api_contracts.py",
+      "normalization": "UTF-8 text with LF newlines",
+      "sha256": "d84bf6825f3dad1aa86c814f82e13d8a29a265a95ba43f38398ab43a7a215a95"
+    }
+  ]
+}

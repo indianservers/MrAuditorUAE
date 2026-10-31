@@ -409,13 +409,21 @@ def existing_group():
             membership_from="2024-01-01",
             membership_through="2024-12-31",
         )
+    for member, cash, equity, opening in [
+        (prior["members"][0], "60", "110", "70"),
+        (prior["members"][1], "40", "40", "10"),
+    ]:
+        member["lines"][0]["amount"] = cash
+        member["lines"][2]["amount"] = "-" + equity
+        member["lines"][6]["amount"] = opening
+        member["lines"][9]["amount"] = equity
     data["comparative"] = prior
     return data
 
 
 def test_first_framework_year_does_not_create_first_group_period_exemption():
     data = existing_group()
-    assert result(data)["comparative"]["totals"]["equity"] == "220"
+    assert result(data)["comparative"]["totals"]["equity"] == "150"
     data["comparative"] = None
     with pytest.raises(ValueError, match="existing group requires"):
         result(data)
@@ -431,12 +439,31 @@ def test_comparatives_retain_prior_only_lines_and_do_not_invent_zero_prior_figur
             for r in actual["comparative"]["statements"]["position"]
             if r["code"] == "PRIOR-ONLY-CASH"
         )["amount"]
-        == "100"
+        == "60"
     )
     assert not any(
         r["code"] == "PRIOR-ONLY-CASH" for r in actual["current"]["statements"]["position"]
     )
     assert actual["comparative"]["notes"] == actual["current"]["notes"]
+
+
+def test_individually_balanced_periods_cannot_hide_an_unreconciled_opening_equity_gap():
+    data = existing_group()
+    assert not result(data)["issues"]
+    prior = data["comparative"]["members"][0]
+    prior["lines"][0]["amount"] = "61"
+    prior["lines"][2]["amount"] = "-111"
+    prior["lines"][6]["amount"] = "71"
+    prior["lines"][9]["amount"] = "111"
+    actual = result(data)
+    assert (
+        actual["current"]["arithmetic_reconciled"]
+        and actual["comparative"]["arithmetic_reconciled"]
+    )
+    assert actual["issues"] == [
+        {"code": "COMPARATIVE_OPENING_EQUITY_BRIDGE_REQUIRED", "difference": "-1"}
+    ]
+    assert not actual["validation"]["arithmetic_reconciled"]
 
 
 def test_changed_prior_membership_is_retained_as_its_own_population_not_rewritten():

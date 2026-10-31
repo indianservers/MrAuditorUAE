@@ -7,6 +7,7 @@ import {
 import { mkdirSync, readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { makeWorkflowHarness } from "./msme-browser-workflow";
+import { runTaxGroupWorkpaperBrowser } from "./uae-tax-group-workpaper-browser";
 
 async function login(page: Page, email: string) {
   if (!email || !process.env.AUDITOS_SMOKE_PASSWORD)
@@ -20,7 +21,7 @@ async function login(page: Page, email: string) {
   await page.waitForURL("**/dashboard");
 }
 
-test("UAE company accounts duty, explicit written request, independent review and legal-adoption staleness", async ({
+test("UAE company accounts and Tax Group workpapers retain original sources, separate review, full export and staleness", async ({
   page,
   browser,
 }) => {
@@ -330,6 +331,13 @@ test("UAE company accounts duty, explicit written request, independent review an
       .screenshot({
         path: `${screenshots}/AE-company-accounts-adoption-stale.png`,
       });
+    await runTaxGroupWorkpaperBrowser(
+      page,
+      reviewer,
+      eid,
+      ids.tenant_id,
+      screenshots,
+    );
     expect(errors).toEqual([]);
   } finally {
     await context.close();

@@ -267,3 +267,5 @@ docs/phase-12/ct-member-*.xml -text whitespace=cr-at-eol
 
 docs/phase-12/tax-group-statements-core.xml -text whitespace=cr-at-eol
 docs/phase-12/tax-group-authority-scans-*.json -text
+
+docs/phase-12/tax-group-workpaper-*.xml -text whitespace=cr-at-eol

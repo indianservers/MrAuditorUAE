@@ -17,10 +17,17 @@ export function RetainedRowsTable({
   title,
   rows,
   currency,
+  serverPage,
 }: {
   title: string;
   rows: unknown;
   currency: string;
+  serverPage?: {
+    offset: number;
+    total: number;
+    onPage: (offset: number) => void;
+    isLoading?: boolean;
+  };
 }) {
   const [offset, setOffset] = useState(0);
   const original = Array.isArray(rows) ? rows : [];
@@ -37,13 +44,19 @@ export function RetainedRowsTable({
     offset,
     Math.max(0, Math.floor((records.length - 1) / limit) * limit),
   );
+  const pageStart = serverPage?.offset ?? start;
+  const total = serverPage?.total ?? records.length;
+  const visible = serverPage
+    ? records.slice(0, limit)
+    : records.slice(start, start + limit);
+  const changePage = serverPage?.onPage ?? setOffset;
   return (
     <section aria-label={title}>
       <h4>{title}</h4>
       <p>
-        Records {records.length ? start + 1 : 0}–
-        {Math.min(start + limit, records.length)} of {records.length}. Original
-        values and references are retained without rounding.
+        Records {visible.length ? pageStart + 1 : 0}–
+        {visible.length ? Math.min(pageStart + visible.length, total) : 0} of{" "}
+        {total}. Original values and references are retained without rounding.
       </p>
       {invalid > 0 && (
         <p role="alert">
@@ -81,7 +94,7 @@ export function RetainedRowsTable({
               </tr>
             </thead>
             <tbody>
-              {records.slice(start, start + limit).map((row, index) => (
+              {visible.map((row, index) => (
                 <tr key={start + index}>
                   {columns.map((key) => (
                     <td
@@ -109,14 +122,14 @@ export function RetainedRowsTable({
       )}
       <div className="toolbar">
         <Button
-          disabled={start === 0}
-          onClick={() => setOffset(Math.max(0, start - limit))}
+          disabled={pageStart === 0 || serverPage?.isLoading}
+          onClick={() => changePage(Math.max(0, pageStart - limit))}
         >
           Previous {title.toLowerCase()}
         </Button>
         <Button
-          disabled={start + limit >= records.length}
-          onClick={() => setOffset(start + limit)}
+          disabled={pageStart + limit >= total || serverPage?.isLoading}
+          onClick={() => changePage(pageStart + limit)}
         >
           Next {title.toLowerCase()}
         </Button>

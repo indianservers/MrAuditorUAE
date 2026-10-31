@@ -99,6 +99,7 @@ import {
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
 import { UAECTAuditDuty } from "./uae-ct-audit-duty";
 import { UAECTAuditDutyResult } from "./uae-ct-audit-duty-result";
+import { UAETaxGroupWorkpaper, UAETaxGroupResult } from "./uae-tax-group-workpaper";
 import { UAECompanyAccounts, UAECompanyAccountsResult } from "./uae-company-accounts";
 import { draftCurrency, reportingCurrency } from "./workflow-currency";
 import { TurnoverBooksComposition } from "./turnover-books-composition";
@@ -2534,6 +2535,9 @@ export function CountryWorkflows({
           evidence={inputs.data?.evidence || []}
           onCreated={setSelected}
         />
+      )}
+      {mode === "country-workflow" && config.data?.country === "AE" && (
+        <UAETaxGroupWorkpaper key={`tax-group:${tenant}:${eid}`} eid={eid} onCreated={setSelected} />
       )}
       {mode === "country-workflow" && config.data?.country === "AE" && (
         <UAECompanyAccounts key={`company-accounts:${eid}`} eid={eid} evidence={inputs.data?.evidence || []} onCreated={setSelected} />
@@ -7351,6 +7355,9 @@ export function CountryWorkflows({
           )}
           {body.workflow === "uae-ct-audit-duty" && (
             <UAECTAuditDutyResult row={rows[0]} />
+          )}
+          {body.workflow === "uae-tax-group-statements" && (
+            <UAETaxGroupResult key={selected} prefix={prefix} selected={selected} body={body} access={{eid,tenant,dependencies:detail.data.dependencies||[]}} />
           )}
           {body.workflow === "uae-company-accounts-duty" && (
             <UAECompanyAccountsResult row={rows[0]} />

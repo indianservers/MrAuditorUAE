@@ -43,6 +43,7 @@ COUNTRY_WORKFLOW_PATHS = (
     "modules/intelligence/matching_review.py",
     "modules/ifrs/calculations.py",
     "modules/ifrs/schemas.py",
+    "modules/ifrs/uae_tax_group_statements.py",
     "modules/jurisdictions/profiles.py",
     "modules/reconciliation/service.py",
     "modules/regulatory/conversion.py",

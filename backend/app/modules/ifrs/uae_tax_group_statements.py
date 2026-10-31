@@ -585,9 +585,21 @@ def calculate(data: TaxGroupStatements):
         precision.prec = 48
         current = _period(data.current)
         comparative = _period(data.comparative) if data.comparative else None
+        opening_difference = (
+            current["totals"]["opening_equity"] - comparative["totals"]["closing_equity"]
+            if comparative
+            else Decimal(0)
+        )
     issues = [{"period": "current", **issue} for issue in current["issues"]]
     if comparative:
         issues += [{"period": "comparative", **issue} for issue in comparative["issues"]]
+        if opening_difference:
+            issues.append(
+                {
+                    "code": "COMPARATIVE_OPENING_EQUITY_BRIDGE_REQUIRED",
+                    "difference": opening_difference,
+                }
+            )
         if data.comparative_basis == "unassessed":
             issues.append({"code": "COMPARATIVE_FRAMEWORK_BASIS_UNASSESSED"})
     return serial(
@@ -602,7 +614,8 @@ def calculate(data: TaxGroupStatements):
             "validation": {
                 "ready": False,
                 "arithmetic_reconciled": current["arithmetic_reconciled"]
-                and (comparative is None or comparative["arithmetic_reconciled"]),
+                and (comparative is None or comparative["arithmetic_reconciled"])
+                and not opening_difference,
                 "framework_inputs_without_detected_issues": not issues,
             },
             "source_binding_established": False,

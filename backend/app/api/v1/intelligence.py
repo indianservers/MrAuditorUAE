@@ -32,6 +32,7 @@ from app.modules.country_workflows.turnover_composition import TurnoverCompositi
 from app.modules.country_workflows.turnover_ledger import TurnoverLedgerInput
 from app.modules.country_workflows.uae_company_accounts import CompanyAccountsInput
 from app.modules.country_workflows.uae_ct_audit_duty import CTAuditDutyInput
+from app.modules.country_workflows.uae_tax_group_workpaper import TaxGroupWorkpaperInput
 from app.modules.country_workflows.vat_composition import VATCompositionInput
 from app.modules.country_workflows.withholding_obligations import WithholdingObligationInput
 from app.modules.intelligence import jobs, service
@@ -227,6 +228,133 @@ async def uae_ct_audit_duty(
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/uae-tax-group-statements", status_code=201)
+async def uae_tax_group_statements(
+    eid: uuid.UUID, data: TaxGroupWorkpaperInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.uae_tax_group_workpaper import COLLECTIONS, prepare, preview
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    obj = await prepare(db, ctx, eng, data, request.state.request_id)
+    return {
+        **audit.serialize(obj),
+        "body": {**preview(obj.body), "rows": obj.body["rows"][:100]},
+        "collection_totals": {key: len(obj.body.get(key, [])) for key in COLLECTIONS.values()},
+    }
+
+
+@router.get("/engagements/{eid}/events/{identifier}/tax-group-collections")
+async def tax_group_collections(
+    eid: uuid.UUID,
+    identifier: uuid.UUID,
+    db: DB,
+    ctx: Actor,
+    collection_name: Literal[
+        "statements",
+        "sources",
+        "members",
+        "adjustments",
+        "checks",
+        "notes",
+        "issues",
+        "losses",
+        "documents",
+    ] = Query(...),
+    period: Literal["all", "current", "comparative"] = "all",
+    statement: Literal["all", "position", "profit_loss", "oci", "changes_equity"] = "all",
+    offset: int = Query(0, ge=0),
+    limit: int = Query(25, ge=1, le=100),
+):
+    from app.modules.country_workflows.uae_tax_group_workpaper import collection
+
+    obj = await service.event(db, ctx, eid, identifier)
+    if obj.body.get("workflow") != "uae-tax-group-statements":
+        raise HTTPException(422, "Select a retained Tax Group statement workpaper")
+    values = collection(obj.body, collection_name, period, statement)
+    return {
+        "items": values[offset : offset + limit],
+        "total": len(values),
+        "offset": offset,
+        "limit": limit,
+    }
+
+
+@router.get("/engagements/{eid}/tax-group-mapping-schema")
+async def tax_group_mapping_schema(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.country_workflows.uae_tax_group_workpaper import mapping_schema
+
+    await service.scope(db, ctx, eid)
+    return mapping_schema()
+
+
+@router.get("/engagements/{eid}/evidence-choices")
+async def evidence_choices(
+    eid: uuid.UUID,
+    db: DB,
+    ctx: Actor,
+    offset: int = Query(0, ge=0),
+    limit: int = Query(25, ge=1, le=100),
+    sha256: str | None = Query(None, pattern=r"^[a-f0-9]{64}$"),
+    search: str = Query("", max_length=100),
+):
+    from sqlalchemy import func
+
+    from app.modules.audit_execution.models import EvidenceVersion
+
+    await service.scope(db, ctx, eid)
+    latest = (
+        select(EvidenceVersion.record_id, func.max(EvidenceVersion.number).label("number"))
+        .join(AuditRecord, AuditRecord.id == EvidenceVersion.record_id)
+        .where(
+            EvidenceVersion.tenant_id == ctx.tenant_id,
+            AuditRecord.engagement_id == eid,
+            AuditRecord.kind == "evidence",
+            AuditRecord.status != "ARCHIVED",
+        )
+        .group_by(EvidenceVersion.record_id)
+        .subquery()
+    )
+    query = (
+        select(EvidenceVersion)
+        .join(
+            latest,
+            and_(
+                EvidenceVersion.record_id == latest.c.record_id,
+                EvidenceVersion.number == latest.c.number,
+            ),
+        )
+        .where(EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.scan_status == "CLEAN")
+    )
+    if sha256:
+        query = query.where(EvidenceVersion.sha256 == sha256)
+    if search:
+        query = query.where(EvidenceVersion.filename.icontains(search, autoescape=True))
+    total = await db.scalar(select(func.count()).select_from(query.subquery()))
+    versions = (
+        await db.scalars(
+            query.order_by(EvidenceVersion.created_at.desc(), EvidenceVersion.id)
+            .offset(offset)
+            .limit(limit)
+        )
+    ).all()
+    return {
+        "items": [
+            {
+                "id": str(v.id),
+                "record_id": str(v.record_id),
+                "label": v.filename,
+                "sha256": v.sha256,
+                "version": v.number,
+                "scan_status": v.scan_status,
+            }
+            for v in versions
+        ],
+        "total": total,
+        "offset": offset,
+        "limit": limit,
+    }
 
 
 @router.post("/engagements/{eid}/uae-company-accounts-duty", status_code=201)
@@ -990,6 +1118,13 @@ async def event_details(
         selected_kind = "party-confirmation" if confirmation_view == "parties" else "control"
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
     totals = {}
+    if body.get("workflow") == "uae-tax-group-statements":
+        from app.modules.country_workflows.uae_tax_group_workpaper import COLLECTIONS, preview
+
+        totals.update(
+            {key: len(body.get(key, [])) for key in COLLECTIONS.values() if key != "rows"}
+        )
+        body = preview(body)
     for key in [
         "rows",
         "items",

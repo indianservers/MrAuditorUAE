@@ -1,0 +1,616 @@
+{
+  "$defs": {
+    "FrameworkAdjustment": {
+      "additionalProperties": false,
+      "properties": {
+        "reference": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "member": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Member",
+          "type": "string"
+        },
+        "line_reference": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Line Reference",
+          "type": "string"
+        },
+        "delta": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string",
+              "pattern": "^-?[0-9]{1,28}(?:\\.[0-9]{1,8})?$"
+            }
+          ],
+          "title": "Delta",
+          "description": "Use an exact bounded plain decimal string (at most28 total digits and8 decimal places). Fractional JSON numbers are rejected. Cross-field and total-digit checks run during preparation."
+        },
+        "category": {
+          "enum": [
+            "uniform_policy",
+            "uae_ct_exclusion",
+            "consolidation_acquisition_removal",
+            "intramember_elimination",
+            "consequential_asset_adjustment"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "counterparty_member": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Counterparty Member"
+        },
+        "transaction_reference": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transaction Reference"
+        },
+        "source_reference": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "reference",
+        "member",
+        "line_reference",
+        "delta",
+        "category",
+        "source_reference",
+        "rationale"
+      ],
+      "title": "FrameworkAdjustment",
+      "type": "object"
+    },
+    "MemberStatements": {
+      "additionalProperties": false,
+      "properties": {
+        "member": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Member",
+          "type": "string"
+        },
+        "legal_entity_id": {
+          "format": "uuid",
+          "title": "Legal Entity Id",
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "parent",
+            "subsidiary"
+          ],
+          "title": "Role",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "membership_from": {
+          "format": "date",
+          "title": "Membership From",
+          "type": "string"
+        },
+        "membership_through": {
+          "format": "date",
+          "title": "Membership Through",
+          "type": "string"
+        },
+        "currency": {
+          "const": "AED",
+          "title": "Currency",
+          "type": "string"
+        },
+        "basis": {
+          "const": "standalone_unconsolidated",
+          "title": "Basis",
+          "type": "string"
+        },
+        "accounting_standard": {
+          "enum": [
+            "IFRS",
+            "IFRS_FOR_SMES",
+            "unassessed"
+          ],
+          "title": "Accounting Standard",
+          "type": "string"
+        },
+        "uniform_policy": {
+          "enum": [
+            "assessed_aligned",
+            "adjusted_with_evidence",
+            "unassessed"
+          ],
+          "title": "Uniform Policy",
+          "type": "string"
+        },
+        "policy_assessment": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Policy Assessment",
+          "type": "string"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "lines": {
+          "items": {
+            "$ref": "#/$defs/StatementLine"
+          },
+          "maxItems": 20000,
+          "minItems": 4,
+          "title": "Lines",
+          "type": "array"
+        }
+      },
+      "required": [
+        "member",
+        "legal_entity_id",
+        "role",
+        "period_start",
+        "period_end",
+        "membership_from",
+        "membership_through",
+        "currency",
+        "basis",
+        "accounting_standard",
+        "uniform_policy",
+        "policy_assessment",
+        "source_evidence_version_id",
+        "source_sha256",
+        "lines"
+      ],
+      "title": "MemberStatements",
+      "type": "object"
+    },
+    "PeriodStatements": {
+      "additionalProperties": false,
+      "properties": {
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "population": {
+          "enum": [
+            "assessed_complete",
+            "unassessed"
+          ],
+          "title": "Population",
+          "type": "string"
+        },
+        "intramember_population": {
+          "enum": [
+            "assessed_complete",
+            "unassessed"
+          ],
+          "title": "Intramember Population",
+          "type": "string"
+        },
+        "population_assessment": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Population Assessment",
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "$ref": "#/$defs/MemberStatements"
+          },
+          "maxItems": 100,
+          "minItems": 2,
+          "title": "Members",
+          "type": "array"
+        },
+        "adjustments": {
+          "items": {
+            "$ref": "#/$defs/FrameworkAdjustment"
+          },
+          "maxItems": 20000,
+          "title": "Adjustments",
+          "type": "array"
+        },
+        "pre_join_losses": {
+          "items": {
+            "$ref": "#/$defs/PreJoinLoss"
+          },
+          "maxItems": 10000,
+          "title": "Pre Join Losses",
+          "type": "array"
+        },
+        "basis_of_preparation": {
+          "maxLength": 20000,
+          "minLength": 10,
+          "title": "Basis Of Preparation",
+          "type": "string"
+        },
+        "accounting_policies": {
+          "maxLength": 20000,
+          "minLength": 10,
+          "title": "Accounting Policies",
+          "type": "string"
+        },
+        "estimates_and_judgments": {
+          "maxLength": 20000,
+          "minLength": 10,
+          "title": "Estimates And Judgments",
+          "type": "string"
+        },
+        "membership_disclosures": {
+          "maxLength": 20000,
+          "minLength": 10,
+          "title": "Membership Disclosures",
+          "type": "string"
+        }
+      },
+      "required": [
+        "period_start",
+        "period_end",
+        "population",
+        "intramember_population",
+        "population_assessment",
+        "members",
+        "adjustments",
+        "pre_join_losses",
+        "basis_of_preparation",
+        "accounting_policies",
+        "estimates_and_judgments",
+        "membership_disclosures"
+      ],
+      "title": "PeriodStatements",
+      "type": "object"
+    },
+    "PreJoinLoss": {
+      "additionalProperties": false,
+      "properties": {
+        "transaction_reference": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Transaction Reference",
+          "type": "string"
+        },
+        "members": {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Members",
+          "type": "array"
+        },
+        "deductible_loss": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "integer"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]{1,28}(?:\\.[0-9]{1,8})?$"
+            }
+          ],
+          "title": "Deductible Loss",
+          "description": "Use an exact bounded plain decimal string (at most28 total digits and8 decimal places). Fractional JSON numbers are rejected. Cross-field and total-digit checks run during preparation."
+        },
+        "previously_reversed": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "integer"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]{1,28}(?:\\.[0-9]{1,8})?$"
+            }
+          ],
+          "title": "Previously Reversed",
+          "description": "Use an exact bounded plain decimal string (at most28 total digits and8 decimal places). Fractional JSON numbers are rejected. Cross-field and total-digit checks run during preparation."
+        },
+        "period_income": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "integer"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]{1,28}(?:\\.[0-9]{1,8})?$"
+            }
+          ],
+          "title": "Period Income",
+          "description": "Use an exact bounded plain decimal string (at most28 total digits and8 decimal places). Fractional JSON numbers are rejected. Cross-field and total-digit checks run during preparation."
+        },
+        "source_reference": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 4000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "transaction_reference",
+        "members",
+        "deductible_loss",
+        "previously_reversed",
+        "period_income",
+        "source_reference",
+        "assessment"
+      ],
+      "title": "PreJoinLoss",
+      "type": "object"
+    },
+    "StatementLine": {
+      "additionalProperties": false,
+      "properties": {
+        "reference": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "statement": {
+          "enum": [
+            "position",
+            "profit_loss",
+            "oci",
+            "changes_equity"
+          ],
+          "title": "Statement",
+          "type": "string"
+        },
+        "code": {
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "kind": {
+          "maxLength": 40,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string",
+              "pattern": "^-?[0-9]{1,28}(?:\\.[0-9]{1,8})?$"
+            }
+          ],
+          "title": "Amount",
+          "description": "Use an exact bounded plain decimal string (at most28 total digits and8 decimal places). Fractional JSON numbers are rejected. Cross-field and total-digit checks run during preparation."
+        },
+        "treatment": {
+          "enum": [
+            "ordinary",
+            "nonmember_investment",
+            "member_investment",
+            "member_equity",
+            "direct_member_investment_impairment",
+            "uae_ct_current",
+            "uae_ct_deferred",
+            "foreign_or_emirate_tax",
+            "consolidation_only_acquisition",
+            "standalone_business_acquisition"
+          ],
+          "title": "Treatment",
+          "type": "string"
+        },
+        "counterparty_member": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Counterparty Member"
+        },
+        "transaction_reference": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transaction Reference"
+        },
+        "source_reference": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "measurement_basis": {
+          "default": "unassessed",
+          "enum": [
+            "cost_less_impairment",
+            "other",
+            "unassessed"
+          ],
+          "title": "Measurement Basis",
+          "type": "string"
+        },
+        "cost_basis": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "integer"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]{1,28}(?:\\.[0-9]{1,8})?$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Basis",
+          "description": "Use an exact bounded plain decimal string (at most28 total digits and8 decimal places). Fractional JSON numbers are rejected. Cross-field and total-digit checks run during preparation."
+        },
+        "cumulative_impairment": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "integer"
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]{1,28}(?:\\.[0-9]{1,8})?$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cumulative Impairment",
+          "description": "Use an exact bounded plain decimal string (at most28 total digits and8 decimal places). Fractional JSON numbers are rejected. Cross-field and total-digit checks run during preparation."
+        }
+      },
+      "required": [
+        "reference",
+        "statement",
+        "code",
+        "label",
+        "kind",
+        "amount",
+        "treatment",
+        "source_reference"
+      ],
+      "title": "StatementLine",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "uae-tax-group-four-statement-workpaper/1",
+      "title": "Contract",
+      "type": "string"
+    },
+    "group_reference": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Group Reference",
+      "type": "string"
+    },
+    "first_group_period_start": {
+      "format": "date",
+      "title": "First Group Period Start",
+      "type": "string"
+    },
+    "current": {
+      "$ref": "#/$defs/PeriodStatements"
+    },
+    "comparative": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PeriodStatements"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "comparative_basis": {
+      "enum": [
+        "first_group_period",
+        "assessed_current_framework",
+        "unassessed"
+      ],
+      "title": "Comparative Basis",
+      "type": "string"
+    }
+  },
+  "required": [
+    "contract",
+    "group_reference",
+    "first_group_period_start",
+    "current",
+    "comparative",
+    "comparative_basis"
+  ],
+  "title": "TaxGroupStatements",
+  "type": "object"
+}
