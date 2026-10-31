@@ -302,3 +302,4 @@ docs/phase-12/screenshots/dec7e6b-view-label-failure/*.png -text
 docs/phase-12/icfr-*.xml -text whitespace=cr-at-eol
 docs/country-workflows/sample-inputs/SYNTHETIC-icfr-duty-coverage/*/*.csv text eol=lf
 docs/country-workflows/sample-inputs/SYNTHETIC-icfr-duty-coverage/*/*.txt -text
+docs/phase-12/screenshots/e15170f-payroll-views/*.png -text

@@ -1,0 +1,99 @@
+{
+  "recorded_date": "2026-10-31",
+  "evidence_kind": "hosted-job-log-observation",
+  "current_source": "9f6c1eb9b4af1a460d9bb2f084abb67ef91800bd",
+  "observations": [
+    {
+      "source": "e15170f0d2ddddfd6e4f0880663e51a92f983492",
+      "run_id": 41186128630,
+      "job_id": 124493306504,
+      "job": "browser-smoke",
+      "conclusion": "SUCCESS",
+      "executed_cases": 20,
+      "elapsed": "12.2m",
+      "employment_case": "UAE then India employment payroll: corrections, separate approval, exact export and withdrawn source",
+      "employment_elapsed": "22.6s",
+      "verified_by": "Completed GitHub job and decoded execution log; exact view selector, history and assessment assertions are in that source's browser case",
+      "artifact": {
+        "id": 13037870015,
+        "size": 25526844,
+        "sha256": "947dc4c1e2a83203f4a2244d073e379b425e71d5e346e2b84985f4505961dcbe"
+      },
+      "screenshot_review": "All six original PNGs visually inspected: separate assessment/history selections, superseded 1500 versus current 1000, AED/INR, matched 1000/1000 delta 0, and unchanged rows with stale notice and disabled approval. Toasts remain below financial rows."
+    },
+    {
+      "source": "7c65ad7b56732f1e72df5ca1a3baa0f5ff9075e9",
+      "run_id": 41185535048,
+      "job_id": 124491595697,
+      "job": "verify",
+      "conclusion": "SUCCESS",
+      "passed": 6181,
+      "skipped": 9,
+      "elapsed_seconds": 4816.81,
+      "coverage_percent_display": 87.46,
+      "core_covered": 831,
+      "core_statements": 930
+    },
+    {
+      "source": "071dc57508bf596e1e9f888db1d18085651e984e",
+      "run_id": 41183714197,
+      "job_id": 124486231754,
+      "job": "verify",
+      "conclusion": "SUCCESS",
+      "passed": 6181,
+      "skipped": 9,
+      "elapsed_seconds": 6211.17,
+      "coverage_percent_display": 87.46,
+      "core_covered": 831,
+      "core_statements": 930
+    }
+  ],
+  "limitations": [
+    "These are prior source results, not evidence of the new ICFR browser workflow.",
+    "Raw full backend XML/coverage for these two runs have not been archived in this receipt.",
+    "Nine skips remain in original hosted executions; no skip is represented as passed.",
+    "No real client, vendor integration or professional qualification is established."
+  ],
+  "current_run": {
+    "id": 41191029405,
+    "source": "9f6c1eb9b4af1a460d9bb2f084abb67ef91800bd",
+    "ml": "SUCCESS",
+    "security": "SUCCESS",
+    "verify": "IN_PROGRESS",
+    "browser": "IN_PROGRESS",
+    "frontend": "IN_PROGRESS",
+    "containers": "IN_PROGRESS"
+  },
+  "screenshots": [
+    {
+      "path": "docs/phase-12/screenshots/e15170f-payroll-views/AE-employment-payroll-history.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "176f42b8bdca8cbec809c1f494f955f659a4280ee6f15be6478ba7f3c7ede755"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e15170f-payroll-views/AE-employment-payroll-reviewed.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "d1ab5456de4eca3a0510cd5e2a9336bc81040ab83f3de338e8c356055e332ed0"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e15170f-payroll-views/AE-employment-payroll-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "40b712d2b4fa6fe8f1d75e210ef9281cd3af13eb2a034ccff0e46d1f27606dd5"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e15170f-payroll-views/IN-employment-payroll-history.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "ad7dc753ce91edabb1d262020e6bbbcbc588c2a6f2d2e97143400e1631b1ac61"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e15170f-payroll-views/IN-employment-payroll-reviewed.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "8ea23afbc1ceaf80d860bb4ad923ce50bb3d6f941eaee33501acde7675ee74bf"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e15170f-payroll-views/IN-employment-payroll-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "34371f3668bf749cc19980c34eca309e2e88bc1f679b4ddc03ce86db4cd29017"
+    }
+  ]
+}
