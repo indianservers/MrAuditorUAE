@@ -6512,18 +6512,28 @@ export function CountryWorkflows({
               </ul>
             </details>
           )}
-          <div className="toolbar">
-            <Status value={body.review_status} />
-            <Status value={detail.data.freshness} />
-            <span>{body.exception_count ?? 0} exceptions</span>
-            <IntelligenceExports
-              key={`${tenant}:${prefix}:${selected}`}
-              prefix={prefix}
-              eventId={selected}
-              tenant={tenant}
-              filename={`country-workflow-${selected}`}
-            />
-          </div>
+          <section aria-label="Retained result status and exports">
+            <div className="toolbar">
+              <Status value={body.review_status} />
+              <Status value={detail.data.freshness} />
+              <span>{body.exception_count ?? 0} exceptions</span>
+              <IntelligenceExports
+                key={`${tenant}:${prefix}:${selected}`}
+                prefix={prefix}
+                eventId={selected}
+                tenant={tenant}
+                filename={`country-workflow-${selected}`}
+              />
+            </div>
+            {detail.data.freshness !== "CURRENT" && (
+              <p role="alert">
+                This retained result has no current dependency verification,
+                so any previous review does not approve the current
+                evidence or rules. Regenerate the result and complete a new
+                independent review before using it as a current workpaper.
+              </p>
+            )}
+          </section>
           {body.blocked && (
             <p role="alert">
               {body.booking_date_review_count

@@ -273,12 +273,19 @@ export async function runTaxGroupWorkpaperBrowser(
     reviewer.getByRole("button", { name: "Independent approval", exact: true }),
   ).toBeDisabled();
   await reviewer
-    .getByRole("heading", {
-      name: "SYNTHETIC retained Tax Group FY2025",
+    .getByRole("region", {
+      name: "Retained result status and exports",
       exact: true,
     })
-    .locator("..")
     .screenshot({
       path: `${screenshots}/AE-tax-group-workpaper-mapping-stale.png`,
+    });
+  await expect(reviewer.getByRole("alert")).toContainText(
+    "any previous review does not approve the current evidence or rules",
+  );
+  await reviewer
+    .getByRole("button", { name: "Independent approval", exact: true })
+    .screenshot({
+      path: `${screenshots}/AE-tax-group-workpaper-stale-approval-disabled.png`,
     });
 }

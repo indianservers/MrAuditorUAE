@@ -1,0 +1,44 @@
+{
+  "recorded_at": "2026-10-31T04:53:41.966053+00:00",
+  "base_commit": "a889034bd98325458ca559169f3a24b2315ca356",
+  "scope": "Shared UAE/India retained result status: previous review does not establish current dependency approval; focused Tax Group browser screenshots",
+  "reports": [
+    {
+      "path": "docs/phase-12/retained-status-frontend.xml",
+      "sha256": "9094d1ce3cb8ba96985cd1b13c6aece8b58cb2547f841af1f507cb7b38cc238a",
+      "tests": 531,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "path": "docs/phase-12/retained-status-focused.xml",
+      "sha256": "afbc499cf1055898695e77886fc87f32b1cf229e0791aa10834f862430e759f0",
+      "tests": 151,
+      "failures": 0,
+      "errors": 0
+    }
+  ],
+  "implementation_files": [
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "normalization": "LF",
+      "sha256": "9ed73fedbd2b69a9081d78a5699fe2df5b0650ea46d0828ca21166bd515f7594"
+    },
+    {
+      "path": "frontend/e2e/uae-tax-group-workpaper-browser.ts",
+      "normalization": "LF",
+      "sha256": "c22b8ab186cdf67718f1654836f80a40a2c67140dfa53fbeffbcce38b9336327"
+    }
+  ],
+  "checks": {
+    "typescript": "PASS",
+    "targeted_eslint": "PASS",
+    "production_build": "PASS",
+    "combined_browser_case_discovery": "PASS; one test discovered"
+  },
+  "limitations": [
+    "Actual new browser screenshots await hosted execution",
+    "Existing tall fe11d0e PNG is preserved unchanged as historical evidence",
+    "No backend rules, review gates or professional qualification were changed"
+  ]
+}
