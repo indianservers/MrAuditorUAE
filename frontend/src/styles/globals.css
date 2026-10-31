@@ -3677,6 +3677,38 @@ kbd,
 .ifrs-report {
   border-bottom: 1px solid var(--border, #e2e8f0);
 }
+.group-source-lineage {
+  flex: none;
+  min-width: 0;
+  padding: 16px;
+  margin-top: 16px;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+}
+.group-source-lineage > section {
+  margin-top: 20px;
+}
+.group-source-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+.group-source-scroll table {
+  width: 100%;
+  min-width: 1080px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+.group-source-scroll th,
+.group-source-scroll td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.group-source-scroll thead {
+  background: var(--surface-muted, #f4f6fa);
+}
 .ifrs-designer {
   display: grid;
   grid-template-columns: 180px minmax(380px, 1fr) minmax(240px, 300px);

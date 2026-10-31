@@ -1,0 +1,90 @@
+{
+  "source_commit": "b7be0b3d8ee21acaca0fe57995f82bb7f00c4bf8",
+  "run_id": 41141914782,
+  "job_id": 124357976938,
+  "conclusion": "success",
+  "passed": 5697,
+  "skipped": 9,
+  "failed": 0,
+  "errors": 0,
+  "duration_seconds": 5989.75,
+  "overall_coverage_percent": 87.11114220418824,
+  "artifact": {
+    "id": 13022863159,
+    "bytes": 258141,
+    "sha256": "c7084b619ac0e34fd23840dfc21838de7e0beb81550756567d2ef4b5f05a964d"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/b7be0b3-hosted-full.xml",
+      "bytes": 889496,
+      "sha256": "a9dbcbbd1879f1af54144dea580e441f8028098d331c2df7b0dfa80de91aece4"
+    },
+    {
+      "path": "docs/phase-12/b7be0b3-hosted-coverage.json",
+      "bytes": 1913804,
+      "sha256": "4ce6196860ae908942776b50f98eb150047491b969f6fe2adf2c1f55ad07dd7e"
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "security": "success",
+    "containers": "success",
+    "ml": "success"
+  },
+  "skipped_cases": [
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "class": "tests.phase2.test_live_native",
+      "name": "test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_document_worker_runtime",
+      "name": "test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "numbered_form_module_cases": 102,
+  "limits": [
+    "Source-specific native Form140/144 and earlier implementations only. Later all-quarter salary, pypdf patch, UAE accounts-duty and group features require separate verification.",
+    "This source predates the isolated pypdf6.21.4 security patch and is not a current dependency-security receipt.",
+    "Skipped live-provider cases do not establish authorized access. No real-client, professional or production qualification."
+  ]
+}

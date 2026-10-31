@@ -1,0 +1,56 @@
+{
+  "source_commit": "ec7ea18e03deb8c76c6d1e212d29627e16dce120",
+  "run_id": 41152682450,
+  "job_id": 124392556492,
+  "conclusion": "success",
+  "suite": {
+    "passed": 15,
+    "duration": "9.9m",
+    "group_comparative_case_seconds": 25.4
+  },
+  "artifact": {
+    "id": 13024051210,
+    "bytes": 21971852,
+    "sha256": "a52f1f0e640148b426c571402897e89fcb9f88aacc31e9016b3a0306aad31ced"
+  },
+  "images": [
+    {
+      "file": "AE-group-comparative-original-lineage-ec7ea18.png",
+      "bytes": 72927,
+      "sha256": "75d4efc11ff120c23f69a642644e1ea85dda10740cb8a055105af1966be63ae0"
+    },
+    {
+      "file": "AE-group-comparative-prior-disclosure-stale-ec7ea18.png",
+      "bytes": 158026,
+      "sha256": "a4615285fab0634fef3b8867e3a37240407c0646e4904d6b6dc95bf9a1c51539"
+    },
+    {
+      "file": "AE-group-comparative-source-accounts-ec7ea18.png",
+      "bytes": 36883,
+      "sha256": "704ebcec3bab2aa0cf66087dca885b428113bb44926c790122c6b3e58ca12740"
+    },
+    {
+      "file": "AE-group-comparative-source-ec7ea18.png",
+      "bytes": 42424,
+      "sha256": "d02bd0a86a3ce57f772595cca8f9ba6106aee2341e7e85ea2d115e16e0139917"
+    }
+  ],
+  "visual_review": [
+    "All four original PNGs inspected without modification.",
+    "Current AED910 and comparative AED390 remain visible, with original draft prior run/source metadata and STALE after a new prior disclosure.",
+    "The new full-width source-account panel is still vertically shrunken: its screenshot clips the comparative table and paging controls. Columns are densely joined without scoped table styling.",
+    "Automated visible-cell checks passed despite this real layout defect. A subsequent fix removes flex sizing from this panel, styles its tables and asserts containment of both tables and the final paging controls.",
+    "Prior metadata rendered by the generic facts view still clips some long text; screenshots do not establish complete readable metadata."
+  ],
+  "automated_scope": [
+    "Four independently approved member packages across two periods, UI calculation and original FX/source accounts",
+    "Both table populations and expected current rate3/prior rate2 present",
+    "Full XLSX download preserves immutable data",
+    "New prior disclosure recursively stales the original immutable result and blocks recalculation from stale prior source"
+  ],
+  "limits": [
+    "This receipt proves the source-specific browser run, not success of its still-running full backend job.",
+    "Synthetic workflow only; no real-client, professional or production qualification.",
+    "The later layout fix requires separate hosted screenshot verification."
+  ]
+}

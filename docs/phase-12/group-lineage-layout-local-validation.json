@@ -1,0 +1,20 @@
+{
+  "scope": "Group source-account table layout after visually observed ec7ea18 clipping",
+  "frontend_report": {
+    "file": "group-lineage-layout-frontend.xml",
+    "bytes": 119873,
+    "sha256": "96e5ee9e9e0ba2a76768b6f2812117b6f13e8f2d613c1b13f0923bf2b6466881",
+    "passed": 508,
+    "failed": 0
+  },
+  "checks": {
+    "typecheck": "PASS",
+    "lint": "PASS_WITH_EXISTING_UNRELATED_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS"
+  },
+  "change": "Remove generic flex sizing from source panel; allow full table height with scoped wrapping, spacing and horizontal scrolling. Hosted check requires both complete table bounds and final paging control inside panel.",
+  "limits": [
+    "Browser containment and fixed screenshots are authored but await source-specific hosted execution; no local application server started.",
+    "No accounting calculation or backend behavior changed."
+  ]
+}

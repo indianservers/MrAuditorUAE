@@ -52,8 +52,8 @@ function SourceTable({
       {records.length === 0 ? (
         <p>No structured source accounts retained for this line.</p>
       ) : (
-        <div style={{ overflowX: "auto" }}>
-          <table aria-label={title} className="data-table">
+        <div className="group-source-scroll">
+          <table aria-label={title}>
             <thead>
               <tr>
                 {columns.map((key) => (
@@ -122,8 +122,7 @@ export function GroupSourceLineage({
   return (
     <section
       aria-label="Group financial source lineage"
-      className="main-panel"
-      style={{ padding: 16, marginTop: 16 }}
+      className="group-source-lineage"
     >
       <h3>Selected group line: source accounts</h3>
       <p>

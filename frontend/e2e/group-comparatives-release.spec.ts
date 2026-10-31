@@ -428,6 +428,25 @@ test("prior reported group comparatives retain separate review, original FX, com
     await expect(
       priorSources.getByRole("cell", { name: "2", exact: true }),
     ).toBeVisible();
+    // Visibility alone permits content overflowing a shrunken flex panel.
+    // Both full tables and the final paging controls must fit its own bounds.
+    const panelBounds = await lineage.boundingBox();
+    expect(panelBounds).not.toBeNull();
+    for (const content of [
+      currentSources,
+      priorSources,
+      lineage.getByRole("button", {
+        name: "Next comparative source accounts",
+        exact: true,
+      }),
+    ]) {
+      const bounds = await content.boundingBox();
+      expect(bounds).not.toBeNull();
+      expect(bounds!.y).toBeGreaterThanOrEqual(panelBounds!.y);
+      expect(bounds!.y + bounds!.height).toBeLessThanOrEqual(
+        panelBounds!.y + panelBounds!.height,
+      );
+    }
     await lineage.screenshot({
       path: `${screenshots}/AE-group-comparative-source-accounts.png`,
     });
