@@ -1,0 +1,68 @@
+{
+  "source_commit": "125892213fa5c57eb4d4f4263064f42c6c8cc3b8",
+  "run_id": 41161512884,
+  "job_id": 124419873352,
+  "conclusion": "success",
+  "passed": 16,
+  "duration": "10.9m",
+  "artifact": {
+    "id": 13028240594,
+    "bytes": 22694683,
+    "sha256": "8aedc4a3330fec20fc4105a9ed67ce41d09078ae5191fb81c418e030375176ee"
+  },
+  "images": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-CT-MD84-at-limit-summary-1258922.png",
+      "bytes": 37932,
+      "sha256": "a8745381fa5a5a7fb054f1a82694f0ead562810d450f56a69a5954bbd2483ba0"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-CT-MD84-at-limit-reviewed-1258922.png",
+      "bytes": 135256,
+      "sha256": "21c9ef9fbd5758f33779dcbd909bd93a8715908aebe10d942a4a0249acf72a54"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-CT-MD84-above-limit-summary-1258922.png",
+      "bytes": 34656,
+      "sha256": "f7d88335a97accef5ac0fdb26a655356a0f098e2f3e85f0729fab5805f33cf8c"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-CT-MD84-above-limit-reviewed-1258922.png",
+      "bytes": 133875,
+      "sha256": "1e9d1289b70d6e195e939a1bddad79fda1c13ef9dad79f3d7e34450ff70864ae"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-CT-MD84-member-above-limit-summary-1258922.png",
+      "bytes": 46266,
+      "sha256": "58f0c978d32c0eda75f15ad78e69eef957b92deca183f8cf99b38d55bc943639"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-CT-MD84-member-above-limit-reviewed-1258922.png",
+      "bytes": 141203,
+      "sha256": "3f5d95c23c5601de0c3cff6b12fcc658c6f9d8e303b806f98a729f776360c77a"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-CT-MD84-facts-replaced-stale-1258922.png",
+      "bytes": 134655,
+      "sha256": "a14200aa1f3225f547be2b6a7f267cde3d0aed6a0c4abd44a10d0b74e2ab1212"
+    }
+  ],
+  "visual_review": [
+    "All7 unchanged original MD84 summary/reviewed/stale PNGs visually inspected.",
+    "Assessed nonmember exactlyAED50000000: no MD84 duty; assessed nonmember AED50000000.01: required. Both exact amounts and separate company-law boundary are readable.",
+    "Assessed approved whole-period standalone member AED50000000.01: no standalone CT audit duty, with separate Tax Group audit and other entity duties explicitly retained.",
+    "Reviewed/current statuses and export actions are visible. After replacement of facts the immutable historical body remains visible, status is STALE, and independent approval is disabled.",
+    "Wide retained source schedule requires horizontal scrolling; the compact readable summary carries the decision and exact revenue."
+  ],
+  "automated_scope": [
+    "Actual browser form selects explicit member status and all3 distinct retained original MD84/CTP007/fact versions.",
+    "Each of3 scenarios creates an actual API result, rejects self-approval403, accepts a separate reviewer, verifies the readable summary and downloads XLSX.",
+    "Fact replacement stales the retained reviewed event without mutating its body.",
+    "Other source-pinned AE/India report and group/stock/benefit browser regressions remain green."
+  ],
+  "limits": [
+    "Synthetic fixtures only; no real-client or independent professional qualification.",
+    "Full verify job124419873540 was still in progress when this browser evidence was retained; no all-jobs-success claim.",
+    "This source predates the internal four-statement engine; it does not prove Tax Group statement preparation or issuance."
+  ]
+}

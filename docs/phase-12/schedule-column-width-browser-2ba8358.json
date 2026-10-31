@@ -1,0 +1,45 @@
+{
+  "source_commit": "2ba835837e6a9b16ce8c31669851c2fac5a0f6a3",
+  "run_id": 41160641253,
+  "browser_job_id": 124417202100,
+  "conclusion": "success",
+  "passed": 16,
+  "duration": "10.8m",
+  "browser_artifact": {
+    "id": 13027246927,
+    "bytes": 22512105,
+    "sha256": "1b2c12459fd8fc48dcdb64613991da5eaeeeb76205a36fc2269d40a68336bb65"
+  },
+  "scan_artifact": {
+    "id": 13027730194,
+    "bytes": 1133,
+    "sha256": "7e28ecb178be48d29ee5e67d8df031127041a7be422cce49dc260b7ee44941b6"
+  },
+  "scan_original": {
+    "path": "docs/phase-12/tax-group-authority-scans-2ba8358.json",
+    "bytes": 3164,
+    "sha256": "45e15ed556c95a9e11fadb8edaa07856809edb0e22f1806c048f6b583640a0c0"
+  },
+  "images": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-inventory-approved-calculation-2ba8358.png",
+      "bytes": 60957,
+      "sha256": "83a0d5b56673e32a365083da3dd940f03c35486b4a727dfdb2b93b650c0d7592"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-employee-benefits-approved-calculation-2ba8358.png",
+      "bytes": 75894,
+      "sha256": "974bbddc9168cea5e3c7397ead095b9564155e0283a552bc09d4f3d025a483ad"
+    }
+  ],
+  "visual_review": [
+    "Both unchanged original PNGs inspected. Inventory carrying160/write-down16 remain readable. The horizontally scrolled item table shows spaced columns and exact cost144/176 without squeezing18 fields into the viewport.",
+    "Remaining columns require horizontal scrolling; one screenshot is not a claim that every column is simultaneously visible. The browser assertion checks the closing-cost column is at least239px wide.",
+    "Benefit obligation closing120 and payroll bridge closing160 remain separately readable; unknown statutory settlement and zero differences retain distinct displays."
+  ],
+  "scope": [
+    "All16 source-pinned synthetic browser tests passed; this is not a full-backend receipt.",
+    "All8 exact public authority originals received complete CLEAN verdicts from the real hosted scanner, including original FTA7 and CTP007.",
+    "This source predates MD84 member contract v2 and the internal four-statement engine. No client, professional or production qualification."
+  ]
+}

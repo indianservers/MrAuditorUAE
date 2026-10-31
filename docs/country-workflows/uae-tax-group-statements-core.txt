@@ -1,0 +1,113 @@
+UAE Tax Group four-statement workpaper core
+=========================================
+
+Status: internal calculation layer; not yet an available client workflow.
+Contract: uae-tax-group-four-statement-workpaper/1.
+Implementation: backend/app/modules/ifrs/uae_tax_group_statements.py.
+
+This implements part of the distinct FTA7/CTP007 aggregation framework. It
+does not repurpose IFRS10 consolidation or claim a completed reporting pack.
+No endpoint, source-byte verification, independent review or user interface
+is connected to this engine yet. Source binding remains false, statutory
+issuance remains false, professional qualification remains NOT_ESTABLISHED
+and validation.ready is always false. These boundaries also apply when the
+numbers reconcile and no input issue is detected.
+
+Inputs and calculation
+----------------------
+Every current-period member supplies an explicit whole-period standalone,
+unconsolidated AED package with legal-entity identity, parent/subsidiary role,
+membership coverage, financial year, accounting standard, policy assessment,
+source-version identity/hash and independently mapped statement rows.
+Exactly one parent, unique entities, aligned financial years and all four
+statements are required. There is no automatic FX or mid-period alignment.
+
+The statements are position, profit/loss, OCI and changes in equity. Position
+uses debit-positive/credit-negative balances. Performance uses income-positive
+and expense-negative amounts; equity movements use increase-positive values.
+Opening/closing equity, profit transfers, OCI and nil categories must be
+explicit, rather than silently supplied from missing fields.
+
+Decimal strings retain up to eight decimal places without rounding. Binary
+floats, booleans, unbounded strings and exponent notation are rejected. The
+48-digit calculation context accommodates sums beyond an individual input's
+28-digit bound. A complete period is limited to20000 statement rows across
+at most100 members, with separately bounded explicit adjustments/exceptions.
+
+Each output caption retains all member source references, labels, original
+amounts, adjustments, final amounts, treatment and source-version hashes.
+Adjustments target existing source rows and require nonzero explicit amounts,
+source references and reasons. No elimination or journal is invented.
+
+Framework distinctions
+----------------------
+Member investments, member equity and direct member-investment impairments
+are protected from intramember elimination. Nonmember investments have a
+separate cost-less-impairment bridge; missing or inconsistent cost evidence
+stays unresolved. A nonmember cannot be an elimination counterparty.
+
+Other intramember balances/transactions need an exact actual member pair and
+transaction reference. Uneliminated amounts remain issues. Consequential
+asset adjustments also need that exact transaction binding. Uniform-policy,
+UAE CT and consolidation-only acquisition adjustments remain separate.
+
+UAE current/deferred CT amounts and consolidation-only acquisition entries
+remaining in the output are issues. Foreign/emirate taxes cannot be removed
+as UAE CT. The separate-legal-entity consolidation exclusion cannot remove
+standalone business-acquisition assets/goodwill. Pre-UAE-CT profit is null
+while identified UAE CT performance amounts remain unresolved; the original
+profit/loss sum is retained separately. Equity effects of any adjustment
+must be explicitly supported and reconciled, not silently balanced.
+
+Pre-join loss exceptions bind exact member transactions and retained declared
+loss/reversal facts. An unreversed deductible loss prevents premature
+elimination. The separate income-ceiling schedule caps declared period income
+at the remaining declared loss. This is a review schedule, not a determination
+of taxable income. Every such exception stays flagged for its accounting/tax
+bridge and independent professional assessment.
+
+Each original member package and the adjusted group have separate position,
+equity rollforward, equity-to-position, profit-transfer and OCI-transfer
+checks. Equal/opposite source errors cannot disappear into a balanced group.
+Numerical reconciliation does not clear unassessed populations or policies.
+
+Comparatives and notes
+----------------------
+Only the actual first tax period of the Tax Group has no group comparative.
+An existing group in its first2025 framework year still requires the preceding
+tax period. Comparative packages have their own member population, source
+lineage, statement rows, adjustments, notes and checks. Prior-only captions
+are retained in the prior statements; prior values are not inferred from
+current values. An unassessed current-framework comparative basis stays an
+issue. Changed membership is retained explicitly, not rewritten to match the
+current population; professional treatment is not established by this core.
+
+Basis of preparation, policies, estimates/judgments and membership disclosures
+must be supplied separately for each period. Meaningful text is required,
+but the exact prescribed wording and completeness are not authenticated here.
+
+Next integration work
+---------------------
+Bind exact FTA7/CTP007 originals, original member financial packages and their
+independent mapping/adjustment evidence to current retained bytes. Reuse the
+existing immutable results, country/engagement authorization, contributor
+restrictions, separate approval, full exports and recursive source freshness.
+Cross-engagement member evidence must enforce each member's access scope;
+tenant membership alone is insufficient. No mapping generated from the
+calculated output may serve as its independent expected result.
+
+Then connect the typed API and user workbench, exercise actual review/export/
+staleness and inspect hosted screenshots. Complete remaining framework rules,
+full prescribed note wording, leaving-member continuity and clawback treatment,
+Arabic/operative-source adoption and professional review. Actual audit and
+authorized submission remain separate activities. The internal arithmetic
+tests and source-scanner verdicts do not establish these steps or real-client
+qualification.
+
+Verification
+------------
+The retained local report contains57 new core cases plus64 existing MD84
+unit regressions, all passing. Ruff checks/format and Mypy434 source files
+passed. See docs/phase-12/tax-group-statements-core-local.json for source and
+report hashes. The public MD84 v2 workflow has separate hosted browser proof
+at source1258922; that source predates this internal calculation layer.

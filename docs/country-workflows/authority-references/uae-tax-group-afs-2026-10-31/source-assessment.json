@@ -31,10 +31,10 @@
   "automatic_rule_enabled": false,
   "professional_qualification": "NOT_ESTABLISHED",
   "next_required_work": [
-    "Retain the exact original sources in real-scanner proof and complete remaining visual/Arabic legal review.",
+    "Complete remaining rendered-page review and independent Arabic professional comparison. Exact source originals now have retained real-scanner CLEAN proof for source2ba8358.",
     "Verify operative source chain and any later changes, including Arabic legislation where required, and independently adopt applicable versions.",
-    "Validate hosted browser acceptance for the MD84 v2 member-role correction. The implementation now requires original CTP007, explicit whole-period standalone membership, unresolved/conflict handling and prior-version invalidation. Local synthetic verification passed 64 MD84 units and 15 HTTP cases within 4861 passing backend tests, plus 526 frontend tests. These checks do not establish real-client or professional qualification.",
-    "Implement distinct group membership/standalone aggregation, prescribed adjustments and exceptions, all primary statements/disclosures, comparative and leaving-member treatment with source-specific tests.",
+    "MD84 v2 member-role correction passed all16 hosted browser tests at source1258922, with all7 original MD84 PNGs inspected and retained. This does not qualify the complete Tax Group reporting framework or real-client cases.",
+    "Connect the internal four-statement engine to retained original authority/member evidence, explicit source mapping, source freshness, separate reviewers, API and UI. The current internal engine has57 passing synthetic core cases and always reports not-ready/unbound. Complete full prescribed notes, comparative adoption and leaving-member/clawback treatment before reporting qualification.",
     "Obtain representative client expected results, independent professional review and authorized reporting/submission procedures."
   ],
   "review_scope": {
@@ -101,12 +101,13 @@
       32
     ],
     "complete_arabic_professional_review": false,
-    "real_clamav_status": "PENDING_SOURCE_SPECIFIC_HOSTED_EXECUTION",
+    "real_clamav_status": "SOURCE_PINNED_COMPLETE_CLEAN_VERDICTS_RETAINED",
     "local_checks": [
       "Exact original PDF size and SHA256 checks passed",
       "Parsed6 and32 PDF pages without rewriting originals",
       "Scanner-script Ruff and format checks passed",
       "Scanner CLI help loaded in existing isolated runtime; no local scan claimed"
-    ]
+    ],
+    "real_clamav_receipt": "docs/phase-12/schedule-column-width-browser-2ba8358.json"
   }
 }

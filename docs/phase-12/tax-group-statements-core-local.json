@@ -1,0 +1,29 @@
+{
+  "scope": "INTERNAL_UNEXPOSED_ARITHMETIC_ENGINE_ONLY",
+  "contract": "uae-tax-group-four-statement-workpaper/1",
+  "base_commit": "125892213fa5c57eb4d4f4263064f42c6c8cc3b8",
+  "report": {
+    "path": "docs/phase-12/tax-group-statements-core.xml",
+    "bytes": 19467,
+    "sha256": "76185a1486c929eb3721017a68b5d82eae6f8ac31aff077cab134a9583ff3ffd"
+  },
+  "passed": 121,
+  "tax_group_core_cases": 57,
+  "existing_md84_unit_regressions": 64,
+  "implementation_sha256_lf": {
+    "backend/app/modules/ifrs/uae_tax_group_statements.py": "bc0b22f77451b0326355e0d573823197bbfb76b1c855c370005b1931f2966d12",
+    "backend/tests/unit/test_uae_tax_group_statements.py": "631b29166b728228731af15f7709d15cc55b239b25e68264fdcbe9839c741b42"
+  },
+  "checks": [
+    "Ruff check and format passed for both new files",
+    "Mypy app passed for434 source files"
+  ],
+  "boundaries": [
+    "No public endpoint, UI, typed API registration, original-byte verification or independent review integration exists for this internal engine yet.",
+    "Source binding is always false, professional qualification NOT_ESTABLISHED and validation.ready always false, including arithmetically reconciled inputs.",
+    "No automatic member eligibility, FX, IFRS10 investment/equity elimination, NCI or goodwill journal.",
+    "Pre-join loss schedule is an explicitly unresolved review bridge, not a tax liability determination.",
+    "Full note wording, leaving-member continuity/clawbacks, retained-source approvals, source freshness and complete reporting/release remain required.",
+    "57 new synthetic arithmetic/validation cases do not increase the independently qualified client/use-case population."
+  ]
+}

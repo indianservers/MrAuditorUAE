@@ -264,3 +264,6 @@ docs/country-workflows/authority-references/uae-tax-group-afs-2026-10-31/*.pdf -
 docs/phase-12/schedule-column-width-focused.xml -text whitespace=cr-at-eol
 
 docs/phase-12/ct-member-*.xml -text whitespace=cr-at-eol
+
+docs/phase-12/tax-group-statements-core.xml -text whitespace=cr-at-eol
+docs/phase-12/tax-group-authority-scans-*.json -text
