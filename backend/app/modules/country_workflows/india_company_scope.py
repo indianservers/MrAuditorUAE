@@ -14,6 +14,7 @@ from app.modules.country_workflows.india_company_scope_core import (
 from app.modules.jurisdictions.profiles import Strict
 
 CONTRACT = "india-company-reporting-scope/1"
+SMALL_COMPANY_2022_SHA256 = "bb19f1b28fa3d1fad986a549d2f664ba052de684b7f1539a07f221441ea0fff3"
 BINDING = "RETAINED_DOCUMENT_BYTES_VERIFIED"
 ROLES = {
     "companies_act",
@@ -152,9 +153,12 @@ async def prepare(db, ctx, eng, data, request_id):
         if source.role not in {"legal_adoption", "company_facts"}:
             if original.media_type != "application/pdf":
                 raise HTTPException(422, "Retain legal source originals as PDF documents")
-        if source.role in PINNED and (
-            source.sha256 != PINNED[source.role] or original.sha256 != PINNED[source.role]
-        ):
+        expected = PINNED.get(source.role)
+        if source.role == "small_company_amendment" and date(
+            2022, 9, 15
+        ) <= data.facts.financial_period_end < date(2025, 12, 1):
+            expected = SMALL_COMPANY_2022_SHA256
+        if expected and (source.sha256 != expected or original.sha256 != expected):
             raise HTTPException(
                 422, "Retain the exact pinned Gazette original for this source role"
             )

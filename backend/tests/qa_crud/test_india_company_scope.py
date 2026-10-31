@@ -224,3 +224,49 @@ async def test_unresolved_scope_cannot_be_approved(environment, monkeypatch, unr
     assert response.json()["body"]["rows"][0]["companies_act_section139_audit"] is None
     rejected = await decision(c, reviewer[0], eid, response.json())
     assert rejected.status_code == 409, rejected.text
+
+
+@pytest.mark.parametrize("matching_definition", [True, False])
+async def test_historical_small_company_definition_binds_exact_2022_original(
+    environment, monkeypatch, matching_definition
+):
+    c = environment
+    double_boundaries(monkeypatch)
+    h, eid, base = await india_context(c, year=2024)
+    _, data = await documents(c, h, base)
+    data["facts"].update(
+        financial_period_start="2024-04-01",
+        financial_period_end="2025-03-31",
+        small_paid_up_capital="40000000",
+        preceding_financial_year_turnover="400000000",
+    )
+    data["adopted_from"] = "2024-04-01"
+    if matching_definition:
+        _, version = await upload(
+            c,
+            h,
+            base,
+            "original-gsr700-2022.pdf",
+            (FOLDER / "small-company-gsr700-2022.pdf").read_bytes(),
+            "application/pdf",
+        )
+        source = next(d for d in data["documents"] if d["role"] == "small_company_amendment")
+        source.update(evidence_version_id=version["id"], sha256=version["sha256"])
+    response = await c.post(
+        f"/api/v1/intelligence/engagements/{eid}/india-company-reporting-scope",
+        headers=h,
+        json=data,
+    )
+    if not matching_definition:
+        assert response.status_code == 422, response.text
+        return
+    assert response.status_code == 201, response.text
+    row = response.json()["body"]["rows"][0]
+    assert row["small_company"] is True and row["caro2020_applies"] is False
+    assert row["companies_act_section139_audit"] is True
+    assert row["basis"]["small_company_capital_limit_inr"] == "40000000"
+    assert "700(E)" in row["basis"]["small_company_prescribed_limits_source"]
+    reviewer = await actor(h, "Firm Administrator", "historical-company-reviewer")
+    await grant(c, h, base, reviewer)
+    approved = await decision(c, reviewer[0], eid, response.json())
+    assert approved.status_code == 201, approved.text

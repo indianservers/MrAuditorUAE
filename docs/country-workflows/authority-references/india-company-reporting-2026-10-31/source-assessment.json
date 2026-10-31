@@ -11,7 +11,7 @@
       "reviewed_pages": [
         2
       ],
-      "note": "G.S.R. 880(E), 1 December 2025; current small-company definition. Earlier definition source chain remains outside the candidate core."
+      "note": "G.S.R.880(E), 1 December 2025; 10/100 crore prescribed limits. The retained G.S.R.700(E) supports the preceding 2022 cohort; definitions before 15 September 2022 remain outside the candidate core."
     },
     {
       "file": "caro2020-commencement-amendment.pdf",
@@ -56,6 +56,18 @@
       ],
       "note": "Appendix I reproduces CARO 2020; this file is not the Gazette original. Its historical commencement statements are superseded by the retained December 2020 amendment. No statutory adoption is inferred from this guidance.",
       "numbered_matter_review": "48 standalone paragraph 3 leaves, consolidated paragraph 3(xxi), and two paragraph 4 reason duties enumerated; PDF pages 234-243 text reviewed and rendered pages visually inspected. Reproduction and historical commencement limitations remain."
+    },
+    {
+      "file": "small-company-gsr700-2022.pdf",
+      "url": "https://egazette.gov.in/WriteReadData/2022/238857.pdf",
+      "kind": "gazette_original",
+      "sha256": "bb19f1b28fa3d1fad986a549d2f664ba052de684b7f1539a07f221441ea0fff3",
+      "bytes": 733961,
+      "reviewed_pages": [
+        1,
+        2
+      ],
+      "note": "G.S.R.700(E), 15 September 2022; publication-date commencement and 4/40 crore prescribed limits. Primary original retrieved with Windows TLS validation; no certificate bypass. Paired with the separately retained December 2025 replacement for candidate date selection."
     }
   ],
   "primary_sources_read_without_retained_original_bytes": [

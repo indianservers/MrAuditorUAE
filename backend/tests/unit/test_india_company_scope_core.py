@@ -96,14 +96,50 @@ def test_late_signing_date_does_not_backdate_the_december_definition():
     result = evaluate_company_scope(
         facts(financial_period_start="2024-04-01", financial_period_end="2025-03-31")
     )
-    assert result["candidates"]["small_company"] is None
-    assert result["basis"]["small_company_capital_limit_inr"] is None
+    assert result["candidates"]["small_company"] is False
+    assert result["basis"]["small_company_capital_limit_inr"] == "40000000"
 
 
 def test_missing_current_amount_retains_known_limit_without_fabricating_zero():
     result = evaluate_company_scope(facts(small_paid_up_capital=None))
     assert result["candidates"]["small_company"] is None
     assert result["basis"]["small_company_capital_limit_inr"] == "100000000"
+
+
+@pytest.mark.parametrize(
+    "as_of,capital,turnover,expected",
+    [
+        ("2022-09-14", "40000000", "400000000", None),
+        ("2022-09-15", "40000000", "400000000", True),
+        ("2025-11-30", "40000000", "400000000", True),
+        ("2025-11-30", "40000000.01", "400000000", False),
+        ("2025-11-30", "40000000", "400000000.01", False),
+        ("2025-11-30", None, "400000000", None),
+        ("2025-11-30", "100000000", "1000000000", False),
+        ("2025-12-01", "100000000", "1000000000", True),
+    ],
+)
+def test_prescribed_definition_tracks_balance_sheet_date_and_exact_inclusive_limits(
+    as_of, capital, turnover, expected
+):
+    result = evaluate_company_scope(
+        facts(
+            financial_period_start="2022-04-01",
+            financial_period_end=as_of,
+            small_paid_up_capital=capital,
+            preceding_financial_year_turnover=turnover,
+        )
+    )
+    assert result["candidates"]["small_company"] is expected
+    assert result["candidates"]["companies_act_section139_audit"] is True
+    if as_of == "2022-09-14":
+        assert result["basis"]["small_company_prescribed_limits_source"] is None
+    elif as_of < "2025-12-01":
+        assert result["basis"]["small_company_capital_limit_inr"] == "40000000"
+        assert result["basis"]["small_company_preceding_year_turnover_limit_inr"] == "400000000"
+        assert "700(E)" in result["basis"]["small_company_prescribed_limits_source"]
+    else:
+        assert "880(E)" in result["basis"]["small_company_prescribed_limits_source"]
 
 
 @pytest.mark.parametrize(

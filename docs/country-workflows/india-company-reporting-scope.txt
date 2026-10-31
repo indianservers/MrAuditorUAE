@@ -29,8 +29,13 @@ source version makes old results stale without rewriting the retained result.
 Existing complete row XLSX/JSON exports and event review apply.
 
 The core covers CARO 2020 periods commencing from 1 April 2021. It uses the
-small-company definition effective 1 December 2025 only for eligible balance
-sheet dates; earlier definitions remain pending. Financial IFC thresholds are
+small-company definition effective 1 December 2025 for eligible balance sheet
+dates, and G.S.R.700(E)'s preceding definition for 15 September 2022 through
+30 November 2025. Definitions before 15 September 2022 remain pending. The
+small_company_amendment document role must contain the exact original PDF
+matching the balance sheet date; a later signing date does not change that
+selection. The result retains and displays the selected definition and limits.
+Financial IFC thresholds are
 strict and joined with AND pursuant to the 2017 corrigendum. Filing-default
 facts affect private-company IFC exemption separately. Special regimes and
 foreign-company audit/IFC scope remain pending where not established.

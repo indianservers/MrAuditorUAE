@@ -68,7 +68,7 @@ it("retains all eight roles and submits unknown facts as null and exact INR text
     fireEvent.change(screen.getByLabelText(label), { target: { value } });
   const labels = [
     "Companies Act original PDF",
-    "GSR 880(E) small-company original PDF",
+    "Small-company definition original PDF",
     "CARO 2020 original order PDF",
     "SO 4588(E) CARO commencement original PDF",
     "GSR 583(E) IFC original PDF",
@@ -120,12 +120,20 @@ it("displays independent duty answers and unresolved values without declaring au
         companies_act_section139_audit: true,
         caro2020_applies: false,
         section143_3_i_ifc_reporting: null,
+        basis: {
+          small_company_prescribed_limits_source:
+            "G.S.R.700(E), 15 September 2022",
+          small_company_capital_limit_inr: "40000000",
+          small_company_preceding_year_turnover_limit_inr: "400000000",
+        },
       }}
     />,
   );
   const region = screen.getByRole("region", {
     name: "India company reporting scope summary",
   });
+  expect(region).toHaveTextContent("G.S.R.700(E), 15 September 2022");
+  expect(region).toHaveTextContent("Capital limit (INR): 40000000");
   expect(
     within(region).getByText("Companies Act section 139 audit")
       .nextElementSibling,

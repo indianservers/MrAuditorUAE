@@ -56,7 +56,7 @@ const DATES = [
 ] as const;
 const ROLES = [
   ["companies_act", "Companies Act original PDF"],
-  ["small_company_amendment", "GSR 880(E) small-company original PDF"],
+  ["small_company_amendment", "Small-company definition original PDF"],
   ["caro_order", "CARO 2020 original order PDF"],
   ["caro_commencement", "SO 4588(E) CARO commencement original PDF"],
   ["ifc_notification", "GSR 583(E) IFC original PDF"],
@@ -119,6 +119,11 @@ export function IndiaCompanyScope({
         retained sources, including the IFC corrigendum. Review establishes a
         workpaper assessment; it does not issue an audit opinion or authenticate
         the source law.
+      </p>
+      <p>
+        Use the definition original matching the balance sheet date: GSR 700(E)
+        for 15 September 2022 through 30 November 2025, or GSR 880(E) from 1
+        December 2025. Earlier definitions remain unresolved.
       </p>
       <ErrorState error={action.error} />
       {[
@@ -306,6 +311,10 @@ export function IndiaCompanyScopeResult({
   row?: Record<string, unknown>;
 }) {
   if (!row) return null;
+  const basis =
+    row.basis && typeof row.basis === "object" && !Array.isArray(row.basis)
+      ? (row.basis as Record<string, unknown>)
+      : {};
   return (
     <section
       aria-label="India company reporting scope summary"
@@ -318,6 +327,14 @@ export function IndiaCompanyScopeResult({
         {String(row.period_end)}
       </p>
       <dl>
+        <div>
+          <dt>Small-company definition considered</dt>
+          <dd>
+            {String(
+              basis.small_company_prescribed_limits_source ?? "Unresolved",
+            )}
+          </dd>
+        </div>
         {[
           ["small_company", "Small-company classification"],
           ["companies_act_section139_audit", "Companies Act section 139 audit"],
@@ -341,6 +358,14 @@ export function IndiaCompanyScopeResult({
           </div>
         ))}
       </dl>
+      <p>
+        Capital limit (INR):{" "}
+        {String(basis.small_company_capital_limit_inr ?? "Unresolved")};
+        preceding-year turnover limit (INR):{" "}
+        {String(
+          basis.small_company_preceding_year_turnover_limit_inr ?? "Unresolved",
+        )}
+      </p>
       <p>
         Review does not establish audit completion, an exemption from every
         audit regime, or authority to issue a statutory report.

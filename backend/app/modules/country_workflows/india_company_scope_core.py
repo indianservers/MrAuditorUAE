@@ -18,6 +18,14 @@ Truth = bool | None
 CRORE = Decimal("10000000")
 
 
+def small_company_limits(as_of):
+    if as_of >= date(2025, 12, 1):
+        return "G.S.R.880(E), 1 December 2025", 10 * CRORE, 100 * CRORE
+    if as_of >= date(2022, 9, 15):
+        return "G.S.R.700(E), 15 September 2022", 4 * CRORE, 40 * CRORE
+    return None
+
+
 def every(*values: Truth) -> Truth:
     return False if False in values else None if None in values else True
 
@@ -122,13 +130,13 @@ def evaluate_company_scope(payload):
         inverse(facts.governed_by_special_act),
     )
     # Earlier prescribed definitions require their own retained amendment chain.
-    current_small_definition = facts.financial_period_end >= date(2025, 12, 1)
+    definition = small_company_limits(facts.financial_period_end)
     small_money = (
         None
-        if not current_small_definition
+        if definition is None
         else every(
-            within(facts.small_paid_up_capital, 10 * CRORE),
-            within(facts.preceding_financial_year_turnover, 100 * CRORE),
+            within(facts.small_paid_up_capital, definition[1]),
+            within(facts.preceding_financial_year_turnover, definition[2]),
         )
     )
     small = every(small_structure, small_money)
@@ -155,7 +163,7 @@ def evaluate_company_scope(payload):
         reasons.append(
             "Earlier financial years require their own CARO commencement/version assessment"
         )
-    if small_structure is not False and facts.financial_period_end < date(2025, 12, 1):
+    if small_structure is not False and definition is None:
         reasons.append("Earlier small-company prescribed limits have not been adopted by this core")
     # S.O.2218(E) corrects the original G.S.R.583(E) 'or' to 'and'.
     financial_ifc_exemption = every(
@@ -209,11 +217,10 @@ def evaluate_company_scope(payload):
         "pending_candidates": [key for key, value in candidates.items() if value is None],
         "basis": {
             "small_company_definition_date": facts.financial_period_end.isoformat(),
-            "small_company_capital_limit_inr": str(10 * CRORE)
-            if current_small_definition
-            else None,
-            "small_company_preceding_year_turnover_limit_inr": str(100 * CRORE)
-            if current_small_definition
+            "small_company_prescribed_limits_source": definition[0] if definition else None,
+            "small_company_capital_limit_inr": str(definition[1]) if definition else None,
+            "small_company_preceding_year_turnover_limit_inr": str(definition[2])
+            if definition
             else None,
             "caro_private_exemption": private_caro_exemption,
             "ifc_financial_exemption_both_tests": financial_ifc_exemption,

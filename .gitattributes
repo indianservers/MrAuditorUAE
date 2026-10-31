@@ -287,3 +287,5 @@ docs/phase-12/caro-index-*.xml -text whitespace=cr-at-eol
 docs/phase-12/caro-scope-lineage-http.xml -text whitespace=cr-at-eol
 docs/phase-12/screenshots/9ef46ad-reviewed/*.png -text
 docs/phase-12/caro-browser-frontend.xml -text whitespace=cr-at-eol
+docs/phase-12/company-definition-2022-*.xml -text whitespace=cr-at-eol
+docs/phase-12/screenshots/6fed32d-caro-failures/*.png -text

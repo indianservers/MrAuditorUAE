@@ -1,0 +1,31 @@
+{
+  "source_commit": "6fed32d98905ee14067efc65218dab540c216abf",
+  "run": 41179080837,
+  "browser_job": 124472585231,
+  "result": {
+    "passed": 17,
+    "failed": 2,
+    "duration": "8.1 minutes"
+  },
+  "artifact": {
+    "id": 13034293123,
+    "bytes": 25633343,
+    "sha256": "ad5139efa7e7e936c75d15e3ccd20052ca45cd6d58e99938b2273257ac7f2e6e"
+  },
+  "reviewed_originals": [
+    {
+      "path": "docs/phase-12/screenshots/6fed32d-caro-failures/consolidated.png",
+      "bytes": 97535,
+      "sha256": "6d221477768bb77720afc5bb23695aa938b317cce18497e60babf2149596b8b3"
+    },
+    {
+      "path": "docs/phase-12/screenshots/6fed32d-caro-failures/standalone.png",
+      "bytes": 98918,
+      "sha256": "358916471313f9df9e26ae6975fdb8a96496795068beeadb11675718ef439c3e"
+    }
+  ],
+  "failure": "Both new CARO cases timed out locating the final populated basis textarea using exact getByLabel. Screenshots show the final field present in standalone and consolidated inventories.",
+  "correction": "Use getByRole textbox with its exact accessible name, consistent with existing passing Form 26 flows. No edit, review, export or preservation assertion removed.",
+  "reverification": "PENDING_HOSTED_RUN",
+  "scope": "Two selected original failure PNGs inspected; complete archive remains in the owned local runtime. These are failure evidence, not passing CARO browser captures."
+}

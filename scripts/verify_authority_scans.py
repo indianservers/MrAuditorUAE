@@ -12,7 +12,7 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 from app.core.config import settings
 from app.modules.audit_execution.evidence import scan
-from app.modules.country_workflows import uae_company_accounts
+from app.modules.country_workflows import india_company_scope, uae_company_accounts
 from app.modules.grc import adgm_accounts, dmcc_audit
 
 
@@ -21,6 +21,22 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     sources = [
+        (
+            "india-company-reporting-2026-10-31/small-company-gsr700-2022.pdf",
+            india_company_scope.SMALL_COMPANY_2022_SHA256,
+        ),
+        (
+            "india-company-reporting-2026-10-31/small-company-gsr880-2025.pdf",
+            india_company_scope.PINNED["small_company_amendment"],
+        ),
+        (
+            "india-company-reporting-2026-10-31/caro2020-commencement-amendment.pdf",
+            india_company_scope.PINNED["caro_commencement"],
+        ),
+        (
+            "india-company-reporting-2026-10-31/ifc-private-gsr583-2017-original.pdf",
+            india_company_scope.PINNED["ifc_notification"],
+        ),
         (
             "adgm-accounts-2026-10-31/adgm-companies-consolidated-ver20260626.pdf",
             adgm_accounts.REGULATIONS_SHA256,

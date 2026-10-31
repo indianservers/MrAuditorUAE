@@ -62,7 +62,7 @@ test("India scope form preserves unknown facts and blocks unresolved adoption", 
   const folder =
     "../docs/country-workflows/authority-references/india-company-reporting-2026-10-31";
   const originals = [
-    ["GSR 880(E) small-company original PDF", "small-company-gsr880-2025.pdf"],
+    ["Small-company definition original PDF", "small-company-gsr880-2025.pdf"],
     [
       "SO 4588(E) CARO commencement original PDF",
       "caro2020-commencement-amendment.pdf",

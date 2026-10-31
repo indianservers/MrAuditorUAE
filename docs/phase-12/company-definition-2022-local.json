@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-31",
+  "base_commit": "6fed32d98905ee14067efc65218dab540c216abf",
+  "implementation": "India small-company candidate limits select the retained 2022 or 2025 definition by balance sheet date; document binding requires the matching original",
+  "validation": {
+    "backend_unit": {"passed": 5056, "skipped": 4, "failed": 0, "report": "company-definition-2022-all-unit.xml"},
+    "focused_definition_unit": {"passed": 48, "failed": 0, "report": "company-definition-2022-unit.xml"},
+    "scope_and_caro_http": {"passed": 22, "failed": 0, "report": "company-definition-2022-http.xml"},
+    "frontend": {"passed": 539, "files": 96, "failed": 0, "report": "company-definition-2022-frontend.xml"},
+    "mypy": "440 application source files passed",
+    "ruff_and_scoped_frontend_eslint": "passed",
+    "frontend_types_production_build_api_types": "passed",
+    "runtime_api_snapshot_check": "passed; API contract unchanged",
+    "playwright_discovery": "19 tests in 16 files; corrected CARO locator not yet executed",
+    "authority_source_pin_check": "All 12 scanner-list paths match their exact retained file hashes; static verification, not a local malware scan"
+  },
+  "checked": [
+    "15 September 2022 and 1 December 2025 commencement boundaries",
+    "Inclusive limits, exact decimal excess and missing facts",
+    "Signing after December 2025 does not backdate the new definition to an older balance sheet",
+    "Historical API period accepts the 2022 original and rejects a 2025 original in the same source role",
+    "Companies Act audit duty remains separate from small-company/CARO/IFC exemptions",
+    "Result UI retains and displays the selected definition and limits"
+  ],
+  "source": {
+    "path": "docs/country-workflows/authority-references/india-company-reporting-2026-10-31/small-company-gsr700-2022.pdf",
+    "url": "https://egazette.gov.in/WriteReadData/2022/238857.pdf",
+    "bytes": 733961,
+    "sha256": "bb19f1b28fa3d1fad986a549d2f664ba052de684b7f1539a07f221441ea0fff3",
+    "review": "Both original pages rendered and visually inspected; publication heading and English operative text checked. Windows TLS-validated download, no certificate bypass."
+  },
+  "scanner_change": "Real-scanner authority list now includes all four pinned India originals. CI step allows 20 minutes for 12 documents at the existing 90-second per-file bound plus two minutes overhead; no scanner check is bypassed.",
+  "limits": [
+    "Definitions before 15 September 2022 remain pending where material; no historical source is fabricated.",
+    "Independent adoption, complete legal source-chain qualification and special statutory regimes remain unresolved requirements.",
+    "The CARO browser locator correction and expanded real-scanner list still require hosted execution.",
+    "Independent employee-contract/master-change/attendance payroll audit remains a separate original-roadmap gap; this change does not complete it.",
+    "No real client data or independently approved client results are supplied."
+  ]
+}

@@ -350,10 +350,10 @@ for (const scope of ["standalone", "consolidated"] as const) {
         }),
       ).toHaveValue(last.key);
       await page
-        .getByLabel(
-          `Applicability and source basis ${pack.requirements.length}`,
-          { exact: true },
-        )
+        .getByRole("textbox", {
+          name: `Applicability and source basis ${pack.requirements.length}`,
+          exact: true,
+        })
         .fill(
           "SYNTHETIC browser-reviewed final CARO reason assessment; no legal qualification",
         );
