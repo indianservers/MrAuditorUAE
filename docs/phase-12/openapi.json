@@ -31612,6 +31612,21 @@
             }
           },
           {
+            "name": "employment_view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "all",
+                "assessment",
+                "history"
+              ],
+              "type": "string",
+              "default": "all",
+              "title": "Employment View"
+            }
+          },
+          {
             "name": "inventory_view",
             "in": "query",
             "required": false,

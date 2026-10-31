@@ -237,6 +237,24 @@ test("UAE then India employment payroll: corrections, separate approval, exact e
       await expect(
         reviewer.getByRole("heading", { name: title, exact: true }),
       ).toBeVisible();
+      await reviewer
+        .getByLabel("Employment payroll view", { exact: true })
+        .selectOption("history");
+      await expect(
+        reviewer.getByRole("cell", { name: "1500", exact: true }),
+      ).toBeVisible();
+      await expect(
+        reviewer.getByRole("cell", { name: "superseded", exact: true }),
+      ).toBeVisible();
+      await expect(
+        reviewer.getByRole("cell", { name: "current", exact: true }),
+      ).toBeVisible();
+      await reviewer
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..")
+        .screenshot({
+          path: `test-results/country-reports/${country}-employment-payroll-history.png`,
+        });
       const downloadEvent = reviewer.waitForEvent("download");
       const exportResponse = reviewer.waitForResponse(
         (r) =>
@@ -274,6 +292,18 @@ test("UAE then India employment payroll: corrections, separate approval, exact e
         ],
         { input: readFileSync(download!), timeout: 15000 },
       );
+      await reviewer
+        .getByLabel("Employment payroll view", { exact: true })
+        .selectOption("assessment");
+      await expect(
+        reviewer.getByRole("columnheader", {
+          name: "expected amount",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        reviewer.getByRole("cell", { name: "1000", exact: true }),
+      ).toHaveCount(2);
       await reviewer
         .getByRole("heading", { name: title, exact: true })
         .locator("..")

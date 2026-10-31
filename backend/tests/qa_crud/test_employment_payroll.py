@@ -69,11 +69,26 @@ async def test_employment_review_export_and_withdrawal(environment, monkeypatch,
     assert approved.status_code == 201, approved.text
     result = approved.json()
     prefix = f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}"
+    for view, count, kinds in (
+        ("assessment", 1, {"entry-comparison", "population-coverage"}),
+        ("history", 2, {"revision-history"}),
+        ("all", 3, {"entry-comparison", "population-coverage", "revision-history"}),
+    ):
+        filtered = await c.get(prefix + f"?employment_view={view}&limit=1", headers=h)
+        assert filtered.status_code == 200, filtered.text
+        assert filtered.json()["collection_totals"]["rows"] == count
+        assert len(filtered.json()["body"]["rows"]) == 1
+        assert filtered.json()["body"]["rows"][0]["kind"] in kinds
+    history_page = await c.get(prefix + "?employment_view=history&offset=1&limit=1", headers=h)
+    assert history_page.status_code == 200, history_page.text
+    assert history_page.json()["body"]["rows"][0]["retained_amount"] == "1500"
+    assert (await c.get(prefix + "?employment_view=unknown", headers=h)).status_code == 422
     preparer = await actor(h, "Senior Auditor", "employment-restricted-preparer")
     await grant(c, h, base, preparer)
     for restricted in (
         prefix,
         prefix + "/export?format=xlsx",
+        prefix + "?employment_view=history",
         f"/api/v1/intelligence/engagements/{eid}/events/{selected['register']}",
     ):
         denied = await c.get(restricted, headers=preparer[0])
@@ -84,6 +99,24 @@ async def test_employment_review_export_and_withdrawal(environment, monkeypatch,
     assert any(
         sheet.max_row == 4 and "revision-history" in str(list(sheet.values)) for sheet in book
     )
+    incomplete = await execute(
+        c,
+        h,
+        eid,
+        "country-workflow",
+        {**payload, "as_of": "2026-07-31", "title": "SYNTHETIC missing July payroll controls"},
+    )
+    missing_prefix = f"/api/v1/intelligence/engagements/{eid}/events/{incomplete['id']}"
+    missing_view = await c.get(missing_prefix + "?employment_view=assessment", headers=h)
+    assert missing_view.status_code == 200, missing_view.text
+    assert missing_view.json()["collection_totals"]["rows"] == 2
+    missing = next(
+        row for row in missing_view.json()["body"]["rows"] if row["kind"] == "population-coverage"
+    )
+    assert missing["payroll_month"] == "2026-07" and missing["expected_amount"] is None
+    assert missing_view.json()["body"]["blocked"] is True
+    assert (await decision(c, reviewer[0], eid, incomplete)).status_code == 409
+    assert (await c.get(prefix, headers=h)).json()["freshness"] == "CURRENT"
     original = await c.get(
         f"/api/v1/intelligence/engagements/{eid}/events/{selected['employment']}", headers=h
     )

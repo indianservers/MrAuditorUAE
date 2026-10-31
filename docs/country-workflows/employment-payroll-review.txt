@@ -27,6 +27,14 @@ control, including explicit assessed zero. Missing both sides is an exception.
 Arrears can be processed after termination when the declared original service
 period lies within employment; no current-month entitlement is inferred.
 
+Review views: comparisons and missing months are shown together by default.
+Switch to register revision history for superseded/cancelled/current observations,
+or all retained observations for their combined schedule. Each view is filtered
+before server pagination and has its own row count; changing views resets the
+page. Full provenance columns remain available. XLSX always exports the complete
+saved result even when the visible view contains only history. These filters do
+not change saved values, blocked status, source freshness or review permissions.
+
 Country boundary: these shared controls assess evidence consistency. They do not
 calculate salary proration, tax, PF/ESI/PT, GPSSA, WPS, benefits, pensions or end
 of service entitlements. Use the existing country-specific workflows separately.
@@ -41,7 +49,9 @@ independently certified expected outcomes or additions to the 154-case catalogue
 Client inputs and independently checked expectations belong in the existing
 ignored pilot-data/UAE and pilot-data/India folders.
 
-Known release boundary: current hosted CARO browser export checks failed using
-read-only worksheet max_row metadata. The browser assertion now iterates rows
-and verifies the complete expected requirement-key set; hosted rerun is pending.
+Known release boundary: the corrected CARO export checks passed with all 19
+browser cases on e7a06f5. The later 076a310 payroll browser case reached separate
+approval but timed out waiting for its export; 071dc57 adds explicit approved-event
+selection and export-response synchronization. Its hosted rerun remains pending.
+The server-paged payroll review views require their own hosted browser proof.
 Full product/client and country legal qualification remain incomplete.

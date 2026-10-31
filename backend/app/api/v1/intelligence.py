@@ -1088,6 +1088,7 @@ async def event_details(
     date_offset: int = Query(0, ge=0),
     date_limit: int = Query(100, ge=1, le=500),
     payroll_view: Literal["all", "accounts", "postings"] = "all",
+    employment_view: Literal["all", "assessment", "history"] = "all",
     inventory_view: Literal["all", "valuations", "gl-controls"] = "all",
     confirmation_view: Literal["all", "parties", "gl-controls"] = "all",
     confirmation_link_offset: int = Query(0, ge=0),
@@ -1122,6 +1123,13 @@ async def event_details(
             "account-rollforward" if payroll_view == "accounts" else "posting-comparison"
         )
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
+    if body.get("workflow") == "employment-payroll-review" and employment_view != "all":
+        selected_kinds = (
+            {"revision-history"}
+            if employment_view == "history"
+            else {"entry-comparison", "population-coverage"}
+        )
+        body["rows"] = [row for row in body["rows"] if row["kind"] in selected_kinds]
     if body.get("workflow") == "inventory-valuation-control" and inventory_view != "all":
         selected_kind = "valuation-test" if inventory_view == "valuations" else "gl-control"
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]

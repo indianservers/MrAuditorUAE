@@ -1,0 +1,90 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "071dc57508bf596e1e9f888db1d18085651e984e",
+  "change": "Server-paged employment payroll assessment, history and all-observation views; full exports remain independent of the selected view",
+  "local_checks": {
+    "http_payroll_regressions": 6,
+    "focused_backend_units": 42,
+    "full_frontend_tests": 546,
+    "frontend_test_files": 96,
+    "final_country_workflows_tests": 158,
+    "mypy_application_files": 441,
+    "ruff": "PASS",
+    "scoped_eslint": "PASS",
+    "typescript": "PASS",
+    "api_snapshots": "PASS",
+    "api_types": "PASS",
+    "production_build": "PASS"
+  },
+  "verified_http_behavior": [
+    "Filtering occurs before bounded paging and collection row totals",
+    "History offset 1 retains exact superseded 1500 amount",
+    "Assessment includes missing July employee-month with null expectation and blocked result",
+    "Incomplete monthly evidence cannot be approved",
+    "Creating a separate incomplete review leaves the earlier approved review current",
+    "Restricted preparer cannot read history view, source or full export",
+    "XLSX retains all observations regardless of view; source withdrawal stales immutable result"
+  ],
+  "verified_ui_behavior": [
+    "Revision and retained salary columns visible in history view",
+    "Employer and employment episode remain visible for partition context",
+    "Source run references available with full provenance",
+    "Default assessment shows missing monthly control with unknown amount, never zero"
+  ],
+  "browser_definition": "The employment release case now checks both UI views and complete XLSX from the history view; six country-specific captures are defined. Hosted execution for these added assertions remains pending.",
+  "prior_hosted_caro": {
+    "source": "bf485771017d4f679c9d028e998eb361a188e367",
+    "run_id": 41183240104,
+    "browser_job_id": 124484790742,
+    "caro_standalone": "PASS",
+    "caro_consolidated": "PASS",
+    "entire_browser_suite": {
+      "passed": 19,
+      "failed": 1
+    },
+    "failure": "Old payroll export wait; synchronized test source 071dc57 is in a separate live rerun"
+  },
+  "limits": [
+    "Prior full backend unit run was 5088 passes/four skips on 34d0d74; it was not repeated for this route/view change",
+    "Current complete hosted backend verification remains live",
+    "No real client files or independently approved client outcomes supplied",
+    "No statutory, professional or full payroll-population qualification inferred"
+  ],
+  "files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "normalization": "LF",
+      "sha256": "ea9fcf71f2eb1bc3aee85d09688e8bc63959f1fae174dcdabcb08d35393b3c50"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_employment_payroll.py",
+      "normalization": "LF",
+      "sha256": "17c91daf128292d8a13b806f9c190ebb6a9158d1d75e207e07009f7de241a0f9"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "normalization": "LF",
+      "sha256": "640e5d921d41736bd9ba240b5ac9abe8e1faf356cec6ebcf9a8d08fe94a88cae"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "normalization": "LF",
+      "sha256": "48ca6d61e9a77205e29304b559ca8bf495f2fc852b714a9ea2090a92f7108925"
+    },
+    {
+      "path": "frontend/e2e/employment-payroll-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "dedc5c2f75edbf44f883ebce86d54ceebd66053051aeb418342f68238925e349"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "normalization": "LF",
+      "sha256": "352e9a3f3725bd784031eb5b6120651608588bf256be20ba31c6c2f15dad7548"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "normalization": "LF",
+      "sha256": "89b6c6354643a405acf4243a8168c0eb753a5e4efd9d26d2d1795057ddb2bd0f"
+    }
+  ]
+}

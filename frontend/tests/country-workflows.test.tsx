@@ -3911,3 +3911,32 @@ it.each(["controls", "register"])("retains independent import totals for employm
   await waitFor(() => expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({table_type:"employment-payroll-" + role, control_totals:{AED:"2500"}, expected_rows:2});
 });
+
+
+it("shows the employment history view with full provenance available", () => {
+  state.result = {id:"result", kind:"country-workflow", version:2, freshness:"CURRENT", body:{workflow:"employment-payroll-review", title:"Synthetic employee observations", review_status:"REVIEWED", rows:[{id:"R1", kind:"revision-history", registration:"SYN-EMPLOYER", episode_reference:"SYN-EPISODE", employee_token:"a".repeat(64), component:"GROSS", currency:"AED", payroll_month:"2026-06", earning_month:"2026-06", revision:1, record_status:"superseded", retained_amount:"1500", counted_in_current_payroll:false, run_reference:"SYN-RUN", state:"MATCHED"}]}};
+  const original = JSON.stringify(state.result);
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {target:{value:"result"}});
+  fireEvent.change(screen.getByLabelText("Employment payroll view"), {target:{value:"history"}});
+  expect(screen.getByRole("cell", {name:"1500"})).toBeVisible();
+  expect(screen.getByRole("cell", {name:"superseded"})).toBeVisible();
+  expect(screen.getByRole("cell", {name:"SYN-EMPLOYER"})).toBeVisible();
+  expect(screen.getByRole("cell", {name:"SYN-EPISODE"})).toBeVisible();
+  expect(screen.queryByRole("columnheader", {name:"run reference"})).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("checkbox", {name:"Show source provenance and all columns"}));
+  expect(screen.getByRole("cell", {name:"SYN-RUN"})).toBeVisible();
+  expect(JSON.stringify(state.result)).toBe(original);
+});
+
+
+it("keeps missing employee-month controls visible in the default assessment view", () => {
+  state.result = {id:"result", kind:"country-workflow", version:1, freshness:"CURRENT", body:{workflow:"employment-payroll-review", title:"Synthetic missing July", review_status:"UNVERIFIED", blocked:true, exception_count:1, rows:[{id:"M1", kind:"population-coverage", employee_token:"a".repeat(64), payroll_month:"2026-07", expected_amount:null, state:"MISSING_EMPLOYEE_MONTH_CONTROL"}]}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {target:{value:"result"}});
+  expect(screen.getByLabelText("Employment payroll view")).toHaveValue("assessment");
+  const row = screen.getByRole("cell", {name:"MISSING_EMPLOYEE_MONTH_CONTROL"}).closest("tr")!;
+  expect(within(row).getByRole("cell", {name:"2026-07"})).toBeVisible();
+  expect(within(row).getByRole("cell", {name:"—"})).toBeVisible();
+  expect(within(row).queryByRole("cell", {name:"0"})).not.toBeInTheDocument();
+});

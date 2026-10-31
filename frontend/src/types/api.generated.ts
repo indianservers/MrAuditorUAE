@@ -32056,6 +32056,7 @@ export interface operations {
                 date_offset?: number;
                 date_limit?: number;
                 payroll_view?: "all" | "accounts" | "postings";
+                employment_view?: "all" | "assessment" | "history";
                 inventory_view?: "all" | "valuations" | "gl-controls";
                 confirmation_view?: "all" | "parties" | "gl-controls";
                 confirmation_link_offset?: number;

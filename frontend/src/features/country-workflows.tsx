@@ -698,10 +698,11 @@ export function CountryWorkflows({
   const [showAllJobs, setShowAllJobs] = useState(false);
   const [offset, setOffset] = useState(0);
   const [payrollView, setPayrollView] = useState("accounts");
+  const [employmentView, setEmploymentView] = useState("assessment");
   const [inventoryView, setInventoryView] = useState("valuations");
   const [confirmationView, setConfirmationView] = useState("parties");
   const detail = useAPI<Result>(
-    `${prefix}/events/${selected}?offset=${offset}&limit=100&payroll_view=${payrollView}&inventory_view=${inventoryView}&confirmation_view=${confirmationView}`,
+    `${prefix}/events/${selected}?offset=${offset}&limit=100&payroll_view=${payrollView}&employment_view=${employmentView}&inventory_view=${inventoryView}&confirmation_view=${confirmationView}`,
     !!selected,
   );
   const [workflow, setWorkflow] = useState("bank-brs");
@@ -1710,9 +1711,24 @@ export function CountryWorkflows({
                                 ].filter((key) => allColumns.includes(key))
                               : baseColumns;
   const columns =
-    body?.workflow === "stock-audit" && !showRuleProvenance
-      ? stockCountReviewColumns.filter((key) => allColumns.includes(key))
-      : domainColumns;
+    body?.workflow === "employment-payroll-review" &&
+    !showRuleProvenance &&
+    employmentView !== "all"
+      ? (employmentView === "history"
+          ? [
+              "registration", "employee_token", "episode_reference", "component", "currency", "payroll_month",
+              "earning_month", "entry_reference", "revision", "record_status",
+              "retained_amount", "counted_in_current_payroll",
+            ]
+          : [
+              "registration", "employee_token", "episode_reference", "component", "currency", "payroll_month",
+              "earning_month", "entry_reference", "category", "expected_amount", "reported_amount",
+              "difference", "state",
+            ]
+        ).filter((key) => allColumns.includes(key))
+      : body?.workflow === "stock-audit" && !showRuleProvenance
+        ? stockCountReviewColumns.filter((key) => allColumns.includes(key))
+        : domainColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -7092,6 +7108,31 @@ export function CountryWorkflows({
               ))}
             </dl>
           )}
+          {body.workflow === "employment-payroll-review" && (
+            <section aria-label="Employment payroll observations">
+              <label>
+                Employment payroll view
+                <select
+                  value={employmentView}
+                  onChange={(event) => {
+                    setEmploymentView(event.target.value);
+                    setOffset(0);
+                  }}
+                >
+                  <option value="assessment">
+                    Comparisons and missing months
+                  </option>
+                  <option value="history">Register revision history</option>
+                  <option value="all">All retained observations</option>
+                </select>
+              </label>
+              <p>
+                Views page independently. Only explicit current revisions count
+                as payroll; history retains superseded and cancelled amounts.
+                XLSX always contains every retained observation.
+              </p>
+            </section>
+          )}
           {body.workflow === "payroll-ledger-rollforward" && (
             <label>
               Payroll accounting view
@@ -7940,6 +7981,7 @@ export function CountryWorkflows({
               compactBenefit ||
               body.workflow === "bank-account-evidence" ||
               body.workflow === "payroll-ledger-rollforward" ||
+              body.workflow === "employment-payroll-review" ||
               body.workflow === "inventory-valuation-control" ||
               body.workflow === "inventory-fifo-cost" ||
               body.workflow === "inventory-performance" ||
@@ -8010,6 +8052,7 @@ export function CountryWorkflows({
                               "party-balance-confirmations",
                               "inventory-custody-confirmations",
                               "ownership-lookthrough",
+                              "employment-payroll-review",
                             ].includes(body.workflow || "")
                               ? { maxWidth: 200, overflowWrap: "anywhere" }
                               : undefined
