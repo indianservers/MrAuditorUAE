@@ -2,6 +2,64 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { expect, it } from "vitest";
 import { AccountingScheduleResults } from "@/features/accounting-schedule-results";
 
+it("pages every project layer and explicit issue allocation independently with exact costs and evidence", () => {
+  const exact = "0.333333333333333333333333333333333333333333333334";
+  render(
+    <AccountingScheduleResults
+      kind="inventory"
+      data={{
+        execution: { presentation_currency: "INR" },
+        schedule: [],
+        movements: [],
+        transfers: [],
+        issues: [],
+        identified_layers: Array.from({ length: 101 }, (_, i) => ({
+          layer_reference: `LAYER-${i + 1}`,
+          remaining_cost: exact,
+          source_evidence: `INVOICE-${i + 1}`,
+        })),
+        identified_allocations: Array.from({ length: 26 }, (_, i) => ({
+          issue_reference: `ISSUE-${i + 1}`,
+          layer_reference: `LAYER-${i + 1}`,
+          cost: exact,
+          allocation_evidence: `ATTRIBUTION-${i + 1}`,
+        })),
+      }}
+    />,
+  );
+  fireEvent.click(screen.getByText("Identified project cost layers (101)"));
+  const layers = screen.getByRole("region", {
+    name: "Identified project cost layers",
+  });
+  for (let i = 0; i < 4; i++)
+    fireEvent.click(
+      within(layers).getByRole("button", {
+        name: "Next identified project cost layers",
+      }),
+    );
+  expect(within(layers).getByRole("cell", { name: "LAYER-101" })).toBeVisible();
+  expect(
+    within(layers).getByRole("cell", { name: "INVOICE-101" }),
+  ).toBeVisible();
+  expect(within(layers).getByRole("cell", { name: exact })).toBeVisible();
+  fireEvent.click(
+    screen.getByText("Identified project issue allocations (26)"),
+  );
+  const allocations = screen.getByRole("region", {
+    name: "Identified project issue allocations",
+  });
+  fireEvent.click(
+    within(allocations).getByRole("button", {
+      name: "Next identified project issue allocations",
+    }),
+  );
+  expect(
+    within(allocations).getByRole("cell", { name: "ATTRIBUTION-26" }),
+  ).toBeVisible();
+  expect(within(allocations).getByRole("cell", { name: exact })).toBeVisible();
+  expect(within(layers).getByRole("cell", { name: "LAYER-101" })).toBeVisible();
+});
+
 it("retains every item, movement and later-only field with independent pages and exact values", () => {
   render(
     <AccountingScheduleResults

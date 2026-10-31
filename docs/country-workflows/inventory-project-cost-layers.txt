@@ -1,0 +1,56 @@
+Segregated purchased project-lot cost attribution
+
+The shared IFRS inventory record now accepts identification_basis
+segregated_project_lot under method specific_identification. UAE/AED and
+India/INR use the existing entity reporting profile, period, approval and
+immutable calculation lifecycle. This is financial inventory attribution;
+country tax valuation and framework eligibility are not inferred.
+
+Each item/location represents one explicitly assessed, non-interchangeable
+segregated purchased project lot. Keep unrelated units and projects separate.
+Provide SKU, identification_reference and identification_assessment. Identity,
+ownership, UOM and identification basis must remain consistent across locations.
+
+Opening stock uses opening_layers with distinct reference, positive quantity,
+nonnegative unit_cost and explicit evidence. Their quantities must exactly equal
+opening_quantity. Set opening_unit_cost to zero and leave opening_cost_evidence
+empty: a pooled opening average is rejected, and layer costs determine value.
+Opening layer references cannot collide with receipt or issue references.
+Every receipt creates a new identified layer at actual quantity times unit cost
+plus declared landed cost, supported by its retained evidence reference.
+
+Every issue supplies cost_allocations: layer_reference, quantity and evidence.
+Allocation quantities must exactly cover the issue. Duplicate targets, missing
+or future layers, whitespace-only evidence and cumulative layer overdrafts are
+rejected. Partial issues draw only from the selected layer's actual residual
+cost. Full exhaustion consumes its exact remaining cost. No FIFO fallback,
+cross-layer average, undisclosed allocation or balancing amount is invented.
+Layer quantities and costs must reconcile to the movement ledger at its declared
+eight-decimal accounting precision. Per-layer and allocation outputs preserve
+their full retained Decimal precision, including division residuals.
+
+Transfers retain the declared project identity, basis, SKU, UOM, ownership,
+quantity, temporal order and actual allocated issue cost. A mismatched transfer
+remains a blocking reconciliation issue. The receiving layer's evidence is
+separate from the outgoing allocation evidence. This does not independently
+verify the physical transfer or original-file contents.
+
+The 20,000-row limit counts items, movements, opening layers and allocations.
+The result retains all layers, including exhausted zero balances, and every
+issue allocation. Separate paged tables show source and allocation evidence
+without rounding numeric strings or silently truncating later records. Existing
+per-item NRV, write-down and custody-only exclusions remain. The appropriateness
+of grouping goods for a single project-lot NRV requires professional assessment.
+
+Approved input changes stale previous runs; previous values remain immutable.
+The accounting implementation fingerprint includes inventory_layers.py, so an
+operative layer-engine change cannot reuse a previous engine attestation.
+
+All examples and automated API cases are synthetic. No client pilot approval,
+production/overhead allocation, returns lifecycle, manufacturing WIP accounting,
+physical count, legal title, automatic tax treatment or statutory opinion is
+established by this extension. India legal-framework adoption still requires
+independent assessment; the linked MCA PDF returned HTTP 403 during this check.
+
+Primary accounting overview checked 31 October 2026:
+https://www.ifrs.org/issued-standards/list-of-standards/ias-2-inventories/

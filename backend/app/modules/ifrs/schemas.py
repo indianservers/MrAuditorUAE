@@ -483,6 +483,19 @@ class StockReceipt(Strict):
     transfer_reference: str = Field(default="", max_length=100)
 
 
+class StockCostAllocation(Strict):
+    layer_reference: str = Field(min_length=1, max_length=100)
+    quantity: Positive
+    evidence: str = Field(min_length=1, max_length=1000)
+
+
+class StockOpeningLayer(Strict):
+    reference: str = Field(min_length=1, max_length=100)
+    quantity: Positive
+    unit_cost: Nonnegative
+    evidence: str = Field(min_length=1, max_length=1000)
+
+
 class StockIssue(Strict):
     reference: str = Field(min_length=1, max_length=100)
     date: date
@@ -491,6 +504,7 @@ class StockIssue(Strict):
     evidence: str = Field(min_length=1, max_length=1000)
     transaction_type: Literal["dispatch", "transfer_out"] = "dispatch"
     transfer_reference: str = Field(default="", max_length=100)
+    cost_allocations: list[StockCostAllocation] = Field(default_factory=list, max_length=10000)
 
 
 class InventoryItem(Strict):
@@ -502,8 +516,10 @@ class InventoryItem(Strict):
     opening_quantity: Nonnegative
     opening_unit_cost: Nonnegative
     identification_reference: str = Field(default="", max_length=200)
+    identification_basis: Literal["individual_unit", "segregated_project_lot"] = "individual_unit"
     identification_assessment: str = Field(default="", max_length=4000)
     opening_cost_evidence: str = Field(default="", max_length=1000)
+    opening_layers: list[StockOpeningLayer] = Field(default_factory=list, max_length=10000)
     receipts: list[StockReceipt] = Field(default_factory=list, max_length=10000)
     issues: list[StockIssue] = Field(default_factory=list, max_length=10000)
     expected_closing_quantity: Nonnegative

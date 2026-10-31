@@ -1,0 +1,101 @@
+{
+  "recorded_at": "2026-10-31T05:02:22.386429+00:00",
+  "base_commit": "970eda0373e0223f520e3cb8c4ec1e1bf1c32e1a",
+  "scope": "Explicit purchased segregated-project cost layers and issue allocations in the existing approved IFRS inventory workflow",
+  "reports": [
+    {
+      "path": "docs/phase-12/project-layers-backend.xml",
+      "sha256": "79c498e4307b0eaa31d3366579df5eeee0ff166214da162690cac1573432a660",
+      "tests": 4966,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/project-layers-http.xml",
+      "sha256": "c41a9b7c128e2015eea79fb4b4c98df36b8cd16749b0a6c157a12116538022a1",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/project-layers-frontend.xml",
+      "sha256": "a8ff832c4e4d88ae3944636b9a25eb7a80c1bf2b0ee6bf6e4b17737a39d93b4d",
+      "tests": 532,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "implementation_files": [
+    {
+      "path": "backend/app/modules/ifrs/inventory.py",
+      "normalization": "LF",
+      "sha256": "c398039e0560423047090d3205e620fc0fb74960b33932a53153064badac4c11"
+    },
+    {
+      "path": "backend/app/modules/ifrs/inventory_layers.py",
+      "normalization": "LF",
+      "sha256": "f94927bf64c858763a79ee1c4c7d0216704673110f72583979979b3849316661"
+    },
+    {
+      "path": "backend/app/modules/ifrs/schemas.py",
+      "normalization": "LF",
+      "sha256": "5caa284841e976cc5c2389fd419575260cc3c4a65fa09d7a0e6b779ed1b02564"
+    },
+    {
+      "path": "backend/app/modules/ifrs/contracts.py",
+      "normalization": "LF",
+      "sha256": "5f4074041b6fa311119c10fe6ddeb7fe4ad172227153b2ed1feff82dfbf3e00d"
+    },
+    {
+      "path": "backend/tests/unit/test_inventory_project_layers.py",
+      "normalization": "LF",
+      "sha256": "7fc3953cdb47162fc3f314a7ad3e7f707a00304291d18e2e26c30c409c2c8925"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_inventory_identified_units.py",
+      "normalization": "LF",
+      "sha256": "3a2cd16808d9bb9dae60d8fd29c2924c5ff3d4f3ff930ad815e1006d6205b4d0"
+    },
+    {
+      "path": "frontend/src/features/accounting-schedule-results.tsx",
+      "normalization": "LF",
+      "sha256": "8ffb37a9ac91ad88e91e5b7c810849eb01bddc36d447a6f9d5982ae5acd52d6e"
+    },
+    {
+      "path": "frontend/tests/accounting-schedule-results.test.tsx",
+      "normalization": "LF",
+      "sha256": "0871ed49f2163e071b9c094df6a1d522b5f10f73504921745f6ed4b1828e0465"
+    },
+    {
+      "path": "frontend/e2e/group-comparatives-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "6192ae0c16ee0a7cf1af07c936ef798778eef5252f0094230a92e4ba1c3c5f2a"
+    }
+  ],
+  "checks": {
+    "ruff_and_format": "PASS",
+    "mypy_436_app_files": "PASS",
+    "typescript": "PASS",
+    "targeted_eslint": "PASS",
+    "frontend_production_build": "PASS",
+    "api_contract_snapshot_check": "PASS",
+    "generated_types_check": "PASS",
+    "browser_discovery": "PASS; one combined group/stock/benefit test discovered; new project assertions await hosted execution"
+  },
+  "country_api_cases": [
+    "AE/AED individual_unit",
+    "AE/AED segregated_project_lot",
+    "IN/INR individual_unit",
+    "IN/INR segregated_project_lot"
+  ],
+  "evidence_boundaries": [
+    "All arithmetic, HTTP inputs and expected values are explicitly synthetic",
+    "Original-file verification, method/framework eligibility, title and physical existence remain separately assessed",
+    "No manufacturing overhead, WIP or returns lifecycle is implemented by this change",
+    "India tax/ICDS valuation is not inferred; MCA source returned 403",
+    "Local scanner and import dispatch remain explicit doubles; actual new browser screenshots and full hosted checks are pending"
+  ]
+}

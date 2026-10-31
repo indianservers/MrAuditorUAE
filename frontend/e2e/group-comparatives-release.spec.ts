@@ -789,6 +789,144 @@ test("prior reported group comparatives retain separate review, original FX, com
     await identifiedResults.screenshot({
       path: `${screenshots}/AE-inventory-specific-identification.png`,
     });
+    const projectLot = await current.ready("inventory", {
+      profile_id: current.profile.id,
+      period_start: "2026-01-01",
+      period_end: "2026-12-31",
+      method: "specific_identification",
+      policy_version: "SYNTHETIC-segregated-project/1",
+      items: [
+        {
+          reference: "SYNTHETIC-project-A",
+          sku: "SYNTHETIC-project-component",
+          uom: "each",
+          location: "SYNTHETIC-Dubai",
+          ownership: "owned",
+          identification_reference: "SYNTHETIC-project-A",
+          identification_basis: "segregated_project_lot",
+          identification_assessment:
+            "SYNTHETIC independently assessed non-interchangeable purchased project lot",
+          opening_quantity: "5",
+          opening_unit_cost: "0",
+          opening_layers: [
+            {
+              reference: "A",
+              quantity: "2",
+              unit_cost: "10",
+              evidence: "SYNTHETIC invoice A",
+            },
+            {
+              reference: "B",
+              quantity: "3",
+              unit_cost: "30",
+              evidence: "SYNTHETIC invoice B",
+            },
+          ],
+          receipts: [
+            {
+              reference: "C",
+              date: "2026-02-01",
+              quantity: "4",
+              unit_cost: "50",
+              landed_cost: "4",
+              evidence: "SYNTHETIC invoice C and freight",
+            },
+          ],
+          issues: [
+            {
+              reference: "I",
+              date: "2026-03-01",
+              quantity: "3",
+              evidence: "SYNTHETIC physical issue",
+              cost_allocations: [
+                {
+                  layer_reference: "B",
+                  quantity: "2",
+                  evidence: "SYNTHETIC attribution B",
+                },
+                {
+                  layer_reference: "C",
+                  quantity: "1",
+                  evidence: "SYNTHETIC attribution C",
+                },
+              ],
+            },
+          ],
+          expected_closing_quantity: "6",
+          selling_price: "500",
+          nrv_evidence: "SYNTHETIC separately assessed project lot NRV",
+        },
+      ],
+    });
+    await page.goto(`/ifrs/${current.eid}/inventory`);
+    const projectRegion = page.getByRole("region", {
+      name: "Reporting calculations",
+      exact: true,
+    });
+    await projectRegion
+      .getByRole("combobox", { name: "Approved assumptions", exact: true })
+      .selectOption(projectLot.id);
+    const projectPending = page.waitForResponse(
+      (r) =>
+        r
+          .url()
+          .endsWith(
+            `/ifrs/engagements/${current.eid}/calculate/${projectLot.id}`,
+          ) && r.request().method() === "POST",
+    );
+    await projectRegion
+      .getByRole("button", { name: "Calculate approved inputs", exact: true })
+      .click();
+    const projectResponse = await projectPending;
+    expect(projectResponse.status(), await projectResponse.text()).toBe(201);
+    const projectRun = await projectResponse.json();
+    expect(projectRun.results.closing_carrying).toBe("203.00000000");
+    expect(projectRun.results.schedule[0].issue_cost).toBe("111.00000000");
+    const projectResults = projectRegion.getByRole("region", {
+      name: "Inventory costing results",
+      exact: true,
+    });
+    await projectResults
+      .getByText("Identified project cost layers (3)", { exact: true })
+      .click();
+    const projectLayers = projectResults.getByRole("table", {
+      name: "Identified project cost layers",
+      exact: true,
+    });
+    await expect(projectLayers.getByRole("row")).toHaveCount(4);
+    await projectResults
+      .getByRole("region", {
+        name: "Identified project cost layers",
+        exact: true,
+      })
+      .screenshot({
+        path: `${screenshots}/AE-inventory-project-cost-layers.png`,
+      });
+    await projectResults
+      .getByText("Identified project issue allocations (2)", { exact: true })
+      .click();
+    const projectAllocations = projectResults.getByRole("table", {
+      name: "Identified project issue allocations",
+      exact: true,
+    });
+    await expect(projectAllocations.getByRole("row")).toHaveCount(3);
+    await projectAllocations
+      .getByRole("cell", { name: "SYNTHETIC attribution C", exact: true })
+      .scrollIntoViewIfNeeded();
+    await expect(
+      projectAllocations.getByRole("cell", {
+        name: "SYNTHETIC attribution C",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await projectResults
+      .getByRole("region", {
+        name: "Identified project issue allocations",
+        exact: true,
+      })
+      .screenshot({
+        path: `${screenshots}/AE-inventory-project-issue-allocations.png`,
+      });
     expect(errors).toEqual([]);
   } finally {
     await Promise.all(contexts.map((context) => context.close()));

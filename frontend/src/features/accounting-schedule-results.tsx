@@ -21,7 +21,16 @@ export function AccountingScheduleResults({
   const inventory = kind === "inventory";
   const currency = object(data.execution).presentation_currency;
   const tables = inventory
-    ? ["schedule", "movements", "transfers", "issues"]
+    ? [
+        "schedule",
+        "movements",
+        "transfers",
+        "issues",
+        ...(Array.isArray(data.identified_layers) ? ["identified_layers"] : []),
+        ...(Array.isArray(data.identified_allocations)
+          ? ["identified_allocations"]
+          : []),
+      ]
     : ["issues"];
   const nested = inventory ? [] : ["obligation_rollforward", "payroll_bridge"];
   const limitations = Array.isArray(data.limitations) ? data.limitations : null;
@@ -51,8 +60,8 @@ export function AccountingScheduleResults({
           : "Benefit obligation and payroll reconciliation"}
       </h3>
       <p>
-        Values are shown at their retained precision. Reporting
-        currency: {typeof currency === "string" ? currency : "Not established"}.
+        Values are shown at their retained precision. Reporting currency:{" "}
+        {typeof currency === "string" ? currency : "Not established"}.
       </p>
       <Facts data={meta} />
       {limitations && (
@@ -90,7 +99,11 @@ export function AccountingScheduleResults({
               ? "Inventory cost movements"
               : key === "transfers"
                 ? "Inventory transfers"
-                : "Accounting schedule issues";
+                : key === "identified_layers"
+                  ? "Identified project cost layers"
+                  : key === "identified_allocations"
+                    ? "Identified project issue allocations"
+                    : "Accounting schedule issues";
         const table = (
           <RetainedRowsTable
             title={title}

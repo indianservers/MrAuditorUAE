@@ -53,6 +53,7 @@ def implementation_hash():
         "calculations.py",
         "schemas.py",
         "inventory.py",
+        "inventory_layers.py",
         "employee_benefits.py",
         "intercompany.py",
         "group_comparatives.py",
