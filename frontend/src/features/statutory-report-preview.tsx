@@ -33,11 +33,14 @@ export function StatutoryReportPreview({
   const coverage = object(body.requirements_coverage);
   const pack = object(coverage.requirements_pack);
   const items = rows(coverage.items);
+  const assessments = new Map(
+    rows(body.requirements).map((item) => [text(item.key), item]),
+  );
   const fields = new Map(
     rows(pack.fields).map((field) => [text(field.key), field]),
   );
   const filtered = items.filter((item) =>
-    `${text(item.key, "")} ${text(item.title, "")} ${text(item.disposition, "")} ${text(item.status, "")}`
+    `${text(item.key, "")} ${text(item.title, "")} ${text(item.disposition, "")} ${text(item.status, "")} ${text(assessments.get(text(item.key))?.basis, "")}`
       .toLocaleLowerCase()
       .includes(query.trim().toLocaleLowerCase()),
   );
@@ -157,6 +160,7 @@ export function StatutoryReportPreview({
               <th>Disposition</th>
               <th>Coverage</th>
               <th>Report blocks</th>
+              <th>Assessed basis</th>
               <th>Published source page</th>
             </tr>
           </thead>
@@ -174,6 +178,9 @@ export function StatutoryReportPreview({
                       ? item.block_keys.map((key) => text(key)).join(", ") ||
                         "No block links"
                       : "No block links"}
+                  </td>
+                  <td style={{ maxWidth: 360, overflowWrap: "anywhere" }}>
+                    {text(assessments.get(text(item.key))?.basis)}
                   </td>
                   <td>{text(fields.get(text(item.key))?.page)}</td>
                 </tr>

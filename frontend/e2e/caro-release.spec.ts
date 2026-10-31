@@ -341,6 +341,8 @@ for (const scope of ["standalone", "consolidated"] as const) {
         page.getByLabel("Reviewed CARO company-scope result", { exact: true }),
       ).toHaveValue(scopeResult.id);
       const last = pack.requirements.at(-1)!;
+      const editedBasis =
+        "SYNTHETIC browser-reviewed final CARO reason assessment; no legal qualification";
       await page
         .getByLabel("Search report requirements", { exact: true })
         .fill(last.key);
@@ -354,9 +356,7 @@ for (const scope of ["standalone", "consolidated"] as const) {
           name: `Applicability and source basis ${pack.requirements.length}`,
           exact: true,
         })
-        .fill(
-          "SYNTHETIC browser-reviewed final CARO reason assessment; no legal qualification",
-        );
+        .fill(editedBasis);
       const saving = page.waitForResponse(
         (r) =>
           r.url().endsWith("/report-templates") &&
@@ -375,6 +375,10 @@ for (const scope of ["standalone", "consolidated"] as const) {
       const template = await saved.json();
       expect(template.body.company_reporting_scope_id).toBe(scopeResult.id);
       expect(template.body.blocks).toEqual(initial.body.blocks);
+      expect(
+        template.body.requirements.find((r: Requirement) => r.key === last.key)
+          ?.basis,
+      ).toBe(editedBasis);
       await reviewer.goto("/reports/statutory");
       await reviewer
         .getByRole("combobox", { name: "Engagement", exact: true })
@@ -409,6 +413,10 @@ for (const scope of ["standalone", "consolidated"] as const) {
       const generated = await generating;
       expect(generated.status(), await generated.text()).toBe(201);
       const report = await generated.json();
+      expect(
+        report.body.requirements.find((r: Requirement) => r.key === last.key)
+          ?.basis,
+      ).toBe(editedBasis);
       await reviewer
         .getByRole("link", {
           name: "Review generated report and export DOCX / XLSX / PDF",
@@ -434,6 +442,14 @@ for (const scope of ["standalone", "consolidated"] as const) {
       await expect(
         preview.getByRole("cell", { name: last.key, exact: true }),
       ).toBeVisible();
+      await expect(
+        preview.getByRole("cell", { name: editedBasis, exact: true }),
+      ).toBeVisible();
+      const notices = reviewer.getByRole("button", {
+        name: "Dismiss notification",
+        exact: true,
+      });
+      while (await notices.count()) await notices.first().click();
       mkdirSync("test-results/country-reports", { recursive: true });
       await preview
         .getByRole("heading", {
@@ -456,7 +472,7 @@ for (const scope of ["standalone", "consolidated"] as const) {
           : "../backend/.venv/bin/python",
         [
           "-c",
-          `import io,sys;from openpyxl import load_workbook;w=load_workbook(io.BytesIO(sys.stdin.buffer.read()),read_only=True);rows=list(w['Requirements coverage'].values);expected=${JSON.stringify(pack.requirements.map((item) => item.key))};assert len(rows)==len(expected)+1;assert {r[0] for r in rows[1:]}==set(expected)`,
+          `import io,sys;from openpyxl import load_workbook;w=load_workbook(io.BytesIO(sys.stdin.buffer.read()),read_only=True);rows=list(w['Requirements coverage'].values);expected=${JSON.stringify(pack.requirements.map((item) => item.key))};assert len(rows)==len(expected)+1;assert {r[0] for r in rows[1:]}==set(expected);assert next(dict(zip(rows[0],r)) for r in rows[1:] if r[0]==${JSON.stringify(last.key)})['basis']==${JSON.stringify(editedBasis)}`,
         ],
         { input: readFileSync(file!), timeout: 15000 },
       );
@@ -482,7 +498,17 @@ for (const scope of ["standalone", "consolidated"] as const) {
       ).toBeDisabled();
       const retained = await get(`${prefix}/events/${report.id}`);
       expect(retained.body).toEqual(report.body);
-      await preview.getByRole("alert").screenshot({
+      await preview
+        .getByLabel("Search saved report requirements", { exact: true })
+        .fill(last.key);
+      await preview
+        .getByRole("heading", { level: 2 })
+        .evaluate((node) => node.scrollIntoView({ block: "start" }));
+      await expect(preview.getByRole("alert")).toBeInViewport();
+      await expect(
+        preview.getByRole("cell", { name: editedBasis, exact: true }),
+      ).toBeInViewport();
+      await reviewer.screenshot({
         path: `test-results/country-reports/IN-CARO-${scope}-stale.png`,
       });
       expect(errors).toEqual([]);

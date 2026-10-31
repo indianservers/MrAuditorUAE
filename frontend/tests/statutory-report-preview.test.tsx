@@ -269,3 +269,38 @@ describe("retained statutory report preview", () => {
     expect(JSON.stringify(body)).toBe(original);
   });
 });
+
+it("shows and searches each saved assessment basis without borrowing another field basis", () => {
+  const body = {
+    ...fixture(3),
+    requirements: [
+      { key: "field.1", basis: "SYNTHETIC documented nil exposure" },
+      { key: "field.2", basis: "SYNTHETIC exception retained for review" },
+    ],
+  };
+  const original = JSON.stringify(body);
+  render(<StatutoryReportPreview body={body} freshness="STALE" eid="E" />);
+  const table = screen.getByRole("table", {
+    name: "Saved requirement references and block coverage",
+  });
+  const first = within(table)
+    .getByRole("cell", { name: "field.1" })
+    .closest("tr")!;
+  expect(
+    within(first).getByRole("cell", {
+      name: "SYNTHETIC documented nil exposure",
+    }),
+  ).toBeVisible();
+  const missing = within(table)
+    .getByRole("cell", { name: "field.3" })
+    .closest("tr")!;
+  expect(
+    within(missing).getByRole("cell", { name: "Not supplied" }),
+  ).toBeVisible();
+  fireEvent.change(screen.getByLabelText("Search saved report requirements"), {
+    target: { value: "exception retained" },
+  });
+  expect(within(table).getAllByRole("row")).toHaveLength(2);
+  expect(within(table).getByRole("cell", { name: "field.2" })).toBeVisible();
+  expect(JSON.stringify(body)).toBe(original);
+});

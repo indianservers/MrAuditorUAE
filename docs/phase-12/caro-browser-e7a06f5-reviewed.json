@@ -1,0 +1,79 @@
+{
+  "recorded_date": "2026-10-31",
+  "hosted_source": "e7a06f51f780b07837d8936bd5bb6164a1f06880",
+  "run_id": 41182059791,
+  "browser_job_id": 124481311558,
+  "browser_result": {
+    "passed": 19,
+    "failed": 0,
+    "duration": "8.1 minutes"
+  },
+  "caro_assertions": [
+    "Standalone and consolidated templates revised through UI with retained company scope and workpaper blocks",
+    "Separate template review and real report generation",
+    "Complete XLSX exact requirement-key sets: 50 standalone and 3 consolidated",
+    "Changing linked procedure evidence makes generated report stale, keeps its body immutable and disables approval"
+  ],
+  "browser_artifact": {
+    "id": 13034984100,
+    "bytes": 24478875,
+    "sha256": "eacf1c4a79a03dbdbe8d433922f998641b907ee253e17c690fc90eafd8e995ab"
+  },
+  "authority_artifact": {
+    "id": 13034714497,
+    "bytes": 1409,
+    "sha256": "3ba3c1a01722005fd3e5eaa60e4ddf9b44d88b7131427b71b831bde208c28f58"
+  },
+  "authority_verification": "All 12 source rows have real CLEAN verdicts; exact size and SHA256 rechecked against current retained PDF originals",
+  "visual_review": [
+    "All four original CARO PNGs inspected",
+    "Filtered reviewed captures visibly show final caro.4.2, COVERED and 1 of 50 / 1 of 3; notification overlays part of row",
+    "Stale captures show only warning banner; they do not visually demonstrate approval controls or unchanged rows",
+    "Follow-up test dismisses notification and captures wider stale context; corrected capture rerun is pending"
+  ],
+  "follow_up_local": {
+    "frontend_tests": 544,
+    "files": 96,
+    "production_build": "PASS",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "playwright_discovery": {
+      "tests": 20,
+      "files": 17
+    }
+  },
+  "follow_up_change": "Saved report preview displays and searches the retained individual requirement basis. Browser asserts exact edited basis in saved template, generated body, rendered row and XLSX. Earlier screenshots are not proof of this added display.",
+  "limits": [
+    "Full hosted backend verification remains live, not passed",
+    "This 19-case source does not include the later employment browser case",
+    "Synthetic browser controls and clean PDF scans do not establish real-client, professional or statutory qualification",
+    "Primary corrigendum text remains indexed but direct raw PDF retrieval timed out; original bytes still unavailable"
+  ],
+  "files": [
+    {
+      "path": "docs/phase-12/screenshots/e7a06f5-caro-reviewed/IN-CARO-consolidated-last-matter.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "e5ebcb421632aadc08688843d68f655b6625c4b3eb3e47aa1c94eeb383058c82"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e7a06f5-caro-reviewed/IN-CARO-consolidated-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "196d551f6abd41243dd100c9764568f4c5916ac9b29e68a40d35ab1991500119"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e7a06f5-caro-reviewed/IN-CARO-standalone-last-matter.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "43c1ce559e4cef9ba047adb48e1181e2c9aff172a781e1a1d2394d607ac36a56"
+    },
+    {
+      "path": "docs/phase-12/screenshots/e7a06f5-caro-reviewed/IN-CARO-standalone-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "196d551f6abd41243dd100c9764568f4c5916ac9b29e68a40d35ab1991500119"
+    },
+    {
+      "path": "docs/phase-12/authority-scan-e7a06f5.json",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "bec6b0d7e759bcbc172fb0daba2a65f32849ffb246daca91dac81121a677a67f"
+    }
+  ]
+}
