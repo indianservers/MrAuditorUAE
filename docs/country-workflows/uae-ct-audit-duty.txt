@@ -49,6 +49,13 @@ contributors, so they cannot independently approve their own derived result.
 
 Outputs and boundaries
 ---------------------
+The result screen presents a compact duty summary before the wide source
+schedule. It shows the current assessment separately from the dated-source
+branch, the exact retained AED revenue (including zero), period and scope,
+unresolved issues and separate Tax Group/distribution procedures. Missing
+revenue remains not established. It does not round amounts through browser
+floating-point numbers or interpret string booleans as assessed answers.
+
 The result keeps the dated-source branch and current assessed requirement,
 statement type, threshold/basis, exact amount, unresolved issues and separate
 procedure flags. The general entity-audit-exemption flag is always false:

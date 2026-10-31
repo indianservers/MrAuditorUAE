@@ -98,6 +98,7 @@ import {
 } from "./salary-annual-comparison";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
 import { UAECTAuditDuty } from "./uae-ct-audit-duty";
+import { UAECTAuditDutyResult } from "./uae-ct-audit-duty-result";
 import { draftCurrency, reportingCurrency } from "./workflow-currency";
 import { TurnoverBooksComposition } from "./turnover-books-composition";
 import {
@@ -7343,6 +7344,9 @@ export function CountryWorkflows({
               prefix={prefix}
               selected={selected}
             />
+          )}
+          {body.workflow === "uae-ct-audit-duty" && (
+            <UAECTAuditDutyResult row={rows[0]} />
           )}
           {body.inventory_quantity_controls && (
             <InventoryEvidenceTable

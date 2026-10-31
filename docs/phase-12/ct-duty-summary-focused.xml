@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="4" failures="0" errors="0" time="0.1069181">
+    <testsuite name="tests/uae-ct-audit-duty-result.test.tsx" timestamp="2026-10-31T00:35:26.799Z" hostname="DESKTOP-B3SR465" tests="4" failures="0" errors="0" skipped="0" time="0.1069181">
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="shows the exact threshold result without implying a company-law audit exemption" time="0.0826275">
+        </testcase>
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="keeps unresolved current rules distinct from a positive dated-source branch and unknown revenue" time="0.0089639">
+        </testcase>
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="preserves exact long AED values and treats string booleans as unresolved" time="0.0038971">
+        </testcase>
+        <testcase classname="tests/uae-ct-audit-duty-result.test.tsx" name="keeps explicitly reported zero distinct from absent revenue" time="0.0095199">
+        </testcase>
+    </testsuite>
+</testsuites>

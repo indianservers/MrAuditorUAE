@@ -116,6 +116,21 @@ export async function runCTAuditDutyBrowserWorkflow(
       `/intelligence/${eid}/country-workflow?event=${retained!.id}`,
     );
     await expect(reviewer.getByText("REVIEWED", { exact: true })).toBeVisible();
+    const summary = reviewer.getByRole("region", {
+      name: "UAE corporate-tax audit duty summary",
+      exact: true,
+    });
+    await expect(summary).toContainText(
+      required
+        ? "MD84 preparation and maintenance duty: Required"
+        : "MD84 preparation and maintenance duty: Not required under the selected MD84 assessment",
+    );
+    await expect(
+      summary.getByText(`AED ${amount}`, { exact: true }),
+    ).toBeVisible();
+    await summary.screenshot({
+      path: `${screenshots}/AE-CT-MD84-${required ? "above-limit" : "at-limit"}-summary.png`,
+    });
     await reviewer
       .getByRole("heading", { name: title, exact: true })
       .locator("..")

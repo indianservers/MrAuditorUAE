@@ -1,0 +1,34 @@
+{
+  "scope": "Readable UAE MD84 duty-result summary alongside the complete retained source schedule",
+  "reports": [
+    {
+      "file": "ct-duty-summary-frontend.xml",
+      "bytes": 118297,
+      "sha256": "46a2ec0b2906d772997507e37d3f98a72008774b29ef07ceb4d34192392c6260",
+      "tests": 502
+    },
+    {
+      "file": "ct-duty-summary-focused.xml",
+      "bytes": 1114,
+      "sha256": "3873beb0edf2ca66a42a82e6fccc4b47b185a705d581248f54a92cf6f2fee92a",
+      "tests": 4
+    }
+  ],
+  "coverage_note": "Full frontend suite contains502 tests including the first3 summary cases; the final focused4 includes the additional zero-value case and overlaps with the full suite. No additive unique-test total is claimed.",
+  "checks": {
+    "typecheck": "PASS",
+    "lint": "PASS_WITH_EXISTING_UNRELATED_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS"
+  },
+  "verified": [
+    "Current unresolved assessment remains distinct from the positive dated-source branch",
+    "Exact AED strings remain intact beyond JavaScript integer precision; null and explicit zero remain distinct",
+    "String booleans cannot become assessed true/false conclusions",
+    "Company-law/free-zone audit exemption and separate group procedures remain visibly distinct from MD84 duty"
+  ],
+  "browser_status": "New dedicated boundary-summary assertions and screenshots are added to the existing hosted browser workflow; their success is not established by local unit tests",
+  "limits": [
+    "UI presentation over retained assessed facts; no new legal rule or eligibility determination",
+    "No new real-client, professional, production, audit-opinion or filing qualification"
+  ]
+}
