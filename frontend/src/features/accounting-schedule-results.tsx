@@ -108,6 +108,29 @@ export function AccountingScheduleResults({
           <RetainedRowsTable
             title={title}
             rows={data[key]}
+            columnOrder={
+              key === "identified_layers"
+                ? [
+                    "layer_reference",
+                    "original_quantity",
+                    "original_cost",
+                    "remaining_quantity",
+                    "remaining_cost",
+                    "source_evidence",
+                  ]
+                : key === "identified_allocations"
+                  ? [
+                      "issue_reference",
+                      "layer_reference",
+                      "quantity",
+                      "cost",
+                      "allocation_evidence",
+                      "source_evidence",
+                      "remaining_quantity",
+                      "remaining_cost",
+                    ]
+                  : undefined
+            }
             currency={typeof currency === "string" ? currency : ""}
           />
         );

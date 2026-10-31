@@ -1,0 +1,47 @@
+{
+  "recorded_at": "2026-10-31T05:34:38.304692+00:00",
+  "base_commit": "ae6d90f4ee7493be4a879b2f4874e7c01f20885e",
+  "scope": "Prioritize project cost attribution columns without omitting unlisted retained data; dismiss normal notifications and capture costs separately from evidence",
+  "report": {
+    "path": "docs/phase-12/project-cost-readability-frontend.xml",
+    "sha256": "73d87b0df4a44a0189913b6f470fce3a29adf99696e6271ef1f5c2d18d303ef5",
+    "tests": 533,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "implementation_files": [
+    {
+      "path": "frontend/src/features/retained-rows-table.tsx",
+      "normalization": "LF",
+      "sha256": "c288d09970417b296c520acea9b70e246b0fbc709b57856b3ce84ef70bea99cd"
+    },
+    {
+      "path": "frontend/src/features/accounting-schedule-results.tsx",
+      "normalization": "LF",
+      "sha256": "4652a27f1dbe9dd4df3a3beab990b719214c197a48f3dd9689123a7bfe2da602"
+    },
+    {
+      "path": "frontend/tests/accounting-schedule-results.test.tsx",
+      "normalization": "LF",
+      "sha256": "e7dbb832c388bead5e47f4b52027eb7bbe54301653fd993ac8427763fa810b32"
+    },
+    {
+      "path": "frontend/e2e/group-comparatives-release.spec.ts",
+      "normalization": "LF",
+      "sha256": "54ad6785456fbd084aa6b623af14bdf9be545aea1c5ce9edfb83e682055ec19c"
+    }
+  ],
+  "checks": {
+    "typescript": "PASS",
+    "targeted_eslint": "PASS",
+    "production_build": "PASS",
+    "browser_discovery": "PASS; existing combined group/stock/benefit case discovered"
+  },
+  "retained_browser_proof": "docs/phase-12/inventory-tax-group-browser-ead3653.json",
+  "limitations": [
+    "Corrected captures await current hosted execution; inspected source ead3653 retains its actual toast and offscreen-cost limitations",
+    "No backend engine changed in this follow-up",
+    "Synthetic UI evidence does not qualify client or statutory outcomes"
+  ]
+}

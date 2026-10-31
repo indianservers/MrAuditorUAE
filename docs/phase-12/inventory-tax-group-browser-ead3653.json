@@ -1,0 +1,66 @@
+{
+  "source_commit": "ead36530394531931db5254874e02367f7e97aae",
+  "recorded_at": "2026-10-31T05:33:42.914547+00:00",
+  "run_id": 41171671345,
+  "browser_job_id": 124450749636,
+  "browser_result": "16 passed in 11.4 minutes; Tax Group combined case 22.6s; group/inventory/benefit combined case 43.8s",
+  "artifact": {
+    "id": 13031616478,
+    "bytes": 23093001,
+    "sha256": "ae4f099a9a75aeff7cbfa28b25e35900cd903910b0e3936b102e66dcb283a36e"
+  },
+  "original_images": [
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-inventory-project-cost-layers.png",
+      "bytes": 32391,
+      "sha256": "2384d3ac5456771c771d8133e3829617451cc3eef78f6e6ab5f8f4a2edc51f81"
+    },
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-inventory-project-issue-allocations.png",
+      "bytes": 21605,
+      "sha256": "b05bf1e7bda03ef3615e976ecb3d5f726606100bda85cd1091146390b525b891"
+    },
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-inventory-specific-identification.png",
+      "bytes": 86859,
+      "sha256": "4f32003dad0b50494b6d340eb68b4d203c06164a5ba7ad371b7a29e1ac129092"
+    },
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-tax-group-workpaper-last-source-page.png",
+      "bytes": 36729,
+      "sha256": "c4b1ccebe3381bc91086ab61acc5ba60925179deafbf0e1772980af6aec7db75"
+    },
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-tax-group-workpaper-mapping-stale.png",
+      "bytes": 15630,
+      "sha256": "8b8fc8b9a4edebe104786bc09db8945c63a73a890415ff4d715c491651499ff4"
+    },
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-tax-group-workpaper-position.png",
+      "bytes": 27452,
+      "sha256": "0cafb4f5a94a2501df4e0f253e7786d99c7710d323e505a878246f9eda6f8508"
+    },
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-tax-group-workpaper-stale-approval-disabled.png",
+      "bytes": 1662,
+      "sha256": "335ad7c21339acf32c76ea44d26702de943b6fd09b6119ba7f717a4b007cec70"
+    },
+    {
+      "path": "docs/phase-12/screenshots/ead3653-reviewed/AE-tax-group-workpaper-totals.png",
+      "bytes": 21928,
+      "sha256": "f7ab25f8dd8253e096e816cbfc88e353ae89d2f60e7d9ead9c02c75a56054daa"
+    }
+  ],
+  "inspection": [
+    "Tax Group totals, gross member investment position, last source page, stale notice and disabled approval control are readable in separate captures",
+    "Project layers retain original costs 20/90/204 and remaining costs 20/30/153; a notification obscures part of the last source-evidence cell",
+    "Allocation evidence capture shows both invoice and attribution references, but cost columns are horizontally offscreen",
+    "Individual-unit capture shows method, carrying value 100, both unit identities and opening invoice references; notification overlaps lower blank/provenance area"
+  ],
+  "follow_up": "Current browser changes dismiss notifications through their normal buttons and capture project issue costs and attribution separately; current table prioritizes references, quantities and costs while retaining later unlisted fields",
+  "limitations": [
+    "All eight originals preserved unchanged; new corrected images await separate hosted execution",
+    "These passing results precede ae6d90f pension salary consistency changes",
+    "Synthetic test evidence is not real client, professional or statutory qualification; full source-specific backend CI remains separately pending"
+  ]
+}

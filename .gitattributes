@@ -274,3 +274,5 @@ docs/phase-12/retained-status-*.xml -text whitespace=cr-at-eol
 docs/phase-12/project-layers-*.xml -text whitespace=cr-at-eol
 docs/phase-12/inventory-evidence-lineage-*.xml -text whitespace=cr-at-eol
 docs/phase-12/pension-support-basis-*.xml -text whitespace=cr-at-eol
+docs/phase-12/project-cost-readability-*.xml -text whitespace=cr-at-eol
+docs/phase-12/screenshots/ead3653-reviewed/*.png -text

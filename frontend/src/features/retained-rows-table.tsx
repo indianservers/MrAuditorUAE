@@ -17,11 +17,13 @@ export function RetainedRowsTable({
   title,
   rows,
   currency,
+  columnOrder = [],
   serverPage,
 }: {
   title: string;
   rows: unknown;
   currency: string;
+  columnOrder?: readonly string[];
   serverPage?: {
     offset: number;
     total: number;
@@ -36,7 +38,13 @@ export function RetainedRowsTable({
       row !== null && typeof row === "object" && !Array.isArray(row),
   );
   const invalid = original.length - records.length;
-  const columns = [...new Set(records.flatMap((row) => Object.keys(row)))];
+  const discovered = [...new Set(records.flatMap((row) => Object.keys(row)))];
+  const columns = [
+    ...new Set([
+      ...columnOrder.filter((key) => discovered.includes(key)),
+      ...discovered,
+    ]),
+  ];
   const columnWidth = (key: string) =>
     key === "rate_source" || key.endsWith("evidence") ? 320 : 240;
   const limit = 25;

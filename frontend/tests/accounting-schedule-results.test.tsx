@@ -17,6 +17,7 @@ it("pages every project layer and explicit issue allocation independently with e
           layer_reference: `LAYER-${i + 1}`,
           remaining_cost: exact,
           source_evidence: `INVOICE-${i + 1}`,
+          ...(i === 100 ? { later_unlisted_field: "RETAIN-UNLISTED" } : {}),
         })),
         identified_allocations: Array.from({ length: 26 }, (_, i) => ({
           issue_reference: `ISSUE-${i + 1}`,
@@ -42,6 +43,9 @@ it("pages every project layer and explicit issue allocation independently with e
     within(layers).getByRole("cell", { name: "INVOICE-101" }),
   ).toBeVisible();
   expect(within(layers).getByRole("cell", { name: exact })).toBeVisible();
+  expect(
+    within(layers).getByRole("cell", { name: "RETAIN-UNLISTED" }),
+  ).toBeVisible();
   fireEvent.click(
     screen.getByText("Identified project issue allocations (26)"),
   );

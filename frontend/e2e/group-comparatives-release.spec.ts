@@ -32,6 +32,14 @@ async function login(page: Page, email: string) {
   await page.waitForURL("**/dashboard");
 }
 
+async function dismissNotifications(page: Page) {
+  const buttons = page.getByRole("button", {
+    name: "Dismiss notification",
+    exact: true,
+  });
+  while (await buttons.count()) await buttons.first().click();
+}
+
 test("prior reported group comparatives retain separate review, original FX, complete export and recursive staleness", async ({
   page,
   browser,
@@ -661,6 +669,7 @@ test("prior reported group comparatives retain separate review, original FX, com
             : "Employee benefit accounting results",
         exact: true,
       });
+      await dismissNotifications(page);
       if (kind === "inventory") {
         await expect(scheduleResults).toContainText("160.00000000");
         const itemTable = scheduleResults.getByRole("table", {
@@ -786,6 +795,7 @@ test("prior reported group comparatives retain separate review, original FX, com
         exact: true,
       }),
     ).toBeVisible();
+    await dismissNotifications(page);
     await identifiedResults.screenshot({
       path: `${screenshots}/AE-inventory-specific-identification.png`,
     });
@@ -894,6 +904,7 @@ test("prior reported group comparatives retain separate review, original FX, com
       exact: true,
     });
     await expect(projectLayers.getByRole("row")).toHaveCount(4);
+    await dismissNotifications(page);
     await projectResults
       .getByRole("region", {
         name: "Identified project cost layers",
@@ -910,6 +921,20 @@ test("prior reported group comparatives retain separate review, original FX, com
       exact: true,
     });
     await expect(projectAllocations.getByRole("row")).toHaveCount(3);
+    await expect(
+      projectAllocations.getByRole("cell", { name: "60", exact: true }),
+    ).toBeVisible();
+    await expect(
+      projectAllocations.getByRole("cell", { name: "51", exact: true }),
+    ).toBeVisible();
+    await projectResults
+      .getByRole("region", {
+        name: "Identified project issue allocations",
+        exact: true,
+      })
+      .screenshot({
+        path: `${screenshots}/AE-inventory-project-issue-costs.png`,
+      });
     await projectAllocations
       .getByRole("cell", { name: "SYNTHETIC attribution C", exact: true })
       .scrollIntoViewIfNeeded();
