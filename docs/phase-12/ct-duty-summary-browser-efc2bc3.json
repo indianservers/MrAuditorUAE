@@ -1,0 +1,50 @@
+{
+  "source_commit": "efc2bc31b1d701926e71358ba081ae3f62ec3fe4",
+  "run_id": 41151150045,
+  "job_id": 124387710234,
+  "conclusion": "success",
+  "suite": {
+    "passed": 15,
+    "duration": "9.8m",
+    "compound_uae_country_report_case_duration": "1.6m"
+  },
+  "artifact": {
+    "id": 13022879016,
+    "bytes": 21997174,
+    "sha256": "ef00ac604e5e7ba6e93eb0508b9e419e836ec2f6273d0867461257156af3d798"
+  },
+  "images": [
+    {
+      "file": "AE-CT-MD84-at-limit-summary-efc2bc3.png",
+      "bytes": 37932,
+      "sha256": "a8745381fa5a5a7fb054f1a82694f0ead562810d450f56a69a5954bbd2483ba0"
+    },
+    {
+      "file": "AE-CT-MD84-above-limit-summary-efc2bc3.png",
+      "bytes": 34656,
+      "sha256": "f7d88335a97accef5ac0fdb26a655356a0f098e2f3e85f0729fab5805f33cf8c"
+    },
+    {
+      "file": "AE-CT-MD84-facts-replaced-stale-efc2bc3.png",
+      "bytes": 123159,
+      "sha256": "989f581de0530ec100dd3445c14499cbdbe683f92cdbbc7cfa8700f05e3d7981"
+    }
+  ],
+  "visual_review": [
+    "All three original PNGs inspected.",
+    "The focused summary at AED50000000 visibly shows the selected MD84 duty as not required and the strict threshold result as No.",
+    "The focused summary at AED50000000.01 visibly shows Required, audited financial statements and the strict threshold result as Yes.",
+    "Both summaries show the exact registration, assessed period, AED amount, whole-person basis and separate company-law/free-zone exemption boundary without relying on the clipped source table.",
+    "The replaced-facts capture visibly retains the original amount and summary under a STALE header, with independent approval disabled. The wide lower source table still clips some right-hand columns."
+  ],
+  "automated_scope": [
+    "UI submission at the exact threshold and above, retained original PDF and separate synthetic fact document, separate review, forbidden self-review, dedicated summary assertions and screenshots",
+    "Draft XLSX download and changed-source staleness preserving the original reviewed body",
+    "All 15 release browser cases passed, including the separate group-comparative workflow"
+  ],
+  "limits": [
+    "The source-specific full backend job was still running when browser success was retained; not an all-jobs-success receipt",
+    "Synthetic assessed facts only, with no real-client, professional, production, audit-opinion or statutory-issuance qualification",
+    "This source predates the full-width group source-lineage tables"
+  ]
+}

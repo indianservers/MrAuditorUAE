@@ -1,0 +1,35 @@
+{
+  "retrieved_on": "2026-10-31",
+  "publication_page": "https://www.moet.gov.ae/en/laws",
+  "retrieval": "Official Companies Legislations accordion; original linked PDFs downloaded through the browser after direct HTTP retrieval of the English file timed out. No content recreated or modified.",
+  "files": [
+    {
+      "file": "moet-hosted-companies-law32-2021-english.pdf",
+      "bytes": 1029717,
+      "sha256": "b08a904a9af7102804e96e70c77a975876f3f2705190ecb6bea4f39d533435af",
+      "pages": 70
+    },
+    {
+      "file": "fdl20-2025-arabic-original.pdf",
+      "bytes": 264822,
+      "sha256": "7e035b6c3616255ffe8f1c4326080bec3f270f165aa63eeb06ab4c1f481e7163",
+      "pages": 8
+    }
+  ],
+  "english_source_url": "https://www.moet.gov.ae/documents/20121/376326/Commercial+Companies.pdf/12d14f53-1a3e-47b4-8e70-fac3f672c403?t=1645596097819",
+  "arabic_amendment_publication_link_document_id": "3da118c5-b49c-bddd-999c-bfafa9f8e243",
+  "observations": [
+    "The 70-page Ministry-hosted English file is explicitly marked UNOFFICIAL TRANSLATION and carries LexisNexis identification. It is the 2021 law text, not a current consolidated English version.",
+    "The 8-page Arabic FDL20/2025 amendment is separate. Its first page lists amended articles, including applicability Articles 3 and 5. A mainland/free-zone company label alone cannot resolve the amended applicability scope.",
+    "English page 8 and Arabic amendment pages 1 and 8 were rendered with Poppler and visually inspected. The English page includes Articles 26\u201328. Other pages have not been fully visually reviewed for adoption.",
+    "The Arabic amendment states effectiveness following publication. Its issue date alone does not establish its actual publication/effective date; a separate Gazette source and complete later-change assessment are still required."
+  ],
+  "status": "RETAINED_RESEARCH_NOT_ADOPTED_AS_CURRENT_AUTOMATIC_RULE",
+  "next_required_work": [
+    "Verify the operative source chain, publication/effectiveness and any later changes",
+    "Assess company-specific applicability, exclusions and legal form with separate retained facts",
+    "Implement and independently verify company-law accounts/audit procedures separately from corporate-tax MD84 and free-zone procedures"
+  ],
+  "professional_qualification": "NOT_ESTABLISHED",
+  "automatic_rule_enabled": false
+}

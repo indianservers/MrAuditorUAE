@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AuditStudio } from "./audit-studio";
 import { FinancialReview } from "./financial-review";
+import { GroupSourceLineage } from "./group-source-lineage";
 import { AccountingExecutionNotice } from "./accounting-execution-notice";
 import { money } from "@/lib/formatting/money";
 import { PageHeader } from "./shared";
@@ -486,7 +487,19 @@ function ReportingRuns({
                   </p>
                 ))}
                 {line ? (
-                  <Facts data={line} />
+                  <Facts
+                    data={
+                      result.data?.kind === "consolidation"
+                        ? Object.fromEntries(
+                            Object.entries(line).filter(
+                              ([key]) =>
+                                key !== "source_accounts" &&
+                                key !== "comparative_source_accounts",
+                            ),
+                          )
+                        : line
+                    }
+                  />
                 ) : (
                   <p>
                     Select a financial line to trace mapped source accounts.
@@ -496,6 +509,14 @@ function ReportingRuns({
             </div>
           ) : (
             <Facts data={data} />
+          )}
+          {result.data?.kind === "consolidation" && line && (
+            <GroupSourceLineage
+              key={`${rid}:${String(line.line_code)}`}
+              current={line.source_accounts}
+              comparative={line.comparative_source_accounts}
+              currency={String(data.currency || "")}
+            />
           )}
           <p className="ifrs-run-id">
             Run {rid} · SHA-256 {result.data?.sha256}

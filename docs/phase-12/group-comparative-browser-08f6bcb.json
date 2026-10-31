@@ -1,0 +1,52 @@
+{
+  "source_commit": "08f6bcb0896b70991ff73fbd89320a5b1f38327b",
+  "run_id": 41150653768,
+  "job_id": 124386112728,
+  "conclusion": "success",
+  "suite": {
+    "passed": 15,
+    "duration": "6.6m",
+    "group_comparative_case_seconds": 16.2
+  },
+  "artifact": {
+    "id": 13023161252,
+    "bytes": 21859419,
+    "sha256": "28a7f59bb74372b6ea36a19bfcdfec9122333cfbbde878956981f514f73f76d4"
+  },
+  "images": [
+    {
+      "file": "AE-group-comparative-source-08f6bcb.png",
+      "bytes": 42249,
+      "sha256": "5fa335b67442805807ad7cd1ef1503e269f846682817e3de9bee5734ea365380"
+    },
+    {
+      "file": "AE-group-comparative-original-lineage-08f6bcb.png",
+      "bytes": 149804,
+      "sha256": "fd5265cfbf375d80161b741921af5b6c51ba633d6f2f8ff3e124cb716ac2358b"
+    },
+    {
+      "file": "AE-group-comparative-prior-disclosure-stale-08f6bcb.png",
+      "bytes": 179567,
+      "sha256": "f8826707c6ab981a88458c398d23358cfdb314a507357f75ee8b9b0085b2ab01"
+    }
+  ],
+  "visual_review": [
+    "All three original PNGs inspected.",
+    "The selected Cash line visibly retains current AED910 and comparative AED390, with separate original current and comparative account observations in the side panel.",
+    "The prior source notice identifies the 2025 period and draft prior validation; it explicitly does not establish an audited comparative or complete group report.",
+    "After a newly approved prior disclosure the status visibly becomes STALE while the same comparative and current amounts remain.",
+    "The narrow side-panel source arrays and long source metadata clip some content. This source predates the separate full-width source-account tables; it is not visual proof of every retained field."
+  ],
+  "automated_scope": [
+    "Four member packages across two years with separate Manager and Partner package approvals and submitted-record self-approval 403 checks",
+    "UI calculation using approved assumptions and explicit complete-period nil intercompany assessments",
+    "Original prior comparative amount 390 against current 910; draft validation remains false",
+    "Downloaded XLSX contains comparative cash, source metadata and the immutable run sheet",
+    "A newly approved prior disclosure triggers recursive staleness; historical result is unchanged and recalculation from the stale source is 409"
+  ],
+  "limits": [
+    "The source-specific full backend job remained live when browser proof was retained; this is not an all-jobs-success receipt",
+    "Synthetic workflow only; no real-client, legal, professional, IFRS-certification, production or statutory-issuance qualification",
+    "Later UAE duty-summary and full-width source-lineage presentations require their own browser evidence"
+  ]
+}

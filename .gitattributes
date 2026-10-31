@@ -244,3 +244,7 @@ docs/phase-12/ct-audit-*.xml -text whitespace=cr-at-eol
 docs/phase-12/consolidation-nil-*.xml -text whitespace=cr-at-eol
 docs/phase-12/group-comparative-*.xml -text whitespace=cr-at-eol
 docs/phase-12/ct-duty-summary-*.xml -text whitespace=cr-at-eol
+docs/phase-12/80041e1-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/80041e1-hosted-coverage.json -text
+docs/country-workflows/authority-references/uae-company-law-2026-10-31/*.pdf -text
+docs/phase-12/group-lineage-frontend.xml -text whitespace=cr-at-eol

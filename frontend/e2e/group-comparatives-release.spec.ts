@@ -408,6 +408,29 @@ test("prior reported group comparatives retain separate review, original FX, com
       path: `${screenshots}/AE-group-comparative-source.png`,
     });
     await region.getByRole("gridcell", { name: "Cash", exact: true }).click();
+    const lineage = page.getByRole("region", {
+      name: "Group financial source lineage",
+      exact: true,
+    });
+    const currentSources = lineage.getByRole("table", {
+      name: "Current source accounts",
+      exact: true,
+    });
+    const priorSources = lineage.getByRole("table", {
+      name: "Comparative source accounts",
+      exact: true,
+    });
+    await expect(currentSources.getByRole("row")).toHaveCount(3);
+    await expect(priorSources.getByRole("row")).toHaveCount(3);
+    await expect(
+      currentSources.getByRole("cell", { name: "3", exact: true }),
+    ).toBeVisible();
+    await expect(
+      priorSources.getByRole("cell", { name: "2", exact: true }),
+    ).toBeVisible();
+    await lineage.screenshot({
+      path: `${screenshots}/AE-group-comparative-source-accounts.png`,
+    });
     await page.locator(".ifrs-designer").screenshot({
       path: `${screenshots}/AE-group-comparative-original-lineage.png`,
     });

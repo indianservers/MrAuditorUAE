@@ -1,0 +1,99 @@
+{
+  "source_commit": "80041e14df8acd17b2346ca521b2b771c0c505b9",
+  "run_id": 41138261078,
+  "job_id": 124345983213,
+  "conclusion": "success",
+  "passed": 5584,
+  "skipped": 9,
+  "failed": 0,
+  "duration_seconds": 3281.25,
+  "overall_coverage_percent": 87.08084708084708,
+  "core_coverage": {
+    "percent_displayed": 89.35,
+    "covered": 831,
+    "statements": 930
+  },
+  "artifact": {
+    "id": 13019723820,
+    "bytes": 255176,
+    "sha256": "62675be16d316611c96f4b952af8da869befbb9a467b402636209c8a605173e2"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/80041e1-hosted-full.xml",
+      "bytes": 870498,
+      "sha256": "7cb0de730832d56d83b1b9213b75bcabe3a596459c9501809f1948a4a7748c05"
+    },
+    {
+      "path": "docs/phase-12/80041e1-hosted-coverage.json",
+      "bytes": 1906650,
+      "sha256": "9d6555fde3dcee31efb4ec835d65d48a4d371369391468b7639a0b7e28673661"
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "security": "success",
+    "containers": "success",
+    "ml": "success"
+  },
+  "skipped_cases": [
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "class": "tests.phase2.test_live_native",
+      "name": "test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_document_worker_runtime",
+      "name": "test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "separate_browser_receipt": "docs/phase-12/q4-browser-80041e1.json",
+  "limits": [
+    "Source-specific historical Q4 reader and earlier features; later Form140/144, all-quarter comparisons, PDF security update and UAE duty/group features require their own validation.",
+    "Nine skips remain skips; synthetic CI does not establish actual client, legal, professional or production qualification."
+  ],
+  "salary_annual_module_cases": 84,
+  "verified_q4_case_names": [
+    "test_all_six_record_counts_and_explicit_q4_scope_are_required",
+    "test_public_q4_sample_is_preserved_and_rejected_instead_of_widened",
+    "test_reviewed_q4_exports_every_annual_field_and_becomes_stale_with_crosswalk_replacement"
+  ]
+}

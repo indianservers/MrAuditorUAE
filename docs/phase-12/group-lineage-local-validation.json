@@ -1,0 +1,30 @@
+{
+  "scope": "Full-width current and comparative source-account tables in the shared IFRS group workbench",
+  "tests": {
+    "passed": 505,
+    "files": 89,
+    "duration_seconds_displayed": 44.07
+  },
+  "original_report": {
+    "path": "docs/phase-12/group-lineage-frontend.xml",
+    "bytes": 119093,
+    "sha256": "7f891c87d24fd5832b15567882ddeb8512ae356564c1cab30879fa8fa935a56b"
+  },
+  "checks": {
+    "typecheck": "PASS",
+    "lint": "PASS_WITH_EXISTING_UNRELATED_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS",
+    "changed_file_formatting": "PASS"
+  },
+  "verified": [
+    "All201 current rows and26 comparative rows remain independently pageable; a field occurring only in the final current row is retained",
+    "Exact long source amounts, rates, zero, null and observed false values remain distinct",
+    "Unstructured records produce a warning rather than a complete-source assertion",
+    "Selected group-line changes have separate keyed source views; existing non-group source detail is unchanged"
+  ],
+  "hosted_browser_status": "The separate source08f6bcb group calculation/browser case passed15 release cases; this follow-up adds native-table source/rate assertions and a full-width lineage screenshot, whose hosted success is not yet established",
+  "limits": [
+    "Read-only presentation of retained observations; no new consolidation arithmetic or country rule",
+    "No real-client, professional, legal, production or IFRS-compliance qualification"
+  ]
+}

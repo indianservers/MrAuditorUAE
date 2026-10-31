@@ -35,6 +35,11 @@ The result records prior run ID, SHA-256, exact period, reviewed basis, totals,
 validation and unresolved issues. The workbench displays that source and draft
 boundary. PDF, DOCX and XLSX presentation rows include the source metadata;
 XLSX and JSON also retain the complete immutable result and source accounts.
+Selecting a group line also displays current and comparative source accounts
+in separate full-width tables with independent 25-record pages. Every retained
+field is available, including fields occurring only in later rows. Exact
+source amounts, rates and translated amounts remain text; missing values are
+not replaced with zero. Unstructured rows produce an explicit warning.
 The execution receipt recursively checks the prior run as well as copying
 its approved record dependencies. A newly approved prior-period disclosure
 can therefore stale the comparative even though it was not an original
