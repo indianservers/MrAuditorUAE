@@ -3685,6 +3685,21 @@ kbd,
   border: 1px solid var(--border, #e2e8f0);
   border-radius: 8px;
 }
+.group-comparative-source {
+  flex: none;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.group-comparative-source .facts > div {
+  display: grid;
+  grid-template-columns: minmax(90px, 20%) minmax(0, 1fr);
+}
+.group-comparative-source .facts dd {
+  min-width: 0;
+  max-width: none;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
 .group-source-lineage > section {
   margin-top: 20px;
 }

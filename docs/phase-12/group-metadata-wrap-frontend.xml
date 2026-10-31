@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="5" failures="0" errors="0" time="0.5483957">
+    <testsuite name="tests/financial-components.test.tsx" timestamp="2026-10-31T01:34:33.239Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.2058013">
+        <testcase classname="tests/financial-components.test.tsx" name="sorts scientific zeros and large decimal amounts without floating point" time="0.0015694">
+        </testcase>
+        <testcase classname="tests/financial-components.test.tsx" name="shows a truthful empty chart without inventing data" time="0.0850922">
+        </testcase>
+        <testcase classname="tests/financial-components.test.tsx" name="provides usable financial grid controls and error state" time="0.1172002">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/group-source-lineage.test.tsx" timestamp="2026-10-31T01:34:33.240Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.3425944">
+        <testcase classname="tests/group-source-lineage.test.tsx" name="pages full current and comparative populations independently without dropping later source fields" time="0.3281594">
+        </testcase>
+        <testcase classname="tests/group-source-lineage.test.tsx" name="reports unstructured rows and preserves valid rows instead of silently declaring a complete table" time="0.0123219">
+        </testcase>
+    </testsuite>
+</testsuites>

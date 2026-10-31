@@ -404,6 +404,18 @@ test("prior reported group comparatives retain separate review, original FX, com
     await expect(
       region.getByRole("gridcell", { name: "390.00", exact: true }),
     ).toBeVisible();
+    const comparativeBounds = await comparative.boundingBox();
+    expect(comparativeBounds).not.toBeNull();
+    for (const value of await comparative.locator("dd").all()) {
+      const bounds = await value.boundingBox();
+      expect(bounds).not.toBeNull();
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(
+        comparativeBounds!.x + comparativeBounds!.width + 1,
+      );
+      expect(
+        await value.evaluate((element) => element.scrollWidth),
+      ).toBeLessThanOrEqual(Math.ceil(bounds!.width) + 1);
+    }
     await comparative.screenshot({
       path: `${screenshots}/AE-group-comparative-source.png`,
     });

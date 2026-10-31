@@ -392,7 +392,10 @@ function ReportingRuns({
           {downloadError && <p role="alert">{downloadError}</p>}
           {data.comparative_status ===
             "PRIOR_REPORTED_GROUP_AMOUNTS_RETAINED" && (
-            <section aria-label="Prior group comparative source">
+            <section
+              aria-label="Prior group comparative source"
+              className="group-comparative-source"
+            >
               <h3>Prior reported group figures</h3>
               <p>
                 These figures retain the selected prior group calculation and
