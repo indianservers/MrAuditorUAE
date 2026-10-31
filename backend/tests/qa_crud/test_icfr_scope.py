@@ -183,3 +183,29 @@ async def test_icfr_sources_review_originals_export_and_replacement(
     await execute(
         c, h, eid, "country-workflow", payload, failed="select the reviewed current version"
     )
+
+
+@pytest.mark.parametrize("country", ["AE", "IN"])
+async def test_reference_catalogue_evidence_is_synthetic_in_both_api_views(environment, country):
+    c = environment
+    if country == "IN":
+        h, eid, _ = await india_context(c)
+    else:
+        h, _, eid, _ = await setup(c)
+    capabilities = await c.get("/api/v1/intelligence/capabilities", headers=h)
+    config = await c.get(f"/api/v1/intelligence/engagements/{eid}/country-workflows", headers=h)
+    assert capabilities.status_code == config.status_code == 200
+    global_body, country_body = capabilities.json(), config.json()
+    evidence = global_body["reference_scenario_evidence"]
+    assert evidence == country_body["reference_scenario_evidence"]
+    assert country_body["country"] == country
+    assert evidence["dataset_kind"] == "SYNTHETIC_ENGINE_FIXTURES"
+    assert evidence["count_basis"] == "AUTHORED_REFERENCE_SCENARIOS"
+    assert evidence["scenario_count"] == global_body["real_world_scenario_count"] == 164
+    assert evidence["counts_by_country"] == {"AE": 106, "IN": 58}
+    assert evidence["scenario_count"] == len(country_body["scenarios"])
+    assert evidence["client_validation"] == "NOT_ESTABLISHED_BY_CATALOGUE"
+    assert evidence["execution_status"] == "CONSULT_SOURCE_SPECIFIC_TEST_RECEIPTS"
+    assert evidence["statutory_qualification"] is False
+    assert global_body["statutory_qualification"] is False
+    assert evidence["legacy_count_field"] == "real_world_scenario_count"

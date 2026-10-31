@@ -727,11 +727,13 @@ async def period_action(eid: uuid.UUID, data: PeriodAction, db: DB, ctx: Actor, 
 @router.get("/capabilities")
 async def capabilities(ctx: Actor):
     from app.core.config import settings
-    from app.modules.country_workflows.catalogue import catalogue, scenarios
+    from app.modules.country_workflows.catalogue import catalogue, scenario_evidence
 
+    evidence = scenario_evidence()
     return {
         "country_workflows": catalogue(),
-        "real_world_scenario_count": len(scenarios()),
+        "real_world_scenario_count": evidence["scenario_count"],
+        "reference_scenario_evidence": evidence,
         "engine_version": "accounting-intelligence-1",
         "operations": list(s.OPERATIONS),
         "lead_sections": s.SECTIONS,
@@ -756,7 +758,12 @@ async def capabilities(ctx: Actor):
 @router.get("/engagements/{eid}/country-workflows")
 async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
     from app.db.models.platform import LegalEntity
-    from app.modules.country_workflows.catalogue import catalogue, check_templates, scenarios
+    from app.modules.country_workflows.catalogue import (
+        catalogue,
+        check_templates,
+        scenario_evidence,
+        scenarios,
+    )
     from app.modules.country_workflows.schemas import ROW_TYPES
     from app.modules.country_workflows.vat201_layouts import EMIRATES, LAYOUTS
     from app.modules.jurisdictions.workspace import resolved
@@ -777,6 +784,7 @@ async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
         "vat201_emirates": EMIRATES if package.country == "AE" else {},
         "check_templates": check_templates(package.country),
         "scenarios": scenarios(),
+        "reference_scenario_evidence": scenario_evidence(),
         "country": package.country,
         "items": catalogue(package.country),
         "source_contracts": {

@@ -1,0 +1,52 @@
+{
+  "recorded_date": "2026-10-31",
+  "source_base": "da95c9593f53ec265e5720fa5ee729149229ddd5",
+  "change": "Explicit synthetic reference evidence metadata shared by global capabilities and engagement country catalogue",
+  "compatibility": "real_world_scenario_count remains a historical alias for the same synthetic fixture count; metadata explicitly describes its meaning",
+  "counts": {
+    "total": 164,
+    "AE": 106,
+    "IN": 58
+  },
+  "checks": {
+    "focused_unit_passed": 222,
+    "http_passed": 6,
+    "http_scope": "Two new AE/IN metadata endpoint checks plus four existing ICFR independent source/reviewer/export/original replacement regressions",
+    "mypy_files": 442,
+    "ruff": "PASS",
+    "api_snapshots": "PASS"
+  },
+  "files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "normalization": "LF",
+      "sha256": "b2076a5048ec873a0c6334b1659fc367930c576d229f9feb3de104d47f752a2e"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "normalization": "LF",
+      "sha256": "13d972cbbb6493d647ec0b0d92e1d7603493989b09f8c93ce3671c1c57aa7bd0"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_icfr_scope.py",
+      "normalization": "LF",
+      "sha256": "c630bbbfa56a996d94300ecfb87290258e284efa2473af64cf0260b79ae809d0"
+    }
+  ],
+  "original_reports": [
+    {
+      "path": "docs/phase-12/scenario-evidence-unit.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "0cb9338cfa58be6bd557221cdf2c94b435991b9ca6ac1b4f5455532276a21750"
+    },
+    {
+      "path": "docs/phase-12/scenario-evidence-http.xml",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "68e8dea768556b04f230ad7c26cde319cfcc0f85527bf5f8473c4a2ba2453513"
+    }
+  ],
+  "limits": [
+    "Canonical fixture counts do not establish client, full-country legal or professional coverage",
+    "No new browser result is claimed by this API metadata change; current browser filter/capture runs are separately pending"
+  ]
+}

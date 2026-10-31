@@ -1,6 +1,7 @@
 """Capability states describe implemented scope, not universal legal qualification."""
 
 import json
+from collections import Counter
 from datetime import date
 from pathlib import Path
 
@@ -268,6 +269,21 @@ def catalogue(country=None):
 
 def scenarios():
     return json.loads((Path(__file__).parent / "scenarios.json").read_text(encoding="utf-8"))
+
+
+def scenario_evidence():
+    items = scenarios()
+    return {
+        "dataset_kind": "SYNTHETIC_ENGINE_FIXTURES",
+        "count_basis": "AUTHORED_REFERENCE_SCENARIOS",
+        "scenario_count": len(items),
+        "counts_by_country": dict(sorted(Counter(item["country"] for item in items).items())),
+        "client_validation": "NOT_ESTABLISHED_BY_CATALOGUE",
+        "execution_status": "CONSULT_SOURCE_SPECIFIC_TEST_RECEIPTS",
+        "statutory_qualification": False,
+        "legacy_count_field": "real_world_scenario_count",
+        "legacy_count_meaning": "Synthetic reference fixture count, not validated client cases",
+    }
 
 
 def check_templates(country):

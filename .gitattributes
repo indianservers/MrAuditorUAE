@@ -309,3 +309,4 @@ docs/phase-12/screenshots/9f6c1eb-icfr-reviewed/*.png -text
 docs/phase-12/7c65ad7-hosted-full.xml -text whitespace=cr-at-eol
 docs/phase-12/7c65ad7-hosted-coverage.json -text
 docs/phase-12/workflow-scenarios-frontend.xml -text whitespace=cr-at-eol
+docs/phase-12/scenario-evidence-*.xml -text whitespace=cr-at-eol
