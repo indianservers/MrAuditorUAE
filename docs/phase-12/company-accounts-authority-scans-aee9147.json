@@ -1,0 +1,57 @@
+{
+  "contract": "original-authority-scans/1",
+  "passed": true,
+  "scanner_budget_seconds": 90,
+  "expected_sources": 6,
+  "sources": [
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-companies-consolidated-ver20260626.pdf",
+      "size_bytes": 3568746,
+      "sha256": "8aae2ffcfa9cdc927894ad82e41e08e3eba235092c63d4a64a3349e0268249f0",
+      "status": "CLEAN",
+      "scanner_reason": "COMPLETE_CLEAN_VERDICT",
+      "elapsed_seconds": 19.371
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-annual-accounts-v2-20261014.pdf",
+      "size_bytes": 515781,
+      "sha256": "aa34c1cf43afd0b4a281750f072b55bf177f48ed361f86bb6c614bf9204745af",
+      "status": "CLEAN",
+      "scanner_reason": "COMPLETE_CLEAN_VERDICT",
+      "elapsed_seconds": 1.706
+    },
+    {
+      "path": "docs/country-workflows/authority-references/dmcc-audit-2026-10-30/dmcc-company-regulations-amended.pdf",
+      "size_bytes": 1060466,
+      "sha256": "96748cccb799efffb84d89492cee342faf52eaac39bbe45d997eb8db656e45d1",
+      "status": "CLEAN",
+      "scanner_reason": "COMPLETE_CLEAN_VERDICT",
+      "elapsed_seconds": 2.96
+    },
+    {
+      "path": "docs/country-workflows/authority-references/dmcc-audit-2026-10-30/dmcc-afs-guidelines-2025-04-29.pdf",
+      "size_bytes": 162706,
+      "sha256": "8fa1747da919b757f1605bf411638345d428f44ad492bfa62173eb4ff8847aa7",
+      "status": "CLEAN",
+      "scanner_reason": "COMPLETE_CLEAN_VERDICT",
+      "elapsed_seconds": 0.489
+    },
+    {
+      "path": "docs/country-workflows/authority-references/uae-company-law-2026-10-31/moet-hosted-companies-law32-2021-english.pdf",
+      "size_bytes": 1029717,
+      "sha256": "b08a904a9af7102804e96e70c77a975876f3f2705190ecb6bea4f39d533435af",
+      "status": "CLEAN",
+      "scanner_reason": "COMPLETE_CLEAN_VERDICT",
+      "elapsed_seconds": 2.446
+    },
+    {
+      "path": "docs/country-workflows/authority-references/uae-company-law-2026-10-31/fdl20-2025-arabic-original.pdf",
+      "size_bytes": 264822,
+      "sha256": "7e035b6c3616255ffe8f1c4326080bec3f270f165aa63eeb06ab4c1f481e7163",
+      "status": "CLEAN",
+      "scanner_reason": "COMPLETE_CLEAN_VERDICT",
+      "elapsed_seconds": 0.446
+    }
+  ],
+  "scope": "Exact original public PDFs and configured real scanner only; not legal qualification, a complete malware-engine evaluation or external filing."
+}

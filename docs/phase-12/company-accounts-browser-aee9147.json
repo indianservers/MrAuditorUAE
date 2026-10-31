@@ -1,0 +1,63 @@
+{
+  "source_commit": "aee9147d3a61fd346240a1c99545c9e000faa408",
+  "run_id": 41155318563,
+  "job_id": 124400713974,
+  "conclusion": "success",
+  "suite": {
+    "passed": 16,
+    "duration": "10.7m",
+    "company_accounts_case_seconds": 10.3
+  },
+  "browser_artifact": {
+    "id": 13025191289,
+    "bytes": 22340123,
+    "sha256": "43d013be28c29c37cce9cc500a2b1c622ef79658daa1f35219642a1abc9a99d9"
+  },
+  "scanner_artifact": {
+    "id": 13025620418,
+    "bytes": 972,
+    "sha256": "04ec506bfc333c67b6f5b80b5291ed99bdccb8edbd699dadcf826b68e3b532bc"
+  },
+  "original_scanner_report": {
+    "file": "company-accounts-authority-scans-aee9147.json",
+    "bytes": 2430,
+    "sha256": "66653800ffd6ee7cbe52367dea347a4e358533a82d40c2d6337f954a2a486c24"
+  },
+  "images": [
+    {
+      "file": "AE-company-accounts-adoption-stale-aee9147.png",
+      "bytes": 136607,
+      "sha256": "d2fcc23a0083c97da03e582e132f1b52cd8fc1e00db76337997465299d7e83d6"
+    },
+    {
+      "file": "AE-company-accounts-nil-request-reviewed-aee9147.png",
+      "bytes": 135577,
+      "sha256": "32b71b0435a91025c2f5db96a65cf44a445578fdba939d5ae643f4e9f668f79c"
+    },
+    {
+      "file": "AE-company-accounts-written-request-reviewed-aee9147.png",
+      "bytes": 135732,
+      "sha256": "93f02da7ce2d09c62610f20cf268147f8237e0adea0690274b11709d846fd0f3"
+    }
+  ],
+  "visual_review": [
+    "All three original PNGs inspected.",
+    "Reviewed current nil-request and written-request cases show annual accounts/audit/register duties, minimum retention and distinct response/copy/timing observations.",
+    "Written request deadline2026-09-30 and complete delivery are readable; replacing the legal-adoption original displays STALE and disables independent approval while retaining prior values.",
+    "The bottom wide immutable-row table extends horizontally; this receipt does not claim every column appears simultaneously in the screenshots. Full XLSX fields are checked separately.",
+    "Nil-request result retains null request-detail fields as unresolved; it does not assume a written request or deadline."
+  ],
+  "automated_scope": [
+    "Exact two original PDFs and two separate supporting documents uploaded with real ClamAV, no quarantine bypass",
+    "Direct self-review403 and separate reviewer approval",
+    "No-request and one eligible written holding-company request; all required copies and day10 boundary",
+    "XLSX retains annual-audit true and five-year observation",
+    "Legal-adoption replacement stales both earlier immutable results without changing their bodies"
+  ],
+  "limits": [
+    "Synthetic publication date is not actual Gazette publication or legal qualification.",
+    "Scanner90-second network budget applies to isolated CI; production default remains20 seconds and strict clean verdict is unchanged.",
+    "Full backend job remained live at receipt creation; browser/scanner success is not an all-jobs-success statement.",
+    "No real-client, professional, government-filing or production qualification."
+  ]
+}

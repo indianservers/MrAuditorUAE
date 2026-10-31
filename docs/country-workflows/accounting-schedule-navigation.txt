@@ -1,0 +1,32 @@
+Existing accounting schedules in the reporting workbench
+=======================================================
+
+Inventory Costing & NRV and Payroll & Benefit Accounting Bridge now enable
+Calculate approved inputs for their existing deterministic backend engines.
+The selected assumptions are sent to the existing engagement-scoped calculate
+endpoint. Backend authorization, independently approved assumptions and profile
+requirements remain unchanged. Calculation does not post a journal, issue an
+opinion, authenticate inventory, perform an actuarial valuation or instruct a
+payment. Any journal proposal retains its separate review and posting controls.
+
+Calculation-type choices are scoped to the engagement and workspace. Switching
+subtype, workspace or engagement clears the selected assumptions, immutable
+run, selected financial line and reporting profile in the calculation panel.
+An instrument choice cannot become the calculation type of an inventory
+workspace. Workflows without a standalone numeric engine remain disabled.
+
+The shared accounting UI is used by UAE and India engagements; enabling an
+engine does not choose an employment regime or establish a national statutory
+calculation. The benefit framework and externally supplied expert figures
+remain explicit approved inputs. Inventory costing still has its existing
+purchased-stock and matched-transfer scope and its separate count/custody,
+valuation evidence and quantity reconciliation requirements.
+
+Seven new navigation tests cover both newly enabled routes using UAE and India
+engagement identifiers, correct selected-record submission, subtype changes,
+engagement changes, cross-workspace mode isolation and nonnumeric controls.
+They overlap the full 515-test frontend suite. Hosted coverage also prepares
+separately reviewed stock and benefit assumptions, calculates each through
+the UI, checks retained values and NOT_POSTED status, and compares complete
+downloaded immutable JSON. That later hosted source must pass separately;
+authoring the browser case alone is not execution evidence.

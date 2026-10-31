@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="7" failures="0" errors="0" time="0.2890387">
+    <testsuite name="tests/ifrs-calculation-navigation.test.tsx" timestamp="2026-10-31T01:38:46.336Z" hostname="DESKTOP-B3SR465" tests="7" failures="0" errors="0" skipped="0" time="0.2890387">
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE inventory assumptions through the existing numeric engine" time="0.1153803">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN inventory assumptions through the existing numeric engine" time="0.0133556">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved AE employee-benefits assumptions through the existing numeric engine" time="0.0203007">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="executes approved IN employee-benefits assumptions through the existing numeric engine" time="0.0107206">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="clears selected assumptions and immutable runs when switching calculation subtype" time="0.0934032">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="does not carry instrument mode or a selected record into an inventory workspace" time="0.0245888">
+        </testcase>
+        <testcase classname="tests/ifrs-calculation-navigation.test.tsx" name="keeps workflows without a standalone numeric engine disabled" time="0.0094083">
+        </testcase>
+    </testsuite>
+</testsuites>

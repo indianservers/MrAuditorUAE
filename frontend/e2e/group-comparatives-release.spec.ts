@@ -509,6 +509,137 @@ test("prior reported group comparatives retain separate review, original FX, com
       { headers, data: null },
     );
     expect(stale.status()).toBe(409);
+    // Exercise the existing stock and aggregate benefit engines through their
+    // previously disabled workspaces, after completing the group assertions.
+    const schedules: [string, Record<string, unknown>][] = [
+      [
+        "inventory",
+        {
+          profile_id: current.profile.id,
+          period_start: "2026-01-01",
+          period_end: "2026-12-31",
+          method: "fifo",
+          policy_version: "SYNTHETIC-purchased-stock/1",
+          items: [
+            {
+              reference: "SYNTHETIC-stock-site",
+              uom: "each",
+              location: "SYNTHETIC-site",
+              ownership: "owned",
+              opening_quantity: "10",
+              opening_unit_cost: "10",
+              receipts: [
+                {
+                  reference: "SYNTHETIC-receipt",
+                  date: "2026-02-01",
+                  quantity: "10",
+                  unit_cost: "20",
+                  landed_cost: "20",
+                  evidence: "SYNTHETIC invoice and freight",
+                },
+              ],
+              issues: [
+                {
+                  reference: "SYNTHETIC-dispatch",
+                  date: "2026-03-01",
+                  quantity: "12",
+                  evidence: "SYNTHETIC dispatch",
+                },
+              ],
+              expected_closing_quantity: "8",
+              selling_price: "25",
+              completion_cost: "2",
+              selling_cost: "3",
+              nrv_evidence:
+                "SYNTHETIC separately assessed price, completion and selling costs; no actual stock existence or condition assurance",
+            },
+          ],
+        },
+      ],
+      [
+        "employee-benefits",
+        {
+          profile_id: current.profile.id,
+          policy_version: "SYNTHETIC-aggregate-benefits/1",
+          employment_framework: "uae_mainland",
+          framework_assessment:
+            "SYNTHETIC explicitly assessed employment scope; no statutory or professional qualification",
+          scheme: "defined_benefit",
+          measurement_source:
+            "SYNTHETIC supplied expert figures; no actuarial valuation is performed",
+          actuarial_report_reference: "SYNTHETIC expert report",
+          opening_obligation: "100",
+          current_service_cost: "20",
+          net_interest: "5",
+          remeasurement_oci: "7",
+          settlements: "12",
+          closing_ledger_provision: "120",
+          payroll_expense: "1000",
+          opening_payroll_payable: "100",
+          payroll_deductions: "50",
+          confirmed_bank_payments: "900",
+          closing_payroll_ledger_payable: "160",
+          leave_bonus_accrual: "10",
+        },
+      ],
+    ];
+    for (const [kind, body] of schedules) {
+      const approved = await current.ready(kind, body);
+      await page.goto(`/ifrs/${current.eid}/${kind}`);
+      const reporting = page.getByRole("region", {
+        name: "Reporting calculations",
+        exact: true,
+      });
+      await reporting
+        .getByRole("combobox", { name: "Approved assumptions", exact: true })
+        .selectOption(approved.id);
+      const pending = page.waitForResponse(
+        (r) =>
+          r
+            .url()
+            .endsWith(
+              `/ifrs/engagements/${current.eid}/calculate/${approved.id}`,
+            ) && r.request().method() === "POST",
+      );
+      await reporting
+        .getByRole("button", { name: "Calculate approved inputs", exact: true })
+        .click();
+      const response = await pending;
+      expect(response.status(), await response.text()).toBe(201);
+      const schedule = await response.json();
+      expect(schedule.kind).toBe(kind);
+      expect(schedule.results.issues).toEqual([]);
+      expect(schedule.results.execution.journal_state).toBe("NOT_POSTED");
+      if (kind === "inventory") {
+        expect(schedule.results.closing_carrying).toBe("160.00000000");
+        expect(schedule.results.schedule[0].closing_cost).toBe("176.00000000");
+        expect(schedule.results.schedule[0].closing_write_down).toBe(
+          "16.00000000",
+        );
+      } else {
+        expect(schedule.results.obligation_rollforward.closing).toBe("120");
+        expect(schedule.results.payroll_bridge.closing).toBe("160");
+        expect(schedule.results.payment_state).toBe(
+          "NO_PAYMENT_INSTRUCTION_CREATED",
+        );
+      }
+      await expect(
+        reporting.getByText("CURRENT", { exact: true }),
+      ).toBeVisible();
+      await reporting.screenshot({
+        path: `${screenshots}/AE-${kind}-approved-calculation.png`,
+      });
+      const exportPending = page.waitForEvent("download");
+      await reporting
+        .getByRole("button", { name: "Export JSON", exact: true })
+        .click();
+      const exportedPath = await (await exportPending).path();
+      expect(exportedPath).not.toBeNull();
+      const exported = JSON.parse(readFileSync(exportedPath!, "utf8"));
+      expect(exported.id).toBe(schedule.id);
+      expect(exported.released).toBe(false);
+      expect(exported.results).toEqual(schedule.results);
+    }
     expect(errors).toEqual([]);
   } finally {
     await Promise.all(contexts.map((context) => context.close()));

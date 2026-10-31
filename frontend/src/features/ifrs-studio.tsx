@@ -57,7 +57,11 @@ export function IFRSStudio({
 }) {
   const engagements = useAPI<Page<Engagement>>("engagements?limit=100", !id);
   const selected = ifrsAreas.find((a) => a[0] === area);
-  const [subkind, setSubkind] = useState("");
+  const [subkind, setSubkind] = useState<{
+    engagement: string;
+    area: string;
+    kind: string;
+  } | null>(null);
   if (!id)
     return (
       <>
@@ -88,7 +92,12 @@ export function IFRSStudio({
         Choose a reporting workspace.
       </Empty>
     );
-  const kind = subkind || selected[2];
+  const kind =
+    subkind?.engagement === id && subkind.area === area
+      ? subkind.kind
+      : selected[2];
+  const selectSubkind = (kind: string) =>
+    setSubkind({ engagement: id, area, kind });
   return (
     <>
       <PageHeader
@@ -107,12 +116,12 @@ export function IFRSStudio({
           </Link>
         ))}
       </nav>
-      <ReportingRuns id={id} area={area} kind={kind} />
+      <ReportingRuns key={`${id}:${area}:${kind}`} id={id} area={area} kind={kind} />
       {area === "impairment" && (
         <div className="toolbar">
           <label>
             Calculation type{" "}
-            <select value={kind} onChange={(e) => setSubkind(e.target.value)}>
+            <select value={kind} onChange={(e) => selectSubkind(e.target.value)}>
               <option value="impairment">Impairment</option>
               <option value="provision">Provisions</option>
             </select>
@@ -123,7 +132,7 @@ export function IFRSStudio({
         <div className="toolbar">
           <label>
             Instrument workbench{" "}
-            <select value={kind} onChange={(e) => setSubkind(e.target.value)}>
+            <select value={kind} onChange={(e) => selectSubkind(e.target.value)}>
               <option value="ecl">Expected credit losses</option>
               <option value="instrument">
                 Effective interest / amortised cost
@@ -136,7 +145,7 @@ export function IFRSStudio({
         <div className="toolbar">
           <label>
             Reporting workflow{" "}
-            <select value={kind} onChange={(e) => setSubkind(e.target.value)}>
+            <select value={kind} onChange={(e) => selectSubkind(e.target.value)}>
               <option value="mapping">Account mapping</option>
               <option value="financials">Financial package approval</option>
             </select>
@@ -297,6 +306,8 @@ function ReportingRuns({
               "revenue",
               "deferred-tax",
               "fixed-assets",
+              "inventory",
+              "employee-benefits",
               "impairment",
               "provision",
               "consolidation",

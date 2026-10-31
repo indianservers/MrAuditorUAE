@@ -89,3 +89,14 @@ The synthetic publication date used in fixtures is not an assertion of the
 actual Gazette date. Synthetic checks do not establish real-client or
 professional qualification. Hosted browser/scanner evidence remains a separate
 source-specific gate.
+
+Hosted source aee9147 passed all 16 browser cases, including the company-law
+workflow. Its exact six original authority PDFs received real ClamAV CLEAN
+verdicts; the complete original scanner report and three company-law PNGs are
+retained under docs/phase-12 with a source-pinned browser receipt. All three
+images were visually inspected: reviewed current assessments and subsequent
+legal-adoption staleness are readable. The wide immutable row retains its
+horizontal scroll and full XLSX fields; its screenshot does not show every
+column simultaneously. This browser/scanner evidence does not establish that
+the separate full backend job has completed or that real-client/professional
+qualification has been obtained.

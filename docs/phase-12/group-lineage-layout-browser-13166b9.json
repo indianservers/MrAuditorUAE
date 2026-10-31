@@ -1,0 +1,37 @@
+{
+  "source_commit": "13166b95bd3552925b805d0966242ff55b4c070e",
+  "run_id": 41155755969,
+  "job_id": 124402067749,
+  "conclusion": "success",
+  "suite": {
+    "passed": 16,
+    "duration": "8.3m",
+    "group_comparative_case_seconds": 20.8
+  },
+  "artifact": {
+    "id": 13025291277,
+    "bytes": 22397634,
+    "sha256": "5c63169f6efa6413330702dd03985ade896078367b2fd2d1dc0ef66e0f1c1fd6"
+  },
+  "original_image": {
+    "file": "AE-group-comparative-source-accounts-13166b9.png",
+    "bytes": 74722,
+    "sha256": "79d40983dc361d30c89f7d0ef01b67f25dc621447c03710d6eff29893fb9a061"
+  },
+  "visual_review": [
+    "Original PNG inspected without modification.",
+    "Both complete current and comparative source-account tables and their independent paging controls fit the panel.",
+    "All six fields are readable, with wrapped complete source IDs/references and original unrounded decimal strings.",
+    "Current rates1 and3 and translated amounts130 and780 remain distinct from prior rates1 and2 and amounts130 and260."
+  ],
+  "automated_scope": [
+    "Both table populations retain two original source accounts.",
+    "Both complete table bounds and final comparative paging controls fit the lineage panel bounds.",
+    "Existing group independent input approvals, current/comparative figures, XLSX and recursive stale-source behavior pass in the same browser case."
+  ],
+  "limits": [
+    "Source-specific browser proof only; full backend job remained live when retained.",
+    "Later comparative metadata wrapping and stock/benefit UI action changes require their own hosted browser execution.",
+    "Synthetic data only; no real-client, professional, IFRS-certification or production qualification."
+  ]
+}
