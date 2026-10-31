@@ -1,0 +1,61 @@
+{
+  "recorded_date": "2026-10-31",
+  "source": "bf485771017d4f679c9d028e998eb361a188e367",
+  "run_id": 41183240104,
+  "browser_job_id": 124484790742,
+  "caro_result": {
+    "standalone": "PASS",
+    "consolidated": "PASS"
+  },
+  "whole_browser_result": {
+    "passed": 19,
+    "failed": 1,
+    "duration": "12.9 minutes",
+    "failure": "Payroll export wait on this older source; not a CARO failure"
+  },
+  "artifact": {
+    "id": 13036211317,
+    "bytes": 25227122,
+    "sha256": "9ea2bedec34e30adf1eafc7afd5a9ebbaeddddce000b8ed6e3cf2e21d886f7c3"
+  },
+  "verified_behavior": [
+    "Edited final CARO requirement basis persisted in saved template and generated report",
+    "Exact edited basis present in preview and complete XLSX",
+    "Complete exported requirement-key sets: standalone 50 and consolidated 3",
+    "Changed procedure evidence stales generated report with complete body equality and disabled independent approval"
+  ],
+  "visual_review": [
+    "All four original PNGs inspected after ZIP size and digest verification",
+    "Reviewed captures show unobstructed final caro.4.2, COVERED, exact edited basis, 1 of 50 / 1 of 3 and source validation explicitly at generation",
+    "Stale viewport captures show report title, STALE warning, draft status, template version, company scope link and retained edited basis",
+    "Consolidated stale capture also visibly shows disabled independent approval; standalone screenshot ends within workpaper content, so its disabled-control proof remains the browser assertion"
+  ],
+  "limits": [
+    "This is not a green whole browser suite because payroll failed on this source",
+    "New payroll review views and latest export synchronization require later-source hosted proof",
+    "No full hosted backend result, client qualification or statutory issuance inferred",
+    "Published source page is explicitly not supplied for this CARO inventory; reproduced-order/legal-pack limitations remain"
+  ],
+  "files": [
+    {
+      "path": "docs/phase-12/screenshots/bf48577-caro-reviewed/IN-CARO-consolidated-last-matter.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "68c9c80859ddb957f400ac37d1d7a6a409d3a66ad3c23e2ec6207325c78da586"
+    },
+    {
+      "path": "docs/phase-12/screenshots/bf48577-caro-reviewed/IN-CARO-consolidated-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "b18db96aa8d64904a10c121e719d705d2d46f921f8a621b4ef41fd539ce8079c"
+    },
+    {
+      "path": "docs/phase-12/screenshots/bf48577-caro-reviewed/IN-CARO-standalone-last-matter.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "c3b5d524f22553717b82eea0a44d5bcd68a89a98eb2de0b3763274d9f19ba38c"
+    },
+    {
+      "path": "docs/phase-12/screenshots/bf48577-caro-reviewed/IN-CARO-standalone-stale.png",
+      "normalization": "ORIGINAL_BYTES",
+      "sha256": "a76e407122c0f0a08f9e00b586d5d67f251fa3b0254b71d953bbf81017d16393"
+    }
+  ]
+}
