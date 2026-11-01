@@ -1,0 +1,11 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-004",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "error": "single selected account and currency"
+  },
+  "arithmetic_basis": "Equal nominal numbers do not permit cross-currency matching. This is an expected rejection."
+}

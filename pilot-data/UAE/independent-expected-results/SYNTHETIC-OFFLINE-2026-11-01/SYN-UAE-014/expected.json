@@ -1,0 +1,19 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-014",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "blocked": true,
+    "rows_match": [
+      {
+        "subject": "SYN-VENDOR-002",
+        "requirement": "bank-change-approval",
+        "state": "MISSING"
+      }
+    ]
+  },
+  "arithmetic_basis": "Two vendors times two scoped checks gives four decisions. Vendor 002 has no bank-change approval. A supported licence does not clear it."
+}

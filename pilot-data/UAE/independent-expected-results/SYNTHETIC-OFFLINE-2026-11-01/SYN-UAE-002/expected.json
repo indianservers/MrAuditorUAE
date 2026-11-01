@@ -1,0 +1,20 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-002",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 0,
+    "blocked": false,
+    "assertions": [
+      {
+        "path": [
+          "matches"
+        ],
+        "length": 4
+      }
+    ]
+  },
+  "arithmetic_basis": "The separate corrected population excludes the unpresented item and records the 105 fee. Both movement totals are 5395; four unique references agree."
+}

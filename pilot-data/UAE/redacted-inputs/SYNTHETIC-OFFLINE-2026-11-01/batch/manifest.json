@@ -1,0 +1,5259 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "dataset_date": "2026-11-01",
+  "country": "AE",
+  "case_count": 123,
+  "entities": [
+    {
+      "reference": "SYN-ALNOOR-ENTITY",
+      "name": "SYNTHETIC Al Noor Gulf Trading LLC",
+      "business": "Fictional industrial supplies trader with a Jebel Ali warehouse and Dubai sales"
+    },
+    {
+      "reference": "SYN-GULF-RELIEF-FOUNDATION",
+      "name": "SYNTHETIC Gulf Community Relief Foundation",
+      "business": "Separate fictional nonprofit for diligence scenarios"
+    }
+  ],
+  "population_note": "Operating scenarios are separate from precision/regression cases. Cases are alternatives, not an additive company ledger. No case purports to be an actual government export, bank statement, WPS receipt or licensed registry response.",
+  "available_uae_workflows": [
+    "adverse-media-review",
+    "asset-register-review",
+    "balance-confirmations",
+    "bank-account-evidence",
+    "bank-brs",
+    "bank-subsequent-clearance",
+    "construction-contracts",
+    "controls",
+    "credit-note-applications",
+    "customs-reconciliation",
+    "employee-expenses",
+    "employment-payroll-review",
+    "escrow-disbursements",
+    "excise-reconciliation",
+    "expense-cutoff",
+    "going-concern-cash",
+    "gold-reconciliation",
+    "grant-utilisation",
+    "healthcare-billing",
+    "hospitality-revenue",
+    "icfr-duty-coverage",
+    "inventory-count-bridge",
+    "inventory-custody-confirmations",
+    "inventory-fifo-cost",
+    "inventory-valuation-control",
+    "kyc-edd-review",
+    "merchant-reserve-rollforward",
+    "merchant-settlement-bridge",
+    "nonprofit-diligence",
+    "obligation-bank-allocations",
+    "open-item-allocations",
+    "ownership-lookthrough",
+    "party-balance-confirmations",
+    "payroll-ledger-rollforward",
+    "payroll-settlement",
+    "procurement-match",
+    "receivables-ecl",
+    "sanctions-name-review",
+    "statutory-dues",
+    "stock-audit",
+    "subledger-control",
+    "subsequent-settlements",
+    "tax-close",
+    "tax-turnover-bridge",
+    "trade-document-review",
+    "uae-benefit-review",
+    "uae-import-vat",
+    "uae-pension-review",
+    "uae-savings-review",
+    "uae-vat",
+    "uae-vat-return",
+    "vendor-diligence",
+    "vendor-employee-conflicts"
+  ],
+  "pilot_workflows": [
+    "bank-account-evidence",
+    "bank-brs",
+    "controls",
+    "icfr-duty-coverage",
+    "nonprofit-diligence",
+    "obligation-bank-allocations",
+    "payroll-settlement",
+    "stock-audit",
+    "tax-close",
+    "uae-vat",
+    "uae-vat-return",
+    "vendor-diligence"
+  ],
+  "cases": [
+    {
+      "id": "RW-001",
+      "title": "SYNTHETIC UAE regression: UAE exact bank receipt ties to cashbook",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "100"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-001/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-001/statement.csv",
+          "sha256": "ed4d40a4b6f79a1dcf2aafe4fe7f94050f8b16c5ad0577d4cebdb1b9e7d59440",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-001/expected.json",
+        "sha256": "4cfd61c8097f549574e2ceb10d2992ebc2a44986ba9d66d9baf0d08fb60f3007",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-002",
+      "title": "SYNTHETIC UAE regression: Unpresented cheque remains open",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "-100",
+        "statement_opening": "0",
+        "statement_closing": "20"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-002/books.csv",
+          "sha256": "18e5bf5acf8c3811cc0cdcbb0b96e46dcfac420eaceefbf255a0f1c0a068a318",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-002/statement.csv",
+          "sha256": "144f1d85637baa0499bdaaca2a9da40e185a628f8c60f3881f162a71fc6fad29",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "20"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-002/expected.json",
+        "sha256": "ba31653034f63afdc2fe854330d4308b9676470e62252d5bfc7b44ddc83413c0",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-003",
+      "title": "SYNTHETIC UAE regression: Deposit awaits bank credit",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "20"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-003/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-003/statement.csv",
+          "sha256": "144f1d85637baa0499bdaaca2a9da40e185a628f8c60f3881f162a71fc6fad29",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "20"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-003/expected.json",
+        "sha256": "cd2011c84b6e07f5ba992b6cb6c5ceae38ef9f7d712024b67c15bdcb4f5c13ea",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-004",
+      "title": "SYNTHETIC UAE regression: Bank fee not recorded in cashbook",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "95"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-004/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-004/statement.csv",
+          "sha256": "4185096a4c61cdb4b707c36a1e9e1a0db326604a3959d952222f69fab22efd4e",
+          "bytes": 143,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "95"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-004/expected.json",
+        "sha256": "58a07bf38ce452146f31eea0f5c3d55cc70800d567eca12d0013b09a96668b19",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-005",
+      "title": "SYNTHETIC UAE regression: Bank interest not recorded in cashbook",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "105"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-005/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-005/statement.csv",
+          "sha256": "8ed54882e6457e0ffa1f2bcff20c52313a02d4a04230fa2521e235a4070c57d8",
+          "bytes": 142,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "105"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-005/expected.json",
+        "sha256": "578712e3fb89e48441fcd0ebd42a86ffc25b4496c523817ccdd6ed7b3ece31d0",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-006",
+      "title": "SYNTHETIC UAE regression: Unexplained opening balance difference blocks approval",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "1",
+        "book_closing": "101",
+        "statement_opening": "0",
+        "statement_closing": "100"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-006/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-006/statement.csv",
+          "sha256": "ed4d40a4b6f79a1dcf2aafe4fe7f94050f8b16c5ad0577d4cebdb1b9e7d59440",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-006/expected.json",
+        "sha256": "9e2b69b649083cdc6ee36c37e3d2caea2738c2b24e3fc63f187392cdbb1dbf87",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-007",
+      "title": "SYNTHETIC UAE regression: Incomplete cashbook population fails closing control",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "105",
+        "statement_opening": "0",
+        "statement_closing": "100"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-007/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-007/statement.csv",
+          "sha256": "ed4d40a4b6f79a1dcf2aafe4fe7f94050f8b16c5ad0577d4cebdb1b9e7d59440",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-007/expected.json",
+        "sha256": "c4ad1bbc6b07a6fd74220be32f85c5d47c0ea84edf6e6e94c4fe686a90b2e355",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-008",
+      "title": "SYNTHETIC UAE regression: Incomplete statement population fails closing control",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "105"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-008/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-008/statement.csv",
+          "sha256": "ed4d40a4b6f79a1dcf2aafe4fe7f94050f8b16c5ad0577d4cebdb1b9e7d59440",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-008/expected.json",
+        "sha256": "53074f1cf6db82782fd9209d66f44997b3c56893c7545d047a75125d95d8a316",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-009",
+      "title": "SYNTHETIC UAE regression: Foreign currency statement cannot clear AED cashbook",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "100"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-009/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-009/statement.csv",
+          "sha256": "51a7558d8da9df36411692238cefa5f5f64629cee54d89dcef1af971d7061259",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "USD": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-009/expected.json",
+        "sha256": "9298f7dc487e86272edd75230a7d4120ad62a9436fa4ca122f1af0626c3b3559",
+        "bytes": 391
+      }
+    },
+    {
+      "id": "RW-010",
+      "title": "SYNTHETIC UAE regression: Wrong bank account cannot clear selected account",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "100"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-010/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-010/statement.csv",
+          "sha256": "a74fa0f564bd111f5ee4b3dbc63dc5317d090d642896e6528d24c2d8ad51e8c7",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-010/expected.json",
+        "sha256": "08d7c05059b4f8a9a77f9365e23a52b77045ac0fcf49df921e3e97dcba86117f",
+        "bytes": 391
+      }
+    },
+    {
+      "id": "RW-011",
+      "title": "SYNTHETIC UAE regression: Identical receipt amounts stay ambiguous",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "200"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-011/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-011/statement.csv",
+          "sha256": "3af3ed7e8d67276f0a263851ae2d5b95b0bc2b4cfdb86bd49e30674745626558",
+          "bytes": 136,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "200"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-011/expected.json",
+        "sha256": "7b6d7005bf2e6153f2c4121ba1f85aeeee62d8bede7c4bed18711f0005fb24fa",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-012",
+      "title": "SYNTHETIC UAE regression: Old outstanding cheque is visibly stale",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "-100",
+        "statement_opening": "0",
+        "statement_closing": "20"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-012/books.csv",
+          "sha256": "bcbe0bc0a1c4011186dadf0b8370de9e1f885fa6e14b4fa125644d1cd3b06302",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-012/statement.csv",
+          "sha256": "4d18f574d096fc2969ba5dc2e6403b286d074aa0056cd1dbe5744d7a3f93568e",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "20"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-012/expected.json",
+        "sha256": "7509db466a51dbe387c2fd59549b4897d5dc2c516c13a9c4bcbd749d529d8423",
+        "bytes": 370
+      }
+    },
+    {
+      "id": "RW-013",
+      "title": "SYNTHETIC UAE regression: Split settlement ties by bounded reference group",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "100"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-013/books.csv",
+          "sha256": "130d1ebdd551982c1feab52b5934d40866a101084155e14b14192b49baa8a208",
+          "bytes": 142,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-013/statement.csv",
+          "sha256": "ed4d40a4b6f79a1dcf2aafe4fe7f94050f8b16c5ad0577d4cebdb1b9e7d59440",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-013/expected.json",
+        "sha256": "696c7f51782b6171971219c753b9717a219c0ca63d989aa15b1121499dc546c6",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-014",
+      "title": "SYNTHETIC UAE regression: Receipt reversal retained as an independent item",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "0",
+        "statement_opening": "0",
+        "statement_closing": "0"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-014/books.csv",
+          "sha256": "743d2cf3620ad6469ec7119790e939c43e51ddb9600caee9e3e319a10ff2df14",
+          "bytes": 143,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "0"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-014/statement.csv",
+          "sha256": "4d17379d8f9a5357d2cbd011cdb9b728a163a60f49fe7f382575a0ee9c2914ff",
+          "bytes": 145,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "0"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-014/expected.json",
+        "sha256": "8d8027b1a630dd9ec1696f318d8a2aac4222df7022acd56d65c4fc6c388f6402",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-015",
+      "title": "SYNTHETIC UAE regression: Matching tolerance never hides BRS residual",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "99.99",
+        "tolerance": "0.01"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-015/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-015/statement.csv",
+          "sha256": "fd2c6ae8b75f8cbf10db506b709af20d6ace232a0cab8a347020df4d184f83c9",
+          "bytes": 103,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "99.99"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-015/expected.json",
+        "sha256": "764a80aa8e359e7796b70ddc8afc0afd1923ba68de68df77644639d1858696a5",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-016",
+      "title": "SYNTHETIC UAE regression: Future-dated bank settlement rejected",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "book_opening": "0",
+        "book_closing": "100",
+        "statement_opening": "0",
+        "statement_closing": "100"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-016/books.csv",
+          "sha256": "fe75da147f5d7f661134486354335ca8d659203de64879a1c87db14ea41dcd3d",
+          "bytes": 100,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-016/statement.csv",
+          "sha256": "6aed4dcbc6b0ab0aa3af6791cccf39f782b9a38c5ab63f1a5b380f357c7d94ed",
+          "bytes": 101,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-016/expected.json",
+        "sha256": "f3d20c2728ca3673dd1335e827005380d948f25fa05a63bd2b19ea8db0221e43",
+        "bytes": 397
+      }
+    },
+    {
+      "id": "RW-017",
+      "title": "SYNTHETIC UAE regression: AE invoice independently agrees",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-017/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-017/return.csv",
+          "sha256": "f41cc1e0e2c24ac265b89b95c6065a2e8d977c16e94517207362dec451e378fa",
+          "bytes": 170,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-017/expected.json",
+        "sha256": "3463a1d85ae6471b6ece655cef737b293d69fe2891d19b0e3925c0b025c27e37",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-018",
+      "title": "SYNTHETIC UAE regression: AE credit note retained separately",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-018/books.csv",
+          "sha256": "639478db4f851998de2eb1ec5f75289b909b54fa3b018416b5e06126196d6a87",
+          "bytes": 175,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-018/return.csv",
+          "sha256": "7185868a6e085f5b4d07132cbd4f85a708095bae57fbcb372805b17a21d2efe2",
+          "bytes": 176,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-018/expected.json",
+        "sha256": "632033f6bc03776a4420c0a1dcb28864021817ef2854d563efa7b46672513e33",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-019",
+      "title": "SYNTHETIC UAE regression: AE debit note retained separately",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-019/books.csv",
+          "sha256": "a914e368e3316f24139c99afeeb6c7707fef9fe12bf19a2b4a8bad4627bd3f6a",
+          "bytes": 172,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-019/return.csv",
+          "sha256": "3ec06f21e5128e0f5824333488b744ffa0d7185c7a2817e2482c41a5491f41e0",
+          "bytes": 173,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-019/expected.json",
+        "sha256": "5872b12b1cb65e9876e9167b12be21f29c6e678a940be9f18cd053999fe08fcb",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-020",
+      "title": "SYNTHETIC UAE regression: AE invoice absent from return",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-020/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-020/return.csv",
+          "sha256": "6a79b880516de86edd4326c34fd9bc3b58eda8e9ee7e154fd8f48f8346a1b431",
+          "bytes": 170,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-020/expected.json",
+        "sha256": "52c6d85b90ed511491b35fd9694360ad5896f65077799f7d0fa93dc258c97bff",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-021",
+      "title": "SYNTHETIC UAE regression: AE invoice absent from books",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-021/books.csv",
+          "sha256": "bf8806c960276e171b80eace159ed6a4ddf360109ddcb0f537dea506c2bb6e97",
+          "bytes": 167,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-021/return.csv",
+          "sha256": "f41cc1e0e2c24ac265b89b95c6065a2e8d977c16e94517207362dec451e378fa",
+          "bytes": 170,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-021/expected.json",
+        "sha256": "9c717bbf22cc456138a7043fdc848746ad286a192cf278a56a53c5e4dc9c9cbe",
+        "bytes": 379
+      }
+    },
+    {
+      "id": "RW-022",
+      "title": "SYNTHETIC UAE regression: AE tax amount differs",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-022/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-022/return.csv",
+          "sha256": "95a79fbed1e0c45de6d5cb50b32bd95aad4ab8b9746a0c3be5538ee64debc6f7",
+          "bytes": 170,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "4"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-022/expected.json",
+        "sha256": "d4da2ec75922efd5be69f407522b5517b6f367deadb354b7bf46223b4d3627fd",
+        "bytes": 403
+      }
+    },
+    {
+      "id": "RW-023",
+      "title": "SYNTHETIC UAE regression: AE taxable base differs despite equal tax",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-023/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-023/return.csv",
+          "sha256": "2227b8be817c5cc5c63cb40d4dae41f08162f4d49158484366c7633e0f63ad20",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-023/expected.json",
+        "sha256": "e9cf7e035c64468447e3194acb257f278733b3d1704ce2961741e28dfd3e032d",
+        "bytes": 376
+      }
+    },
+    {
+      "id": "RW-024",
+      "title": "SYNTHETIC UAE regression: AE late filing creates period difference",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-024/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-024/return.csv",
+          "sha256": "f5a452d924d5c238c738f8d3fd31fe63e7f12937c4069e43010d419d682e9719",
+          "bytes": 170,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-024/expected.json",
+        "sha256": "e3bb1246627ba3c5d915da460a273942d95d7e956cebfcfd3a5e9661d413e546",
+        "bytes": 385
+      }
+    },
+    {
+      "id": "RW-025",
+      "title": "SYNTHETIC UAE regression: AE rejected portal document stays visible",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-025/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-025/return.csv",
+          "sha256": "6dc8aab846e799841b3b3aaf1cd44b52ba4478c139934d60ef6e2782fbd20a82",
+          "bytes": 172,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-025/expected.json",
+        "sha256": "d5512146014e7e35207a99c3d0b33b4e8410cd0e6381c83d2de96becc46508f6",
+        "bytes": 386
+      }
+    },
+    {
+      "id": "RW-026",
+      "title": "SYNTHETIC UAE regression: AE pending portal document cannot be clean",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-026/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-026/return.csv",
+          "sha256": "e75e67e8d6a9240c34fc3b7ec1df8524cdde0afe2e65fb4b47eac4cac8d12d9c",
+          "bytes": 171,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-026/expected.json",
+        "sha256": "0e43e531c8fbf212cda81fb1cc39fae75fdeb12f681ff3bfb8eb3df996a6bd59",
+        "bytes": 389
+      }
+    },
+    {
+      "id": "RW-027",
+      "title": "SYNTHETIC UAE regression: AE amendment duplicates cannot be summed",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-027/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-027/return.csv",
+          "sha256": "6ef899f4cc7ad1743812c792e6ca2925dcdc71c7bd2dad2b0131531200c49711",
+          "bytes": 239,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "10"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-027/expected.json",
+        "sha256": "789e36a734b1edd2d6955dfb6dca998bd5f518e0fc6d7feaaa24a71ccd6f0bdf",
+        "bytes": 388
+      }
+    },
+    {
+      "id": "RW-028",
+      "title": "SYNTHETIC UAE regression: AE registration boundaries prevent false matching",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "currency": "AED"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-028/books.csv",
+          "sha256": "11c083097d226246d5ae8d110d5461e0e65b3234a4a88e9103eb539c6e29f280",
+          "bytes": 169,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-028/return.csv",
+          "sha256": "8479b4dc38217874f06a0fbeb202d2ded8180d3b85c8d47fd9ef05abf7a3cfbf",
+          "bytes": 170,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-028/expected.json",
+        "sha256": "3d9f1ef69abebaea62a42ed19ae4674508861e6b9df79256bee058d9ac3ea8d8",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-041",
+      "title": "SYNTHETIC UAE regression: AE three-way settlement agrees",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-041/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-041/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-041/bank.csv",
+          "sha256": "1f3bbcbb374dacec4dc345c2105fa2d428598fcba6e4e38f1e665969f8d437b7",
+          "bytes": 149,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-041/expected.json",
+        "sha256": "20eb93aa6cd2d95ec309c2a75d86ab622ef6110fc48bca5a0b0742f274c07a18",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-042",
+      "title": "SYNTHETIC UAE regression: AE underpayment remains quantified",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-042/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-042/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-042/bank.csv",
+          "sha256": "9536e7d012764c8aa51515e1b779115769a8badafa8c067e41b579ade6533bdd",
+          "bytes": 144,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "90"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-042/expected.json",
+        "sha256": "29dc61b4f669ac7ef9aa18202a8d8cfcc5b918f8cf95d6a902c61dbb5d555bde",
+        "bytes": 376
+      }
+    },
+    {
+      "id": "RW-043",
+      "title": "SYNTHETIC UAE regression: AE missing payment partition remains missing",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-043/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-043/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-043/bank.csv",
+          "sha256": "25b024c7509509a12537d188e36ebef617ed91df2b0586378b1fc4979dc67827",
+          "bytes": 143,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-043/expected.json",
+        "sha256": "a9711c5fd46a03a23a0c3ce8016464ff784f80e8c9e02a6674c8a55a1f524483",
+        "bytes": 392
+      }
+    },
+    {
+      "id": "RW-044",
+      "title": "SYNTHETIC UAE regression: AE late bank payment stays an exception",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-044/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-044/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-044/bank.csv",
+          "sha256": "a62604db387da418b2666ab23c114ae91dcc507089bb422d6436555e9da655d3",
+          "bytes": 145,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-044/expected.json",
+        "sha256": "27962292744f962f9e8c3ccc22482d52d80716fd1a49e1d39c390dfa61c68fe2",
+        "bytes": 380
+      }
+    },
+    {
+      "id": "RW-045",
+      "title": "SYNTHETIC UAE regression: AE missing due date cannot prove timely settlement",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-045/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-045/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-045/bank.csv",
+          "sha256": "c805ce18d21a06b96ef46728a7f2e97a701cce2374399828ad9168b5b539d4fb",
+          "bytes": 135,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-045/expected.json",
+        "sha256": "22e57552a619f3a1d06da194d72f6b39e69fae353f554f4f859e58e0acb73b10",
+        "bytes": 387
+      }
+    },
+    {
+      "id": "RW-046",
+      "title": "SYNTHETIC UAE regression: AE split payment reconciles without duplicate allocation",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-046/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-046/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-046/bank.csv",
+          "sha256": "559cea78ae6ea76eb6bdead69af2d55e1fca06f6eb3aa763b887d681bb67ce64",
+          "bytes": 210,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-046/expected.json",
+        "sha256": "26f6df1f2e3606650c88e91893fefc70f279233674e00ad8a3595014ba42778f",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-047",
+      "title": "SYNTHETIC UAE regression: AE arrears retain their wage month",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-047/payroll.csv",
+          "sha256": "0d9d8715858205cae28650928e3e36de11be76de29ac455092189dfded00e0dc",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-047/channel.csv",
+          "sha256": "b3cf4fb0482ab926727b14232ad90b5f4d7a90aa200a40f12f167d440b2984d9",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-047/bank.csv",
+          "sha256": "59f54f9cab4e78080e8c3f4f12765759d36f648f4ea63964612386ea47c2dc34",
+          "bytes": 149,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-047/expected.json",
+        "sha256": "6f4660ae8172aba89ccd721bd0ca5838fad4a574ab545fe92c072918f77c5b24",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-048",
+      "title": "SYNTHETIC UAE regression: AE different employee cannot clear payroll",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-048/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-048/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-048/bank.csv",
+          "sha256": "10c637a983378738cbc0f565f1d9cc5a36d342671c953d1e29ec95fe337dd836",
+          "bytes": 145,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-048/expected.json",
+        "sha256": "68135e3dc1a5f74f2d76c4f61bfefb09fe85d15732c57aee7c9a22f530a3397a",
+        "bytes": 392
+      }
+    },
+    {
+      "id": "RW-049",
+      "title": "SYNTHETIC UAE regression: AE different employer registration stays separate",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-049/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-049/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-049/bank.csv",
+          "sha256": "d151820e96bcd0f2fffb4ca8bdcdea994d90b95bd527bfe96f713bc9250f2ed2",
+          "bytes": 140,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-049/expected.json",
+        "sha256": "7cff863a96e7c9770f8c7f8cb9c0158bb9e720d05d163edc728a9c11d2d7f91e",
+        "bytes": 392
+      }
+    },
+    {
+      "id": "RW-050",
+      "title": "SYNTHETIC UAE regression: AE employer and employee components cannot net",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-050/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-050/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-050/bank.csv",
+          "sha256": "197900485673b2762c03ceca7cd8640a22f19c6719ccd33cebe9407cda5037b3",
+          "bytes": 151,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-050/expected.json",
+        "sha256": "7fb934f3bff4ce864f4bd6ecbbe51b1c75a9d00c3085a2ed5e55450a316cf5da",
+        "bytes": 392
+      }
+    },
+    {
+      "id": "RW-051",
+      "title": "SYNTHETIC UAE regression: AE negative correction requires explicit allocation adapter",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-051/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-051/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-051/bank.csv",
+          "sha256": "71e58f395f6862f781979ce2a5b19d82db20f4bc98f4878cad447ac594411df1",
+          "bytes": 144,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-1"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-051/expected.json",
+        "sha256": "eea6ac94ce7012cf7c507d9be9eb5d8700084d70a2012698f78639a6852004cb",
+        "bytes": 388
+      }
+    },
+    {
+      "id": "RW-052",
+      "title": "SYNTHETIC UAE regression: AE future payment cannot settle current dues",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-052/payroll.csv",
+          "sha256": "168c07cbb0b7228f2f3e18a603b367adc1e92e8a65f9a952cdbac368744e5b3b",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-052/channel.csv",
+          "sha256": "b37e3fe3d53e45b2c771773f0deb649e2b125db97e45bc58979b93e266414aa6",
+          "bytes": 152,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-052/bank.csv",
+          "sha256": "1b75a73f64f2a3cf349a0112340ee7edc8c826f2dfaebd331a18e54df355253d",
+          "bytes": 145,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "100"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-052/expected.json",
+        "sha256": "8c1f1a16303c50a6fb1580a082523e459d6727fa382b1ddccd346f6bbddc44ee",
+        "bytes": 382
+      }
+    },
+    {
+      "id": "RW-077",
+      "title": "SYNTHETIC UAE regression: Item count and book quantity agree",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-077/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-077/count.csv",
+          "sha256": "32b45219ac6ae982fbdbfaa2d1ad5c7788d126a0178e209ce5bc4bff411f2c13",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-077/expected.json",
+        "sha256": "49888f365ae2b277c68e9624ffc6ae4951855aaaf5fddf528ff19e3e49d32056",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-078",
+      "title": "SYNTHETIC UAE regression: Book item has no matching count",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-078/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-078/count.csv",
+          "sha256": "096fe39a0f087b068404cab0a140f566af347da76b852766799365c33b32a817",
+          "bytes": 136,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-078/expected.json",
+        "sha256": "0522671f4554efbae3bcf5a4fd5def27bae640d0c8d5de358ef76c40f0258138",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-079",
+      "title": "SYNTHETIC UAE regression: Physical count item absent from book register",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-079/books.csv",
+          "sha256": "5155182845504f4457af502c55d55a53d687d3943c7876ca4842367d32bbf740",
+          "bytes": 135,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-079/count.csv",
+          "sha256": "32b45219ac6ae982fbdbfaa2d1ad5c7788d126a0178e209ce5bc4bff411f2c13",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-079/expected.json",
+        "sha256": "1a5e8b8bfa6e6f7f80e18f70e48a8113c02c935e260548684eac227bf961b124",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-080",
+      "title": "SYNTHETIC UAE regression: Count shortage is quantified",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-080/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-080/count.csv",
+          "sha256": "38943c26b49afe78c4c87eb3071f5ca9cb8db5974c240f32945dea879ca3d545",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-080/expected.json",
+        "sha256": "37fcfe3f90d5a8a0e7ccceeccd007e97b8a2dfc82b04d4caf13eb7935e877334",
+        "bytes": 376
+      }
+    },
+    {
+      "id": "RW-081",
+      "title": "SYNTHETIC UAE regression: NRV impairment remains visible",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-081/books.csv",
+          "sha256": "17bc9b186c3175dfd87ea45aa2de6a67a16b46b7f00ea8a1efb4fe5a7ce06427",
+          "bytes": 136,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-081/count.csv",
+          "sha256": "32b45219ac6ae982fbdbfaa2d1ad5c7788d126a0178e209ce5bc4bff411f2c13",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-081/expected.json",
+        "sha256": "499dfa7ace97bb966db48c355f55419f0e9f4c6352bb0dcac93dd168e09cf7da",
+        "bytes": 381
+      }
+    },
+    {
+      "id": "RW-082",
+      "title": "SYNTHETIC UAE regression: Inventory ownership not confirmed",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-082/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-082/count.csv",
+          "sha256": "bbd59593a9711d7d9d1ec3847e687d71db2d305f5557d744713df1ea32366e06",
+          "bytes": 144,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-082/expected.json",
+        "sha256": "71c2703b65eb6e180072e716c73bc1b8728f89c13c77404b63845d20c73e7b52",
+        "bytes": 389
+      }
+    },
+    {
+      "id": "RW-083",
+      "title": "SYNTHETIC UAE regression: Consignment stock is not treated as owned",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-083/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-083/count.csv",
+          "sha256": "a011006fe8f24029fdeadebe2ac705c444b20faa0bd222a9952386592208a921",
+          "bytes": 144,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-083/expected.json",
+        "sha256": "c96e31cf8f3ac8cc8766b0aed8c7f2f11008275fe6aebc2cd9e9728f5f5b1dc5",
+        "bytes": 389
+      }
+    },
+    {
+      "id": "RW-084",
+      "title": "SYNTHETIC UAE regression: Expired inventory condition requires action",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-084/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-084/count.csv",
+          "sha256": "334ee6472205df9207b2a04e11cb557e0c9e871767be0e228d09aeb380a0301f",
+          "bytes": 141,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-084/expected.json",
+        "sha256": "8e822afac0327d87865bf4e3f8a781642f0ea3a2696ce3f5da594c334349f91d",
+        "bytes": 387
+      }
+    },
+    {
+      "id": "RW-085",
+      "title": "SYNTHETIC UAE regression: Count before year end requires movement bridge",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-085/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-085/count.csv",
+          "sha256": "0ae2629dd94bb2f50655664ddc1080ea0fc246a0ee9b98554c6ce1e114f5f29a",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-085/expected.json",
+        "sha256": "3bb4ff4afba56091bfd0482a5107c4009f3223b1851b1e2c9e885cac9ebec12b",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-086",
+      "title": "SYNTHETIC UAE regression: Negative stock requires investigation",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-086/books.csv",
+          "sha256": "a4567d1b973162d1135b9bedad6c1f603ce6766f1d31e3a8675fee423ae65e8d",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-086/count.csv",
+          "sha256": "32b45219ac6ae982fbdbfaa2d1ad5c7788d126a0178e209ce5bc4bff411f2c13",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-086/expected.json",
+        "sha256": "566a96098f8e6f42633e90470ee28809958a056b37b36fe1d207d48d68c6af68",
+        "bytes": 385
+      }
+    },
+    {
+      "id": "RW-087",
+      "title": "SYNTHETIC UAE regression: Missing NRV is not a clean valuation",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-087/books.csv",
+          "sha256": "018fdbc9a3892071f629d18201375d0c1f235128892812c91cee94e74ba9a5eb",
+          "bytes": 135,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-087/count.csv",
+          "sha256": "32b45219ac6ae982fbdbfaa2d1ad5c7788d126a0178e209ce5bc4bff411f2c13",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-087/expected.json",
+        "sha256": "f8480f7d5f73a03e505914a79103e1733b0b8a0f252d23e6e44ebf2a1e626094",
+        "bytes": 391
+      }
+    },
+    {
+      "id": "RW-088",
+      "title": "SYNTHETIC UAE regression: Different units of measure cannot be added",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-088/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-088/count.csv",
+          "sha256": "d2695c1e033f935dd690956d70b62ccc05d5c5795c4afd29d6363e99bbdb6dd4",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-088/expected.json",
+        "sha256": "d5dae4d7f38e2b38013e9e9a4bc542c583b761997f39134f2e773f6490ccc565",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-089",
+      "title": "SYNTHETIC UAE regression: Different warehouses cannot clear each other",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-089/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-089/count.csv",
+          "sha256": "c63a376dc9fc0734cebdd14a1b9937a72aa91af002ec09a89cd1a91140224ddb",
+          "bytes": 138,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-089/expected.json",
+        "sha256": "0165a8b5601b4114dda0075244f241df758b7789543b59f8c0a2fb77e79a5ce9",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-090",
+      "title": "SYNTHETIC UAE regression: Future stock count requires a separate roll-back procedure",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-090/books.csv",
+          "sha256": "2648f45a20a127ba6663b06d2e0836d7a55e056f9c1916e2bdc7b0fad22111ab",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-090/count.csv",
+          "sha256": "8ec403e9b3de9fb295b049b8c2396d985519da901f4beab4822549656d922f44",
+          "bytes": 137,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-090/expected.json",
+        "sha256": "61aeb4381dfdaf8f4aed4006715e2f433fdfa13f0dcacee807cf20875cbaf9a4",
+        "bytes": 384
+      }
+    },
+    {
+      "id": "RW-091",
+      "title": "SYNTHETIC UAE regression: access-review: retained evidence supports scoped check",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-091/checks.csv",
+          "sha256": "de9ca636cdef289145455ff454d03c4fa37b84041fdae86e0088879101c5d53c",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-091/expected.json",
+        "sha256": "4a76b1ff72f131e6af1c163ee60c7926b67839612eca2f7d23a930cb9c798180",
+        "bytes": 399
+      }
+    },
+    {
+      "id": "RW-092",
+      "title": "SYNTHETIC UAE regression: access-review: expired evidence cannot establish current compliance",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-092/checks.csv",
+          "sha256": "234b030848b695a1f1d8d8ed499f2b622a41b658982c4e66f865741458062da6",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-092/expected.json",
+        "sha256": "f771029ff371f031b08b9fe4d961dc652be25774d32f4dd2d892be255e4b505e",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-093",
+      "title": "SYNTHETIC UAE regression: access-review: expiry on review date remains current",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-093/checks.csv",
+          "sha256": "b33e0cfdfca951db5b347a854c8b9f38bc88d955ffb5db1cd23113648698ada9",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-093/expected.json",
+        "sha256": "04725b7fda45bb432287c41b4bc597ecb05ead8ed258be5bae25811754121fec",
+        "bytes": 377
+      }
+    },
+    {
+      "id": "RW-094",
+      "title": "SYNTHETIC UAE regression: access-review: declared support without reference stays missing",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-094/checks.csv",
+          "sha256": "717c6714a0113b6785e4c9d187ec42e9b45d301449eefc109938edbaf42a5976",
+          "bytes": 140,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-094/expected.json",
+        "sha256": "6c9d3b80a7c895bd1fdf173dfd3e0614adaf9be33697d55a072a1ded66ec4769",
+        "bytes": 405
+      }
+    },
+    {
+      "id": "RW-095",
+      "title": "SYNTHETIC UAE regression: access-review: documented exception requires disposition",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-095/checks.csv",
+          "sha256": "1be6533909548b6029bd304f5630ac8792146e0d74c0b5c425ba31183c664e66",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-095/expected.json",
+        "sha256": "a19fea847f135d802ad4ccc3f2108a06a9a95bdb453372a55de73de944c4c47c",
+        "bytes": 398
+      }
+    },
+    {
+      "id": "RW-096",
+      "title": "SYNTHETIC UAE regression: access-review: unknown status is not clean",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-096/checks.csv",
+          "sha256": "01d2c854881ce4dbd3106c70b8090477c9c2a427662a64d8fa8b992a5410c5ad",
+          "bytes": 157,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-096/expected.json",
+        "sha256": "ece24f797ac9daa079aa036aa8a41d2a40cc4202f6860c0a1d4696e648a58d90",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-097",
+      "title": "SYNTHETIC UAE regression: access-review: justified non-applicability retained",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-097/checks.csv",
+          "sha256": "ef1ee89716b9edb45f49eb541596a4d31b955352b5ad8577dc5afd2574b5640b",
+          "bytes": 164,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-097/expected.json",
+        "sha256": "0de98307daf4c1e539a7ce1dbbb12130e5793f27088ba96cae40dd98aaff5330",
+        "bytes": 382
+      }
+    },
+    {
+      "id": "RW-098",
+      "title": "SYNTHETIC UAE regression: access-review: unexplained non-applicability blocked",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-098/checks.csv",
+          "sha256": "8f3d50b4b347d5a09e4f9ac38969d0f43fa4eda8db97ba640519465da4747d97",
+          "bytes": 143,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-098/expected.json",
+        "sha256": "6456d07e8ddabaf683fe8ede38953cd1c65c69e6d8e99c3c01f698e08ab2a800",
+        "bytes": 406
+      }
+    },
+    {
+      "id": "RW-099",
+      "title": "SYNTHETIC UAE regression: access-review: missing scoped check visible despite other evidence",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-099/checks.csv",
+          "sha256": "fdac9869b8d0cb683324efecd22d5f2ff2994dac2a1e7935a7fb3dcdaf1a4c46",
+          "bytes": 151,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-099/expected.json",
+        "sha256": "eed4bc47e638462fa1a2f24275c6093e9c9dc61a4e80d2e65ad22fdbab7bef19",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-100",
+      "title": "SYNTHETIC UAE regression: access-review: whole missing entity is visible",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "access-review"
+        ],
+        "subjects": [
+          "ENTITY-0",
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-100/checks.csv",
+          "sha256": "de9ca636cdef289145455ff454d03c4fa37b84041fdae86e0088879101c5d53c",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-100/expected.json",
+        "sha256": "b5f7c6c7001562bbb0d6c487f0f72d2360b716aebf73821898d7d3baf920d1f9",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-101",
+      "title": "SYNTHETIC UAE regression: trade-licence: retained evidence supports scoped check",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-101/checks.csv",
+          "sha256": "21728eab304511357c8312092591586d3edea5d0680acd511fb6dcf5fcad2957",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-101/expected.json",
+        "sha256": "863154d774f1eff04c7c95d0595a282e7e39d54840819986d9dad7c119f4f624",
+        "bytes": 399
+      }
+    },
+    {
+      "id": "RW-102",
+      "title": "SYNTHETIC UAE regression: trade-licence: expired evidence cannot establish current compliance",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-102/checks.csv",
+          "sha256": "bdce8a42889a54a5ce5dad7f948dd323ab3c5de5a55d840366c55ae2db6bad1d",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-102/expected.json",
+        "sha256": "ca41b8355704b0ccaad82de836b406af50c0363ced413905abc5061c509de323",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-103",
+      "title": "SYNTHETIC UAE regression: trade-licence: expiry on review date remains current",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-103/checks.csv",
+          "sha256": "469c7d98c9a2aedcf4e031a355866fc971241d2e3878fef7dbf7171e6411c459",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-103/expected.json",
+        "sha256": "ab97f120c07d4f21b340f74ae78d86321c629e923b54ab186ff8e1ac7659ac0c",
+        "bytes": 377
+      }
+    },
+    {
+      "id": "RW-104",
+      "title": "SYNTHETIC UAE regression: trade-licence: declared support without reference stays missing",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-104/checks.csv",
+          "sha256": "a20607f6bf8c6df13753cf24c1a3137fbb0fca31e777b8bf5996aeeb60fefb8d",
+          "bytes": 140,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-104/expected.json",
+        "sha256": "39901af1b4b04e88fdc07161be1967dac2acf9d3a4da09307644f79810ade57d",
+        "bytes": 405
+      }
+    },
+    {
+      "id": "RW-105",
+      "title": "SYNTHETIC UAE regression: trade-licence: documented exception requires disposition",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-105/checks.csv",
+          "sha256": "4614a9021acf8f367b5430c594338576ea85c0c85551860e4d3f303e73c5290e",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-105/expected.json",
+        "sha256": "2cde0f7f0958c0d2381596a22762d31ad78068f6eb52a819f293179f87847065",
+        "bytes": 398
+      }
+    },
+    {
+      "id": "RW-106",
+      "title": "SYNTHETIC UAE regression: trade-licence: unknown status is not clean",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-106/checks.csv",
+          "sha256": "8c844b7ca2bf2dd9517694a11e773a0f191324d893d9e8d9d4741d2c6b140f7a",
+          "bytes": 157,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-106/expected.json",
+        "sha256": "1a90504cfaae03cb7baa03fab59767cc082f1a47ad7c00b7d0e709c52ab62800",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-107",
+      "title": "SYNTHETIC UAE regression: trade-licence: justified non-applicability retained",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-107/checks.csv",
+          "sha256": "4b55a0d81b9c17d0616f454e0d7c12051b30376df7bf1d914423fd03d1cc9e09",
+          "bytes": 164,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-107/expected.json",
+        "sha256": "f3af971b023af36d3ed608815fc52b4b1977d2ca807d2633e5ef8c55f06bd7be",
+        "bytes": 382
+      }
+    },
+    {
+      "id": "RW-108",
+      "title": "SYNTHETIC UAE regression: trade-licence: unexplained non-applicability blocked",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-108/checks.csv",
+          "sha256": "27a7b49fc1d5dcbee50a7efabef583ecef01cdfda7faf1028ef86db38e4ebf4f",
+          "bytes": 143,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-108/expected.json",
+        "sha256": "8958239a9efbfe15087dabef3f1c672e7f3c3ca2ba40e26f2f1c75271c62c735",
+        "bytes": 406
+      }
+    },
+    {
+      "id": "RW-109",
+      "title": "SYNTHETIC UAE regression: trade-licence: missing scoped check visible despite other evidence",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-109/checks.csv",
+          "sha256": "fdac9869b8d0cb683324efecd22d5f2ff2994dac2a1e7935a7fb3dcdaf1a4c46",
+          "bytes": 151,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-109/expected.json",
+        "sha256": "b5b5281f13d1aa1ac68dd557177e9e0900bbad541f06b531c075e8320c1e0ecc",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-110",
+      "title": "SYNTHETIC UAE regression: trade-licence: whole missing entity is visible",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "trade-licence"
+        ],
+        "subjects": [
+          "ENTITY-0",
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-110/checks.csv",
+          "sha256": "21728eab304511357c8312092591586d3edea5d0680acd511fb6dcf5fcad2957",
+          "bytes": 159,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-110/expected.json",
+        "sha256": "9742ac3a435768665c3f1dceff50eb2a7bb6eb70b1838d9d632b0eda04900c27",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-111",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: retained evidence supports scoped check",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-111/checks.csv",
+          "sha256": "79b5c8376af165e94977d78cef0c6f9fa0c1ae9e1a5d1429a1e7ee7f7dc6826b",
+          "bytes": 164,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-111/expected.json",
+        "sha256": "e9010517170ba978e68bdbcb865c244a7025f3b2096f8430164eef80fbb8e5b0",
+        "bytes": 399
+      }
+    },
+    {
+      "id": "RW-112",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: expired evidence cannot establish current compliance",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-112/checks.csv",
+          "sha256": "ad4e3bab66edfdac90e32957447216c57c53d6a4212361fbcb50c9be4e741f8a",
+          "bytes": 164,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-112/expected.json",
+        "sha256": "a09df19b73939a811bae9dc015df665441b3be0bfeadd414c60e77f98cd5db3e",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-113",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: expiry on review date remains current",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-113/checks.csv",
+          "sha256": "56386f10028eef9cb60a216a47d5d7692fb4e57ac8050e207520298f64452f18",
+          "bytes": 164,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-113/expected.json",
+        "sha256": "a777159f5894073124b1d7311065e6cff26252f27bcc4ac8e2f4a7a0c3bf973c",
+        "bytes": 377
+      }
+    },
+    {
+      "id": "RW-114",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: declared support without reference stays missing",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-114/checks.csv",
+          "sha256": "30090fc648c52f67227a0e52e43417e65f173ac776ce0a2b1de6479195195991",
+          "bytes": 145,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-114/expected.json",
+        "sha256": "b82d1023904940350b1f5ece150bb627d83457f5db3b0583d0c66b3efb640e9b",
+        "bytes": 405
+      }
+    },
+    {
+      "id": "RW-115",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: documented exception requires disposition",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-115/checks.csv",
+          "sha256": "34e5641b5c5c956ed727d739c3de684d68193316b8a9e1c034f3e64d3524d832",
+          "bytes": 164,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-115/expected.json",
+        "sha256": "a727ddd436643d4d2d716a5b670c62a43c19598ee604f918c1078bf8cd62b505",
+        "bytes": 398
+      }
+    },
+    {
+      "id": "RW-116",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: unknown status is not clean",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-116/checks.csv",
+          "sha256": "c0b12b6ddfdcd8def4eec94d2c34ec5e349b802636a422a3c685e481683fcabe",
+          "bytes": 162,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-116/expected.json",
+        "sha256": "3c797a910df6bbad270c15f7b47cb3604f730fb166b5c8bd5a4e111b311d2402",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-117",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: justified non-applicability retained",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-117/checks.csv",
+          "sha256": "83956092118f775ddce74c50ed9718606f6b996930cefbfa329a43d04e0a9498",
+          "bytes": 169,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-117/expected.json",
+        "sha256": "cca4c4f538f4f269d9005c94bcaf19eb3d5ee326b2cacc7be739eec876d30fe3",
+        "bytes": 382
+      }
+    },
+    {
+      "id": "RW-118",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: unexplained non-applicability blocked",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-118/checks.csv",
+          "sha256": "2d9e96a4e295543f8f4668c050dbbd47fa3539948525bf725cb57b46832dc996",
+          "bytes": 148,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-118/expected.json",
+        "sha256": "7420e54c3a7a29f0976a3fa310b0410565a0c1f9678bf51856d0dae20f79a4cc",
+        "bytes": 406
+      }
+    },
+    {
+      "id": "RW-119",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: missing scoped check visible despite other evidence",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-119/checks.csv",
+          "sha256": "fdac9869b8d0cb683324efecd22d5f2ff2994dac2a1e7935a7fb3dcdaf1a4c46",
+          "bytes": 151,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-119/expected.json",
+        "sha256": "e623ab7ab29c80d71b5511384e3feab7117f049311d99ed75332b15012e17132",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-120",
+      "title": "SYNTHETIC UAE regression: fundraising-permit: whole missing entity is visible",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_checks": [
+          "fundraising-permit"
+        ],
+        "subjects": [
+          "ENTITY-0",
+          "ENTITY-1"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-120/checks.csv",
+          "sha256": "79b5c8376af165e94977d78cef0c6f9fa0c1ae9e1a5d1429a1e7ee7f7dc6826b",
+          "bytes": 164,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-120/expected.json",
+        "sha256": "6d0b896b17afe70cfd6d74492e7b151c054abcf7107ca0289c5b79bff1df6b6a",
+        "bytes": 396
+      }
+    },
+    {
+      "id": "RW-131",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 declared box agrees to register",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-131/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-131/return.csv",
+          "sha256": "5860b382abdbc8ddb67721a3e20422b459bf3689a64c54e4a24a11fde3101b85",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-131/expected.json",
+        "sha256": "1afa6c928607af38ed23c34416f6317a6cff9e5700136f36a82b2ff75799e521",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-132",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 multiple book rows aggregate without netting tax fields",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-132/books.csv",
+          "sha256": "7c40cad70a68f12bba34d53d2582871b7e0b690790baa4f1560ca959230b9cbc",
+          "bytes": 182,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-132/return.csv",
+          "sha256": "5860b382abdbc8ddb67721a3e20422b459bf3689a64c54e4a24a11fde3101b85",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-132/expected.json",
+        "sha256": "aa58a01ce3a18d3d172d3be0d72323a85198a02d88b0dc7ce88dcb5beaa647c9",
+        "bytes": 375
+      }
+    },
+    {
+      "id": "RW-133",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 tax variance is distinct from base variance",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-133/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-133/return.csv",
+          "sha256": "542364fd379871195a9c8fd7fc6d985569b02e0b6a9b6aaa49f918c0f7a7d2f3",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "4"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-133/expected.json",
+        "sha256": "d233e2c9c47858b86afa3a1f59df6e8357398522b017649a6e58aee5649f57f9",
+        "bytes": 376
+      }
+    },
+    {
+      "id": "RW-134",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 taxable-base variance survives equal tax",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-134/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-134/return.csv",
+          "sha256": "8f7fef7a9fdcd64d391d14ef1a18afa2e6b8bc5d6f271999226de3f436b7e8bc",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-134/expected.json",
+        "sha256": "733461174f738999c84e8b7848cf32b1372d3582380d88b8f2cb1e9e8b1b1c15",
+        "bytes": 376
+      }
+    },
+    {
+      "id": "RW-135",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 adjustment is independently compared",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-135/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-135/return.csv",
+          "sha256": "b114e0a0a0128e534f1902c1724253558175eef09c6f169ca9cbc450fbff5ec7",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-135/expected.json",
+        "sha256": "cb47f0e405eea1168ac96366698fa509b8de17f94141d995786254b2bbfc8ea3",
+        "bytes": 376
+      }
+    },
+    {
+      "id": "RW-136",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 book box absent from filed return",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-136/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-136/return.csv",
+          "sha256": "4c155e766139f0dd707b4da09034408e3ae6fd676a0c2511787e9a72c27113fa",
+          "bytes": 130,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-136/expected.json",
+        "sha256": "f54de5195b2e78040a8901f70f472060609e815475eb000cec86e92d041fb2ba",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-137",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 filed box absent from book mapping",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-137/books.csv",
+          "sha256": "0acf068b91c697c9cf3109f96528e469d051f3937853c7daf670627ea724f84b",
+          "bytes": 129,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-137/return.csv",
+          "sha256": "5860b382abdbc8ddb67721a3e20422b459bf3689a64c54e4a24a11fde3101b85",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-137/expected.json",
+        "sha256": "c0c938b9b9a13071b9dffd19fac249af2f8090bcef4106270546b400907eefe5",
+        "bytes": 379
+      }
+    },
+    {
+      "id": "RW-138",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 required box absent from both sources is missing",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB",
+          "9"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-138/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-138/return.csv",
+          "sha256": "5860b382abdbc8ddb67721a3e20422b459bf3689a64c54e4a24a11fde3101b85",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-138/expected.json",
+        "sha256": "b4fa9689b21f20fdf42ac89e8f1eaac34d722aef12b181b9e9e5fb658ee67f3b",
+        "bytes": 393
+      }
+    },
+    {
+      "id": "RW-139",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 duplicate amended return boxes cannot be added",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-139/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-139/return.csv",
+          "sha256": "1056edd3664410a30229456b037afd75a8592204f018ea2d92da4ac2454c97e7",
+          "bytes": 184,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "10"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-139/expected.json",
+        "sha256": "474567b0aa7868a6d6c3c2b6c1eec25ace25b5080459f6794d86690109b18103",
+        "bytes": 388
+      }
+    },
+    {
+      "id": "RW-140",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 different tax registrations stay separate",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-140/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-140/return.csv",
+          "sha256": "48c746cfb8cbc4db0bfb2897d9408b1bcba281de0a94991480dff3d5ce3d57c2",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-140/expected.json",
+        "sha256": "4ec8002d23de56306ea916873ad01989df8e9e9d17936fa4697e4eac2f75947c",
+        "bytes": 378
+      }
+    },
+    {
+      "id": "RW-141",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 different assigned tax periods stay separate",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-141/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-141/return.csv",
+          "sha256": "aa252e09855bb744088032dc1058c6168a8bfecefb82886e43860378bc55146f",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-141/expected.json",
+        "sha256": "86cdbc71c996cbfe978c7ecaec0dd2c763d745f036a213b857bef64c3c9ba243",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-142",
+      "title": "SYNTHETIC UAE regression: UAE VAT201 future tax period cannot close early",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-142/books.csv",
+          "sha256": "317c36804caa7d260de2a7c44a743764454425e4f0aa37de7959e936bf3e884c",
+          "bytes": 133,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-142/return.csv",
+          "sha256": "8bc0e4b923a437efb9f757cc2afca8768a18f64c749b62ad8fb94e2a0f9aa03a",
+          "bytes": 134,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "5"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-142/expected.json",
+        "sha256": "31d4d4aa930b02defdb3ff9c82681eab6cf59247d48ecba40d81ab16ae52a6c8",
+        "bytes": 398
+      }
+    },
+    {
+      "id": "RW-143",
+      "title": "SYNTHETIC UAE regression: UAE pooled bank debit settles two employee obligations",
+      "workflow": "obligation-bank-allocations",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "obligation_month_start": "2026-05",
+        "obligation_month_end": "2026-05",
+        "settlement_start": "2026-06-01",
+        "bank_payment_sign": "debit-negative"
+      },
+      "source_files": {
+        "expected": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-143/expected.csv",
+          "sha256": "bfde5c6e55c9a8fd47ce1e0705f2eba1046ef8153523f340733fbd7e65d2ef46",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "reported": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-143/reported.csv",
+          "sha256": "ef623e831f7baa803de5011ef214f9d90a6befd566447a147b1d3a91c838c25d",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-143/bank.csv",
+          "sha256": "5c06265500fbd68f7f9d017bf98c4f24e54732e952c121aca294a11bcaba6ce0",
+          "bytes": 104,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-180"
+            }
+          }
+        },
+        "allocations": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-143/allocations.csv",
+          "sha256": "c78314f5efd63b3b7daa5222f43e0e3e886e9eafc12ed102cc1a87708d0ffead",
+          "bytes": 287,
+          "controls": {
+            "table_type": "obligation-allocations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-143/expected.json",
+        "sha256": "cdfffc3855c28a8f6ad60981a34ef50c1e7d696e462e84cd05f3c2bc45af7bdd",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-144",
+      "title": "SYNTHETIC UAE regression: UAE partially settled salary remains outstanding and overdue",
+      "workflow": "obligation-bank-allocations",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "obligation_month_start": "2026-05",
+        "obligation_month_end": "2026-05",
+        "settlement_start": "2026-06-01",
+        "bank_payment_sign": "debit-negative"
+      },
+      "source_files": {
+        "expected": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-144/expected.csv",
+          "sha256": "bfde5c6e55c9a8fd47ce1e0705f2eba1046ef8153523f340733fbd7e65d2ef46",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "reported": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-144/reported.csv",
+          "sha256": "ef623e831f7baa803de5011ef214f9d90a6befd566447a147b1d3a91c838c25d",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-144/bank.csv",
+          "sha256": "d2f00c2b03395794610feeb8916084f651cc5002287d9a3235879c644b03f299",
+          "bytes": 104,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-150"
+            }
+          }
+        },
+        "allocations": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-144/allocations.csv",
+          "sha256": "fc165aaab8b074cae5b20a6a8d4e63be4b9b1554c1aa3b69ae7f9fe76c318d7b",
+          "bytes": 287,
+          "controls": {
+            "table_type": "obligation-allocations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "150"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-144/expected.json",
+        "sha256": "73658254a6d8cb4c0c19718790d4ed0170f6cfea2763e6c379bf15c3feb3f0d5",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-145",
+      "title": "SYNTHETIC UAE regression: UAE salary settlement never nets an unallocated bank credit",
+      "workflow": "obligation-bank-allocations",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "obligation_month_start": "2026-05",
+        "obligation_month_end": "2026-05",
+        "settlement_start": "2026-06-01",
+        "bank_payment_sign": "debit-negative"
+      },
+      "source_files": {
+        "expected": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-145/expected.csv",
+          "sha256": "bfde5c6e55c9a8fd47ce1e0705f2eba1046ef8153523f340733fbd7e65d2ef46",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "reported": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-145/reported.csv",
+          "sha256": "ef623e831f7baa803de5011ef214f9d90a6befd566447a147b1d3a91c838c25d",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-145/bank.csv",
+          "sha256": "56278029defe238008933f78df66dc1daf5273862fe08c63d4bb346465e09288",
+          "bytes": 152,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "-160"
+            }
+          }
+        },
+        "allocations": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-145/allocations.csv",
+          "sha256": "c78314f5efd63b3b7daa5222f43e0e3e886e9eafc12ed102cc1a87708d0ffead",
+          "bytes": 287,
+          "controls": {
+            "table_type": "obligation-allocations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-145/expected.json",
+        "sha256": "8a24049e537a719e1ccf02205d65473b9312765badb622110aade027d907c2c1",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-146",
+      "title": "SYNTHETIC UAE regression: UAE missing payroll month remains missing rather than zero",
+      "workflow": "obligation-bank-allocations",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "BANK-1",
+        "obligation_month_start": "2026-05",
+        "obligation_month_end": "2026-06",
+        "settlement_start": "2026-06-01",
+        "bank_payment_sign": "debit-negative"
+      },
+      "source_files": {
+        "expected": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-146/expected.csv",
+          "sha256": "bfde5c6e55c9a8fd47ce1e0705f2eba1046ef8153523f340733fbd7e65d2ef46",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "reported": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-146/reported.csv",
+          "sha256": "ef623e831f7baa803de5011ef214f9d90a6befd566447a147b1d3a91c838c25d",
+          "bytes": 191,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-146/bank.csv",
+          "sha256": "5c06265500fbd68f7f9d017bf98c4f24e54732e952c121aca294a11bcaba6ce0",
+          "bytes": 104,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "-180"
+            }
+          }
+        },
+        "allocations": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-146/allocations.csv",
+          "sha256": "c78314f5efd63b3b7daa5222f43e0e3e886e9eafc12ed102cc1a87708d0ffead",
+          "bytes": 287,
+          "controls": {
+            "table_type": "obligation-allocations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "180"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-146/expected.json",
+        "sha256": "3c80fad93fb7153397240b1389e6d0729be8aa52b8a887f94f74b4e6d4fdd371",
+        "bytes": 372
+      }
+    },
+    {
+      "id": "RW-149",
+      "title": "SYNTHETIC UAE regression: UAE register/ledger/bank owner evidence agrees without bank authentication",
+      "workflow": "bank-account-evidence",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "SYN-BANK",
+        "currency": "AED",
+        "bank_owner_name": "SYNTHETIC Entity LLC",
+        "bank_owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+        "bank_owner_identifier": "00123"
+      },
+      "source_files": {
+        "register": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-149/register.csv",
+          "sha256": "8ac2119edffd628158db48209ac6676a5dcbae2f110d721ec809449b7c0af927",
+          "bytes": 437,
+          "controls": {
+            "table_type": "bank-account-evidence",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "ledger": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-149/ledger.csv",
+          "sha256": "399f8da58ee74f2194e8adfdc937e15732cb1670016c270ffd2187f20bfd3f67",
+          "bytes": 433,
+          "controls": {
+            "table_type": "bank-account-evidence",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-149/bank.csv",
+          "sha256": "b5da5860461faa507070bbce4f6b4df379e8e51e476f0464e74b7e9a256a6655",
+          "bytes": 429,
+          "controls": {
+            "table_type": "bank-account-evidence",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-149/expected.json",
+        "sha256": "0ea1d602ed99c286751aaf629d7f9c99dffa6c9d1a73b19d322dabffd50f2009",
+        "bytes": 394
+      }
+    },
+    {
+      "id": "RW-155",
+      "title": "SYNTHETIC AE independently assessed ICFR separate-required",
+      "workflow": "icfr-duty-coverage",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "period_start": "2026-06-01",
+        "subjects": [
+          "SYN-COMPONENT"
+        ],
+        "required_checks": [
+          "404a:CTRL",
+          "404b:CTRL"
+        ]
+      },
+      "source_files": {
+        "scopes": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-155/scopes.csv",
+          "sha256": "803e8cda114bbdf26d46f5883ae4689657a3f5074a8c95a1b27b7d74d99c4e34",
+          "bytes": 1219,
+          "controls": {
+            "table_type": "icfr-duty-scopes",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        },
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-155/checks.csv",
+          "sha256": "d776a00cf7db5b6a02ae4a76b3b8d1b996e06cc79fa4e13a4700877c39bd8946",
+          "bytes": 254,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-155/expected.json",
+        "sha256": "c75873d09d3c26c7b76f5e2af76f40fc922480f5371a3f0775ddfb8c03bbf7e3",
+        "bytes": 747
+      }
+    },
+    {
+      "id": "RW-156",
+      "title": "SYNTHETIC AE independently assessed ICFR separate-exemption",
+      "workflow": "icfr-duty-coverage",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "period_start": "2026-06-01",
+        "subjects": [
+          "SYN-COMPONENT"
+        ],
+        "required_checks": [
+          "404a:CTRL",
+          "404b:CTRL"
+        ]
+      },
+      "source_files": {
+        "scopes": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-156/scopes.csv",
+          "sha256": "3ab3eb428bb94e8b60a063f9946e9d39adb49784fa4ee9e1c230a25d15b42e86",
+          "bytes": 1223,
+          "controls": {
+            "table_type": "icfr-duty-scopes",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        },
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-156/checks.csv",
+          "sha256": "f38d7c97d02d1ca2ba1f8a5440e32f70c2a2df6a781d5ac65777ae78657194fd",
+          "bytes": 162,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-156/expected.json",
+        "sha256": "ad5aad4689055c59dc4f86a534f7f6973838e42f9a0bdf8236b68f784f30da0b",
+        "bytes": 757
+      }
+    },
+    {
+      "id": "RW-157",
+      "title": "SYNTHETIC AE independently assessed ICFR missing-scope",
+      "workflow": "icfr-duty-coverage",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "period_start": "2026-06-01",
+        "subjects": [
+          "SYN-COMPONENT"
+        ],
+        "required_checks": [
+          "404a:CTRL",
+          "404b:CTRL"
+        ]
+      },
+      "source_files": {
+        "scopes": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-157/scopes.csv",
+          "sha256": "e6b495a456d1329bc17e29798ffd1362fc87fddbc6872feb72d3a69c641e7fce",
+          "bytes": 753,
+          "controls": {
+            "table_type": "icfr-duty-scopes",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        },
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-157/checks.csv",
+          "sha256": "d776a00cf7db5b6a02ae4a76b3b8d1b996e06cc79fa4e13a4700877c39bd8946",
+          "bytes": 254,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-157/expected.json",
+        "sha256": "6a98dcc97831b43b0bbe1a8217b9171bd6a126f57015b64799c7962bc4ce0194",
+        "bytes": 759
+      }
+    },
+    {
+      "id": "RW-158",
+      "title": "SYNTHETIC AE independently assessed ICFR missing-check",
+      "workflow": "icfr-duty-coverage",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "period_start": "2026-06-01",
+        "subjects": [
+          "SYN-COMPONENT"
+        ],
+        "required_checks": [
+          "404a:CTRL",
+          "404b:CTRL"
+        ]
+      },
+      "source_files": {
+        "scopes": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-158/scopes.csv",
+          "sha256": "803e8cda114bbdf26d46f5883ae4689657a3f5074a8c95a1b27b7d74d99c4e34",
+          "bytes": 1219,
+          "controls": {
+            "table_type": "icfr-duty-scopes",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        },
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-158/checks.csv",
+          "sha256": "f38d7c97d02d1ca2ba1f8a5440e32f70c2a2df6a781d5ac65777ae78657194fd",
+          "bytes": 162,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 1,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-158/expected.json",
+        "sha256": "4d520ac127099ed9700b161a491b22dbb0660f38ab7662aa5c78475d8500b42d",
+        "bytes": 744
+      }
+    },
+    {
+      "id": "RW-159",
+      "title": "SYNTHETIC AE independently assessed ICFR pending-adoption",
+      "workflow": "icfr-duty-coverage",
+      "country": "AE",
+      "fixture_family": "EXISTING_ENGINE_REGRESSION",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "period_start": "2026-06-01",
+        "subjects": [
+          "SYN-COMPONENT"
+        ],
+        "required_checks": [
+          "404a:CTRL",
+          "404b:CTRL"
+        ]
+      },
+      "source_files": {
+        "scopes": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-159/scopes.csv",
+          "sha256": "0b9d1085672a893e06c91c8702326c7c1681f26f0be380dae94905917d433b77",
+          "bytes": 1207,
+          "controls": {
+            "table_type": "icfr-duty-scopes",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        },
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/RW-159/checks.csv",
+          "sha256": "d776a00cf7db5b6a02ae4a76b3b8d1b996e06cc79fa4e13a4700877c39bd8946",
+          "bytes": 254,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/RW-159/expected.json",
+        "sha256": "f8aa7378214cb84b2498735de7b9d16e9c7895fd11cb3cfd2e429134800a7923",
+        "bytes": 763
+      }
+    },
+    {
+      "id": "SYN-UAE-001",
+      "title": "SYNTHETIC UAE June close with uncleared cheque and unbooked bank fee",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "SYN-OPERATING-AED",
+        "currency": "AED",
+        "book_opening": "250000.00",
+        "statement_opening": "250000.00",
+        "book_closing": "236750.00",
+        "statement_closing": "255395.00"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-001/books.csv",
+          "sha256": "de2a9ad0fb471bc85543b3977b2ad38c71036878f122f8600b7c6bf87e53a96f",
+          "bytes": 449,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 4,
+            "control_totals": {
+              "AED": "-13250.00"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-001/statement.csv",
+          "sha256": "cbba0a609a262b9c176c4005aad4aafa1e4b181a1ed5572760a84bace7fa24bd",
+          "bytes": 457,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 4,
+            "control_totals": {
+              "AED": "5395.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-001/expected.json",
+        "sha256": "b11a674dcedf3b5d90e0bed37e8f222d98d2bf48efdf2e463b0afc85edbae6c8",
+        "bytes": 809
+      }
+    },
+    {
+      "id": "SYN-UAE-002",
+      "title": "SYNTHETIC UAE separately corrected cashbook agrees to bank",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "SYN-OPERATING-AED",
+        "currency": "AED",
+        "book_opening": "250000.00",
+        "statement_opening": "250000.00",
+        "book_closing": "255395.00",
+        "statement_closing": "255395.00"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-002/books.csv",
+          "sha256": "d16b5e0fd6c1db65fdac19e3d20906863ce0e2cb162873051489a72366e2c27d",
+          "bytes": 448,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 4,
+            "control_totals": {
+              "AED": "5395.00"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-002/statement.csv",
+          "sha256": "cbba0a609a262b9c176c4005aad4aafa1e4b181a1ed5572760a84bace7fa24bd",
+          "bytes": 457,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 4,
+            "control_totals": {
+              "AED": "5395.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-002/expected.json",
+        "sha256": "30fdfb33c84211cf7b595be0a24363aa7461282c895a758d5f836fd88bc498ae",
+        "bytes": 561
+      }
+    },
+    {
+      "id": "SYN-UAE-003",
+      "title": "SYNTHETIC UAE aged unpresented cheque remains visible",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "SYN-OPERATING-AED",
+        "currency": "AED",
+        "book_opening": "250000.00",
+        "statement_opening": "250000.00",
+        "book_closing": "273250.00",
+        "statement_closing": "292000.00"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-003/books.csv",
+          "sha256": "027e61354da6029db4d9863c5c2c8e03151e35f97fb441ca60e753c37d7dcb50",
+          "bytes": 257,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "23250.00"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-003/statement.csv",
+          "sha256": "7038d7ca027c88242d65d74bdc679f2ed561293ceeeefb395bbb3916db90c3d7",
+          "bytes": 156,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "42000.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-003/expected.json",
+        "sha256": "134ca53f31a2631b04f973bdd5a3fc34fc35261ecb8e56329cd3fe016e8f797d",
+        "bytes": 588
+      }
+    },
+    {
+      "id": "SYN-UAE-004",
+      "title": "SYNTHETIC UAE foreign currency cannot clear AED operating account",
+      "workflow": "bank-brs",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "account": "SYN-OPERATING-AED",
+        "currency": "AED",
+        "book_opening": "250000.00",
+        "statement_opening": "250000.00",
+        "book_closing": "292000.00",
+        "statement_closing": "292000.00"
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-004/books.csv",
+          "sha256": "255615dbcc8f738e4446faf35ae3d9e5c7e51c671890994cbc1b91d6d6f16e2b",
+          "bytes": 150,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "AED": "42000.00"
+            }
+          }
+        },
+        "statement": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-004/statement.csv",
+          "sha256": "d22744ba3b6b48ce33ddca02e401f71d5115f92b9a9f9ed4be1ccd7882284285",
+          "bytes": 150,
+          "controls": {
+            "table_type": "transactions",
+            "expected_rows": 1,
+            "control_totals": {
+              "USD": "42000.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-004/expected.json",
+        "sha256": "15a517f4e4fe1d5f917a6929969562b7ef0bff1206c545921e29811cb8c27e40",
+        "bytes": 401
+      }
+    },
+    {
+      "id": "SYN-UAE-005",
+      "title": "SYNTHETIC UAE invoices and credit note reconcile separately",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-005/books.csv",
+          "sha256": "83fcdd8bc5e349cb7e36fb8c0edaf59c5399c43369971468d9331091227ddd99",
+          "bytes": 436,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "2900.00"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-005/return.csv",
+          "sha256": "111148b4cd620e5767d957389b111f15181cb17beafd5e602bd3986924ee9008",
+          "bytes": 463,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "2900.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-005/expected.json",
+        "sha256": "0fe4e78234e6d722b48540a1989299627c4838b606c5e8418b8e17971b27d0dd",
+        "bytes": 564
+      }
+    },
+    {
+      "id": "SYN-UAE-006",
+      "title": "SYNTHETIC UAE equal taxable base with a 25 dirham tax discrepancy",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-006/books.csv",
+          "sha256": "83fcdd8bc5e349cb7e36fb8c0edaf59c5399c43369971468d9331091227ddd99",
+          "bytes": 436,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "2900.00"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-006/return.csv",
+          "sha256": "145fbe3df5e69f0ccf01f114fd28d5868e2f183717ee0c4bf85033cee832e409",
+          "bytes": 463,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "2875.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-006/expected.json",
+        "sha256": "b341f352d6eef2c995711816b8bbdcc217f5320c249b14d2b275d6c7bc42d1bd",
+        "bytes": 548
+      }
+    },
+    {
+      "id": "SYN-UAE-007",
+      "title": "SYNTHETIC UAE missing credit note is not netted into invoices",
+      "workflow": "uae-vat",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-007/books.csv",
+          "sha256": "83fcdd8bc5e349cb7e36fb8c0edaf59c5399c43369971468d9331091227ddd99",
+          "bytes": 436,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "2900.00"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-007/return.csv",
+          "sha256": "d6f5f378149f6d5e1295b2a329db4acdead69991cb990eaea08da50e0a478f3e",
+          "bytes": 341,
+          "controls": {
+            "table_type": "tax-documents",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "3025.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-007/expected.json",
+        "sha256": "fcd93be8ca52899cda8d027f6134762a2d269408e60228711f31a8e00365d9cd",
+        "bytes": 535
+      }
+    },
+    {
+      "id": "SYN-UAE-008",
+      "title": "SYNTHETIC UAE declared VAT201 boxes tie without treating them as a full filing",
+      "workflow": "uae-vat-return",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "required_boxes": [
+          "1:DXB",
+          "10"
+        ]
+      },
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-008/books.csv",
+          "sha256": "23f0afc4f4cb04673cd8af7187ffaf6b149b3b80b0549c216bad56526b4bcdd6",
+          "bytes": 297,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "3150.00"
+            }
+          }
+        },
+        "return": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-008/return.csv",
+          "sha256": "4c98286e60d8e53d1102a76c447ebdf287f3b68e37dd5854ace88373a64c3a76",
+          "bytes": 225,
+          "controls": {
+            "table_type": "return-boxes",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "3150.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-008/expected.json",
+        "sha256": "5b2633060c6c38644ae26664f50f6302ec744d09ac92f6e3e45cafa12f882257",
+        "bytes": 591
+      }
+    },
+    {
+      "id": "SYN-UAE-009",
+      "title": "SYNTHETIC UAE three fictional employees and split bank settlement",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-009/payroll.csv",
+          "sha256": "c37416ee482a114f6182ac162d4e5d3208de1b3a132da10efdc1e37d302ea063",
+          "bytes": 322,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "41500.00"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-009/channel.csv",
+          "sha256": "ec11468b36e5762ef0d5ae914334f40c41fcb282e39c474b8e2e5f92cb364c93",
+          "bytes": 334,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "41500.00"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-009/bank.csv",
+          "sha256": "6b3f778cc47cb405634676976325ffb0ac29669b2d078028ae21f43783d316dd",
+          "bytes": 425,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 4,
+            "control_totals": {
+              "AED": "41500.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-009/expected.json",
+        "sha256": "736969cf672add5aa553f2ed2b4327fc52b7267c25545571e10e797e0b2cc8d2",
+        "bytes": 561
+      }
+    },
+    {
+      "id": "SYN-UAE-010",
+      "title": "SYNTHETIC UAE arrears retain their original earning month",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-010/payroll.csv",
+          "sha256": "4d51e93ef18c7d9fa5a79b6c7944303dd422d04cf58624c474d54ef681dfe76f",
+          "bytes": 262,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "22000.00"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-010/channel.csv",
+          "sha256": "126f5b06f2b118d588b576cecde122be1a8760ca7094dc2011732c6d7084bc7e",
+          "bytes": 262,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "22000.00"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-010/bank.csv",
+          "sha256": "9c96e800bc34b46c94d6b20a409dc8de9cd81c5c9a8da398f941d979288e09bf",
+          "bytes": 256,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 2,
+            "control_totals": {
+              "AED": "22000.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-010/expected.json",
+        "sha256": "a7a89c7e3a18ac60d9807b3bb51d9b9cf78b8135f7302a17f911a6776a751541",
+        "bytes": 529
+      }
+    },
+    {
+      "id": "SYN-UAE-011",
+      "title": "SYNTHETIC UAE late bank date remains separate from amount agreement",
+      "workflow": "payroll-settlement",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "payroll": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-011/payroll.csv",
+          "sha256": "c37416ee482a114f6182ac162d4e5d3208de1b3a132da10efdc1e37d302ea063",
+          "bytes": 322,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "41500.00"
+            }
+          }
+        },
+        "channel": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-011/channel.csv",
+          "sha256": "ec11468b36e5762ef0d5ae914334f40c41fcb282e39c474b8e2e5f92cb364c93",
+          "bytes": 334,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 3,
+            "control_totals": {
+              "AED": "41500.00"
+            }
+          }
+        },
+        "bank": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-011/bank.csv",
+          "sha256": "e6dc23c1bb5d1db7eb477239f91e24daa107408fb2a3b52f05a496af3a996c4b",
+          "bytes": 425,
+          "controls": {
+            "table_type": "obligations",
+            "expected_rows": 4,
+            "control_totals": {
+              "AED": "41500.00"
+            }
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-011/expected.json",
+        "sha256": "6aac3c1f7641da81c4f0781790d5ff597f2c04479051243205416f7213ad68d1",
+        "bytes": 518
+      }
+    },
+    {
+      "id": "SYN-UAE-012",
+      "title": "SYNTHETIC UAE quantity shortage and damaged stock remain separate",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-012/books.csv",
+          "sha256": "3c6791a0c2b20a0040f23c9d4ed3c9609be274ec0993429be91155b60b72c2b9",
+          "bytes": 237,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-012/count.csv",
+          "sha256": "9e67e6c243be18d16a6444141d407be67faed9a448fa328df6163c8822bb3fb0",
+          "bytes": 240,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-012/expected.json",
+        "sha256": "b14a471b8a5ae18417e9b348dcb2d9cd2911b3272428b1a06b9179155fde46a2",
+        "bytes": 996
+      }
+    },
+    {
+      "id": "SYN-UAE-013",
+      "title": "SYNTHETIC UAE full quantity coverage does not eliminate an NRV indicator",
+      "workflow": "stock-audit",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {},
+      "source_files": {
+        "books": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-013/books.csv",
+          "sha256": "3c6791a0c2b20a0040f23c9d4ed3c9609be274ec0993429be91155b60b72c2b9",
+          "bytes": 237,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        },
+        "count": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-013/count.csv",
+          "sha256": "b63d61721ba532f209e52934c92f8e81da2fc1df0070b59422be51e830e96afb",
+          "bytes": 241,
+          "controls": {
+            "table_type": "stock",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-013/expected.json",
+        "sha256": "53beded6e7c56122356e77f88578bd04289b591913e0e6b53b1c604fba867673",
+        "bytes": 677
+      }
+    },
+    {
+      "id": "SYN-UAE-014",
+      "title": "SYNTHETIC UAE new vendor bank details require their own approval",
+      "workflow": "vendor-diligence",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "subjects": [
+          "SYN-VENDOR-001",
+          "SYN-VENDOR-002"
+        ],
+        "required_checks": [
+          "licence",
+          "bank-change-approval"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-014/checks.csv",
+          "sha256": "316a6a5d7cffb340bc53d37bcba8237cbbd000d58dde98b6c4966dede5e5234c",
+          "bytes": 574,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 3,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-014/expected.json",
+        "sha256": "9c84f6a33f0d49b661a0854c3cf8d36cf501d34761313f9782a0b5d08522fcf8",
+        "bytes": 589
+      }
+    },
+    {
+      "id": "SYN-UAE-015",
+      "title": "SYNTHETIC UAE separate fictional foundation with expired registry evidence",
+      "workflow": "nonprofit-diligence",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "subjects": [
+          "SYN-GULF-RELIEF-FOUNDATION"
+        ],
+        "required_checks": [
+          "registry",
+          "grant-controls"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-015/checks.csv",
+          "sha256": "c5586f73afba5ad6c63cbd25ed742a0110985d821d8f8e432f45c4db1b259830",
+          "bytes": 430,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-015/expected.json",
+        "sha256": "543876240eb3383dd4cd85d3a3531519a0bf3be59723ccbef236f6d15168075d",
+        "bytes": 476
+      }
+    },
+    {
+      "id": "SYN-UAE-016",
+      "title": "SYNTHETIC UAE documented incompatible payment access stays an exception",
+      "workflow": "controls",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "subjects": [
+          "SYN-ERP-PAYABLES"
+        ],
+        "required_checks": [
+          "segregation-of-duties",
+          "access-log"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-016/checks.csv",
+          "sha256": "1d5bb855dcb435475a11b1ab1c5bc6ff301fca82b6059973578460e1602fd1a9",
+          "bytes": 411,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-016/expected.json",
+        "sha256": "4bbea1f6abc742b53c07f1ad31af5f66f32dbeefb5d6532adee303133a38188f",
+        "bytes": 497
+      }
+    },
+    {
+      "id": "SYN-UAE-017",
+      "title": "SYNTHETIC UAE VAT tie does not complete unassessed corporate-tax group scope",
+      "workflow": "tax-close",
+      "country": "AE",
+      "fixture_family": "FICTIONAL_OPERATING_PILOT",
+      "as_of": "2026-06-30",
+      "parameters": {
+        "subjects": [
+          "SYN-ALNOOR-ENTITY"
+        ],
+        "required_checks": [
+          "vat201-ledger-tie",
+          "ct-tax-group-scope",
+          "foreign-withholding-scope"
+        ]
+      },
+      "source_files": {
+        "checks": {
+          "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-017/checks.csv",
+          "sha256": "cfeb48eab21c7bc04567de3b4c357969160c27e73c232eeb8e686580d5eda6e9",
+          "bytes": 441,
+          "controls": {
+            "table_type": "checks",
+            "expected_rows": 2,
+            "control_totals": {}
+          }
+        }
+      },
+      "expected_file": {
+        "path": "pilot-data/UAE/independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/SYN-UAE-017/expected.json",
+        "sha256": "3b5d63032db57d2567f97f513d5da05c846c4d98048c85f1d5c41371f99193db",
+        "bytes": 641
+      }
+    }
+  ]
+}

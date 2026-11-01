@@ -1,0 +1,2 @@
+id,subject,requirement,state,evidence_reference,expires_on,rationale
+1,ENTITY-1,access-review,supported,retained-document-1,2026-12-31,Reviewed source scope

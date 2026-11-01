@@ -1,0 +1,10 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-142",
+  "workflow": "uae-vat-return",
+  "status": "PASS",
+  "execution": "EXPECTED_REJECTION",
+  "error": "Return period extends beyond the reconciliation date"
+}

@@ -1,0 +1,13 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-015",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "blocked": true,
+    "state": "EXPIRED"
+  },
+  "arithmetic_basis": "The foundation is a separate fictional entity, not the trading company. May 31 registry evidence is expired at June 30; grant controls cannot replace it."
+}

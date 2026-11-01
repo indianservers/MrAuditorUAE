@@ -1,0 +1,220 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "SYN-UAE-009",
+  "workflow": "payroll-settlement",
+  "status": "PASS",
+  "execution": "CALCULATED",
+  "issues": [],
+  "actual": {
+    "rows": [
+      {
+        "id": "obligation-1",
+        "registration": "SYN-EST-ALNOOR",
+        "subject": "SYN-EMP-001",
+        "period": "2026-06",
+        "component": "SALARY",
+        "currency": "AED",
+        "state": "MATCHED",
+        "amounts": {
+          "payroll": "18500.00",
+          "channel": "18500.00",
+          "bank": "18500.00"
+        },
+        "source_ids": {
+          "payroll": [
+            "P1"
+          ],
+          "channel": [
+            "WPS-P1"
+          ],
+          "bank": [
+            "BANK-P1"
+          ]
+        },
+        "missing_roles": [],
+        "liability_calculation": "DECLARED_INPUT_NOT_LEGAL_COMPUTATION"
+      },
+      {
+        "id": "obligation-2",
+        "registration": "SYN-EST-ALNOOR",
+        "subject": "SYN-EMP-002",
+        "period": "2026-06",
+        "component": "SALARY",
+        "currency": "AED",
+        "state": "MATCHED",
+        "amounts": {
+          "payroll": "14750.00",
+          "channel": "14750.00",
+          "bank": "14750.00"
+        },
+        "source_ids": {
+          "payroll": [
+            "P2"
+          ],
+          "channel": [
+            "WPS-P2"
+          ],
+          "bank": [
+            "BANK-P2-A",
+            "BANK-P2-B"
+          ]
+        },
+        "missing_roles": [],
+        "liability_calculation": "DECLARED_INPUT_NOT_LEGAL_COMPUTATION"
+      },
+      {
+        "id": "obligation-3",
+        "registration": "SYN-EST-ALNOOR",
+        "subject": "SYN-EMP-003",
+        "period": "2026-06",
+        "component": "SALARY",
+        "currency": "AED",
+        "state": "MATCHED",
+        "amounts": {
+          "payroll": "8250.00",
+          "channel": "8250.00",
+          "bank": "8250.00"
+        },
+        "source_ids": {
+          "payroll": [
+            "P3"
+          ],
+          "channel": [
+            "WPS-P3"
+          ],
+          "bank": [
+            "BANK-P3"
+          ]
+        },
+        "missing_roles": [],
+        "liability_calculation": "DECLARED_INPUT_NOT_LEGAL_COMPUTATION"
+      }
+    ],
+    "exception_count": 0,
+    "blocked": false,
+    "limitations": [
+      "Declared expected amounts and due dates require independent professional validation",
+      "This compares sources; it does not compute statutory contributions, salary tax or benefit entitlement",
+      "Due dates must be the obligation due dates, not bank processing dates; no deadline is inferred"
+    ],
+    "title": "SYNTHETIC UAE three fictional employees and split bank settlement",
+    "workflow": "payroll-settlement",
+    "workflow_version": "country-workflows-1",
+    "as_of": "2026-06-30",
+    "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+    "review_status": "UNVERIFIED",
+    "country_guidance": {
+      "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+      "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+      "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+      "excluded_domestic_components": [
+        "PF",
+        "ESI",
+        "PT",
+        "TDS",
+        "TCS"
+      ],
+      "sources": {
+        "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages",
+        "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
+      },
+      "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT"
+    },
+    "statutory_calculation_qualified": false,
+    "professional_conclusion": "NOT_DETERMINED",
+    "obligation_population_scope": "DECLARED_SOURCE_SCOPE",
+    "execution_mode": "deterministic_engine",
+    "ml_execution_mode": null,
+    "language_model_dependency": false,
+    "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+    "nil_population": false,
+    "nil_declarations": {},
+    "parameters": {
+      "inventory_gl_basis": null,
+      "inventory_scope_assessment": "",
+      "esic_population_review_id": null,
+      "esic_basis_scope_assessment": "",
+      "esic_components": [
+        "ESI:EMPLOYEE",
+        "ESI:EMPLOYER"
+      ],
+      "msme_buyer_id": null,
+      "withholding_role": null,
+      "allocation_basis": null,
+      "workflow": "payroll-settlement",
+      "source_ids": {
+        "payroll": "716cf53b-2842-59e4-be11-26930aca4d91",
+        "channel": "5d7ab797-8bd4-5d02-a809-f5cac54f1944",
+        "bank": "f47bb096-16de-5bf4-81d8-7bb0ccd98e7a"
+      },
+      "as_of": "2026-06-30",
+      "obligation_month_start": null,
+      "obligation_month_end": null,
+      "settlement_start": null,
+      "bank_payment_sign": null,
+      "review_through": null,
+      "stock_bridge_mode": "forward",
+      "arrear_only": false,
+      "stock_cutoff_assessment": "",
+      "period_start": null,
+      "tax_year_start": null,
+      "tax_observed_through": null,
+      "title": "SYNTHETIC UAE three fictional employees and split bank settlement",
+      "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+      "account": null,
+      "currency": "AED",
+      "import_nil_scope": null,
+      "bank_account_review_id": null,
+      "bank_account_scope_assessment": "",
+      "bank_owner_name": "",
+      "bank_owner_identifier_scheme": "",
+      "bank_owner_identifier": "",
+      "bank_observation_from": null,
+      "bank_observation_through": null,
+      "bank_observation_assessment": "",
+      "book_opening": null,
+      "book_closing": null,
+      "statement_opening": null,
+      "statement_closing": null,
+      "tolerance": "0",
+      "date_tolerance": 0,
+      "stale_days": 90,
+      "required_checks": [],
+      "invoice_direction": null,
+      "vat201_layout": "custom",
+      "required_boxes": [],
+      "restrict_to_required_boxes": false,
+      "box_scope_assessment": "",
+      "gst_annual_scope": null,
+      "subjects": []
+    },
+    "source_roles": {
+      "payroll": {
+        "row_count": 3,
+        "control_totals": {
+          "AED": "41500.00"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      },
+      "channel": {
+        "row_count": 3,
+        "control_totals": {
+          "AED": "41500.00"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      },
+      "bank": {
+        "row_count": 4,
+        "control_totals": {
+          "AED": "41500.00"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      }
+    }
+  }
+}

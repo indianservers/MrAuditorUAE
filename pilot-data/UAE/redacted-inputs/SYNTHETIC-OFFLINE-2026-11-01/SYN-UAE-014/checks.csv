@@ -1,0 +1,4 @@
+id,subject,requirement,state,evidence_reference,expires_on,rationale
+V1-L,SYN-VENDOR-001,licence,supported,SYNTHETIC-LOCAL-ASSESSMENT-V1-L,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication
+V1-B,SYN-VENDOR-001,bank-change-approval,not-applicable,SYNTHETIC-LOCAL-ASSESSMENT-V1-B,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication
+V2-L,SYN-VENDOR-002,licence,supported,SYNTHETIC-LOCAL-ASSESSMENT-V2-L,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication

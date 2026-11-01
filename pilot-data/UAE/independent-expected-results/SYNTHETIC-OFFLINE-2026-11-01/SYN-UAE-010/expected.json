@@ -1,0 +1,19 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-010",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 0,
+    "assertions": [
+      {
+        "path": [
+          "rows"
+        ],
+        "length": 2
+      }
+    ]
+  },
+  "arithmetic_basis": "June 18500 and April arrears 3500 are two distinct earning-month partitions, total cash 22000. They are not merged into a June-only liability."
+}

@@ -1,0 +1,265 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "SYN-UAE-002",
+  "workflow": "bank-brs",
+  "status": "PASS",
+  "execution": "CALCULATED",
+  "issues": [],
+  "actual": {
+    "rows": [],
+    "matches": [
+      {
+        "left_ids": [
+          "GL1"
+        ],
+        "right_ids": [
+          "ST-GL1"
+        ],
+        "rule": "REFERENCE_AMOUNT_DATE",
+        "variance": "0.00",
+        "auditor_status": "NOT_REVIEWED"
+      },
+      {
+        "left_ids": [
+          "GL2"
+        ],
+        "right_ids": [
+          "ST-GL2"
+        ],
+        "rule": "REFERENCE_AMOUNT_DATE",
+        "variance": "0.00",
+        "auditor_status": "NOT_REVIEWED"
+      },
+      {
+        "left_ids": [
+          "GL4"
+        ],
+        "right_ids": [
+          "ST-GL4"
+        ],
+        "rule": "REFERENCE_AMOUNT_DATE",
+        "variance": "0.00",
+        "auditor_status": "NOT_REVIEWED"
+      },
+      {
+        "left_ids": [
+          "GL-FEE"
+        ],
+        "right_ids": [
+          "ST-FEE"
+        ],
+        "rule": "REFERENCE_AMOUNT_DATE",
+        "variance": "0.00",
+        "auditor_status": "NOT_REVIEWED"
+      }
+    ],
+    "ambiguous": [],
+    "matching_contract": "indexed-transaction-candidates/1",
+    "candidate_checks": 8,
+    "candidate_check_limit": 100000,
+    "ambiguity_link_count": 0,
+    "control_comparison": {
+      "book_balance_control": "0.00",
+      "statement_balance_control": "0.00",
+      "opening_balance_difference": "0.00",
+      "unexplained_bridge_residual": "0.00"
+    },
+    "adjusted_book_balance": "255395.00",
+    "transaction_dates": [
+      {
+        "source_role": "books",
+        "source_row_id": "GL1",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "books",
+        "source_row_id": "GL2",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "books",
+        "source_row_id": "GL4",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "books",
+        "source_row_id": "GL-FEE",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "statement",
+        "source_row_id": "ST-GL1",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "statement",
+        "source_row_id": "ST-GL2",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "statement",
+        "source_row_id": "ST-GL4",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "statement",
+        "source_row_id": "ST-FEE",
+        "transaction_date": "2026-06-25",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      }
+    ],
+    "booking_date_review_count": 0,
+    "blocked": false,
+    "exception_count": 0,
+    "limitations": [
+      "Bridge explains arithmetic differences only; proposed causes need supporting evidence",
+      "Declared opening/closing controls require independent source review",
+      "Value dates are retained separately; fallback dates require booking-date evidence before approval"
+    ],
+    "bank_account_evidence": {
+      "status": "NOT_LINKED_ARITHMETIC_SCOPE_ONLY",
+      "bank_authentication_status": "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
+    },
+    "title": "SYNTHETIC UAE separately corrected cashbook agrees to bank",
+    "workflow": "bank-brs",
+    "workflow_version": "country-workflows-1",
+    "as_of": "2026-06-30",
+    "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+    "review_status": "UNVERIFIED",
+    "country_guidance": {
+      "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+      "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+      "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+      "excluded_domestic_components": [
+        "PF",
+        "ESI",
+        "PT",
+        "TDS",
+        "TCS"
+      ],
+      "sources": {
+        "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages",
+        "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
+      },
+      "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT"
+    },
+    "statutory_calculation_qualified": false,
+    "professional_conclusion": "NOT_DETERMINED",
+    "obligation_population_scope": "DECLARED_SOURCE_SCOPE",
+    "execution_mode": "deterministic_engine",
+    "ml_execution_mode": null,
+    "language_model_dependency": false,
+    "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+    "nil_population": false,
+    "nil_declarations": {},
+    "parameters": {
+      "inventory_gl_basis": null,
+      "inventory_scope_assessment": "",
+      "esic_population_review_id": null,
+      "esic_basis_scope_assessment": "",
+      "esic_components": [
+        "ESI:EMPLOYEE",
+        "ESI:EMPLOYER"
+      ],
+      "msme_buyer_id": null,
+      "withholding_role": null,
+      "allocation_basis": null,
+      "workflow": "bank-brs",
+      "source_ids": {
+        "books": "a0284957-beaa-508f-8538-a8cc7b807462",
+        "statement": "d0d88bc5-5490-575b-880e-6b80341a3fe0"
+      },
+      "as_of": "2026-06-30",
+      "obligation_month_start": null,
+      "obligation_month_end": null,
+      "settlement_start": null,
+      "bank_payment_sign": null,
+      "review_through": null,
+      "stock_bridge_mode": "forward",
+      "arrear_only": false,
+      "stock_cutoff_assessment": "",
+      "period_start": null,
+      "tax_year_start": null,
+      "tax_observed_through": null,
+      "title": "SYNTHETIC UAE separately corrected cashbook agrees to bank",
+      "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+      "account": "SYN-OPERATING-AED",
+      "currency": "AED",
+      "import_nil_scope": null,
+      "bank_account_review_id": null,
+      "bank_account_scope_assessment": "",
+      "bank_owner_name": "",
+      "bank_owner_identifier_scheme": "",
+      "bank_owner_identifier": "",
+      "bank_observation_from": null,
+      "bank_observation_through": null,
+      "bank_observation_assessment": "",
+      "book_opening": "250000.00",
+      "book_closing": "255395.00",
+      "statement_opening": "250000.00",
+      "statement_closing": "255395.00",
+      "tolerance": "0",
+      "date_tolerance": 0,
+      "stale_days": 90,
+      "required_checks": [],
+      "invoice_direction": null,
+      "vat201_layout": "custom",
+      "required_boxes": [],
+      "restrict_to_required_boxes": false,
+      "box_scope_assessment": "",
+      "gst_annual_scope": null,
+      "subjects": []
+    },
+    "source_roles": {
+      "books": {
+        "row_count": 4,
+        "control_totals": {
+          "AED": "5395.00"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      },
+      "statement": {
+        "row_count": 4,
+        "control_totals": {
+          "AED": "5395.00"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      }
+    }
+  }
+}

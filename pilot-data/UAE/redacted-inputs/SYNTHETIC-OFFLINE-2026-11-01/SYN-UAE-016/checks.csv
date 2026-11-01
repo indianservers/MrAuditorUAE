@@ -1,0 +1,3 @@
+id,subject,requirement,state,evidence_reference,expires_on,rationale
+SOD,SYN-ERP-PAYABLES,segregation-of-duties,exception,SYNTHETIC-LOCAL-ASSESSMENT-SOD,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication
+LOG,SYN-ERP-PAYABLES,access-log,supported,SYNTHETIC-LOCAL-ASSESSMENT-LOG,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication

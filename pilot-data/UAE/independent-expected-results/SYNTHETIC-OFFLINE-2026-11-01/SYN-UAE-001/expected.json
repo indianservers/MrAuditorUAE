@@ -1,0 +1,33 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-001",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 2,
+    "blocked": false,
+    "assertions": [
+      {
+        "path": [
+          "matches"
+        ],
+        "length": 3
+      },
+      {
+        "path": [
+          "adjusted_book_balance"
+        ],
+        "decimal_equals": "255395.00"
+      },
+      {
+        "path": [
+          "control_comparison",
+          "unexplained_bridge_residual"
+        ],
+        "decimal_equals": "0"
+      }
+    ]
+  },
+  "arithmetic_basis": "Books: 250000+126000-52500-18750-68000=236750. Bank: 250000+126000-52500-68000-105=255395. Adjusted books: 236750+18750-105=255395."
+}

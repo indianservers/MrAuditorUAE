@@ -1,0 +1,10 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "SYN-UAE-012",
+  "workflow": "stock-audit",
+  "status": "FAIL",
+  "execution": "INVALID_OR_UNREADABLE_FIXTURE",
+  "error": "Invalid CSV row 3, fields: condition"
+}

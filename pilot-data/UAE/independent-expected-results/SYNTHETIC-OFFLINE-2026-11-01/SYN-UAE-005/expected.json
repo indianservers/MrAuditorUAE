@@ -1,0 +1,20 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-005",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 0,
+    "blocked": false,
+    "assertions": [
+      {
+        "path": [
+          "rows"
+        ],
+        "length": 3
+      }
+    ]
+  },
+  "arithmetic_basis": "Private prepared schedules, not a UAE supplier portal. Net: 48000+12500-2500=58000. VAT: 2400+625-125=2900. Credit note remains a distinct signed document."
+}

@@ -16303,6 +16303,7 @@
           "default": "unconfirmed",
           "enum": [
             "good",
+            "damaged",
             "obsolete",
             "expired",
             "unconfirmed"

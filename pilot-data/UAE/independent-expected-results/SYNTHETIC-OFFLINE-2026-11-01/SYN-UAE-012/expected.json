@@ -1,0 +1,39 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-012",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 2,
+    "assertions": [
+      {
+        "path": [
+          "coverage",
+          "book_value"
+        ],
+        "decimal_equals": "21600"
+      },
+      {
+        "path": [
+          "coverage",
+          "count_supported_value"
+        ],
+        "decimal_equals": "21430"
+      }
+    ],
+    "rows_match": [
+      {
+        "sku": "SYN-VALVE",
+        "state": "VARIANCE",
+        "quantity_difference": "-2"
+      },
+      {
+        "sku": "SYN-SEAL",
+        "state": "CONDITION_EXCEPTION",
+        "potential_nrv_writedown": "1800.00"
+      }
+    ]
+  },
+  "arithmetic_basis": "Book value 120*85+30*380=21600. Count-supported value 118*85+30*380=21430. Seal NRV indicator (380-320)*30=1800. Declared counts do not establish physical attendance."
+}

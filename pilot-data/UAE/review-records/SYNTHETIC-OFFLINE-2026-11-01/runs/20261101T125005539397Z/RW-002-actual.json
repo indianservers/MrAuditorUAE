@@ -1,0 +1,203 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-002",
+  "workflow": "bank-brs",
+  "status": "PASS",
+  "execution": "CALCULATED",
+  "issues": [],
+  "actual": {
+    "rows": [
+      {
+        "id": "books:1",
+        "source_id": "1",
+        "transaction_date": "2026-06-01",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false,
+        "side": "books",
+        "reference": "CHQ-1",
+        "amount": "-100",
+        "currency": "AED",
+        "age_days": 29,
+        "stale": false,
+        "cause": "UNPRESENTED_PAYMENT_CANDIDATE",
+        "state": "EXCEPTION",
+        "cause_status": "REQUIRES_EVIDENCE"
+      },
+      {
+        "id": "statement:S1",
+        "source_id": "S1",
+        "transaction_date": "2026-06-01",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false,
+        "side": "statement",
+        "reference": "OTHER",
+        "amount": "20",
+        "currency": "AED",
+        "age_days": 29,
+        "stale": false,
+        "cause": "UNBOOKED_BANK_ITEM",
+        "state": "EXCEPTION",
+        "cause_status": "REQUIRES_EVIDENCE"
+      }
+    ],
+    "matches": [],
+    "ambiguous": [],
+    "matching_contract": "indexed-transaction-candidates/1",
+    "candidate_checks": 0,
+    "candidate_check_limit": 100000,
+    "ambiguity_link_count": 0,
+    "control_comparison": {
+      "book_balance_control": "0",
+      "statement_balance_control": "0",
+      "opening_balance_difference": "0",
+      "unexplained_bridge_residual": "0"
+    },
+    "adjusted_book_balance": "20",
+    "transaction_dates": [
+      {
+        "source_role": "books",
+        "source_row_id": "1",
+        "transaction_date": "2026-06-01",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      },
+      {
+        "source_role": "statement",
+        "source_row_id": "S1",
+        "transaction_date": "2026-06-01",
+        "bank_booking_date": null,
+        "bank_value_date": null,
+        "bank_date_basis": "DECLARED_TRANSACTION_DATE",
+        "booking_date_review_required": false
+      }
+    ],
+    "booking_date_review_count": 0,
+    "blocked": false,
+    "exception_count": 2,
+    "limitations": [
+      "Bridge explains arithmetic differences only; proposed causes need supporting evidence",
+      "Declared opening/closing controls require independent source review",
+      "Value dates are retained separately; fallback dates require booking-date evidence before approval"
+    ],
+    "bank_account_evidence": {
+      "status": "NOT_LINKED_ARITHMETIC_SCOPE_ONLY",
+      "bank_authentication_status": "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
+    },
+    "title": "SYNTHETIC UAE regression: Unpresented cheque remains open",
+    "workflow": "bank-brs",
+    "workflow_version": "country-workflows-1",
+    "as_of": "2026-06-30",
+    "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+    "review_status": "UNVERIFIED",
+    "country_guidance": {
+      "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+      "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+      "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+      "excluded_domestic_components": [
+        "PF",
+        "ESI",
+        "PT",
+        "TDS",
+        "TCS"
+      ],
+      "sources": {
+        "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages",
+        "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
+      },
+      "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT"
+    },
+    "statutory_calculation_qualified": false,
+    "professional_conclusion": "NOT_DETERMINED",
+    "obligation_population_scope": "DECLARED_SOURCE_SCOPE",
+    "execution_mode": "deterministic_engine",
+    "ml_execution_mode": null,
+    "language_model_dependency": false,
+    "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+    "nil_population": false,
+    "nil_declarations": {},
+    "parameters": {
+      "inventory_gl_basis": null,
+      "inventory_scope_assessment": "",
+      "esic_population_review_id": null,
+      "esic_basis_scope_assessment": "",
+      "esic_components": [
+        "ESI:EMPLOYEE",
+        "ESI:EMPLOYER"
+      ],
+      "msme_buyer_id": null,
+      "withholding_role": null,
+      "allocation_basis": null,
+      "workflow": "bank-brs",
+      "source_ids": {
+        "books": "e049aeee-6a38-5ff8-ab45-922d8a001fbb",
+        "statement": "87484035-0841-5458-acb1-2564c2863d4b"
+      },
+      "as_of": "2026-06-30",
+      "obligation_month_start": null,
+      "obligation_month_end": null,
+      "settlement_start": null,
+      "bank_payment_sign": null,
+      "review_through": null,
+      "stock_bridge_mode": "forward",
+      "arrear_only": false,
+      "stock_cutoff_assessment": "",
+      "period_start": null,
+      "tax_year_start": null,
+      "tax_observed_through": null,
+      "title": "SYNTHETIC UAE regression: Unpresented cheque remains open",
+      "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+      "account": "BANK-1",
+      "currency": "AED",
+      "import_nil_scope": null,
+      "bank_account_review_id": null,
+      "bank_account_scope_assessment": "",
+      "bank_owner_name": "",
+      "bank_owner_identifier_scheme": "",
+      "bank_owner_identifier": "",
+      "bank_observation_from": null,
+      "bank_observation_through": null,
+      "bank_observation_assessment": "",
+      "book_opening": "0",
+      "book_closing": "-100",
+      "statement_opening": "0",
+      "statement_closing": "20",
+      "tolerance": "0",
+      "date_tolerance": 0,
+      "stale_days": 90,
+      "required_checks": [],
+      "invoice_direction": null,
+      "vat201_layout": "custom",
+      "required_boxes": [],
+      "restrict_to_required_boxes": false,
+      "box_scope_assessment": "",
+      "gst_annual_scope": null,
+      "subjects": []
+    },
+    "source_roles": {
+      "books": {
+        "row_count": 1,
+        "control_totals": {
+          "AED": "-100"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      },
+      "statement": {
+        "row_count": 1,
+        "control_totals": {
+          "AED": "20"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      }
+    }
+  }
+}

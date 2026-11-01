@@ -1,0 +1,13 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-016",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "blocked": false,
+    "state": "EXCEPTION"
+  },
+  "arithmetic_basis": "A fictional preparer/approver access conflict is an assessed exception, not a successful controls-effectiveness conclusion. Review disposition remains a separate workflow."
+}

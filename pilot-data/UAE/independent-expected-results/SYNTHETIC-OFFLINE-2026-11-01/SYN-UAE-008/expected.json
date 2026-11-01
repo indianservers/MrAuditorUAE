@@ -1,0 +1,20 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-008",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 0,
+    "blocked": false,
+    "assertions": [
+      {
+        "path": [
+          "rows"
+        ],
+        "length": 2
+      }
+    ]
+  },
+  "arithmetic_basis": "Dubai allocations sum to 58000 and 2900. The separate declared input box is 5000 and 250. Only these two declared boxes are assessed, with no credit-eligibility or filing conclusion."
+}

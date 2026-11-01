@@ -1,0 +1,132 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-116",
+  "workflow": "nonprofit-diligence",
+  "status": "PASS",
+  "execution": "CALCULATED",
+  "issues": [],
+  "actual": {
+    "rows": [
+      {
+        "id": "check-1",
+        "subject": "ENTITY-1",
+        "requirement": "fundraising-permit",
+        "state": "MISSING",
+        "source_id": "1",
+        "evidence_reference": "retained-document-1",
+        "rationale": "Reviewed source scope"
+      }
+    ],
+    "out_of_scope_source_ids": [],
+    "exception_count": 1,
+    "blocked": true,
+    "limitations": [
+      "Evidence references are declared references, not verified external registry responses",
+      "No automatic sanctions clearance, legal eligibility or professional attestation is issued",
+      "Requirement scope is engagement-specific and must be independently assessed"
+    ],
+    "title": "SYNTHETIC UAE regression: fundraising-permit: unknown status is not clean",
+    "workflow": "nonprofit-diligence",
+    "workflow_version": "country-workflows-1",
+    "as_of": "2026-06-30",
+    "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+    "review_status": "UNVERIFIED",
+    "country_guidance": {
+      "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+      "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+      "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+      "excluded_domestic_components": [
+        "PF",
+        "ESI",
+        "PT",
+        "TDS",
+        "TCS"
+      ],
+      "sources": {
+        "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages",
+        "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
+      },
+      "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT"
+    },
+    "statutory_calculation_qualified": false,
+    "professional_conclusion": "NOT_DETERMINED",
+    "obligation_population_scope": "DECLARED_SOURCE_SCOPE",
+    "execution_mode": "deterministic_engine",
+    "ml_execution_mode": null,
+    "language_model_dependency": false,
+    "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+    "nil_population": false,
+    "nil_declarations": {},
+    "parameters": {
+      "inventory_gl_basis": null,
+      "inventory_scope_assessment": "",
+      "esic_population_review_id": null,
+      "esic_basis_scope_assessment": "",
+      "esic_components": [
+        "ESI:EMPLOYEE",
+        "ESI:EMPLOYER"
+      ],
+      "msme_buyer_id": null,
+      "withholding_role": null,
+      "allocation_basis": null,
+      "workflow": "nonprofit-diligence",
+      "source_ids": {
+        "checks": "69b6003d-e8c8-5523-a27b-6c5b483d944a"
+      },
+      "as_of": "2026-06-30",
+      "obligation_month_start": null,
+      "obligation_month_end": null,
+      "settlement_start": null,
+      "bank_payment_sign": null,
+      "review_through": null,
+      "stock_bridge_mode": "forward",
+      "arrear_only": false,
+      "stock_cutoff_assessment": "",
+      "period_start": null,
+      "tax_year_start": null,
+      "tax_observed_through": null,
+      "title": "SYNTHETIC UAE regression: fundraising-permit: unknown status is not clean",
+      "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+      "account": null,
+      "currency": "AED",
+      "import_nil_scope": null,
+      "bank_account_review_id": null,
+      "bank_account_scope_assessment": "",
+      "bank_owner_name": "",
+      "bank_owner_identifier_scheme": "",
+      "bank_owner_identifier": "",
+      "bank_observation_from": null,
+      "bank_observation_through": null,
+      "bank_observation_assessment": "",
+      "book_opening": null,
+      "book_closing": null,
+      "statement_opening": null,
+      "statement_closing": null,
+      "tolerance": "0",
+      "date_tolerance": 0,
+      "stale_days": 90,
+      "required_checks": [
+        "fundraising-permit"
+      ],
+      "invoice_direction": null,
+      "vat201_layout": "custom",
+      "required_boxes": [],
+      "restrict_to_required_boxes": false,
+      "box_scope_assessment": "",
+      "gst_annual_scope": null,
+      "subjects": [
+        "ENTITY-1"
+      ]
+    },
+    "source_roles": {
+      "checks": {
+        "row_count": 1,
+        "control_totals": {},
+        "source_range": null,
+        "source_snapshot_id": null
+      }
+    }
+  }
+}

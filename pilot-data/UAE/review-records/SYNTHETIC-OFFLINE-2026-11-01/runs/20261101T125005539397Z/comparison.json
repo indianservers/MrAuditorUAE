@@ -1,0 +1,892 @@
+{
+  "app_tree_content_sha256": "ebaf0c9ae8b9ff9dedd867ebce0858bcc1bb2ea3061b58669d46df02ded064cf",
+  "app_tree_file_count": 454,
+  "runner_sha256": "8c02d6c44d03966eeda926089f4f0189a6110c1534d9b1f308bb9c3daebfa0e4",
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "executed_at": "2026-11-01T12:50:05.539397+00:00",
+  "manifest_sha256": "9f4dce229165f1de83293d0d9b6d9323251bd9e2cad040a896142425efdcf39c",
+  "case_count": 123,
+  "passed": 123,
+  "failed": 0,
+  "expected_rejections": 10,
+  "pilot_workflows": [
+    "bank-account-evidence",
+    "bank-brs",
+    "controls",
+    "icfr-duty-coverage",
+    "nonprofit-diligence",
+    "obligation-bank-allocations",
+    "payroll-settlement",
+    "stock-audit",
+    "tax-close",
+    "uae-vat",
+    "uae-vat-return",
+    "vendor-diligence"
+  ],
+  "execution_scope": "Retained CSV parsing, typed controls and deterministic calculations only; API/storage/worker/review coverage comes from separately executed regressions",
+  "results": [
+    {
+      "id": "RW-001",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-002",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-003",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-004",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-005",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-006",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-007",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-008",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-009",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Bank BRS requires a single selected account and currency"
+    },
+    {
+      "id": "RW-010",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Bank BRS requires a single selected account and currency"
+    },
+    {
+      "id": "RW-011",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-012",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-013",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-014",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-015",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-016",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Statement/book transaction is after the reconciliation date"
+    },
+    {
+      "id": "RW-017",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-018",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-019",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-020",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-021",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-022",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-023",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-024",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-025",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-026",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-027",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Duplicate domain key; select one corrected source version or aggregate explicitly"
+    },
+    {
+      "id": "RW-028",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-041",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-042",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-043",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-044",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-045",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-046",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-047",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-048",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-049",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-050",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-051",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Corrected obligation sources must be restated; negative settlements require a qualified allocation adapter"
+    },
+    {
+      "id": "RW-052",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Future payment cannot settle the current reconciliation"
+    },
+    {
+      "id": "RW-077",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-078",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-079",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-080",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-081",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-082",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-083",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-084",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-085",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-086",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-087",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-088",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-089",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-090",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Future inventory evidence requires a separately qualified roll-back procedure"
+    },
+    {
+      "id": "RW-091",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-092",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-093",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-094",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-095",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-096",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-097",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-098",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-099",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-100",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-101",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-102",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-103",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-104",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-105",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-106",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-107",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-108",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-109",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-110",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-111",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-112",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-113",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-114",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-115",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-116",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-117",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-118",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-119",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-120",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-131",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-132",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-133",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-134",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-135",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-136",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-137",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-138",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-139",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Duplicate domain key; select one corrected source version or aggregate explicitly"
+    },
+    {
+      "id": "RW-140",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-141",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-142",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Return period extends beyond the reconciliation date"
+    },
+    {
+      "id": "RW-143",
+      "workflow": "obligation-bank-allocations",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-144",
+      "workflow": "obligation-bank-allocations",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-145",
+      "workflow": "obligation-bank-allocations",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-146",
+      "workflow": "obligation-bank-allocations",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-149",
+      "workflow": "bank-account-evidence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-155",
+      "workflow": "icfr-duty-coverage",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-156",
+      "workflow": "icfr-duty-coverage",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-157",
+      "workflow": "icfr-duty-coverage",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-158",
+      "workflow": "icfr-duty-coverage",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "RW-159",
+      "workflow": "icfr-duty-coverage",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-001",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-002",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-003",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-004",
+      "workflow": "bank-brs",
+      "status": "PASS",
+      "execution": "EXPECTED_REJECTION",
+      "error": "Bank BRS requires a single selected account and currency"
+    },
+    {
+      "id": "SYN-UAE-005",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-006",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-007",
+      "workflow": "uae-vat",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-008",
+      "workflow": "uae-vat-return",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-009",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-010",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-011",
+      "workflow": "payroll-settlement",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-012",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-013",
+      "workflow": "stock-audit",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-014",
+      "workflow": "vendor-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-015",
+      "workflow": "nonprofit-diligence",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-016",
+      "workflow": "controls",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    },
+    {
+      "id": "SYN-UAE-017",
+      "workflow": "tax-close",
+      "status": "PASS",
+      "execution": "CALCULATED",
+      "issues": []
+    }
+  ]
+}

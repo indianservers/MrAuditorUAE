@@ -1,0 +1,209 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-140",
+  "workflow": "uae-vat-return",
+  "status": "PASS",
+  "execution": "CALCULATED",
+  "issues": [],
+  "actual": {
+    "vat201_arithmetic_contract": "uae-vat201-arithmetic/2",
+    "vat201_arithmetic_source": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf",
+    "vat201_arithmetic_scope": "NOT_ASSESSED_CUSTOM_LAYOUT",
+    "vat201_arithmetic_checks": [],
+    "vat201_arithmetic_error_count": 0,
+    "rows": [
+      {
+        "id": "box-1",
+        "registration": "TRN-1",
+        "period_start": "2026-04-01",
+        "period_end": "2026-06-30",
+        "box": "1:DXB",
+        "currency": "AED",
+        "state": "BOOKS_ONLY",
+        "differences": {
+          "taxable_amount": null,
+          "tax": null,
+          "adjustment": null
+        },
+        "book_source_ids": [
+          "1"
+        ],
+        "return_source_id": null
+      },
+      {
+        "id": "box-2",
+        "registration": "TRN-2",
+        "period_start": "2026-04-01",
+        "period_end": "2026-06-30",
+        "box": "1:DXB",
+        "currency": "AED",
+        "state": "RETURN_ONLY",
+        "differences": {
+          "taxable_amount": null,
+          "tax": null,
+          "adjustment": null
+        },
+        "book_source_ids": [],
+        "return_source_id": "R1"
+      }
+    ],
+    "exception_count": 2,
+    "blocked": false,
+    "vat201_layout": "custom",
+    "box_comparison_scope": {
+      "mode": "ALL_RETAINED_BOXES",
+      "required_boxes": [
+        "1:DXB"
+      ],
+      "assessment": null,
+      "included_rows": {
+        "books": 1,
+        "return": 1
+      },
+      "excluded_rows": {
+        "books": 0,
+        "return": 0
+      },
+      "whole_return_completeness": "NOT_DETERMINED"
+    },
+    "excluded_box_rows": [],
+    "excluded_box_controls": [],
+    "included_box_controls": [
+      {
+        "source_role": "books",
+        "currency": "AED",
+        "row_count": 1,
+        "taxable_amount": "100",
+        "tax": "5",
+        "adjustment": "0"
+      },
+      {
+        "source_role": "return",
+        "currency": "AED",
+        "row_count": 1,
+        "taxable_amount": "100",
+        "tax": "5",
+        "adjustment": "0"
+      }
+    ],
+    "limitations": [
+      "All retained boxes are compared; source-file completeness is not whole-return completeness",
+      "Explicit VAT201 layouts check summary arithmetic exactly; scalar Boxes 12-14 must use tax only with zero base and adjustment. Custom layouts are not arithmetically assessed",
+      "VAT201 box assignments and required-box scope must be independently assessed",
+      "Taxable amounts, tax and adjustments compare separately; no tax rate or recovery entitlement is inferred",
+      "Canonical source contracts do not imply a live FTA connection or native VAT201 parser"
+    ],
+    "title": "SYNTHETIC UAE regression: UAE VAT201 different tax registrations stay separate",
+    "workflow": "uae-vat-return",
+    "workflow_version": "country-workflows-1",
+    "as_of": "2026-06-30",
+    "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+    "review_status": "UNVERIFIED",
+    "country_guidance": {
+      "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+      "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+      "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+      "excluded_domestic_components": [
+        "PF",
+        "ESI",
+        "PT",
+        "TDS",
+        "TCS"
+      ],
+      "sources": {
+        "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages",
+        "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
+      },
+      "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT"
+    },
+    "statutory_calculation_qualified": false,
+    "professional_conclusion": "NOT_DETERMINED",
+    "obligation_population_scope": "DECLARED_SOURCE_SCOPE",
+    "execution_mode": "deterministic_engine",
+    "ml_execution_mode": null,
+    "language_model_dependency": false,
+    "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+    "nil_population": false,
+    "nil_declarations": {},
+    "parameters": {
+      "inventory_gl_basis": null,
+      "inventory_scope_assessment": "",
+      "esic_population_review_id": null,
+      "esic_basis_scope_assessment": "",
+      "esic_components": [
+        "ESI:EMPLOYEE",
+        "ESI:EMPLOYER"
+      ],
+      "msme_buyer_id": null,
+      "withholding_role": null,
+      "allocation_basis": null,
+      "workflow": "uae-vat-return",
+      "source_ids": {
+        "books": "20e336f6-d6cb-5ff4-a6f6-5cc533b5103d",
+        "return": "41520b4b-4a4b-528c-9227-5913d9bc0d2e"
+      },
+      "as_of": "2026-06-30",
+      "obligation_month_start": null,
+      "obligation_month_end": null,
+      "settlement_start": null,
+      "bank_payment_sign": null,
+      "review_through": null,
+      "stock_bridge_mode": "forward",
+      "arrear_only": false,
+      "stock_cutoff_assessment": "",
+      "period_start": null,
+      "tax_year_start": null,
+      "tax_observed_through": null,
+      "title": "SYNTHETIC UAE regression: UAE VAT201 different tax registrations stay separate",
+      "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+      "account": null,
+      "currency": "AED",
+      "import_nil_scope": null,
+      "bank_account_review_id": null,
+      "bank_account_scope_assessment": "",
+      "bank_owner_name": "",
+      "bank_owner_identifier_scheme": "",
+      "bank_owner_identifier": "",
+      "bank_observation_from": null,
+      "bank_observation_through": null,
+      "bank_observation_assessment": "",
+      "book_opening": null,
+      "book_closing": null,
+      "statement_opening": null,
+      "statement_closing": null,
+      "tolerance": "0",
+      "date_tolerance": 0,
+      "stale_days": 90,
+      "required_checks": [],
+      "invoice_direction": null,
+      "vat201_layout": "custom",
+      "required_boxes": [
+        "1:DXB"
+      ],
+      "restrict_to_required_boxes": false,
+      "box_scope_assessment": "",
+      "gst_annual_scope": null,
+      "subjects": []
+    },
+    "source_roles": {
+      "books": {
+        "row_count": 1,
+        "control_totals": {
+          "AED": "5"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      },
+      "return": {
+        "row_count": 1,
+        "control_totals": {
+          "AED": "5"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-052",
+  "workflow": "payroll-settlement",
+  "status": "PASS",
+  "execution": "EXPECTED_REJECTION",
+  "error": "Future payment cannot settle the current reconciliation"
+}

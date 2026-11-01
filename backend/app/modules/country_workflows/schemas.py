@@ -319,7 +319,7 @@ class Stock(Strict):
     unit_cost: Money = Field(ge=0)
     unit_nrv: Money | None = Field(default=None, ge=0)
     ownership: Literal["owned", "third-party", "unconfirmed"] = "unconfirmed"
-    condition: Literal["good", "obsolete", "expired", "unconfirmed"] = "unconfirmed"
+    condition: Literal["good", "damaged", "obsolete", "expired", "unconfirmed"] = "unconfirmed"
     count_date: date
 
 

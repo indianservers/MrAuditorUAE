@@ -1,2 +1,6 @@
 *
 !.gitignore
+
+# User-authorized fictional offline pilot only; real inputs stay private.
+!SYNTHETIC-OFFLINE-2026-11-01/
+!SYNTHETIC-OFFLINE-2026-11-01/**

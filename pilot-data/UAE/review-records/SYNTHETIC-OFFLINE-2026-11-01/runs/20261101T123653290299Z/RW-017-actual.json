@@ -1,0 +1,173 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-017",
+  "workflow": "uae-vat",
+  "status": "PASS",
+  "execution": "CALCULATED",
+  "issues": [],
+  "actual": {
+    "rows": [
+      {
+        "id": "doc-1",
+        "registration": "REG-1",
+        "counterparty": "SUP-1",
+        "reference": "INV-1",
+        "document_type": "invoice",
+        "component": "VAT",
+        "currency": "AED",
+        "state": "MATCHED",
+        "books_id": "1",
+        "return_id": "R1",
+        "books_tax": "5",
+        "return_tax": "5",
+        "books_version_source_ids": [
+          "1"
+        ],
+        "return_version_source_ids": [
+          "R1"
+        ],
+        "books_source_versions": null,
+        "return_source_versions": null,
+        "tax_difference": "0",
+        "net_difference": "0",
+        "books_period": "2026-06",
+        "return_period": "2026-06",
+        "legal_credit_eligibility": "NOT_DETERMINED",
+        "source_review_reasons": [],
+        "books_source_section": null,
+        "return_source_section": null,
+        "source_itc_availability": null,
+        "source_ims_status": null,
+        "comparison_basis": "DIRECT_COMPONENT_COMPARISON"
+      }
+    ],
+    "totals": {
+      "REG-1|2026-06|VAT|AED": {
+        "books_tax": "5",
+        "return_tax": "5"
+      }
+    },
+    "totals_basis": "SOURCE_DOCUMENT_TAX_FIELDS_NOT_RESOLVED_CREDIT_OR_FILING_VALUES",
+    "exception_count": 0,
+    "blocked": false,
+    "limitations": [
+      "Canonical document comparison only; native government export adapters are not qualified",
+      "No input-credit eligibility, reverse-charge liability, interest or filing conclusion is calculated",
+      "UAE VAT returns contain aggregates; do not represent them as a supplier-matching portal",
+      "Canonical return documents require independently prepared document schedules"
+    ],
+    "vat_reporting_currency_contract": "uae-vat-aed-comparison/1",
+    "vat_reporting_currency": "AED",
+    "vat_fx_basis": "SOURCE_AED_AMOUNTS_NO_AUTOMATIC_CONVERSION",
+    "title": "SYNTHETIC UAE regression: AE invoice independently agrees",
+    "workflow": "uae-vat",
+    "workflow_version": "country-workflows-1",
+    "as_of": "2026-06-30",
+    "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+    "review_status": "UNVERIFIED",
+    "country_guidance": {
+      "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+      "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+      "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+      "excluded_domestic_components": [
+        "PF",
+        "ESI",
+        "PT",
+        "TDS",
+        "TCS"
+      ],
+      "sources": {
+        "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages",
+        "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
+      },
+      "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT"
+    },
+    "statutory_calculation_qualified": false,
+    "professional_conclusion": "NOT_DETERMINED",
+    "obligation_population_scope": "DECLARED_SOURCE_SCOPE",
+    "execution_mode": "deterministic_engine",
+    "ml_execution_mode": null,
+    "language_model_dependency": false,
+    "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+    "nil_population": false,
+    "nil_declarations": {},
+    "parameters": {
+      "inventory_gl_basis": null,
+      "inventory_scope_assessment": "",
+      "esic_population_review_id": null,
+      "esic_basis_scope_assessment": "",
+      "esic_components": [
+        "ESI:EMPLOYEE",
+        "ESI:EMPLOYER"
+      ],
+      "msme_buyer_id": null,
+      "withholding_role": null,
+      "allocation_basis": null,
+      "workflow": "uae-vat",
+      "source_ids": {
+        "books": "0ce63a5c-7bb7-5b14-9d5c-8dae22f0e023",
+        "return": "ef64cdb1-dfcf-5dd4-938c-24f0a348a7b9"
+      },
+      "as_of": "2026-06-30",
+      "obligation_month_start": null,
+      "obligation_month_end": null,
+      "settlement_start": null,
+      "bank_payment_sign": null,
+      "review_through": null,
+      "stock_bridge_mode": "forward",
+      "arrear_only": false,
+      "stock_cutoff_assessment": "",
+      "period_start": null,
+      "tax_year_start": null,
+      "tax_observed_through": null,
+      "title": "SYNTHETIC UAE regression: AE invoice independently agrees",
+      "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+      "account": null,
+      "currency": "AED",
+      "import_nil_scope": null,
+      "bank_account_review_id": null,
+      "bank_account_scope_assessment": "",
+      "bank_owner_name": "",
+      "bank_owner_identifier_scheme": "",
+      "bank_owner_identifier": "",
+      "bank_observation_from": null,
+      "bank_observation_through": null,
+      "bank_observation_assessment": "",
+      "book_opening": null,
+      "book_closing": null,
+      "statement_opening": null,
+      "statement_closing": null,
+      "tolerance": "0",
+      "date_tolerance": 0,
+      "stale_days": 90,
+      "required_checks": [],
+      "invoice_direction": null,
+      "vat201_layout": "custom",
+      "required_boxes": [],
+      "restrict_to_required_boxes": false,
+      "box_scope_assessment": "",
+      "gst_annual_scope": null,
+      "subjects": []
+    },
+    "source_roles": {
+      "books": {
+        "row_count": 1,
+        "control_totals": {
+          "AED": "5"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      },
+      "return": {
+        "row_count": 1,
+        "control_totals": {
+          "AED": "5"
+        },
+        "source_range": null,
+        "source_snapshot_id": null
+      }
+    }
+  }
+}

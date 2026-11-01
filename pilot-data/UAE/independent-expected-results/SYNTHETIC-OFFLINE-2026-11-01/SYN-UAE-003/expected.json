@@ -1,0 +1,21 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-003",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "blocked": false,
+    "stale": true,
+    "assertions": [
+      {
+        "path": [
+          "adjusted_book_balance"
+        ],
+        "decimal_equals": "292000.00"
+      }
+    ]
+  },
+  "arithmetic_basis": "250000-18750+42000=273250; add back the uncleared 18750 to reach bank 292000. February 2 is more than 90 days before June 30."
+}

@@ -1,0 +1,17 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-011",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "rows_match": [
+      {
+        "subject": "SYN-EMP-003",
+        "state": "LATE_PAYMENT"
+      }
+    ]
+  },
+  "arithmetic_basis": "Employee 003 is paid 8250 in full on June 30 against the explicitly supplied June 28 due date. The amount ties, but timing is late."
+}

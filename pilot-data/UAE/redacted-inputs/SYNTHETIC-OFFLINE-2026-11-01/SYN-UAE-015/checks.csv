@@ -1,0 +1,3 @@
+id,subject,requirement,state,evidence_reference,expires_on,rationale
+NPO-R,SYN-GULF-RELIEF-FOUNDATION,registry,supported,SYNTHETIC-LOCAL-ASSESSMENT-NPO-R,2026-05-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication
+NPO-G,SYN-GULF-RELIEF-FOUNDATION,grant-controls,supported,SYNTHETIC-LOCAL-ASSESSMENT-NPO-G,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication

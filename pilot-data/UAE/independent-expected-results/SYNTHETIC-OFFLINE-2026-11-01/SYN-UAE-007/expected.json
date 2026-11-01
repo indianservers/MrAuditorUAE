@@ -1,0 +1,18 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-007",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "blocked": false,
+    "rows_match": [
+      {
+        "reference": "SYN-CN-001",
+        "state": "BOOKS_ONLY"
+      }
+    ]
+  },
+  "arithmetic_basis": "Books contain a separate credit note with net -2500 and VAT -125; its absence from the prepared schedule remains one exception."
+}

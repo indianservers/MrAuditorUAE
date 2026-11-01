@@ -1,0 +1,10 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-051",
+  "workflow": "payroll-settlement",
+  "status": "PASS",
+  "execution": "EXPECTED_REJECTION",
+  "error": "Corrected obligation sources must be restated; negative settlements require a qualified allocation adapter"
+}

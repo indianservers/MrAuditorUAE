@@ -1,0 +1,27 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-013",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "assertions": [
+      {
+        "path": [
+          "coverage",
+          "percent"
+        ],
+        "decimal_equals": "100"
+      }
+    ],
+    "rows_match": [
+      {
+        "sku": "SYN-SEAL",
+        "state": "NRV_WRITEDOWN",
+        "potential_nrv_writedown": "1800.00"
+      }
+    ]
+  },
+  "arithmetic_basis": "All 150 declared units agree by SKU. Quantity coverage is 100%; the separate 1800 NRV indicator remains."
+}

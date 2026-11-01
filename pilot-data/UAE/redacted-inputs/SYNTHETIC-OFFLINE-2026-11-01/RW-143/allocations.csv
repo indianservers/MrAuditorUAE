@@ -1,0 +1,3 @@
+id,expected_id,reported_id,transaction_id,currency,amount,evidence_reference,rationale
+A1,E1,R1,BANK,AED,100,SYNTHETIC-PAYMENT-ADVICE,Reviewed fictional pooled salary payment allocation
+A2,E2,R2,BANK,AED,80,SYNTHETIC-PAYMENT-ADVICE,Reviewed fictional pooled salary payment allocation

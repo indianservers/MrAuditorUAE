@@ -830,6 +830,10 @@ def inventory(data, tables):
                 "potential_nrv_writedown": str(valuation) if valuation is not None else None,
                 "books_id": b["id"] if b else None,
                 "count_id": c["id"] if c else None,
+                "book_condition": b["condition"] if b else None,
+                "count_condition": c["condition"] if c else None,
+                "book_ownership": b["ownership"] if b else None,
+                "count_ownership": c["ownership"] if c else None,
             }
         )
     # Monetary coverage across currencies must not be aggregated.

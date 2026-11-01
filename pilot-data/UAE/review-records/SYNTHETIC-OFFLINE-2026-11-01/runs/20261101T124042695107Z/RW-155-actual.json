@@ -1,0 +1,199 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "id": "RW-155",
+  "workflow": "icfr-duty-coverage",
+  "status": "PASS",
+  "execution": "CALCULATED",
+  "issues": [],
+  "actual": {
+    "rows": [
+      {
+        "id": "icfr-scope:1",
+        "kind": "scope-decision",
+        "subject": "SYN-COMPONENT",
+        "duty": "404a",
+        "duty_title": "Management assessment",
+        "reporting_issuer": "SYN-ISSUER",
+        "relationship": "component",
+        "assessed_applicability": "required",
+        "scope_source_row_id": "S-A",
+        "authority_version": "SYNTHETIC-GROUP-INSTRUCTIONS",
+        "authority_url": "https://synthetic.example/authority",
+        "authority_evidence_version_id": "00000000-0000-4000-8000-000000000001",
+        "assessment_evidence_version_id": "00000000-0000-4000-8000-000000000002",
+        "adoption_status": "reviewed-for-period",
+        "effective_from": "2026-01-01",
+        "effective_to": "2026-12-31",
+        "assessment": "SYNTHETIC independently assessed issuer/group scope; no legal determination",
+        "state": "SUPPORTED"
+      },
+      {
+        "id": "icfr-point:2",
+        "kind": "declared-plan-point",
+        "subject": "SYN-COMPONENT",
+        "duty": "404a",
+        "requirement": "404a:CTRL",
+        "scope_source_row_id": "S-A",
+        "check_source_row_id": "C-A",
+        "evidence_reference": "retained-document-1",
+        "assessment": "Reviewed source scope",
+        "state": "SUPPORTED"
+      },
+      {
+        "id": "icfr-scope:3",
+        "kind": "scope-decision",
+        "subject": "SYN-COMPONENT",
+        "duty": "404b",
+        "duty_title": "Auditor attestation",
+        "reporting_issuer": "SYN-ISSUER",
+        "relationship": "component",
+        "assessed_applicability": "required",
+        "scope_source_row_id": "S-B",
+        "authority_version": "SYNTHETIC-GROUP-INSTRUCTIONS",
+        "authority_url": "https://synthetic.example/authority",
+        "authority_evidence_version_id": "00000000-0000-4000-8000-000000000001",
+        "assessment_evidence_version_id": "00000000-0000-4000-8000-000000000002",
+        "adoption_status": "reviewed-for-period",
+        "effective_from": "2026-01-01",
+        "effective_to": "2026-12-31",
+        "assessment": "SYNTHETIC independently assessed issuer/group scope; no legal determination",
+        "state": "SUPPORTED"
+      },
+      {
+        "id": "icfr-point:4",
+        "kind": "declared-plan-point",
+        "subject": "SYN-COMPONENT",
+        "duty": "404b",
+        "requirement": "404b:CTRL",
+        "scope_source_row_id": "S-B",
+        "check_source_row_id": "C-B",
+        "evidence_reference": "retained-document-1",
+        "assessment": "Reviewed source scope",
+        "state": "SUPPORTED"
+      }
+    ],
+    "exception_count": 0,
+    "blocked": false,
+    "icfr_scope_contract": "assessed-icfr-duty-coverage/1",
+    "icfr_scope_population": "DECLARED_SUBJECTS_DUTIES_AND_PLAN_POINTS_ONLY",
+    "effectiveness_conclusion": "NOT_DETERMINED",
+    "limitations": [
+      "404(a) management and 404(b) auditor scope are separately assessed inputs; an exemption for one does not clear the other",
+      "Entity country does not determine US reporting status; issuer/component relationships and adopted windows need independent professional assessment",
+      "Component coverage under group instructions does not establish a separate statutory auditor-attestation duty for that component",
+      "Declared plan completeness and supported evidence references do not establish control design or operating effectiveness, a signed opinion or a complete SOX/AS2201 method",
+      "Local India IFC and UAE duties remain separate workflows; this review does not replace them"
+    ],
+    "title": "SYNTHETIC AE independently assessed ICFR separate-required",
+    "workflow": "icfr-duty-coverage",
+    "workflow_version": "country-workflows-1",
+    "as_of": "2026-06-30",
+    "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+    "review_status": "UNVERIFIED",
+    "country_guidance": {
+      "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+      "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+      "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+      "excluded_domestic_components": [
+        "PF",
+        "ESI",
+        "PT",
+        "TDS",
+        "TCS"
+      ],
+      "sources": {
+        "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages",
+        "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
+      },
+      "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT"
+    },
+    "statutory_calculation_qualified": false,
+    "professional_conclusion": "NOT_DETERMINED",
+    "obligation_population_scope": "DECLARED_SOURCE_SCOPE",
+    "execution_mode": "deterministic_engine",
+    "ml_execution_mode": null,
+    "language_model_dependency": false,
+    "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+    "nil_population": false,
+    "nil_declarations": {},
+    "parameters": {
+      "inventory_gl_basis": null,
+      "inventory_scope_assessment": "",
+      "esic_population_review_id": null,
+      "esic_basis_scope_assessment": "",
+      "esic_components": [
+        "ESI:EMPLOYEE",
+        "ESI:EMPLOYER"
+      ],
+      "msme_buyer_id": null,
+      "withholding_role": null,
+      "allocation_basis": null,
+      "workflow": "icfr-duty-coverage",
+      "source_ids": {
+        "scopes": "858d0791-c692-52c6-9b89-147270698290",
+        "checks": "224faea9-344c-5dd6-a9b0-7713d581388f"
+      },
+      "as_of": "2026-06-30",
+      "obligation_month_start": null,
+      "obligation_month_end": null,
+      "settlement_start": null,
+      "bank_payment_sign": null,
+      "review_through": null,
+      "stock_bridge_mode": "forward",
+      "arrear_only": false,
+      "stock_cutoff_assessment": "",
+      "period_start": "2026-06-01",
+      "tax_year_start": null,
+      "tax_observed_through": null,
+      "title": "SYNTHETIC AE independently assessed ICFR separate-required",
+      "rationale": "SYNTHETIC offline pilot with authored expected outcomes; no external access or human approval",
+      "account": null,
+      "currency": "AED",
+      "import_nil_scope": null,
+      "bank_account_review_id": null,
+      "bank_account_scope_assessment": "",
+      "bank_owner_name": "",
+      "bank_owner_identifier_scheme": "",
+      "bank_owner_identifier": "",
+      "bank_observation_from": null,
+      "bank_observation_through": null,
+      "bank_observation_assessment": "",
+      "book_opening": null,
+      "book_closing": null,
+      "statement_opening": null,
+      "statement_closing": null,
+      "tolerance": "0",
+      "date_tolerance": 0,
+      "stale_days": 90,
+      "required_checks": [
+        "404a:CTRL",
+        "404b:CTRL"
+      ],
+      "invoice_direction": null,
+      "vat201_layout": "custom",
+      "required_boxes": [],
+      "restrict_to_required_boxes": false,
+      "box_scope_assessment": "",
+      "gst_annual_scope": null,
+      "subjects": [
+        "SYN-COMPONENT"
+      ]
+    },
+    "source_roles": {
+      "scopes": {
+        "row_count": 2,
+        "control_totals": {},
+        "source_range": null,
+        "source_snapshot_id": null
+      },
+      "checks": {
+        "row_count": 2,
+        "control_totals": {},
+        "source_range": null,
+        "source_snapshot_id": null
+      }
+    }
+  }
+}

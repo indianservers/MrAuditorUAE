@@ -1,0 +1,19 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-017",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "blocked": true,
+    "rows_match": [
+      {
+        "subject": "SYN-ALNOOR-ENTITY",
+        "requirement": "ct-tax-group-scope",
+        "state": "MISSING"
+      }
+    ]
+  },
+  "arithmetic_basis": "Three required decisions; corporate-tax group scope is absent. Domestic UAE has no automatic Indian PF/PT/TDS rule. Explicit foreign-scope non-applicability is a synthetic assessed input."
+}

@@ -1,0 +1,3 @@
+id,subject,requirement,state,evidence_reference,expires_on,rationale
+TC-VAT,SYN-ALNOOR-ENTITY,vat201-ledger-tie,supported,SYNTHETIC-LOCAL-ASSESSMENT-TC-VAT,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication
+TC-FOR,SYN-ALNOOR-ENTITY,foreign-withholding-scope,not-applicable,SYNTHETIC-LOCAL-ASSESSMENT-TC-FOR,2026-12-31,SYNTHETIC authored evidence assessment; no live registry or bank authentication

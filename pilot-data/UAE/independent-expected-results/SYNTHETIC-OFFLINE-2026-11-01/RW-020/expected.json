@@ -1,0 +1,11 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "RW-020",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "state": "BOOKS_ONLY"
+  },
+  "arithmetic_basis": "Existing authored regression assertions; additional invariants are checked by the regression suite."
+}

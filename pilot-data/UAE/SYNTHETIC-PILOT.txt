@@ -1,0 +1,23 @@
+SYNTHETIC UAE offline pilot — 1 November 2026
+
+All company, foundation, employee, vendor, registration, bank, WPS and registry facts in this pack are fictional. The pack makes no real-client, government-source, external-access or independent-human-review claim.
+
+Saved files
+- redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/: canonical UTF-8 CSV originals plus batch/manifest.json, declared row/tax/amount controls and exact file hashes.
+- independent-expected-results/SYNTHETIC-OFFLINE-2026-11-01/: separately authored expected outcomes and arithmetic explanations. Expectations are literals; the builder never calculates results to generate them.
+- review-records/SYNTHETIC-OFFLINE-2026-11-01/runs/: append-only timestamped automated comparisons and complete actual result bodies. These are automated synthetic records, not professional signatures.
+
+The 123 cases comprise 17 fictional operating scenarios and 106 existing UAE engine regression scenarios. They are alternative scenarios, not an additive company ledger. Trading-company scenarios concern fictional Al Noor Gulf Trading LLC; nonprofit scenarios use the separate fictional Gulf Community Relief Foundation.
+
+The operating pack covers a 255395 AED adjusted bank close, a 105 AED unbooked fee, an 18750 AED unpresented cheque, a 25 AED VAT mismatch, a separate -125 AED credit note, selected VAT201 boxes, 41500 AED declared payroll with split settlement, arrears by earning month, a late payment, stock shortage/condition/NRV, vendor bank changes, expired nonprofit evidence, a controls exception and incomplete tax-close scope. Supplied due dates and tax treatments are assessed synthetic facts; no tax/payroll entitlement is inferred from this narrative.
+
+Reproduce from backend with the configured test environment:
+  python ../scripts/uae_synthetic_pilot.py build
+  python ../scripts/uae_synthetic_pilot.py run
+The builder preserves existing different bytes and stops rather than replacing originals. The runner hashes originals and expected files before parsing/comparing. Failure is a nonzero exit, not an expectation update. Earlier failed attempts are retained with their actual failure reason.
+
+The initial run detected that damaged stock was rejected by the input schema. The schema now accepts damaged stock and retains a condition exception; the failed run is preserved. Ten cases intentionally reject invalid input/domain combinations. A passing expected rejection is reported separately from a calculation.
+
+The saved pilot itself exercises 12 catalogue workflows. Wider workflow execution coverage and API/storage/job/review/export regressions are reported separately under docs/phase-12. The execution report identifies any unexercised UAE catalogue workflow; it must not be read as branch-complete or legal qualification. Source/authority workpapers outside the common workflow catalogue have their separate tests.
+
+The three real-pilot templates at the country root remain unfilled. Synthetic files are deliberately under an explicitly named subdirectory and are never relabelled as REAL_CLIENT_PILOT. Other files in the private input/expectation/review folders remain ignored by Git.

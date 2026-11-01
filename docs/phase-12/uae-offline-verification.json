@@ -1,0 +1,148 @@
+{
+  "dataset_kind": "SYNTHETIC_OFFLINE_VERIFICATION",
+  "real_client_data": false,
+  "independent_professional_review": false,
+  "external_accounting_provider_access": false,
+  "date": "2026-11-01",
+  "case_count": 123,
+  "fictional_operating_cases": 17,
+  "existing_uae_regression_cases": 106,
+  "pilot_csv_workflow_count": 12,
+  "expected_rejections": 10,
+  "passed_pilot_cases": 123,
+  "uae_available_workflows_executed_in_passing_tests": [
+    "adverse-media-review",
+    "asset-register-review",
+    "balance-confirmations",
+    "bank-account-evidence",
+    "bank-brs",
+    "bank-subsequent-clearance",
+    "construction-contracts",
+    "controls",
+    "credit-note-applications",
+    "customs-reconciliation",
+    "employee-expenses",
+    "employment-payroll-review",
+    "escrow-disbursements",
+    "excise-reconciliation",
+    "expense-cutoff",
+    "going-concern-cash",
+    "gold-reconciliation",
+    "grant-utilisation",
+    "healthcare-billing",
+    "hospitality-revenue",
+    "icfr-duty-coverage",
+    "inventory-count-bridge",
+    "inventory-custody-confirmations",
+    "inventory-fifo-cost",
+    "inventory-valuation-control",
+    "kyc-edd-review",
+    "merchant-reserve-rollforward",
+    "merchant-settlement-bridge",
+    "nonprofit-diligence",
+    "obligation-bank-allocations",
+    "open-item-allocations",
+    "ownership-lookthrough",
+    "party-balance-confirmations",
+    "payroll-ledger-rollforward",
+    "payroll-settlement",
+    "procurement-match",
+    "receivables-ecl",
+    "sanctions-name-review",
+    "statutory-dues",
+    "stock-audit",
+    "subledger-control",
+    "subsequent-settlements",
+    "tax-close",
+    "tax-turnover-bridge",
+    "trade-document-review",
+    "uae-benefit-review",
+    "uae-import-vat",
+    "uae-pension-review",
+    "uae-savings-review",
+    "uae-vat",
+    "uae-vat-return",
+    "vendor-diligence",
+    "vendor-employee-conflicts"
+  ],
+  "uae_execution_count": 53,
+  "missing_any_country_catalogue_workflows": [],
+  "unit_tests": {
+    "passed": 5144,
+    "skipped": 4,
+    "failed": 0
+  },
+  "http_tests": {
+    "passed": 25,
+    "saved_file_pipelines": 3,
+    "retained_grant_and_media": 22
+  },
+  "frontend_checks": {
+    "tests_passed": 552,
+    "files_passed": 97,
+    "production_build": "PASS",
+    "api_types": "PASS",
+    "typecheck": "PASS"
+  },
+  "static_checks": {
+    "ruff": "PASS",
+    "mypy_source_files": 442,
+    "api_contract_snapshots": "PASS"
+  },
+  "input_and_expected_file_count": 359,
+  "all_input_expected_hashes_verified": true,
+  "reports": [
+    {
+      "path": "docs/phase-12/uae-offline-final-unit-execution.json",
+      "normalization": "raw bytes",
+      "sha256": "30fa270242d3ce25bc655c6723bb0c8f7ab76d5663de79eca06bc0bd27e7485e"
+    },
+    {
+      "path": "docs/phase-12/uae-offline-final-http-execution.json",
+      "normalization": "raw bytes",
+      "sha256": "e057a0a4961d974375de7b044c557c336be15a55e1f522f812daa65aec9349b4"
+    },
+    {
+      "path": "docs/phase-12/uae-offline-saved-files-http-execution.json",
+      "normalization": "raw bytes",
+      "sha256": "b8f0f238aae7bcebe7ff7166c624ee36a96a0ad33dbb478c621d3c7db974de06"
+    },
+    {
+      "path": "docs/phase-12/uae-offline-final-units.xml",
+      "normalization": "raw bytes",
+      "sha256": "19490f936ef1c7556fb439c3ed2792fb67c24ebddb97a6b3703d5fa88269cc4b"
+    },
+    {
+      "path": "docs/phase-12/uae-offline-final-http.xml",
+      "normalization": "raw bytes",
+      "sha256": "d8ebf6612a140d6a86f1d9c55829950e870ef85896cfd64114b3212915cfabf1"
+    },
+    {
+      "path": "docs/phase-12/uae-offline-saved-files-http.xml",
+      "normalization": "raw bytes",
+      "sha256": "ed188c50220134aef8d2fbd1510a94c01f50bc3a385ca806d947206d271df310"
+    },
+    {
+      "path": "pilot-data/UAE/review-records/SYNTHETIC-OFFLINE-2026-11-01/runs/20261101T125827927261Z/comparison.json",
+      "normalization": "raw bytes",
+      "sha256": "155d95606d908ee8e5225ce7e40e1d9bde0c9a36ed0789d69bd0035caed97030"
+    },
+    {
+      "path": "pilot-data/UAE/redacted-inputs/SYNTHETIC-OFFLINE-2026-11-01/batch/manifest.json",
+      "normalization": "raw bytes",
+      "sha256": "9f4dce229165f1de83293d0d9b6d9323251bd9e2cad040a896142425efdcf39c"
+    }
+  ],
+  "retained_failed_attempts": [
+    "Initial pilot rejected damaged stock before schema fix",
+    "Initial HTTP setup: local database offline; restored existing infrastructure",
+    "First final HTTP run: 22 passed, 3 test-reader failures; corrected iterator and reran all 3 successfully"
+  ],
+  "limits": [
+    "CSV pilot fixtures cover 12 workflows; broader execution coverage covers all 53 enabled UAE catalogue workflows.",
+    "Observed calculation execution in passing tests is not branch-complete validation or legal/professional clearance.",
+    "Scanner and job dispatch are explicit HTTP test doubles; storage, DB, source review, calculations and XLSX export are exercised.",
+    "No new browser server or external provider session was started. Earlier browser evidence remains separately dated.",
+    "Synthetic expected results are author-defined literals, not independently reviewed client results."
+  ]
+}

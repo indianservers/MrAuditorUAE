@@ -1,0 +1,34 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "RW-159",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 1,
+    "blocked": true,
+    "icfr_states": [
+      [
+        "scope-decision",
+        "404a",
+        "SUPPORTED"
+      ],
+      [
+        "declared-plan-point",
+        "404a",
+        "SUPPORTED"
+      ],
+      [
+        "scope-decision",
+        "404b",
+        "PENDING_AUTHORITY_ADOPTION"
+      ],
+      [
+        "declared-plan-point",
+        "404b",
+        "SUPPORTED"
+      ]
+    ]
+  },
+  "arithmetic_basis": "Existing authored regression assertions; additional invariants are checked by the regression suite."
+}

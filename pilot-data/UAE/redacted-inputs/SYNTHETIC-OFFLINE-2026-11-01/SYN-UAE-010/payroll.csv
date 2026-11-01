@@ -1,0 +1,3 @@
+id,registration,subject,period,component,currency,amount,due_date,payment_date
+payroll-JUNE,SYN-EST-ALNOOR,SYN-EMP-001,2026-06,SALARY,AED,18500.00,2026-06-28,2026-06-28
+payroll-APRIL,SYN-EST-ALNOOR,SYN-EMP-001,2026-04,SALARY,AED,3500.00,2026-06-28,2026-06-28

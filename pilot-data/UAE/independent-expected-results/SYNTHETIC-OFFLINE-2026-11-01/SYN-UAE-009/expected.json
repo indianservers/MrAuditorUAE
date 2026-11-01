@@ -1,0 +1,20 @@
+{
+  "dataset_kind": "SYNTHETIC_UAE_OFFLINE_PILOT",
+  "real_client_data": false,
+  "case_id": "SYN-UAE-009",
+  "expected_basis": "AUTHOR_DEFINED_LITERALS_NOT_ENGINE_OUTPUT",
+  "independent_human_review": false,
+  "expected": {
+    "exceptions": 0,
+    "blocked": false,
+    "assertions": [
+      {
+        "path": [
+          "rows"
+        ],
+        "length": 3
+      }
+    ]
+  },
+  "arithmetic_basis": "Declared payroll 18500+14750+8250=41500. Employee 002 bank splits 9000+5750=14750. Due dates are assessed synthetic input facts, not UAE legal defaults."
+}

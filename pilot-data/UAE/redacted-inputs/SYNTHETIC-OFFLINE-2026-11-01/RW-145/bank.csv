@@ -1,0 +1,3 @@
+id,account,reference,date,currency,amount,counterparty
+BANK,BANK-1,PAY-1,2026-06-01,AED,-180,Customer
+REFUND,BANK-1,PAY-1,2026-06-01,AED,20,Customer

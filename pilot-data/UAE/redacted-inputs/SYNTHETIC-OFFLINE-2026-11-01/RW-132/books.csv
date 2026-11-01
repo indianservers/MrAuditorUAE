@@ -1,0 +1,3 @@
+id,registration,period_start,period_end,box,currency,taxable_amount,tax,adjustment
+B1,TRN-1,2026-04-01,2026-06-30,1:DXB,AED,40,2,0
+B2,TRN-1,2026-04-01,2026-06-30,1:DXB,AED,60,3,0
