@@ -94,18 +94,18 @@
   "reports": [
     {
       "path": "docs/phase-12/uae-offline-final-unit-execution.json",
-      "normalization": "raw bytes",
-      "sha256": "30fa270242d3ce25bc655c6723bb0c8f7ab76d5663de79eca06bc0bd27e7485e"
+      "normalization": "LF",
+      "sha256": "0b5e9236d9174cddfd7b9b4486dd268c0aec991309f33e5e4634b389a934904b"
     },
     {
       "path": "docs/phase-12/uae-offline-final-http-execution.json",
-      "normalization": "raw bytes",
-      "sha256": "e057a0a4961d974375de7b044c557c336be15a55e1f522f812daa65aec9349b4"
+      "normalization": "LF",
+      "sha256": "0beac40a3bfe63e1230600eab459f070fce54914a3835ec9f6b5f15ef5fce6ec"
     },
     {
       "path": "docs/phase-12/uae-offline-saved-files-http-execution.json",
-      "normalization": "raw bytes",
-      "sha256": "b8f0f238aae7bcebe7ff7166c624ee36a96a0ad33dbb478c621d3c7db974de06"
+      "normalization": "LF",
+      "sha256": "14156ee8660f5ca86f030276346a5745bc3e493b4b3bda98c16cad19dd21f81c"
     },
     {
       "path": "docs/phase-12/uae-offline-final-units.xml",
